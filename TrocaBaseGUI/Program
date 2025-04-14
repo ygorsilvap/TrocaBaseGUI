@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+public class Program
+{
+    const string DbDirectory = @"C:\Users\ygor\Desktop\TrocaBase";
+    const string ConexaoFile = @"C:\Users\ygor\Desktop\TrocaBase\conexao.dat";
+    static string conexao = "";
+    static void Main(string[] args)
+    {
+        List<string> AllFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
+        List<string> exceptions = new List<string> { "exc", "exc1" };
+
+        List<string> dbFiles = new List<string>(FilterFiles(AllFiles, exceptions));
+
+        conexao = AllFiles.Exists(f => f == ConexaoFile) ? File.ReadLines($@"{ConexaoFile}").FirstOrDefault() : "";
+
+
+        while (true)
+        {
+            Menu(dbFiles);
+        }
+    }
+
+
+
+    static void ToConexao(List<string> db, string opt)
+    {
+        Console.WriteLine("Conexao.dat NOT Found. :(");
+        File.Move($@"{DbDirectory}\{db[int.Parse(opt) - 1]}.dat", $"{ConexaoFile}");
+        conexao = db[int.Parse(opt) - 1];
+        Console.WriteLine($"\n{conexao}.dat is now conexao.dat");
+    }
+
+    static void ToDb(List<string> db, string opt)
+    {
+        Console.WriteLine("Conexao.dat Found! :)");
+
+        string dbName = File.ReadLines($@"{ConexaoFile}").FirstOrDefault();
+
+        File.Move($"{ConexaoFile}", $@"{DbDirectory}\{dbName}.dat");
+
+        File.Move($@"{DbDirectory}\{db[int.Parse(opt) - 1]}.dat", $"{ConexaoFile}");
+
+        conexao = db[int.Parse(opt) - 1];
+
+        Console.WriteLine($"\nconexao.dat is now {dbName}.dat");
+
+    }
+
+    static void Menu(List<string> db)
+    {
+        db.Sort();
+        for (int i = 0; i < db.Count; i++)
+        {
+            if (db[i] == conexao)
+            {
+                Console.WriteLine($"{i + 1} - {db[i]} (Banco Selecionado)");
+            }
+            else
+            {
+                Console.WriteLine($"{i + 1} - {db[i]}");
+            }
+        }
+        Console.Write("\nOpção: ");
+        string option = Console.ReadLine();
+
+        if (option != null && Int32.Parse(option) - 1 < db.Count && Int32.Parse(option) > 0)
+        {
+            if (IsThereConexaoDat(db))
+            {
+                //foreach (var item in db)
+                //{
+                //    Console.WriteLine(item);
+                //}
+
+                ToDb(db, option);
+
+            }
+            else
+            {
+                ToConexao(db, option);
+            }
+        }
+        else
+        {
+            Console.WriteLine("invalid");
+        }
+    }
+
+    static Boolean IsThereConexaoDat(List<string> folder)
+    {
+        List<string> files = new List<string>(folder);
+
+        foreach (string file in files)
+        {
+            if (file.Equals(conexao))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static List<string> FilterFiles(List<string> list, List<string> except)
+    {
+        List<string> filteredFilesNames = new List<string>();
+
+        foreach (string file in list)
+        {
+            filteredFilesNames.Add(Path.GetFileName(file.Replace(".dat", "")));
+        };
+
+        for (int i = 0; i < filteredFilesNames.Count; i++)
+        {
+            for (int j = 0; j < except.Count; j++)
+            {
+                if (filteredFilesNames[i].Equals(except[j]))
+                {
+                    filteredFilesNames.RemoveAt(i);
+                }
+            }
+        }
+
+        for (int i = 0; i < filteredFilesNames.Count; i++)
+        {
+            if (filteredFilesNames[i].Equals("conexao"))
+            {
+                conexao = filteredFilesNames[i];
+            }
+
+            string dbName = File.ReadLines($@"{DbDirectory}\{filteredFilesNames[i]}.dat").FirstOrDefault();
+            filteredFilesNames[i] = dbName;
+        }
+
+
+        return filteredFilesNames;
+    }
+}
