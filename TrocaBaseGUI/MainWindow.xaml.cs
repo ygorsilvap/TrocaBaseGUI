@@ -22,20 +22,18 @@ namespace TrocaBaseGUI
 {
     public partial class MainWindow : Window
     {
-        const string DbDirectory = @"C:\Users\ygor\Desktop\TrocaBase";
-        const string ConexaoFile = @"C:\Users\ygor\Desktop\TrocaBase\conexao.dat";
+        const string DbDirectory = @"C:\2Camadas-Bravos0518-Evolutivo";
+        const string ConexaoFile = @"C:\2Camadas-Bravos0518-Evolutivo\conexao.dat";
         static string conexao = "";
 
         static List<string> AllFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
-        static List<string> exceptions = new List<string> { "exc", "exc1" };
+        static List<string> exceptions = new List<string> { "Help", "iphist" };
 
         static ObservableCollection<Banco> dbFiles = new ObservableCollection<Banco>(FilterFiles(AllFiles, exceptions).Select(name => new Banco { Name = name.ToString() }).ToList());
-
+        
         public MainWindow()
         {
             init(dbFiles);
-
-            /////consertar a implementação de banco selecionado e fazer os elementos atualizarem sozinhos.
 
             InitializeComponent();
 
@@ -49,14 +47,30 @@ namespace TrocaBaseGUI
 
             Console.WriteLine(conexao);
 
-            foreach (var item in dbFiles)
+            SelectBase(db);
+
+        }
+
+        static void SelectBase(ObservableCollection<Banco> db)
+        {
+            foreach (var item in db)
             {
                 if (item.Name == conexao)
                 {
                     item.Name += " (Banco Selecionado)";
                 }
             }
+        }
 
+        static void UnselectBase(ObservableCollection<Banco> db)
+        {
+            foreach (var item in db)
+            {
+                if(item.Name.Contains("(Banco Selecionado)"))
+                {
+                    item.Name = item.Name.Remove(item.Name.Length - 20);
+                }
+            }
         }
 
         static List<string> FilterFiles(List<string> list, List<string> except)
@@ -96,40 +110,38 @@ namespace TrocaBaseGUI
             return filteredFilesNames;
         }
 
-        static void ToConexao(ObservableCollection<Banco> db, string opt)
+        static void DbToConexao(ObservableCollection<Banco> db, string opt)
         {
-            Console.WriteLine("Conexao.dat NOT Found. :(");
+            //Renomeia o banco escolhido(opt) para conexao.dat
             File.Move($@"{DbDirectory}\{opt}.dat", $"{ConexaoFile}");
             conexao = opt;
-            Console.WriteLine($"\n{conexao}.dat is now conexao.dat");
+            SelectBase(db);
+            Console.WriteLine($"\n{conexao}.dat is now conexao.dat(DbToConexao())");
         }
 
-        static void ToDb(ObservableCollection<Banco> db, string opt)
+        static void ConexaoToDb(ObservableCollection<Banco> db, string opt)
         {
             Console.WriteLine("Conexao.dat Found! :)");
+            
 
-            string dbName = File.ReadLines($@"{ConexaoFile}").First();
-
-            File.Move($"{ConexaoFile}", $@"{DbDirectory}\{dbName}.dat");
-
-            //dbFiles.Where(f => f.Name.Equals(conexao)).ToString().Replace(" (Banco Selecionado)", "");
-
-            File.Move($@"{DbDirectory}\{opt}.dat", $"{ConexaoFile}");
-
-            conexao = opt;
-
-
-            foreach ( var item in dbFiles )
+            //Verifica se estamos selecionando um banco já selecionado
+            if(!opt.Contains("(Banco Selecionado)"))
             {
-                if(item.Name == conexao && !item.Name.Contains(" (Banco Selecionado)"))
-                {
-                    item.Name += " (Banco Selecionado)";
-                }
+                //Lê o nome do banco na primeira linha do conexao.dat
+                string dbName = File.ReadLines($@"{ConexaoFile}").First();
+
+                //Renomeia o conexao.dat para o nome do banco de dbName
+                File.Move($"{ConexaoFile}", $@"{DbDirectory}\{dbName}.dat");
+
+                UnselectBase(db);
+
+                DbToConexao(db, opt);
+
+                SelectBase(db);
+            } else
+            {
+                Console.WriteLine("Banco já Selecionado.");
             }
-
-
-            Console.WriteLine($"\nconexao.dat is now {dbName}.dat");
-
         }
 
         static Boolean IsThereConexaoDat()
@@ -146,13 +158,14 @@ namespace TrocaBaseGUI
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+
             if (IsThereConexaoDat())
             {
-                ToDb(dbFiles, lstTodosBancos.SelectedItem.ToString());
+                ConexaoToDb(dbFiles, lstTodosBancos.SelectedItem.ToString());   
             }
             else
             {
-                ToConexao(dbFiles, lstTodosBancos.SelectedItem.ToString());
+                DbToConexao(dbFiles, lstTodosBancos.SelectedItem.ToString());
             }
 
         }
