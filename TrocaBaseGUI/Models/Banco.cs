@@ -32,6 +32,17 @@ namespace TrocaBaseGUI.Models
             }
         }
 
+        private string fileName;
+        public string FileName
+        {
+            get => fileName;
+            set
+            {
+                fileName = value;
+                OnPropertyChanged(nameof(FileName));
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

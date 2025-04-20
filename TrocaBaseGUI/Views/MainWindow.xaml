@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrocaBaseGUI"
         mc:Ignorable="d"
-        Title="Trocabase 1.0" Height="500" Width="550"
+        Title="TrocaBase" Height="500" Width="550"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="10,0,0,0">
         <Button Content="Aplicar e Fechar" Click="CloseApp_Click" Height="33" Margin="194,410,194,0" VerticalAlignment="Top" RenderTransformOrigin="0.435,0.608"/>
@@ -61,8 +61,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <RadioButton Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="80,42,0,0" VerticalAlignment="Top"/>
-        <RadioButton Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="150,42,0,0" VerticalAlignment="Top" />
-        <RadioButton Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="220,42,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="80,42,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="150,42,0,0" VerticalAlignment="Top" />
+        <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="220,42,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

@@ -16,14 +16,17 @@ namespace TrocaBaseGUI
     public partial class MainWindow : Window
     {
         public ObservableCollection<Banco> listaBancos { get; set; }
+        private MainViewModel viewModel;
         public MainWindow()
         {
             InitializeComponent();
 
-            var viewModel = new MainViewModel();
+            viewModel = new MainViewModel();
             this.DataContext = viewModel;
             listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles);
-            lstTodosBancos.ItemsSource = viewModel.dbFiles;
+            lstTodosBancos.ItemsSource = listaBancos;
+            
+            RadioButton_Checked(rbTodos, null);
         }
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -43,7 +46,30 @@ namespace TrocaBaseGUI
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
+            //garante a validade do dbFiles antes de utilizar
+            if (!(DataContext is MainViewModel vm)) return;
 
+            if (sender is RadioButton rb)
+            {
+                switch (rb.Name)
+                { 
+                case "rbTodos":
+                    lstTodosBancos.ItemsSource = vm.dbFiles;
+                    break;
+
+                case "rbOracle":
+                    lstTodosBancos.ItemsSource = new ObservableCollection<Banco>(
+                        vm.dbFiles.Where(d => d.DbType.Equals("Oracle", StringComparison.OrdinalIgnoreCase))
+                    );
+                    break;
+
+                case "rbSqlServer":
+                    lstTodosBancos.ItemsSource = new ObservableCollection<Banco>(
+                        vm.dbFiles.Where(d => d.DbType.Equals("SQLServer", StringComparison.OrdinalIgnoreCase))
+                    );
+                    break;
+                }
+            }
         }
 
 

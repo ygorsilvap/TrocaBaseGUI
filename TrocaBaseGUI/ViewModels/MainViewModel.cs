@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using TrocaBaseGUI.Models;
 
 namespace TrocaBaseGUI.ViewModels
@@ -19,14 +20,17 @@ namespace TrocaBaseGUI.ViewModels
         static List<string> exceptions = new List<string> { "Help", "iphist" };
         
         public ObservableCollection<Banco> dbFiles { get; set; }
-        public ObservableCollection<Banco> oracleFiles { get; set; }
-        public ObservableCollection<Banco> sqlServerFiles { get; set; }
 
         public MainViewModel()
         {
             dbFiles = FilterFiles(AllFiles, exceptions);
 
             init(dbFiles);
+
+            //foreach (var file in dbFiles)
+            //{
+            //    Console.WriteLine("name: " + file.Name + " - dbtype: " + file.DbType + " - filename: " + file.FileName);
+            //}
         }
 
 
@@ -34,6 +38,7 @@ namespace TrocaBaseGUI.ViewModels
         {
             conexao = AllFiles.Exists(f => f == ConexaoFile) ? ToCapitalize(File.ReadLines($@"{ConexaoFile}").First()) : "";
             SelectBase(db);
+            
         }
 
         static void SelectBase(ObservableCollection<Banco> db)
@@ -60,7 +65,6 @@ namespace TrocaBaseGUI.ViewModels
 
         static ObservableCollection<Banco> FilterFiles(List<string> list, List<string> except)
         {
-
             ObservableCollection<Banco> filteredFiles = new ObservableCollection<Banco>();
 
             string oracleDb = "[BANCODADOS]=ORACLE";
@@ -68,7 +72,7 @@ namespace TrocaBaseGUI.ViewModels
 
             foreach (string file in list)
             {
-                filteredFiles.Add(new Banco { Name = Path.GetFileName(file.Replace(".dat", "")) });
+                filteredFiles.Add(new Banco { FileName = Path.GetFileName(file.Replace(".dat", "")) });
             };
 
             //filtra os .dat que são db
@@ -76,32 +80,38 @@ namespace TrocaBaseGUI.ViewModels
             {
                 for (int j = 0; j < except.Count; j++)
                 {
-                    if (filteredFiles[i].Name.Equals(except[j]))
+                    if (filteredFiles[i].FileName.Equals(except[j]))
                     {
                         filteredFiles.RemoveAt(i);
                     }
                 }
             }
+           
+
 
             //nomeia a variavel "conexao" para referencia
             for (int i = 0; i < filteredFiles.Count; i++)
             {
-                if (filteredFiles[i].Name.Equals("conexao"))
+                if (filteredFiles[i].FileName.Equals("conexao"))
                 {
-                    conexao = filteredFiles[i].Name;
+                    conexao = filteredFiles[i].FileName;
                 }
 
                 //Inicial do nome do banco maiúscula
-                string dbName = ToCapitalize(File.ReadLines($@"{DbDirectory}\{filteredFiles[i].Name}.dat").First());
+                string dbName = ToCapitalize(File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").First());
 
                 //IMPLEMENTAR A IDENTIFICAÇÃO DO TIPO DE DB
                 string dbType =
-                    File.ReadLines($@"{DbDirectory}\{filteredFiles[i].Name}.dat").Any(l => l.Contains(oracleDb)) ? "Oracle" :
-                    File.ReadLines($@"{DbDirectory}\{filteredFiles[i].Name}.dat").Any(l => l.Contains(sqlServerDb)) ? "SQLServer" : "Arquivo Inválido";
+                    File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").Any(l => l.Contains(oracleDb)) ? "Oracle" :
+                    File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").Any(l => l.Contains(sqlServerDb)) ? "SQLServer" : "Arquivo Inválido";
 
                 //Atribui os nomes e os tipos dos bancos
-                filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType });
+                filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, FileName = filteredFiles[i].FileName });
+
+                Console.WriteLine("original - " + "name: " + filteredFiles[i].Name + " - dbtype: " + filteredFiles[i].DbType + " - filename: " + filteredFiles[i].FileName);
+
             }
+                //Console.WriteLine("kok");
 
             return new ObservableCollection<Banco>(filteredFiles.OrderBy(l => l.Name));
         }
@@ -136,6 +146,7 @@ namespace TrocaBaseGUI.ViewModels
                 DbToConexao(db, opt);
 
                 SelectBase(db);
+
             }
             else
             {
@@ -169,10 +180,9 @@ namespace TrocaBaseGUI.ViewModels
             else
             {
                 DbToConexao(dbFiles, selectedBanco);
+                
             }
         }
-
-
 
         public static string ToCapitalize(string str)
         {
