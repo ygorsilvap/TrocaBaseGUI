@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,16 @@ namespace TrocaBaseGUI.Models
             }
         }
 
+        private string instance;
+        public string Instance
+        {
+            get => instance;
+            set
+            {
+                instance = value;
+                OnPropertyChanged(nameof(Instance));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

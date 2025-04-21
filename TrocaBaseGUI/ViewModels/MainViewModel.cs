@@ -10,6 +10,9 @@ using TrocaBaseGUI.Models;
 
 namespace TrocaBaseGUI.ViewModels
 {
+    //CRIAR BOTÃO PARA TELA DE CONFIGURAÇÃO
+    //COLOCAR A SELEÇÃO DO DIRETÓRIO DAS BASES
+    //COLOCAR A SELEÇÃO DO DIRETÓRIO DO SISTEMA
     internal class MainViewModel
     {
         const string DbDirectory = @"C:\Users\ygor\Desktop\TrocaBase";
@@ -20,7 +23,6 @@ namespace TrocaBaseGUI.ViewModels
         static List<string> exceptions = new List<string> { "Help", "iphist" };
         
         public ObservableCollection<Banco> dbFiles { get; set; }
-
         public MainViewModel()
         {
             dbFiles = FilterFiles(AllFiles, exceptions);
@@ -29,10 +31,10 @@ namespace TrocaBaseGUI.ViewModels
 
             //foreach (var file in dbFiles)
             //{
-            //    Console.WriteLine("name: " + file.Name + " - dbtype: " + file.DbType + " - filename: " + file.FileName);
+            //    Console.WriteLine("name: " + file.Name + " - inst: " + file.Instance);    
             //}
-        }
 
+        }
 
         static void init(ObservableCollection<Banco> db)
         {
@@ -47,7 +49,7 @@ namespace TrocaBaseGUI.ViewModels
             {
                 if (item.Name == conexao)
                 {
-                    item.Name += " (Banco Selecionado)";
+                    item.Name += " (Base Selecionada)";
                 }
             }
         }
@@ -56,9 +58,9 @@ namespace TrocaBaseGUI.ViewModels
         {
             foreach (var item in db)
             {
-                if (item.Name.Contains("(Banco Selecionado)"))
+                if (item.Name.Contains("(Base Selecionada)"))
                 {
-                    item.Name = item.Name.Remove(item.Name.Length - 20);
+                    item.Name = item.Name.Remove(item.Name.Length - 19);
                 }
             }
         }
@@ -69,6 +71,9 @@ namespace TrocaBaseGUI.ViewModels
 
             string oracleDb = "[BANCODADOS]=ORACLE";
             string sqlServerDb = "[BANCODADOS]=SQLSERVER";
+
+            string serverOracle = "[DATABASE]=150.230.86.225";
+            string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
 
             foreach (string file in list)
             {
@@ -104,18 +109,16 @@ namespace TrocaBaseGUI.ViewModels
                 string dbType =
                     File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").Any(l => l.Contains(oracleDb)) ? "Oracle" :
                     File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").Any(l => l.Contains(sqlServerDb)) ? "SQLServer" : "Arquivo Inválido";
+                string instanceType =
+                    File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").Any(i => i.Contains(serverOracle)) ? "server" :
+                    File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").Any(i => i.Contains(serverSqlServer)) ? "server" : "local";
 
                 //Atribui os nomes e os tipos dos bancos
-                filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, FileName = filteredFiles[i].FileName });
-
-                Console.WriteLine("original - " + "name: " + filteredFiles[i].Name + " - dbtype: " + filteredFiles[i].DbType + " - filename: " + filteredFiles[i].FileName);
-
+                filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, Instance = instanceType, FileName = filteredFiles[i].FileName });
             }
-                //Console.WriteLine("kok");
 
             return new ObservableCollection<Banco>(filteredFiles.OrderBy(l => l.Name));
         }
-
 
         //Define o banco que vai ser selecionado. Passa o .dat do banco para conexao.dat
         static void DbToConexao(ObservableCollection<Banco> db, string opt)
@@ -133,7 +136,7 @@ namespace TrocaBaseGUI.ViewModels
             Console.WriteLine("Conexao.dat Found! :)");
 
             //Verifica se estamos selecionando um banco já selecionado
-            if (!opt.Contains("(Banco Selecionado)"))
+            if (!opt.Contains("(Base Selecionada)"))
             {
                 //Lê o nome do banco na primeira linha do conexao.dat
                 string dbName = File.ReadLines($@"{ConexaoFile}").First();
@@ -189,6 +192,16 @@ namespace TrocaBaseGUI.ViewModels
             if (string.IsNullOrEmpty(str))
                 return str;
             return char.ToUpper(str[0]) + str.Substring(1).ToLower();
+        }
+
+        public ObservableCollection<Banco> InstanceFilter(string instance, ObservableCollection<Banco> db)
+        {
+            return new ObservableCollection<Banco>(db.Where(i => i.Instance.Equals(instance)));
+        }
+
+        public ObservableCollection<Banco> DbTypeFilter(string type, ObservableCollection<Banco> db)
+        {
+            return new ObservableCollection<Banco>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
         }
     }
 }
