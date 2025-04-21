@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.ViewModels;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace TrocaBaseGUI
 {
@@ -21,7 +23,7 @@ namespace TrocaBaseGUI
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
-            listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles);
+            listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
             lstTodosBancos.ItemsSource = listaBancos;
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
@@ -78,6 +80,67 @@ namespace TrocaBaseGUI
                 tabSelected = tabControl.SelectedIndex;
 
             GetFilter(listaBancos);
+        }
+
+        private void SelecionarDiretorio_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true,
+                InitialDirectory = @"C:\",
+                Title = "Selecione o diretório do LinxDMS/Bravos."
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                viewModel.AdicionarDiretorio($"\\{System.IO.Path.GetFileName(dialog.FileName)}");
+                viewModel.SetConexaoAddress(dialog.FileName);
+
+                dirSys.SelectedItem = viewModel.History.FirstOrDefault();
+
+                // Atualiza a lista de arquivos
+                viewModel.AtualizarDbFiles();
+
+                // Atualiza a interface para refletir os dados mais recentes
+                listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+                lstTodosBancos.ItemsSource = listaBancos;
+
+                RadioButton_Checked(rbTodos, null);
+                tabSelected = TabControl.SelectedIndex;
+                GetFilter(listaBancos);
+            }
+        }
+
+        private void SelecionarDiretorioBase_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true,
+                InitialDirectory = @"C:\",
+                Title = "Selecione o diretório das bases."
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                // Atualiza o DbDirectory no ViewModel
+                viewModel.SetBaseAddress(dialog.FileName);
+
+                // Atualiza a lista de arquivos
+                viewModel.AtualizarDbFiles();
+
+                // Altera o texto do TextBlock diretamente no código-behind
+                dirBase.Text = $"...\\{System.IO.Path.GetFileName(dialog.FileName)}";
+
+                // Atualiza a interface para refletir os dados mais recentes
+                listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+                lstTodosBancos.ItemsSource = listaBancos;
+
+                RadioButton_Checked(rbTodos, null);
+                tabSelected = TabControl.SelectedIndex;
+                GetFilter(listaBancos);
+            }
+
+
         }
     }
 }

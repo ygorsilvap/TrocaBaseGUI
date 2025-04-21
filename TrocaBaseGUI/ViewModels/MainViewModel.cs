@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -10,46 +11,55 @@ using TrocaBaseGUI.Models;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    //CRIAR BOTÃO PARA TELA DE CONFIGURAÇÃO
-    //COLOCAR A SELEÇÃO DO DIRETÓRIO DAS BASES
-    //COLOCAR A SELEÇÃO DO DIRETÓRIO DO SISTEMA
+    //LINHA 151
     internal class MainViewModel
     {
-        const string DbDirectory = @"C:\Users\ygor\Desktop\TrocaBase";
-        const string ConexaoFile = @"C:\Users\ygor\Desktop\TrocaBase\conexao.dat";
+        static string DbDirectory;
+        static string ConexaoFile;// = @"C:\Users\ygor\Desktop\TrocaBase\conexao.dat";
         static string conexao = "";
 
-        static List<string> AllFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
-        static List<string> exceptions = new List<string> { "Help", "iphist" };
-        
+        static List<string> allFiles;// = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
+        static List<string> exceptions = new List<string> { "Help", "iphist", "conexao" };
+
+
+        private const int MaxHistory = 5;
+        public ObservableCollection<SysDirectory> History { get; } = new ObservableCollection<SysDirectory>();
         public ObservableCollection<Banco> dbFiles { get; set; }
         public MainViewModel()
         {
-            dbFiles = FilterFiles(AllFiles, exceptions);
+            if ((!string.IsNullOrWhiteSpace(DbDirectory) && Directory.Exists(DbDirectory)) && (!string.IsNullOrWhiteSpace(ConexaoFile) && Directory.Exists(ConexaoFile)))
+            {
+                allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
 
-            init(dbFiles);
-
-            //foreach (var file in dbFiles)
-            //{
-            //    Console.WriteLine("name: " + file.Name + " - inst: " + file.Instance);    
-            //}
-
+                dbFiles = FilterFiles(allFiles, exceptions);
+                init(dbFiles, allFiles);
+                Console.WriteLine(ConexaoFile);
+            }
         }
 
-        static void init(ObservableCollection<Banco> db)
+        static void init(ObservableCollection<Banco> db, List<string> allFiles)
         {
-            conexao = AllFiles.Exists(f => f == ConexaoFile) ? ToCapitalize(File.ReadLines($@"{ConexaoFile}").First()) : "";
+            if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile))
+            {
+                var linha = File.ReadLines(ConexaoFile).FirstOrDefault();
+                conexao = linha != null ? ToCapitalize(linha) : "";
+            }
+            else
+            {
+                conexao = "";
+            }
+
             SelectBase(db);
-            
         }
 
         static void SelectBase(ObservableCollection<Banco> db)
         {
             foreach (var item in db)
             {
-                if (item.Name == conexao)
+                if (item.Name.Equals(conexao))
                 {
                     item.Name += " (Base Selecionada)";
+                    Console.WriteLine(item.Name);
                 }
             }
         }
@@ -75,6 +85,11 @@ namespace TrocaBaseGUI.ViewModels
             string serverOracle = "[DATABASE]=150.230.86.225";
             string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
 
+            if (string.IsNullOrEmpty(DbDirectory) || string.IsNullOrEmpty(ConexaoFile))
+            {
+                return new ObservableCollection<Banco>();
+            }
+
             foreach (string file in list)
             {
                 filteredFiles.Add(new Banco { FileName = Path.GetFileName(file.Replace(".dat", "")) });
@@ -97,9 +112,9 @@ namespace TrocaBaseGUI.ViewModels
             //nomeia a variavel "conexao" para referencia
             for (int i = 0; i < filteredFiles.Count; i++)
             {
-                if (filteredFiles[i].FileName.Equals("conexao"))
+                if (ConexaoFile != null && filteredFiles[i].FileName.Equals(File.ReadLines($"{ConexaoFile}").First()))
                 {
-                    conexao = filteredFiles[i].FileName;
+                    conexao = filteredFiles[i].Name;
                 }
 
                 //Inicial do nome do banco maiúscula
@@ -120,36 +135,21 @@ namespace TrocaBaseGUI.ViewModels
             return new ObservableCollection<Banco>(filteredFiles.OrderBy(l => l.Name));
         }
 
-        //Define o banco que vai ser selecionado. Passa o .dat do banco para conexao.dat
+        //Retorna o conexao.dat para o nome do banco
         static void DbToConexao(ObservableCollection<Banco> db, string opt)
         {
-            //Renomeia o banco escolhido(opt) para conexao.dat
-            File.Move($@"{DbDirectory}\{opt}.dat", $"{ConexaoFile}");
-            conexao = opt;
-            SelectBase(db);
-            Console.WriteLine($"\n{conexao}.dat is now conexao.dat(DbToConexao())");
-        }
-
-        //Retorna o conexao.dat para o nome do banco
-        static void ConexaoToDb(ObservableCollection<Banco> db, string opt)
-        {
-            Console.WriteLine("Conexao.dat Found! :)");
-
             //Verifica se estamos selecionando um banco já selecionado
             if (!opt.Contains("(Base Selecionada)"))
             {
-                //Lê o nome do banco na primeira linha do conexao.dat
-                string dbName = File.ReadLines($@"{ConexaoFile}").First();
+                string dbText = File.ReadAllText($@"{DbDirectory}\{opt}.dat");
 
-                //Renomeia o conexao.dat para o nome do banco de dbName
-                File.Move($"{ConexaoFile}", $@"{DbDirectory}\{dbName}.dat");
+                File.WriteAllText($"{ConexaoFile}", dbText);
 
                 UnselectBase(db);
 
-                DbToConexao(db, opt);
-
                 SelectBase(db);
 
+                //////////CORRIGIR A MUDANÇA DE NOME DE BASE SELECIONADA
             }
             else
             {
@@ -178,12 +178,10 @@ namespace TrocaBaseGUI.ViewModels
 
             if (IsThereConexaoDat())
             {
-                ConexaoToDb(dbFiles, selectedBanco);
+                DbToConexao(dbFiles, selectedBanco);
             }
             else
-            {
-                DbToConexao(dbFiles, selectedBanco);
-                
+            {                
             }
         }
 
@@ -202,6 +200,49 @@ namespace TrocaBaseGUI.ViewModels
         public ObservableCollection<Banco> DbTypeFilter(string type, ObservableCollection<Banco> db)
         {
             return new ObservableCollection<Banco>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        public void AdicionarDiretorio(string endereco)
+        {
+            // Verifica se já existe o diretório no histórico
+            var existente = History.FirstOrDefault(d => d.Address == endereco);
+            if (existente != null)
+            {
+                History.Remove(existente); // Remove para mover para o topo
+            }
+
+            // Adiciona no início da lista
+            History.Insert(0, new SysDirectory(endereco));
+
+            // Garante que só existam no máximo 5
+            while (History.Count > MaxHistory)
+            {
+                History.RemoveAt(History.Count - 1); // Remove o mais antigo (último)
+            }
+        }
+
+        public void SetBaseAddress(string add)
+        {
+            DbDirectory = add;
+        }
+
+        public void SetConexaoAddress(string add)
+        {
+            ConexaoFile = add + @"\conexao.dat";
+        }
+
+        public void AtualizarDbFiles()
+        {
+            if (!string.IsNullOrEmpty(DbDirectory))
+            {
+                allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
+                dbFiles = FilterFiles(allFiles, exceptions);
+                init(dbFiles, allFiles);
+            }
+            else
+            {
+                dbFiles = new ObservableCollection<Banco>();
+            }
         }
     }
 }

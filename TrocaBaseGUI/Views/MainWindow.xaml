@@ -8,22 +8,26 @@
         Title="TrocaBase" Height="500" Width="550"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="10,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="121*"/>
+            <ColumnDefinition Width="59*"/>
+        </Grid.ColumnDefinitions>
 
         <!-- Botão -->
-        <Button Content="Aplicar e Fechar" Click="CloseApp_Click" Height="33" Margin="194,410,194,0" VerticalAlignment="Top"/>
+        <Button Content="Aplicar e Fechar" Click="CloseApp_Click" Height="33" Margin="194,400,17,0" VerticalAlignment="Top"/>
 
         <!-- TabControl só para trocar contexto -->
-        <TabControl Margin="80,80,80,350" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0">
+        <TabControl Margin="80,100,80,330" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Grid.ColumnSpan="2">
             <TabItem Header="Local"/>
             <TabItem Header="Server"/>
         </TabControl>
 
         <!-- ListBox única -->
         <ListBox x:Name="lstTodosBancos"
-                 Margin="80,102.3,80,120"
+                 Margin="80,122,80,100"
                  ItemsSource="{Binding listaBancos}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
-                 BorderThickness="1">
+                 BorderThickness="1" Grid.ColumnSpan="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -40,9 +44,13 @@
         </ListBox>
 
         <!-- Radio Buttons -->
-        <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="80,42,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="150,42,0,0" VerticalAlignment="Top" />
-        <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="220,42,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="81,60,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="151,60,0,0" VerticalAlignment="Top" />
+        <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="221,60,0,0" VerticalAlignment="Top"/>
+        <Button Content="Dir. Bases" Click="SelecionarDiretorioBase_Click" HorizontalAlignment="Left" Padding="10, 2" Margin="90,60,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button Content="Dir. DMS/Bravos" Click="SelecionarDiretorio_Click" HorizontalAlignment="Left" Padding="12, 2" Margin="320,60,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="dirBase" FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Margin="85,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
