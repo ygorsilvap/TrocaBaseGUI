@@ -49,7 +49,7 @@
         <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="221,60,0,0" VerticalAlignment="Top"/>
         <Button Content="Dir. Bases" Click="SelecionarDiretorioBase_Click" HorizontalAlignment="Left" Padding="10, 2" Margin="90,60,0,0" VerticalAlignment="Top" Grid.Column="1"/>
         <Button Content="Dir. DMS/Bravos" Click="SelecionarDiretorio_Click" HorizontalAlignment="Left" Padding="12, 2" Margin="320,60,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" SelectionChanged="dirSys_SelectionChanged" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="dirBase" FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Margin="85,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
     </Grid>

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TrocaBaseGUI
 {
@@ -104,7 +105,7 @@ namespace TrocaBaseGUI
                 // Atualiza a interface para refletir os dados mais recentes
                 listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
                 lstTodosBancos.ItemsSource = listaBancos;
-
+                
                 RadioButton_Checked(rbTodos, null);
                 tabSelected = TabControl.SelectedIndex;
                 GetFilter(listaBancos);
@@ -139,8 +140,25 @@ namespace TrocaBaseGUI
                 tabSelected = TabControl.SelectedIndex;
                 GetFilter(listaBancos);
             }
+        }
 
+        private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            var selectedItem = comboBox.SelectedItem as SysDirectory;
 
+            Console.WriteLine("t: " + selectedItem.Address);
+
+            //viewModel.SetConexaoAddress(dialog.FileName);
+
+            //viewModel.AtualizarDbFiles();
+
+            //listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+            //lstTodosBancos.ItemsSource = listaBancos;
+
+            //RadioButton_Checked(rbTodos, null);
+            //tabSelected = TabControl.SelectedIndex;
+            //GetFilter(listaBancos);
         }
     }
 }

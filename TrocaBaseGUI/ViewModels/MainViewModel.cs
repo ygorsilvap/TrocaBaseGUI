@@ -15,10 +15,10 @@ namespace TrocaBaseGUI.ViewModels
     internal class MainViewModel
     {
         static string DbDirectory;
-        static string ConexaoFile;// = @"C:\Users\ygor\Desktop\TrocaBase\conexao.dat";
+        static string ConexaoFile;
         static string conexao = "";
 
-        static List<string> allFiles;// = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
+        static List<string> allFiles;
         static List<string> exceptions = new List<string> { "Help", "iphist", "conexao" };
 
 
@@ -33,13 +33,12 @@ namespace TrocaBaseGUI.ViewModels
 
                 dbFiles = FilterFiles(allFiles, exceptions);
                 init(dbFiles, allFiles);
-                Console.WriteLine(ConexaoFile);
             }
         }
 
         static void init(ObservableCollection<Banco> db, List<string> allFiles)
         {
-            if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile))
+            if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile)) 
             {
                 var linha = File.ReadLines(ConexaoFile).FirstOrDefault();
                 conexao = linha != null ? ToCapitalize(linha) : "";
@@ -59,7 +58,6 @@ namespace TrocaBaseGUI.ViewModels
                 if (item.Name.Equals(conexao))
                 {
                     item.Name += " (Base Selecionada)";
-                    Console.WriteLine(item.Name);
                 }
             }
         }
@@ -139,11 +137,14 @@ namespace TrocaBaseGUI.ViewModels
         static void DbToConexao(ObservableCollection<Banco> db, string opt)
         {
             //Verifica se estamos selecionando um banco já selecionado
+            Console.WriteLine("opt: " + opt);
             if (!opt.Contains("(Base Selecionada)"))
             {
                 string dbText = File.ReadAllText($@"{DbDirectory}\{opt}.dat");
 
                 File.WriteAllText($"{ConexaoFile}", dbText);
+
+                conexao = opt;
 
                 UnselectBase(db);
 
