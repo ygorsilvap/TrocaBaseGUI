@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:TrocaBaseGUI"
         mc:Ignorable="d"
         Title="TrocaBase" Height="500" Width="550"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing">
     <Grid Margin="10,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="121*"/>

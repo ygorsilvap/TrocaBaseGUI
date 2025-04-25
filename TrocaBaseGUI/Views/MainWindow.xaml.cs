@@ -15,6 +15,7 @@ namespace TrocaBaseGUI
     public partial class MainWindow : Window
     {
         public ObservableCollection<Banco> listaBancos { get; set; }
+        public ObservableCollection<SysDirectory> hist { get; set; }
         private MainViewModel viewModel;
         public int tabSelected;
         public string rbSelected;
@@ -24,26 +25,13 @@ namespace TrocaBaseGUI
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
+            hist = viewModel.History;
             listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
             lstTodosBancos.ItemsSource = listaBancos;
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             GetFilter(listaBancos);
         }
-
-        private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (DataContext is MainViewModel vm)
-            {
-                vm.TrocarBase(lstTodosBancos.SelectedItem);
-            }
-        }
-
-        private void CloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
         private void GetFilter(ObservableCollection<Banco> db)
         {
             if (!(DataContext is MainViewModel vm)) return;
@@ -70,6 +58,31 @@ namespace TrocaBaseGUI
             lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
         }
 
+        private void Refresh()
+        {
+            viewModel.AtualizarDbFiles();
+
+            listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+            lstTodosBancos.ItemsSource = listaBancos;
+
+            RadioButton_Checked(rbTodos, null);
+            tabSelected = TabControl.SelectedIndex;
+            GetFilter(listaBancos);
+        }
+
+        private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.TrocarBase(lstTodosBancos.SelectedItem);
+            }
+        }
+
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
              GetFilter(listaBancos);
@@ -94,21 +107,12 @@ namespace TrocaBaseGUI
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                viewModel.AdicionarDiretorio($"\\{System.IO.Path.GetFileName(dialog.FileName)}");
+                viewModel.AdicionarDiretorio($"\\{System.IO.Path.GetFileName(dialog.FileName)}", dialog.FileName);
                 viewModel.SetConexaoAddress(dialog.FileName);
 
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
-                // Atualiza a lista de arquivos
-                viewModel.AtualizarDbFiles();
-
-                // Atualiza a interface para refletir os dados mais recentes
-                listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
-                lstTodosBancos.ItemsSource = listaBancos;
-                
-                RadioButton_Checked(rbTodos, null);
-                tabSelected = TabControl.SelectedIndex;
-                GetFilter(listaBancos);
+                Refresh();
             }
         }
 
@@ -126,19 +130,10 @@ namespace TrocaBaseGUI
                 // Atualiza o DbDirectory no ViewModel
                 viewModel.SetBaseAddress(dialog.FileName);
 
-                // Atualiza a lista de arquivos
-                viewModel.AtualizarDbFiles();
-
                 // Altera o texto do TextBlock diretamente no código-behind
                 dirBase.Text = $"...\\{System.IO.Path.GetFileName(dialog.FileName)}";
 
-                // Atualiza a interface para refletir os dados mais recentes
-                listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
-                lstTodosBancos.ItemsSource = listaBancos;
-
-                RadioButton_Checked(rbTodos, null);
-                tabSelected = TabControl.SelectedIndex;
-                GetFilter(listaBancos);
+                Refresh();
             }
         }
 
@@ -147,18 +142,16 @@ namespace TrocaBaseGUI
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectory;
 
-            Console.WriteLine("t: " + selectedItem.Address);
+            viewModel.SetConexaoAddress(selectedItem.FullPathAddress);
 
-            //viewModel.SetConexaoAddress(dialog.FileName);
+            viewModel.AtualizarDbFiles();
 
-            //viewModel.AtualizarDbFiles();
+            Refresh();
+        }
 
-            //listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
-            //lstTodosBancos.ItemsSource = listaBancos;
-
-            //RadioButton_Checked(rbTodos, null);
-            //tabSelected = TabControl.SelectedIndex;
-            //GetFilter(listaBancos);
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            viewModel.SalvarEstado(); // Salva os dados antes de fechar
         }
     }
 }

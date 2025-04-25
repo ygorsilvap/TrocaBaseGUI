@@ -22,5 +22,65 @@ namespace TrocaBaseGUI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string dbDirectory {
+            get {
+                return ((string)(this["dbDirectory"]));
+            }
+            set {
+                this["dbDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string conexaoFile {
+            get {
+                return ((string)(this["conexaoFile"]));
+            }
+            set {
+                this["conexaoFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Conexao {
+            get {
+                return ((string)(this["Conexao"]));
+            }
+            set {
+                this["Conexao"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TabSelect {
+            get {
+                return ((int)(this["TabSelect"]));
+            }
+            set {
+                this["TabSelect"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string RbSelected {
+            get {
+                return ((string)(this["RbSelected"]));
+            }
+            set {
+                this["RbSelected"] = value;
+            }
+        }
     }
 }
