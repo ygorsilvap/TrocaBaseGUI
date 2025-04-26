@@ -1,17 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace TrocaBaseGUI.Models
 {
     public class SysDirectory : INotifyPropertyChanged
     {
-        public string Address { get; set; }
-        public string FullPathAddress { get; set; }
+        private string address;
+        public string Address
+        {
+            get => address;
+            set
+            {
+                address = value;
+                OnPropertyChanged(nameof(Address));
+            }
+        }
 
+        private string fullPathAddress;
+        public string FullPathAddress
+        {
+            get => fullPathAddress;
+            set
+            {
+                fullPathAddress = value;
+                OnPropertyChanged(nameof(FullPathAddress));
+            }
+        }
+
+        
         public SysDirectory(string address, string fullPathAddress)
         {
             Address = address;

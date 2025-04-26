@@ -1,53 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Channels;
+using System.Text.Json;
 using System.Windows;
-using System.Windows.Controls;
 using TrocaBaseGUI.Models;
 
 namespace TrocaBaseGUI.ViewModels
 {
+    //validar se o conexao.dat tem conteúdo inválido
+    //decidir se haverá a separação do cabeçalho dos arquivos de base
+    //colocar as mensagens de pasta de base vazia e pasta do sistema vazio
+    //criar mais validações com messagebox 
+    //colocar botão para escolher o executável do sistema
+    //colocar botão para fechar e abrir o sistema
+    //alternativo, trocar o botão de escolha da pasta do sistema para o executável do sistema, através disso fazer o registro dos caminhnos como já está sendo mas aproveitar o input
+        //para definir o caminho do .exe
+    //colocar um botão para limpar toda as seleções e excluir histórico
+    //aumentar o limite do histórico de 5 para 10
+    //possíveis pequenas alterações no layout
+    //refatoração rápida
+    //proteger a aplicação com try catch
 
-    //TERMINAR DE IMPLEMENTAR A FUNÇÃO DE MEMÓRIA
     internal class MainViewModel
     {
-        static string DbDirectory;
-        static string ConexaoFile;
+        public static string DbDirectory;
+        public static string ConexaoFile;
         static string conexao = "";
 
         static List<string> allFiles;
-
-
         private const int MaxHistory = 5;
-        public ObservableCollection<SysDirectory> History { get; } = new ObservableCollection<SysDirectory>();
+        public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
         public ObservableCollection<Banco> dbFiles { get; set; }
         public MainViewModel()
         {
-            DbDirectory = Properties.Settings.Default.dbDirectory;
-            ConexaoFile = Properties.Settings.Default.conexaoFile;
-            conexao = Properties.Settings.Default.Conexao;
+            LoadState();
 
-            if ((!string.IsNullOrWhiteSpace(DbDirectory) && Directory.Exists(DbDirectory)) && (!string.IsNullOrWhiteSpace(ConexaoFile) && Directory.Exists(ConexaoFile)))
+            if ((!string.IsNullOrWhiteSpace(DbDirectory) && Directory.Exists(DbDirectory)) && (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile)))
             {
                 allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
                 dbFiles = FilterFiles(allFiles);
                 init(dbFiles, allFiles);
             }
-
         }
 
         static void init(ObservableCollection<Banco> db, List<string> allFiles)
         {
-            if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile)) 
+            if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile) && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile))) 
             {
                 var linha = File.ReadLines(ConexaoFile).FirstOrDefault().Remove(0, 12);
                 conexao = linha != null ? ToCapitalize(linha) : "";
+                SelectBase(db);
             }
-            SelectBase(db);
         }
 
         static ObservableCollection<Banco> FilterFiles(List<string> list)
@@ -72,7 +78,6 @@ namespace TrocaBaseGUI.ViewModels
                 };
             }
 
-            //nomeia a variavel "conexao" para referencia
             for (int i = 0; i < filteredFiles.Count; i++)
             {
                 var lines = File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").ToList();
@@ -94,10 +99,10 @@ namespace TrocaBaseGUI.ViewModels
                 //Atribui os nomes e os tipos dos bancos
                 filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, Instance = instanceType, FileName = filteredFiles[i].FileName });
 
-                if (ConexaoFile != null &&
-                    filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").First().Remove(0, 12))))
+                //nomeia a variavel "conexao" para referencia
+                if (ConexaoFile != null && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile)))
                 {
-                    conexao = filteredFiles[i].Name;
+                    conexao = filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").FirstOrDefault().Remove(0, 12))) ? filteredFiles[i].Name : conexao;
                 }
             }
 
@@ -108,7 +113,7 @@ namespace TrocaBaseGUI.ViewModels
         {
             foreach (var item in db)
             {
-                if (item.Name.Equals(conexao))
+                if (!string.IsNullOrEmpty(item.Name) && item.Name.Equals(conexao))
                 {
                     item.Name += " (Base Selecionada)";
                 }
@@ -235,13 +240,39 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
+        public Boolean ValidateSystemPath(string path)
+        {
+            return File.Exists(path + "\\conexao.dat") ? true : false;
+        }
+
         public void SalvarEstado()
         {
+            List<SysDirectory> historyList = History.ToList();
+            string HistoricoSerialized = JsonSerializer.Serialize(historyList);
+            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+            {
+                Properties.Settings.Default.historico = HistoricoSerialized;
+            }
+
             Properties.Settings.Default.dbDirectory = DbDirectory;
             Properties.Settings.Default.conexaoFile = ConexaoFile;
             Properties.Settings.Default.Conexao = conexao;
-            //Properties.Settings.Default.History = History;
             Properties.Settings.Default.Save();
+        }
+
+        public void LoadState()
+        {
+            DbDirectory = Properties.Settings.Default.dbDirectory;
+            ConexaoFile = Properties.Settings.Default.conexaoFile;
+            conexao = Properties.Settings.Default.Conexao;
+
+            string HistoricoSerialized = Properties.Settings.Default.historico;
+            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+            {
+                History =
+                JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
+                ?? new ObservableCollection<SysDirectory>();
+            }
         }
     }
 }

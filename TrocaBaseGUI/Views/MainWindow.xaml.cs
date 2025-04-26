@@ -8,7 +8,9 @@ using System.Windows.Input;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+
 
 namespace TrocaBaseGUI
 {
@@ -19,17 +21,23 @@ namespace TrocaBaseGUI
         private MainViewModel viewModel;
         public int tabSelected;
         public string rbSelected;
+        public string sysSelected;
+
         public MainWindow()
         {
             InitializeComponent();
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
+
             hist = viewModel.History;
             listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
             lstTodosBancos.ItemsSource = listaBancos;
+
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
+            dirSys.SelectedValue = hist.First().Address;
+
             GetFilter(listaBancos);
         }
         private void GetFilter(ObservableCollection<Banco> db)
@@ -67,6 +75,8 @@ namespace TrocaBaseGUI
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
+            conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(MainViewModel.ConexaoFile)) ? "conexao.dat vazio" : "";
+            dirBase.Text = $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
             GetFilter(listaBancos);
         }
 
@@ -105,7 +115,7 @@ namespace TrocaBaseGUI
                 Title = "Selecione o diretório do LinxDMS/Bravos."
             };
 
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok && viewModel.ValidateSystemPath(dialog.FileName))
             {
                 viewModel.AdicionarDiretorio($"\\{System.IO.Path.GetFileName(dialog.FileName)}", dialog.FileName);
                 viewModel.SetConexaoAddress(dialog.FileName);
@@ -113,6 +123,9 @@ namespace TrocaBaseGUI
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
                 Refresh();
+            } else
+            {
+                MessageBox.Show("Diretório inválido.\nconexao.dat não encontrado.", "Seleção de Diretório Inválida", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
