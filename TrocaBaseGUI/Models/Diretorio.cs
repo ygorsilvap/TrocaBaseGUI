@@ -26,11 +26,23 @@ namespace TrocaBaseGUI.Models
             }
         }
 
-        
-        public SysDirectory(string address, string fullPathAddress)
+        private string exeFile;
+        public string ExeFile
+        {
+            get => exeFile;
+            set
+            {
+                exeFile = value;
+                OnPropertyChanged(nameof(ExeFile));
+            }
+        }
+
+
+        public SysDirectory(string address, string fullPathAddress, string exeFile)
         {
             Address = address;
             FullPathAddress = fullPathAddress;
+            ExeFile = exeFile;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

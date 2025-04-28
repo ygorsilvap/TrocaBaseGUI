@@ -3,23 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.Channels;
 using System.Text.Json;
-using System.Windows;
 using TrocaBaseGUI.Models;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    //validar se o conexao.dat tem conteúdo inválido
+    //adicionar segunda tela para crud
+    //adicionar diferenciação do 2c para 3c
     //decidir se haverá a separação do cabeçalho dos arquivos de base
-    //colocar as mensagens de pasta de base vazia e pasta do sistema vazio
-    //criar mais validações com messagebox 
-    //colocar botão para escolher o executável do sistema
-    //colocar botão para fechar e abrir o sistema
-    //alternativo, trocar o botão de escolha da pasta do sistema para o executável do sistema, através disso fazer o registro dos caminhnos como já está sendo mas aproveitar o input
-        //para definir o caminho do .exe
-    //colocar um botão para limpar toda as seleções e excluir histórico
-    //aumentar o limite do histórico de 5 para 10
+    //criar mais validações com messagebox
     //possíveis pequenas alterações no layout
     //refatoração rápida
     //proteger a aplicação com try catch
@@ -28,10 +20,11 @@ namespace TrocaBaseGUI.ViewModels
     {
         public static string DbDirectory;
         public static string ConexaoFile;
-        static string conexao = "";
+        static string selectedBase;
+        public static string exeFile;
 
         static List<string> allFiles;
-        private const int MaxHistory = 5;
+        private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
         public ObservableCollection<Banco> dbFiles { get; set; }
         public MainViewModel()
@@ -51,7 +44,7 @@ namespace TrocaBaseGUI.ViewModels
             if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile) && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile))) 
             {
                 var linha = File.ReadLines(ConexaoFile).FirstOrDefault().Remove(0, 12);
-                conexao = linha != null ? ToCapitalize(linha) : "";
+                selectedBase = linha != null ? ToCapitalize(linha) : "";
                 SelectBase(db);
             }
         }
@@ -102,7 +95,7 @@ namespace TrocaBaseGUI.ViewModels
                 //nomeia a variavel "conexao" para referencia
                 if (ConexaoFile != null && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile)))
                 {
-                    conexao = filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").FirstOrDefault().Remove(0, 12))) ? filteredFiles[i].Name : conexao;
+                    selectedBase = filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").FirstOrDefault().Remove(0, 12))) ? filteredFiles[i].Name : selectedBase;
                 }
             }
 
@@ -113,7 +106,7 @@ namespace TrocaBaseGUI.ViewModels
         {
             foreach (var item in db)
             {
-                if (!string.IsNullOrEmpty(item.Name) && item.Name.Equals(conexao))
+                if (!string.IsNullOrEmpty(item.Name) && item.Name.Equals(selectedBase))
                 {
                     item.Name += " (Base Selecionada)";
                 }
@@ -140,7 +133,7 @@ namespace TrocaBaseGUI.ViewModels
 
                 File.WriteAllText($"{ConexaoFile}", dbText);
 
-                conexao = opt;
+                selectedBase = opt;
 
                 UnselectBase(db);
 
@@ -154,7 +147,7 @@ namespace TrocaBaseGUI.ViewModels
 
         static Boolean IsThereConexaoDat()
         {
-            if (conexao == "")
+            if (selectedBase == "")
             {
                 return false;
             }
@@ -165,7 +158,7 @@ namespace TrocaBaseGUI.ViewModels
 
         }
 
-        public void TrocarBase(object selectedItem)
+        public void ChangeDb(object selectedItem)
         {
             if (selectedItem == null) return;
 
@@ -197,7 +190,7 @@ namespace TrocaBaseGUI.ViewModels
             return new ObservableCollection<Banco>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
         }
 
-        public void AdicionarDiretorio(string endereco, string enderecoCompleto)
+        public void AddDirectory(string endereco, string enderecoCompleto, string exe)
         {
             // Verifica se já existe o diretório no histórico
             var existente = History.FirstOrDefault(d => d.Address == endereco);
@@ -207,7 +200,8 @@ namespace TrocaBaseGUI.ViewModels
             }
 
             // Adiciona no início da lista
-            History.Insert(0, new SysDirectory(endereco, enderecoCompleto));
+            History.Insert(0, new SysDirectory(endereco, enderecoCompleto, exe));
+            exeFile = exe;
 
             // Garante que só existam no máximo 5
             while (History.Count > MaxHistory)
@@ -245,7 +239,7 @@ namespace TrocaBaseGUI.ViewModels
             return File.Exists(path + "\\conexao.dat") ? true : false;
         }
 
-        public void SalvarEstado()
+        public void SaveState()
         {
             List<SysDirectory> historyList = History.ToList();
             string HistoricoSerialized = JsonSerializer.Serialize(historyList);
@@ -254,17 +248,19 @@ namespace TrocaBaseGUI.ViewModels
                 Properties.Settings.Default.historico = HistoricoSerialized;
             }
 
+            Properties.Settings.Default.ExeFile = exeFile;
             Properties.Settings.Default.dbDirectory = DbDirectory;
             Properties.Settings.Default.conexaoFile = ConexaoFile;
-            Properties.Settings.Default.Conexao = conexao;
+            Properties.Settings.Default.Conexao = selectedBase;
             Properties.Settings.Default.Save();
         }
 
         public void LoadState()
         {
+            exeFile = Properties.Settings.Default.ExeFile;
             DbDirectory = Properties.Settings.Default.dbDirectory;
             ConexaoFile = Properties.Settings.Default.conexaoFile;
-            conexao = Properties.Settings.Default.Conexao;
+            selectedBase = Properties.Settings.Default.Conexao;
 
             string HistoricoSerialized = Properties.Settings.Default.historico;
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
@@ -273,6 +269,20 @@ namespace TrocaBaseGUI.ViewModels
                 JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
                 ?? new ObservableCollection<SysDirectory>();
             }
+        }
+
+        public void ClearApp()
+        {
+            DbDirectory = "";
+            ConexaoFile = "";
+            selectedBase = "";
+            exeFile = "";
+
+            History.Clear();
+            Properties.Settings.Default.historico = "";
+            Properties.Settings.Default.Save();
+
+            AtualizarDbFiles();
         }
     }
 }

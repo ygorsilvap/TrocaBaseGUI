@@ -94,5 +94,17 @@ namespace TrocaBaseGUI.Properties {
                 this["historico"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ExeFile {
+            get {
+                return ((string)(this["ExeFile"]));
+            }
+            set {
+                this["ExeFile"] = value;
+            }
+        }
     }
 }

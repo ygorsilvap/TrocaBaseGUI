@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +7,10 @@ using TrocaBaseGUI.Models;
 using TrocaBaseGUI.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
+using System.Diagnostics;
+using System;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Threading;
 
 
 namespace TrocaBaseGUI
@@ -30,13 +31,18 @@ namespace TrocaBaseGUI
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
 
-            hist = viewModel.History;
+            hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
             lstTodosBancos.ItemsSource = listaBancos;
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-            dirSys.SelectedValue = hist.First().Address;
+            dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
+            CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
+            IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
+            IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
+
+            Console.WriteLine(hist.Count());
 
             GetFilter(listaBancos);
         }
@@ -68,6 +74,9 @@ namespace TrocaBaseGUI
 
         private void Refresh()
         {
+            IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
+            IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
+
             viewModel.AtualizarDbFiles();
 
             listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
@@ -75,8 +84,19 @@ namespace TrocaBaseGUI
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-            conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(MainViewModel.ConexaoFile)) ? "conexao.dat vazio" : "";
-            dirBase.Text = $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
+
+            if (!string.IsNullOrEmpty(MainViewModel.ConexaoFile))
+            {
+                conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(MainViewModel.ConexaoFile)) || 
+                    !File.ReadAllText(MainViewModel.ConexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
+            }
+            else
+            {
+                conexaoCheck.Text = "";
+            }
+            dirBase.Text = string.IsNullOrEmpty(System.IO.Path.GetFileName(MainViewModel.DbDirectory)) ? "" : $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
+            CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
+
             GetFilter(listaBancos);
         }
 
@@ -84,7 +104,7 @@ namespace TrocaBaseGUI
         {
             if (DataContext is MainViewModel vm)
             {
-                vm.TrocarBase(lstTodosBancos.SelectedItem);
+                vm.ChangeDb(lstTodosBancos.SelectedItem);
             }
         }
 
@@ -106,26 +126,24 @@ namespace TrocaBaseGUI
             GetFilter(listaBancos);
         }
 
-        private void SelecionarDiretorio_Click(object sender, RoutedEventArgs e)
+        private void SelecionarExecutavel_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new CommonOpenFileDialog
             {
-                IsFolderPicker = true,
+                Title = "Selecione o executável do sistema.",
                 InitialDirectory = @"C:\",
-                Title = "Selecione o diretório do LinxDMS/Bravos."
+                Filters = { new CommonFileDialogFilter("Executáveis", "*.exe") }
             };
 
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok && viewModel.ValidateSystemPath(dialog.FileName))
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok && File.Exists(dialog.FileName))
             {
-                viewModel.AdicionarDiretorio($"\\{System.IO.Path.GetFileName(dialog.FileName)}", dialog.FileName);
-                viewModel.SetConexaoAddress(dialog.FileName);
+                viewModel.AddDirectory($"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}", 
+                    System.IO.Path.GetDirectoryName(dialog.FileName), System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
+                viewModel.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
 
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
                 Refresh();
-            } else
-            {
-                MessageBox.Show("Diretório inválido.\nconexao.dat não encontrado.", "Seleção de Diretório Inválida", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -155,16 +173,35 @@ namespace TrocaBaseGUI
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectory;
 
-            viewModel.SetConexaoAddress(selectedItem.FullPathAddress);
-
-            viewModel.AtualizarDbFiles();
-
+            if (selectedItem != null) { 
+                viewModel.SetConexaoAddress(selectedItem.FullPathAddress);
+                MainViewModel.exeFile = selectedItem.ExeFile;
+            }
             Refresh();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            viewModel.SalvarEstado(); // Salva os dados antes de fechar
+            viewModel.SaveState(); // Salva os dados antes de fechar
+        }
+
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            var del = MessageBox.Show("Isso fará com que todos os dados da aplicação sejam deletados.\n\nDesejar continuar?", "Hard Reset", 
+                MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                .ToString().ToLower();
+
+            if (del.Equals("yes"))
+            {
+                viewModel.ClearApp();
+                Refresh();
+            }
+        }
+
+        private void CloseNSysButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start($@"{System.IO.Path.GetDirectoryName(MainViewModel.ConexaoFile)}\{MainViewModel.exeFile}.exe");
+            Application.Current.Shutdown();
         }
     }
 }

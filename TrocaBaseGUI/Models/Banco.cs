@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace TrocaBaseGUI.Models
 {
-    //Criação da classe Banco com método de observação para alteração na tela em tempo real(Código feito pelo ChatGPT)
     public class Banco : INotifyPropertyChanged
     {
         private string name;

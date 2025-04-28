@@ -15,44 +15,37 @@
         </Grid.ColumnDefinitions>
 
         <!-- Botão -->
-        <Button Content="Aplicar e Fechar" Click="CloseApp_Click" Height="33" Margin="194,400,17,0" VerticalAlignment="Top"/>
+        <Button Content="Fechar" Click="CloseApp_Click" Height="38" Margin="90,390,123,0" VerticalAlignment="Top"/>
+
+        <Button x:Name="CloseNSysButton" Content="{Binding exeName}" Click="CloseNSysButton_Click" Height="38" Margin="300,390,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
         <!-- TabControl só para trocar contexto -->
         <TabControl Margin="80,100,80,330" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Grid.ColumnSpan="2">
             <TabItem Header="Local"/>
             <TabItem Header="Server"/>
         </TabControl>
-
         <!-- ListBox única -->
         <ListBox x:Name="lstTodosBancos"
                  Margin="80,122,80,100"
-                 ItemsSource="{Binding listaBancos}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
-                 BorderThickness="1" Grid.ColumnSpan="2">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="275" />
-                            <ColumnDefinition Width="70" />
-                        </Grid.ColumnDefinitions>
+                 BorderThickness="1" Grid.ColumnSpan="2"/>
 
-                        <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="{Binding DbType}" VerticalAlignment="Center" Foreground="Gray" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
 
         <!-- Radio Buttons -->
         <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="81,60,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="151,60,0,0" VerticalAlignment="Top" />
         <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="221,60,0,0" VerticalAlignment="Top"/>
         <Button Content="Dir. Bases" Click="SelecionarDiretorioBase_Click" HorizontalAlignment="Left" Padding="10, 2" Margin="90,60,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button Content="Dir. DMS/Bravos" Click="SelecionarDiretorio_Click" HorizontalAlignment="Left" Padding="12, 2" Margin="320,60,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Button Content="Dir. Sistema" Click="SelecionarExecutavel_Click" HorizontalAlignment="Left" Padding="24, 2" Margin="320,60,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" SelectedValuePath="Address" SelectionChanged="dirSys_SelectionChanged" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="dirBase" FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Margin="85,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock x:Name="conexaoCheck" HorizontalAlignment="Left" Height="27" Margin="200,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="103"/>
+        <TextBlock x:Name="conexaoCheck" HorizontalAlignment="Left" Height="29" Margin="205,86,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="103"/>
+        <Button Grid.Column="1" HorizontalAlignment="Left" Margin="140,15,0,0" VerticalAlignment="Top" Click="ClearAll_Click">
+            <TextBlock Text="🗑️" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </Button>
+        <TextBlock x:Name="IsThereDbDirectory" HorizontalAlignment="Left" Margin="171,177,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
+        <TextBlock x:Name="IsThereSysDirectory" HorizontalAlignment="Left" Margin="171,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
+
 
     </Grid>
 </Window>
