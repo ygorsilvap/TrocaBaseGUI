@@ -261,7 +261,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\DatabaseModel.cs" />
     <Compile Include="Models\Diretorio.cs" />
+    <Compile Include="Models\SqlServerConnectionModel.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="Views\MainWindow.xaml">

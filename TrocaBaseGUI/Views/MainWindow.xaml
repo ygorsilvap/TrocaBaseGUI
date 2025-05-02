@@ -35,15 +35,15 @@
         <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="81,60,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="151,60,0,0" VerticalAlignment="Top" />
         <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="221,60,0,0" VerticalAlignment="Top"/>
-        <Button Content="Dir. Bases" Click="SelecionarDiretorioBase_Click" HorizontalAlignment="Left" Padding="10, 2" Margin="90,60,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <!--<Button Content="Dir. Bases" Click="SelecionarDiretorioBase_Click" HorizontalAlignment="Left" Padding="10, 2" Margin="90,60,0,0" VerticalAlignment="Top" Grid.Column="1"/>-->
         <Button Content="Dir. Sistema" Click="SelecionarExecutavel_Click" HorizontalAlignment="Left" Padding="24, 2" Margin="320,60,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" SelectedValuePath="Address" SelectionChanged="dirSys_SelectionChanged" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
-        <TextBlock x:Name="dirBase" FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Margin="85,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <!--<TextBlock x:Name="dirBase" FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Margin="85,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>-->
         <TextBlock x:Name="conexaoCheck" HorizontalAlignment="Left" Height="29" Margin="205,86,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="103"/>
-        <Button Grid.Column="1" HorizontalAlignment="Left" Margin="140,15,0,0" VerticalAlignment="Top" Click="ClearAll_Click">
+        <!--<Button Grid.Column="1" HorizontalAlignment="Left" Margin="140,15,0,0" VerticalAlignment="Top" Click="ClearAll_Click">
             <TextBlock Text="🗑️" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        </Button>
-        <TextBlock x:Name="IsThereDbDirectory" HorizontalAlignment="Left" Margin="171,177,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
+        </Button>-->
+        <!--<TextBlock x:Name="IsThereDbDirectory" HorizontalAlignment="Left" Margin="171,177,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>-->
         <TextBlock x:Name="IsThereSysDirectory" HorizontalAlignment="Left" Margin="171,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
 
 

@@ -5,17 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using TrocaBaseGUI.Models;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    //adicionar segunda tela para crud
-    //adicionar diferenciação do 2c para 3c
-    //decidir se haverá a separação do cabeçalho dos arquivos de base
-    //criar mais validações com messagebox
-    //possíveis pequenas alterações no layout
-    //refatoração rápida
-    //proteger a aplicação com try catch
-
     internal class MainViewModel
     {
         public static string DbDirectory;
@@ -24,18 +18,46 @@ namespace TrocaBaseGUI.ViewModels
         public static string exeFile;
 
         static List<string> allFiles;
+
+        public SqlServerConnectionModel Connection { get; set; } = new SqlServerConnectionModel();
+
+        public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
+
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
         public ObservableCollection<Banco> dbFiles { get; set; }
         public MainViewModel()
         {
-            LoadState();
+            //LoadState();
+            LoadSqlServerDatabases();
 
             if ((!string.IsNullOrWhiteSpace(DbDirectory) && Directory.Exists(DbDirectory)) && (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile)))
             {
-                allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
-                dbFiles = FilterFiles(allFiles);
+                //allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
+                //dbFiles = FilterFiles(allFiles);
                 init(dbFiles, allFiles);
+            }
+
+            foreach (var item in Databases)
+            {
+                Console.WriteLine("\ndb: " + item.Name + "\n");
+            }
+        }
+
+
+        public void LoadSqlServerDatabases()
+        {
+            using (var conn = new SqlConnection(Connection.GetConnectionString()))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
+                var reader = cmd.ExecuteReader();
+
+                Databases.Clear();
+                while (reader.Read())
+                {
+                    Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQL Server" });
+                }
             }
         }
 
@@ -49,58 +71,58 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        static ObservableCollection<Banco> FilterFiles(List<string> list)
-        {
-            ObservableCollection<Banco> filteredFiles = new ObservableCollection<Banco>();
+        //static ObservableCollection<Banco> FilterFiles(List<string> list)
+        //{
+        //    ObservableCollection<Banco> filteredFiles = new ObservableCollection<Banco>();
 
-            string oracleDb = "[BANCODADOS]=ORACLE";
-            string sqlServerDb = "[BANCODADOS]=SQLSERVER";
+        //    string oracleDb = "[BANCODADOS]=ORACLE";
+        //    string sqlServerDb = "[BANCODADOS]=SQLSERVER";
 
-            string serverOracle = "[DATABASE]=150.230.86.225";
-            string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
+        //    string serverOracle = "[DATABASE]=150.230.86.225";
+        //    string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
 
-            string nameTag = "[NOMEBANCO]";
+        //    string nameTag = "[NOMEBANCO]";
 
-            if (string.IsNullOrEmpty(DbDirectory) || string.IsNullOrEmpty(ConexaoFile)) return new ObservableCollection<Banco>();
+        //    if (string.IsNullOrEmpty(DbDirectory) || string.IsNullOrEmpty(ConexaoFile)) return new ObservableCollection<Banco>();
 
-            foreach (string file in list)
-            {
-                if (File.ReadLines(file).ToList().Any(n => n.IndexOf(nameTag, StringComparison.OrdinalIgnoreCase) >= 0) && !(Path.GetFileName(file).Equals("conexao.dat")))
-                {
-                    filteredFiles.Add(new Banco { FileName = Path.GetFileName(file.Replace(".dat", "")) });
-                };
-            }
+        //    foreach (string file in list)
+        //    {
+        //        if (File.ReadLines(file).ToList().Any(n => n.IndexOf(nameTag, StringComparison.OrdinalIgnoreCase) >= 0) && !(Path.GetFileName(file).Equals("conexao.dat")))
+        //        {
+        //            filteredFiles.Add(new Banco { FileName = Path.GetFileName(file.Replace(".dat", "")) });
+        //        };
+        //    }
 
-            for (int i = 0; i < filteredFiles.Count; i++)
-            {
-                var lines = File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").ToList();
+        //    for (int i = 0; i < filteredFiles.Count; i++)
+        //    {
+        //        var lines = File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").ToList();
 
-                //Define nome do banco e nicial do nome do banco maiúscula
-                string dbName = ToCapitalize((lines.FirstOrDefault(b => b.Contains(nameTag)) ?? string.Empty).Remove(0, 12));
+        //        //Define nome do banco e nicial do nome do banco maiúscula
+        //        string dbName = ToCapitalize((lines.FirstOrDefault(b => b.Contains(nameTag)) ?? string.Empty).Remove(0, 12));
 
-                //Define o tipo de base(oracle, sqlserver)
-                string dbType =
-                    lines.Any(l => l.IndexOf(oracleDb, StringComparison.OrdinalIgnoreCase) >= 0) ? "Oracle" :
-                    lines.Any(l => l.IndexOf(sqlServerDb, StringComparison.OrdinalIgnoreCase) >= 0) ? "SQLServer" : "Inválido";
+        //        //Define o tipo de base(oracle, sqlserver)
+        //        string dbType =
+        //            lines.Any(l => l.IndexOf(oracleDb, StringComparison.OrdinalIgnoreCase) >= 0) ? "Oracle" :
+        //            lines.Any(l => l.IndexOf(sqlServerDb, StringComparison.OrdinalIgnoreCase) >= 0) ? "SQLServer" : "Inválido";
 
-                //Define o tipo de instância(local, server)
-                string instanceType =
-                    lines.Any(l => l.IndexOf(serverOracle, StringComparison.OrdinalIgnoreCase) >= 0) ? "server" :
-                    lines.Any(l => l.IndexOf(serverSqlServer, StringComparison.OrdinalIgnoreCase) >= 0) ? "server" : "local";
+        //        //Define o tipo de instância(local, server)
+        //        string instanceType =
+        //            lines.Any(l => l.IndexOf(serverOracle, StringComparison.OrdinalIgnoreCase) >= 0) ? "server" :
+        //            lines.Any(l => l.IndexOf(serverSqlServer, StringComparison.OrdinalIgnoreCase) >= 0) ? "server" : "local";
 
 
-                //Atribui os nomes e os tipos dos bancos
-                filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, Instance = instanceType, FileName = filteredFiles[i].FileName });
+        //        //Atribui os nomes e os tipos dos bancos
+        //        filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, Instance = instanceType, FileName = filteredFiles[i].FileName });
 
-                //nomeia a variavel "conexao" para referencia
-                if (ConexaoFile != null && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile)))
-                {
-                    selectedBase = filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").FirstOrDefault().Remove(0, 12))) ? filteredFiles[i].Name : selectedBase;
-                }
-            }
+        //        //nomeia a variavel "conexao" para referencia
+        //        if (ConexaoFile != null && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile)))
+        //        {
+        //            selectedBase = filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").FirstOrDefault().Remove(0, 12))) ? filteredFiles[i].Name : selectedBase;
+        //        }
+        //    }
 
-            return new ObservableCollection<Banco>(filteredFiles.OrderBy(l => l.Name));
-        }
+        //    return new ObservableCollection<Banco>(filteredFiles.OrderBy(l => l.Name));
+        //}
 
         static void SelectBase(ObservableCollection<Banco> db)
         {
@@ -210,10 +232,10 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public void SetBaseAddress(string add)
-        {
-            DbDirectory = add;
-        }
+        //public void SetBaseAddress(string add)
+        //{
+        //    DbDirectory = add;
+        //}
 
         public void SetConexaoAddress(string add)
         {
@@ -224,8 +246,8 @@ namespace TrocaBaseGUI.ViewModels
         {
             if (!string.IsNullOrEmpty(DbDirectory))
             {
-                allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
-                dbFiles = FilterFiles(allFiles);
+                //allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
+                //dbFiles = FilterFiles(allFiles);
                 init(dbFiles, allFiles);
             }
             else
@@ -239,50 +261,50 @@ namespace TrocaBaseGUI.ViewModels
             return File.Exists(path + "\\conexao.dat") ? true : false;
         }
 
-        public void SaveState()
-        {
-            List<SysDirectory> historyList = History.ToList();
-            string HistoricoSerialized = JsonSerializer.Serialize(historyList);
-            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-            {
-                Properties.Settings.Default.historico = HistoricoSerialized;
-            }
+        //public void SaveState()
+        //{
+        //    List<SysDirectory> historyList = History.ToList();
+        //    string HistoricoSerialized = JsonSerializer.Serialize(historyList);
+        //    if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+        //    {
+        //        Properties.Settings.Default.historico = HistoricoSerialized;
+        //    }
 
-            Properties.Settings.Default.ExeFile = exeFile;
-            Properties.Settings.Default.dbDirectory = DbDirectory;
-            Properties.Settings.Default.conexaoFile = ConexaoFile;
-            Properties.Settings.Default.Conexao = selectedBase;
-            Properties.Settings.Default.Save();
-        }
+        //    Properties.Settings.Default.ExeFile = exeFile;
+        //    Properties.Settings.Default.dbDirectory = DbDirectory;
+        //    Properties.Settings.Default.conexaoFile = ConexaoFile;
+        //    Properties.Settings.Default.Conexao = selectedBase;
+        //    Properties.Settings.Default.Save();
+        //}
 
-        public void LoadState()
-        {
-            exeFile = Properties.Settings.Default.ExeFile;
-            DbDirectory = Properties.Settings.Default.dbDirectory;
-            ConexaoFile = Properties.Settings.Default.conexaoFile;
-            selectedBase = Properties.Settings.Default.Conexao;
+        //public void LoadState()
+        //{
+        //    exeFile = Properties.Settings.Default.ExeFile;
+        //    DbDirectory = Properties.Settings.Default.dbDirectory;
+        //    ConexaoFile = Properties.Settings.Default.conexaoFile;
+        //    selectedBase = Properties.Settings.Default.Conexao;
 
-            string HistoricoSerialized = Properties.Settings.Default.historico;
-            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-            {
-                History =
-                JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
-                ?? new ObservableCollection<SysDirectory>();
-            }
-        }
+        //    string HistoricoSerialized = Properties.Settings.Default.historico;
+        //    if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+        //    {
+        //        History =
+        //        JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
+        //        ?? new ObservableCollection<SysDirectory>();
+        //    }
+        //}
 
-        public void ClearApp()
-        {
-            DbDirectory = "";
-            ConexaoFile = "";
-            selectedBase = "";
-            exeFile = "";
+        //public void ClearApp()
+        //{
+        //    DbDirectory = "";
+        //    ConexaoFile = "";
+        //    selectedBase = "";
+        //    exeFile = "";
 
-            History.Clear();
-            Properties.Settings.Default.historico = "";
-            Properties.Settings.Default.Save();
+        //    History.Clear();
+        //    Properties.Settings.Default.historico = "";
+        //    Properties.Settings.Default.Save();
 
-            AtualizarDbFiles();
-        }
+        //    AtualizarDbFiles();
+        //}
     }
 }

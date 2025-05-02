@@ -17,7 +17,8 @@ namespace TrocaBaseGUI
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Banco> listaBancos { get; set; }
+        //public ObservableCollection<Banco> listaBancos { get; set; }
+        public ObservableCollection<DatabaseModel> listaBancos { get; set; }
         public ObservableCollection<SysDirectory> hist { get; set; }
         private MainViewModel viewModel;
         public int tabSelected;
@@ -30,23 +31,25 @@ namespace TrocaBaseGUI
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
+            
 
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
-            listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+            //listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+            listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
             CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
-            IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
+            //IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
             Console.WriteLine(hist.Count());
 
             GetFilter(listaBancos);
         }
-        private void GetFilter(ObservableCollection<Banco> db)
+        private void GetFilter(ObservableCollection<DatabaseModel> db)
         {
             if (!(DataContext is MainViewModel vm)) return;
 
@@ -63,23 +66,23 @@ namespace TrocaBaseGUI
             }
             else
             {
-                lstTodosBancos.ItemsSource = vm.InstanceFilter(instance, db);
+                //lstTodosBancos.ItemsSource = vm.InstanceFilter(instance, db);
                 return;
             }
 
-            ObservableCollection<Banco> bases = vm.InstanceFilter(instance, db);
+            //ObservableCollection<Banco> bases = vm.InstanceFilter(instance, db);
 
-            lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
+            //lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
         }
 
         private void Refresh()
         {
-            IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
+            //IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
             viewModel.AtualizarDbFiles();
 
-            listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
+            listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
             RadioButton_Checked(rbTodos, null);
@@ -94,7 +97,7 @@ namespace TrocaBaseGUI
             {
                 conexaoCheck.Text = "";
             }
-            dirBase.Text = string.IsNullOrEmpty(System.IO.Path.GetFileName(MainViewModel.DbDirectory)) ? "" : $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
+            //dirBase.Text = string.IsNullOrEmpty(System.IO.Path.GetFileName(MainViewModel.DbDirectory)) ? "" : $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
             CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
 
             GetFilter(listaBancos);
@@ -106,6 +109,8 @@ namespace TrocaBaseGUI
             {
                 vm.ChangeDb(lstTodosBancos.SelectedItem);
             }
+
+            Refresh();
         }
 
         private void CloseApp_Click(object sender, RoutedEventArgs e)
@@ -147,26 +152,26 @@ namespace TrocaBaseGUI
             }
         }
 
-        private void SelecionarDiretorioBase_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new CommonOpenFileDialog
-            {
-                IsFolderPicker = true,
-                InitialDirectory = @"C:\",
-                Title = "Selecione o diretório das bases."
-            };
+        //private void SelecionarDiretorioBase_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var dialog = new CommonOpenFileDialog
+        //    {
+        //        IsFolderPicker = true,
+        //        InitialDirectory = @"C:\",
+        //        Title = "Selecione o diretório das bases."
+        //    };
 
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                // Atualiza o DbDirectory no ViewModel
-                viewModel.SetBaseAddress(dialog.FileName);
+        //    if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+        //    {
+        //        // Atualiza o DbDirectory no ViewModel
+        //        viewModel.SetBaseAddress(dialog.FileName);
 
-                // Altera o texto do TextBlock diretamente no código-behind
-                dirBase.Text = $"...\\{System.IO.Path.GetFileName(dialog.FileName)}";
+        //        // Altera o texto do TextBlock diretamente no código-behind
+        //        dirBase.Text = $"...\\{System.IO.Path.GetFileName(dialog.FileName)}";
 
-                Refresh();
-            }
-        }
+        //        Refresh();
+        //    }
+        //}
 
         private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
