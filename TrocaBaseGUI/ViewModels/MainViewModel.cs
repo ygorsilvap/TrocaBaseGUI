@@ -7,47 +7,41 @@ using System.Text.Json;
 using TrocaBaseGUI.Models;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Net;
+using Oracle.ManagedDataAccess.Client;
+using System.ServiceProcess;
 
 namespace TrocaBaseGUI.ViewModels
 {
     internal class MainViewModel
     {
-        public static string DbDirectory;
         public static string ConexaoFile;
         static string selectedBase;
         public static string exeFile;
+        public string hostname;
 
-        static List<string> allFiles;
-
-        public SqlServerConnectionModel Connection { get; set; } = new SqlServerConnectionModel();
+        public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
 
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
 
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
-        public ObservableCollection<Banco> dbFiles { get; set; }
         public MainViewModel()
         {
             //LoadState();
             LoadSqlServerDatabases();
+            GetOracleInstances();
+            GetOracleInstancesDatabases();  
+            hostname = Dns.GetHostName();
+            //Console.WriteLine(hostname);
 
-            if ((!string.IsNullOrWhiteSpace(DbDirectory) && Directory.Exists(DbDirectory)) && (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile)))
-            {
-                //allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
-                //dbFiles = FilterFiles(allFiles);
-                init(dbFiles, allFiles);
-            }
-
-            foreach (var item in Databases)
-            {
-                Console.WriteLine("\ndb: " + item.Name + "\n");
-            }
+            SelectBase(Databases);
         }
 
 
         public void LoadSqlServerDatabases()
         {
-            using (var conn = new SqlConnection(Connection.GetConnectionString()))
+            using (var conn = new SqlConnection(SQLServerConnection.GetConnectionString()))
             {
                 conn.Open();
                 var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
@@ -56,114 +50,69 @@ namespace TrocaBaseGUI.ViewModels
                 Databases.Clear();
                 while (reader.Read())
                 {
-                    Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQL Server" });
+                    Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer" });
                 }
             }
         }
 
-        static void init(ObservableCollection<Banco> db, List<string> allFiles)
+        public List<string> GetOracleInstances()
         {
-            if (!string.IsNullOrWhiteSpace(ConexaoFile) && File.Exists(ConexaoFile) && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile))) 
+            List<string> inst = new List<string>();
+
+            // Lista todos os serviços do sistema
+            ServiceController[] services = ServiceController.GetServices();
+
+            foreach (ServiceController service in services)
             {
-                var linha = File.ReadLines(ConexaoFile).FirstOrDefault().Remove(0, 12);
-                selectedBase = linha != null ? ToCapitalize(linha) : "";
-                SelectBase(db);
-            }
-        }
-
-        //static ObservableCollection<Banco> FilterFiles(List<string> list)
-        //{
-        //    ObservableCollection<Banco> filteredFiles = new ObservableCollection<Banco>();
-
-        //    string oracleDb = "[BANCODADOS]=ORACLE";
-        //    string sqlServerDb = "[BANCODADOS]=SQLSERVER";
-
-        //    string serverOracle = "[DATABASE]=150.230.86.225";
-        //    string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
-
-        //    string nameTag = "[NOMEBANCO]";
-
-        //    if (string.IsNullOrEmpty(DbDirectory) || string.IsNullOrEmpty(ConexaoFile)) return new ObservableCollection<Banco>();
-
-        //    foreach (string file in list)
-        //    {
-        //        if (File.ReadLines(file).ToList().Any(n => n.IndexOf(nameTag, StringComparison.OrdinalIgnoreCase) >= 0) && !(Path.GetFileName(file).Equals("conexao.dat")))
-        //        {
-        //            filteredFiles.Add(new Banco { FileName = Path.GetFileName(file.Replace(".dat", "")) });
-        //        };
-        //    }
-
-        //    for (int i = 0; i < filteredFiles.Count; i++)
-        //    {
-        //        var lines = File.ReadLines($@"{DbDirectory}\{filteredFiles[i].FileName}.dat").ToList();
-
-        //        //Define nome do banco e nicial do nome do banco maiúscula
-        //        string dbName = ToCapitalize((lines.FirstOrDefault(b => b.Contains(nameTag)) ?? string.Empty).Remove(0, 12));
-
-        //        //Define o tipo de base(oracle, sqlserver)
-        //        string dbType =
-        //            lines.Any(l => l.IndexOf(oracleDb, StringComparison.OrdinalIgnoreCase) >= 0) ? "Oracle" :
-        //            lines.Any(l => l.IndexOf(sqlServerDb, StringComparison.OrdinalIgnoreCase) >= 0) ? "SQLServer" : "Inválido";
-
-        //        //Define o tipo de instância(local, server)
-        //        string instanceType =
-        //            lines.Any(l => l.IndexOf(serverOracle, StringComparison.OrdinalIgnoreCase) >= 0) ? "server" :
-        //            lines.Any(l => l.IndexOf(serverSqlServer, StringComparison.OrdinalIgnoreCase) >= 0) ? "server" : "local";
-
-
-        //        //Atribui os nomes e os tipos dos bancos
-        //        filteredFiles[i] = (new Banco { Name = dbName, DbType = dbType, Instance = instanceType, FileName = filteredFiles[i].FileName });
-
-        //        //nomeia a variavel "conexao" para referencia
-        //        if (ConexaoFile != null && !string.IsNullOrEmpty(File.ReadAllText(ConexaoFile)))
-        //        {
-        //            selectedBase = filteredFiles[i].Name.Equals(ToCapitalize(File.ReadLines($"{ConexaoFile}").FirstOrDefault().Remove(0, 12))) ? filteredFiles[i].Name : selectedBase;
-        //        }
-        //    }
-
-        //    return new ObservableCollection<Banco>(filteredFiles.OrderBy(l => l.Name));
-        //}
-
-        static void SelectBase(ObservableCollection<Banco> db)
-        {
-            foreach (var item in db)
-            {
-                if (!string.IsNullOrEmpty(item.Name) && item.Name.Equals(selectedBase))
+                // Verifica se o nome do serviço contém "Oracle"
+                if (service.ServiceName.Contains("OracleService"))
                 {
-                    item.Name += " (Base Selecionada)";
+                    if(service.Status.ToString().ToLower().Equals("running")) inst.Add(service.ServiceName.Remove(0, 13));
                 }
             }
+            return inst;
         }
 
-        static void UnselectBase(ObservableCollection<Banco> db)
+        public void GetOracleInstancesDatabases()
         {
-            foreach (var item in db)
+            string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
+                "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
+
+            string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
+
+            using (OracleConnection conn = new OracleConnection(connectionString))
             {
-                if (item.Name.Contains("(Base Selecionada)"))
+                try
                 {
-                    item.Name = item.Name.Remove(item.Name.Length - 19);
+                    conn.Open();
+                    Console.WriteLine("Conexão realizada com sucesso!");
+
+                    // Exemplo simples de consulta no schema
+                    OracleCommand cmd = new OracleCommand("SELECT username FROM dba_users WHERE account_status = 'OPEN' AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') " + 
+                        $"AND username NOT IN ({exception}) ORDER BY username", conn);
+                    OracleDataReader reader = cmd.ExecuteReader();
+
+                    Console.WriteLine("Usuários no schema:");
+                    while (reader.Read())
+                    {
+                        Console.WriteLine(reader["USERNAME"]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erro: " + ex.Message);
                 }
             }
         }
 
-        static void DbToConexao(ObservableCollection<Banco> db, string opt)
+        static void SelectBase(ObservableCollection<DatabaseModel> db)
         {
-            //Verifica se estamos selecionando um banco já selecionado
-            if (!opt.Contains("(Base Selecionada)"))
+            if (db.Any(d => d.DbType.ToLower().StartsWith("s")))
             {
-                string dbText = File.ReadAllText($@"{DbDirectory}\{opt}.dat");
-
-                File.WriteAllText($"{ConexaoFile}", dbText);
-
-                selectedBase = opt;
-
-                UnselectBase(db);
-
-                SelectBase(db);
-            }
-            else
+                //Console.WriteLine("SQLServer");
+            } else if(db.Any(d => d.DbType.ToLower().StartsWith("o")))
             {
-                Console.WriteLine("Banco já Selecionado.");
+               //Console.WriteLine("Oracle");
             }
         }
 
@@ -180,21 +129,6 @@ namespace TrocaBaseGUI.ViewModels
 
         }
 
-        public void ChangeDb(object selectedItem)
-        {
-            if (selectedItem == null) return;
-
-            string selectedBanco = selectedItem.ToString();
-
-            if (IsThereConexaoDat())
-            {
-                DbToConexao(dbFiles, selectedBanco);
-            }
-            else
-            {                
-            }
-        }
-
         public static string ToCapitalize(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -202,15 +136,15 @@ namespace TrocaBaseGUI.ViewModels
             return char.ToUpper(str[0]) + str.Substring(1).ToLower();
         }
 
-        public ObservableCollection<Banco> InstanceFilter(string instance, ObservableCollection<Banco> db)
-        {
-            return new ObservableCollection<Banco>(db.Where(i => i.Instance.Equals(instance)));
-        }
+        //public ObservableCollection<Banco> InstanceFilter(string instance, ObservableCollection<Banco> db)
+        //{
+        //    return new ObservableCollection<Banco>(db.Where(i => i.Instance.Equals(instance)));
+        //}
 
-        public ObservableCollection<Banco> DbTypeFilter(string type, ObservableCollection<Banco> db)
-        {
-            return new ObservableCollection<Banco>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
-        }
+        //public ObservableCollection<Banco> DbTypeFilter(string type, ObservableCollection<Banco> db)
+        //{
+        //    return new ObservableCollection<Banco>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
+        //}
 
         public void AddDirectory(string endereco, string enderecoCompleto, string exe)
         {
@@ -242,69 +176,50 @@ namespace TrocaBaseGUI.ViewModels
             ConexaoFile = add + @"\conexao.dat";
         }
 
-        public void AtualizarDbFiles()
-        {
-            if (!string.IsNullOrEmpty(DbDirectory))
-            {
-                //allFiles = new List<string>(Directory.GetFiles(DbDirectory, "*.dat"));
-                //dbFiles = FilterFiles(allFiles);
-                init(dbFiles, allFiles);
-            }
-            else
-            {
-                dbFiles = new ObservableCollection<Banco>();
-            }
-        }
-
         public Boolean ValidateSystemPath(string path)
         {
             return File.Exists(path + "\\conexao.dat") ? true : false;
         }
 
-        //public void SaveState()
-        //{
-        //    List<SysDirectory> historyList = History.ToList();
-        //    string HistoricoSerialized = JsonSerializer.Serialize(historyList);
-        //    if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-        //    {
-        //        Properties.Settings.Default.historico = HistoricoSerialized;
-        //    }
+        public void SaveState()
+        {
+            List<SysDirectory> historyList = History.ToList();
+            string HistoricoSerialized = JsonSerializer.Serialize(historyList);
+            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+            {
+                Properties.Settings.Default.historico = HistoricoSerialized;
+            }
 
-        //    Properties.Settings.Default.ExeFile = exeFile;
-        //    Properties.Settings.Default.dbDirectory = DbDirectory;
-        //    Properties.Settings.Default.conexaoFile = ConexaoFile;
-        //    Properties.Settings.Default.Conexao = selectedBase;
-        //    Properties.Settings.Default.Save();
-        //}
+            Properties.Settings.Default.ExeFile = exeFile;
+            Properties.Settings.Default.conexaoFile = ConexaoFile;
+            Properties.Settings.Default.Conexao = selectedBase;
+            Properties.Settings.Default.Save();
+        }
 
-        //public void LoadState()
-        //{
-        //    exeFile = Properties.Settings.Default.ExeFile;
-        //    DbDirectory = Properties.Settings.Default.dbDirectory;
-        //    ConexaoFile = Properties.Settings.Default.conexaoFile;
-        //    selectedBase = Properties.Settings.Default.Conexao;
+        public void LoadState()
+        {
+            exeFile = Properties.Settings.Default.ExeFile;
+            ConexaoFile = Properties.Settings.Default.conexaoFile;
+            selectedBase = Properties.Settings.Default.Conexao;
 
-        //    string HistoricoSerialized = Properties.Settings.Default.historico;
-        //    if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-        //    {
-        //        History =
-        //        JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
-        //        ?? new ObservableCollection<SysDirectory>();
-        //    }
-        //}
+            string HistoricoSerialized = Properties.Settings.Default.historico;
+            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+            {
+                History =
+                JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
+                ?? new ObservableCollection<SysDirectory>();
+            }
+        }
 
-        //public void ClearApp()
-        //{
-        //    DbDirectory = "";
-        //    ConexaoFile = "";
-        //    selectedBase = "";
-        //    exeFile = "";
+        public void ClearApp()
+        {
+            ConexaoFile = "";
+            selectedBase = "";
+            exeFile = "";
 
-        //    History.Clear();
-        //    Properties.Settings.Default.historico = "";
-        //    Properties.Settings.Default.Save();
-
-        //    AtualizarDbFiles();
-        //}
+            History.Clear();
+            Properties.Settings.Default.historico = "";
+            Properties.Settings.Default.Save();
+        }
     }
 }

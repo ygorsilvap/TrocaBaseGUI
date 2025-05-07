@@ -45,7 +45,7 @@ namespace TrocaBaseGUI
             //IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
-            Console.WriteLine(hist.Count());
+            //Console.WriteLine(hist.Count());
 
             GetFilter(listaBancos);
         }
@@ -80,7 +80,7 @@ namespace TrocaBaseGUI
             //IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
-            viewModel.AtualizarDbFiles();
+            //viewModel.AtualizarDbFiles();
 
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
@@ -107,7 +107,7 @@ namespace TrocaBaseGUI
         {
             if (DataContext is MainViewModel vm)
             {
-                vm.ChangeDb(lstTodosBancos.SelectedItem);
+                //vm.ChangeDb(lstTodosBancos.SelectedItem);
             }
 
             Refresh();
