@@ -38,7 +38,7 @@ namespace TrocaBaseGUI.ViewModels
             SelectBase(Databases);
         }
 
-
+        
         public void LoadSqlServerDatabases()
         {
             using (var conn = new SqlConnection(SQLServerConnection.GetConnectionString()))
@@ -78,7 +78,7 @@ namespace TrocaBaseGUI.ViewModels
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
+            string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;";
 
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
@@ -87,15 +87,13 @@ namespace TrocaBaseGUI.ViewModels
                     conn.Open();
                     Console.WriteLine("Conexão realizada com sucesso!");
 
-                    // Exemplo simples de consulta no schema
                     OracleCommand cmd = new OracleCommand("SELECT username FROM dba_users WHERE account_status = 'OPEN' AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') " + 
                         $"AND username NOT IN ({exception}) ORDER BY username", conn);
                     OracleDataReader reader = cmd.ExecuteReader();
 
-                    Console.WriteLine("Usuários no schema:");
                     while (reader.Read())
                     {
-                        Console.WriteLine(reader["USERNAME"]);
+                        Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle" });
                     }
                 }
                 catch (Exception ex)

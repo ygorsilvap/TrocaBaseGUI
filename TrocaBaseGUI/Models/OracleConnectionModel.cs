@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Net;
 
 public class OracleConnectionModel : INotifyPropertyChanged
 {
@@ -18,6 +19,13 @@ public class OracleConnectionModel : INotifyPropertyChanged
 
     }
 
+    private string hostname = Dns.GetHostName();
+    public string Hostname
+    {
+        get => hostname;
+        set { hostname = value; OnPropertyChanged(); }
+    }
+
     private string porta;
     public string Porta
     {
@@ -25,16 +33,9 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { porta = value; OnPropertyChanged(); }
     }
 
-    private bool useIntegratedSecurity = true;
-    public bool UseIntegratedSecurity
-    {
-        get => useIntegratedSecurity;
-        set { useIntegratedSecurity = value; OnPropertyChanged(); }
-    }
-
     public string GetConnectionString()
     {
-        return $"User Id={UserId};Password={Password};Data Source=DESKTOP-N8OLEBQ:{Porta}/LINX;DBA Privilege=SYSDBA;";
+        return $"User Id={UserId};Password={Password};Data Source={Hostname}:1521/LINX;DBA Privilege=SYSDBA;";
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

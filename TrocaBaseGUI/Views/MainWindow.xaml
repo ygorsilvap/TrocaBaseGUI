@@ -40,9 +40,9 @@
         <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" SelectedValuePath="Address" SelectionChanged="dirSys_SelectionChanged" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
         <!--<TextBlock x:Name="dirBase" FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Margin="85,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>-->
         <TextBlock x:Name="conexaoCheck" HorizontalAlignment="Left" Height="29" Margin="205,86,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="103"/>
-        <!--<Button Grid.Column="1" HorizontalAlignment="Left" Margin="140,15,0,0" VerticalAlignment="Top" Click="ClearAll_Click">
-            <TextBlock Text="🗑️" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        </Button>-->
+        <Button Grid.Column="1" HorizontalAlignment="Left" Margin="140,15,0,0" VerticalAlignment="Top">
+            <TextBlock Text="⚙️" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </Button>
         <!--<TextBlock x:Name="IsThereDbDirectory" HorizontalAlignment="Left" Margin="171,177,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>-->
         <TextBlock x:Name="IsThereSysDirectory" HorizontalAlignment="Left" Margin="171,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
 
