@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Botão -->
-        <Button Content="Fechar" Click="CloseApp_Click" Height="38" Margin="90,390,123,0" VerticalAlignment="Top"/>
+        <Button Content="Fechar" Click="CloseApp_Click" Margin="90,390,123,72"/>
 
         <Button x:Name="CloseNSysButton" Content="{Binding exeName}" Click="CloseNSysButton_Click" Height="38" Margin="300,390,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 

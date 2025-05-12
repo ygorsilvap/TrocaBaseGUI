@@ -78,8 +78,8 @@ namespace TrocaBaseGUI.ViewModels
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            //string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
-            string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
+            string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
+            //string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
 
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
