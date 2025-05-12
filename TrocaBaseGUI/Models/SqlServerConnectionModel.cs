@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 
 public class SqlServerConnectionModel : INotifyPropertyChanged
 {
-    private string server = "MTZNOTFS058680";
+    //private string server = "MTZNOTFS058680";
+    private string server = "DESKTOP-N8OLEBQ\\SQLExpress";
     public string Server
     {
         get => server;

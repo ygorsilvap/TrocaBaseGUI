@@ -35,7 +35,7 @@ namespace TrocaBaseGUI.ViewModels
             hostname = Dns.GetHostName();
             //Console.WriteLine(hostname);
 
-            SelectBase(Databases);
+            //SelectBase(Databases);
         }
 
         
@@ -50,7 +50,7 @@ namespace TrocaBaseGUI.ViewModels
                 Databases.Clear();
                 while (reader.Read())
                 {
-                    Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer" });
+                    Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Instance = "local"});
                 }
             }
         }
@@ -78,7 +78,8 @@ namespace TrocaBaseGUI.ViewModels
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;";
+            //string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
+            string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
 
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
@@ -93,7 +94,7 @@ namespace TrocaBaseGUI.ViewModels
 
                     while (reader.Read())
                     {
-                        Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle" });
+                        Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Instance = "local" });
                     }
                 }
                 catch (Exception ex)
@@ -103,14 +104,15 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        static void SelectBase(ObservableCollection<DatabaseModel> db)
+        public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
-            if (db.Any(d => d.DbType.ToLower().StartsWith("s")))
+            if (dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db)))
             {
-                //Console.WriteLine("SQLServer");
-            } else if(db.Any(d => d.DbType.ToLower().StartsWith("o")))
+                Console.WriteLine("SQLServer");
+            }
+            else if (dbs.Any(d => d.DbType.ToLower().StartsWith("o") && d.Name.Equals(db)))
             {
-               //Console.WriteLine("Oracle");
+                Console.WriteLine("Oracle");
             }
         }
 
@@ -134,15 +136,15 @@ namespace TrocaBaseGUI.ViewModels
             return char.ToUpper(str[0]) + str.Substring(1).ToLower();
         }
 
-        //public ObservableCollection<Banco> InstanceFilter(string instance, ObservableCollection<Banco> db)
-        //{
-        //    return new ObservableCollection<Banco>(db.Where(i => i.Instance.Equals(instance)));
-        //}
+        public ObservableCollection<DatabaseModel> InstanceFilter(string instance, ObservableCollection<DatabaseModel> db)
+        {
+            return new ObservableCollection<DatabaseModel>(db.Where(i => i.Instance.Equals(instance)));
+        }
 
-        //public ObservableCollection<Banco> DbTypeFilter(string type, ObservableCollection<Banco> db)
-        //{
-        //    return new ObservableCollection<Banco>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
-        //}
+        public ObservableCollection<DatabaseModel> DbTypeFilter(string type, ObservableCollection<DatabaseModel> db)
+        {
+            return new ObservableCollection<DatabaseModel>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
+        }
 
         public void AddDirectory(string endereco, string enderecoCompleto, string exe)
         {

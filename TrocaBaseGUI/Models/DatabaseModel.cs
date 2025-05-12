@@ -24,6 +24,17 @@ public class DatabaseModel : INotifyPropertyChanged
         }
     }
 
+    private string instance;
+    public string Instance
+    {
+        get => instance;
+        set
+        {
+            instance = value;
+            OnPropertyChanged(nameof(Instance));
+        }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged(string prop)
