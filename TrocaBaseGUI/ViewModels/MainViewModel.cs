@@ -106,13 +106,22 @@ namespace TrocaBaseGUI.ViewModels
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
+            string oracleDb = "[BANCODADOS]=ORACLE";
+            string sqlServerDb = "[BANCODADOS]=SQLSERVER";
+
+            //string serverOracle = "[DATABASE]=150.230.86.225";
+            //string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
             if (dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db)))
             {
-                Console.WriteLine("SQLServer");
+                if(File.ReadAllLines(ConexaoFile).Any(line => line.StartsWith("[BANCODADOS]")))
+                {
+                    File.WriteAllLines(File.ReadAllLines(ConexaoFile).Where(line => line.StartsWith("[BANCODADOS]")), );
+                }
             }
             else if (dbs.Any(d => d.DbType.ToLower().StartsWith("o") && d.Name.Equals(db)))
             {
-                Console.WriteLine("Oracle");
+                File.WriteAllLines(ConexaoFile, File.ReadAllLines(ConexaoFile)
+                    .Select(line => line.StartsWith("[BANCODADOS]") ? oracleDb : line));
             }
         }
 
