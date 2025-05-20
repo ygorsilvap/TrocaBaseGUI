@@ -103,9 +103,12 @@ namespace TrocaBaseGUI.Views
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (DataContext is MainViewModel vm)
+            if (DataContext is MainViewModel vm && !String.IsNullOrEmpty(MainViewModel.exeFile))
             {
                 vm.SelectBase(vm.Databases, lstTodosBancos.SelectedItem.ToString());
+            } else
+            {
+                MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             Refresh();

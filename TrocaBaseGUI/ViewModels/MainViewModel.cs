@@ -20,6 +20,8 @@ namespace TrocaBaseGUI.ViewModels
         public static string exeFile;
         public string hostname;
 
+        public string domain = "MTZNOTFS058680.linx-inves.com.br";
+
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
 
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
@@ -33,9 +35,6 @@ namespace TrocaBaseGUI.ViewModels
             GetOracleInstances();
             GetOracleInstancesDatabases();  
             hostname = Dns.GetHostName();
-            //Console.WriteLine(hostname);
-
-            //SelectBase(Databases);
         }
 
         
@@ -78,8 +77,8 @@ namespace TrocaBaseGUI.ViewModels
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
-            //string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
+            //string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
+              string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
 
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
@@ -108,21 +107,93 @@ namespace TrocaBaseGUI.ViewModels
         {
             string oracleDb = "[BANCODADOS]=ORACLE";
             string sqlServerDb = "[BANCODADOS]=SQLSERVER";
+            var conexaoLines = File.ReadAllLines(ConexaoFile).ToList();
+            int bancoIndex = conexaoLines.FindIndex(line => line.StartsWith("[BANCODADOS]", StringComparison.OrdinalIgnoreCase));
+            int oracleUserIndex = conexaoLines.FindIndex(line => line.StartsWith("[USUARIO_ORACLE]", StringComparison.OrdinalIgnoreCase));
+            int index;
 
-            //string serverOracle = "[DATABASE]=150.230.86.225";
-            //string serverSqlServer = "[DATABASE]=AZ-BD-AUTO-03";
+            //if (string.IsNullOrWhiteSpace(conexaoLines.Last()) && string.IsNullOrWhiteSpace(selectedBase))
+            //{
+            //    index = conexaoLines.Count - 1;
+            //    //Console.WriteLine("ultimoIndexVazio: " + index);
+            //} else if (string.IsNullOrWhiteSpace(selectedBase))
+            //{
+            //    conexaoLines.Add("");
+            //    conexaoLines.Add("");
+            //    //File.WriteAllLines(ConexaoFile, conexaoLines);
+            //    index = conexaoLines.Count - 1;
+            //    //Console.WriteLine("addLinha: " + index);
+            //} else
+            //{
+            //    index = bancoIndex;
+            //}
+            if (bancoIndex >= 0)
+            {
+                index = bancoIndex;
+
+                // Remove tudo a partir do [BANCODADOS]
+                conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
+            }
+            else
+            {
+                // Se não encontrou, adiciona duas linhas vazias e escreve no final
+                if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
+                {
+                    conexaoLines.Add("");
+                    conexaoLines.Add("");
+                }
+
+                index = conexaoLines.Count - 1;
+            }
+
+            //Console.WriteLine("IND: " + conexaoLines[index]);
+
+            //foreach (var item in conexaoLines)
+            //{
+            //    Console.WriteLine("linhas: " + conexaoLines.IndexOf(item));
+
+            //}
+            //Console.WriteLine("ult: " + conexaoLines.IndexOf(conexaoLines.Last()));
+
+            if (bancoIndex >= 0 && bancoIndex < conexaoLines.Count)
+            {
+                int count = conexaoLines.Count - bancoIndex;
+                conexaoLines.RemoveRange(bancoIndex, count);
+            }
+            else
+            {
+                Console.WriteLine("Aviso: [BANCODADOS] não encontrado ou índice inválido.");
+            }
+
             if (dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db)))
             {
-                if(File.ReadAllLines(ConexaoFile).Any(line => line.StartsWith("[BANCODADOS]")))
-                {
-                    File.WriteAllLines(File.ReadAllLines(ConexaoFile).Where(line => line.StartsWith("[BANCODADOS]")), );
-                }
+                conexaoLines[index] = CreateConnectionString(sqlServerDb, domain, db);
+                if (oracleUserIndex > 0) conexaoLines[oracleUserIndex] = "";
             }
             else if (dbs.Any(d => d.DbType.ToLower().StartsWith("o") && d.Name.Equals(db)))
             {
-                File.WriteAllLines(ConexaoFile, File.ReadAllLines(ConexaoFile)
-                    .Select(line => line.StartsWith("[BANCODADOS]") ? oracleDb : line));
+                conexaoLines[index] = CreateConnectionString(oracleDb, domain, db);
             }
+
+            File.WriteAllLines(ConexaoFile, conexaoLines);
+            selectedBase = db;
+
+        }
+
+        public string CreateConnectionString(string dbType, string domain, string db)
+        {
+            string connString = "";
+            if (dbType.ToLower().Contains("sqlserver"))
+            {
+                connString += $"{dbType}\n";
+                connString += $"[DATABASE]={domain}:{db.ToUpper()}\n";
+            } else
+            {
+                connString += $"{dbType}\n";
+                connString += $"[DATABASE]={domain}/LINX\n";
+                connString += $"[USUARIO_ORACLE]={db.ToUpper()}\n";
+            }
+            return connString;
         }
 
         static Boolean IsThereConexaoDat()

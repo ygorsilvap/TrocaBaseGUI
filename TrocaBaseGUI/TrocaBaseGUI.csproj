@@ -269,6 +269,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\DatabaseModel.cs" />
     <Compile Include="Models\Diretorio.cs" />
+    <Compile Include="Models\DomainModel.cs" />
     <Compile Include="Models\OracleConnectionModel.cs" />
     <Compile Include="Models\SqlServerConnectionModel.cs" />
     <Compile Include="Settings.cs" />

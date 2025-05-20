@@ -17,7 +17,6 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainWindow : Window
     {
-        private MainViewModel viewModel;
         public Frame MainFramePublic => MainFrame;
         public MainWindow()
         {
