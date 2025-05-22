@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Net;
 using Oracle.ManagedDataAccess.Client;
 using System.ServiceProcess;
+using System.Windows.Shapes;
 
 namespace TrocaBaseGUI.ViewModels
 {
@@ -77,8 +78,8 @@ namespace TrocaBaseGUI.ViewModels
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            //string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
-              string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
+            string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
+          //string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
 
             using (OracleConnection conn = new OracleConnection(connectionString))
             {
@@ -112,27 +113,13 @@ namespace TrocaBaseGUI.ViewModels
             int oracleUserIndex = conexaoLines.FindIndex(line => line.StartsWith("[USUARIO_ORACLE]", StringComparison.OrdinalIgnoreCase));
             int index;
 
-            //if (string.IsNullOrWhiteSpace(conexaoLines.Last()) && string.IsNullOrWhiteSpace(selectedBase))
-            //{
-            //    index = conexaoLines.Count - 1;
-            //    //Console.WriteLine("ultimoIndexVazio: " + index);
-            //} else if (string.IsNullOrWhiteSpace(selectedBase))
-            //{
-            //    conexaoLines.Add("");
-            //    conexaoLines.Add("");
-            //    //File.WriteAllLines(ConexaoFile, conexaoLines);
-            //    index = conexaoLines.Count - 1;
-            //    //Console.WriteLine("addLinha: " + index);
-            //} else
-            //{
-            //    index = bancoIndex;
-            //}
             if (bancoIndex >= 0)
             {
                 index = bancoIndex;
 
                 // Remove tudo a partir do [BANCODADOS]
                 conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
+                index = conexaoLines.Count;
             }
             else
             {
@@ -143,32 +130,16 @@ namespace TrocaBaseGUI.ViewModels
                     conexaoLines.Add("");
                 }
 
-                index = conexaoLines.Count - 1;
+                index = conexaoLines.Count;
             }
 
-            //Console.WriteLine("IND: " + conexaoLines[index]);
+            Console.WriteLine("index: " + index + " ");
 
-            //foreach (var item in conexaoLines)
-            //{
-            //    Console.WriteLine("linhas: " + conexaoLines.IndexOf(item));
-
-            //}
-            //Console.WriteLine("ult: " + conexaoLines.IndexOf(conexaoLines.Last()));
-
-            if (bancoIndex >= 0 && bancoIndex < conexaoLines.Count)
-            {
-                int count = conexaoLines.Count - bancoIndex;
-                conexaoLines.RemoveRange(bancoIndex, count);
-            }
-            else
-            {
-                Console.WriteLine("Aviso: [BANCODADOS] não encontrado ou índice inválido.");
-            }
+            return;
 
             if (dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db)))
             {
                 conexaoLines[index] = CreateConnectionString(sqlServerDb, domain, db);
-                if (oracleUserIndex > 0) conexaoLines[oracleUserIndex] = "";
             }
             else if (dbs.Any(d => d.DbType.ToLower().StartsWith("o") && d.Name.Equals(db)))
             {
@@ -177,7 +148,6 @@ namespace TrocaBaseGUI.ViewModels
 
             File.WriteAllLines(ConexaoFile, conexaoLines);
             selectedBase = db;
-
         }
 
         public string CreateConnectionString(string dbType, string domain, string db)
