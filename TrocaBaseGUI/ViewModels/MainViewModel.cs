@@ -31,7 +31,7 @@ namespace TrocaBaseGUI.ViewModels
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
         public MainViewModel()
         {
-            //LoadState();
+            LoadState();
             LoadSqlServerDatabases();
             GetOracleInstances();
             GetOracleInstancesDatabases();  
@@ -109,17 +109,14 @@ namespace TrocaBaseGUI.ViewModels
             string oracleDb = "[BANCODADOS]=ORACLE";
             string sqlServerDb = "[BANCODADOS]=SQLSERVER";
             var conexaoLines = File.ReadAllLines(ConexaoFile).ToList();
-            int bancoIndex = conexaoLines.FindIndex(line => line.StartsWith("[BANCODADOS]", StringComparison.OrdinalIgnoreCase));
-            int oracleUserIndex = conexaoLines.FindIndex(line => line.StartsWith("[USUARIO_ORACLE]", StringComparison.OrdinalIgnoreCase));
+            int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
             int index;
 
             if (bancoIndex >= 0)
             {
-                index = bancoIndex;
-
                 // Remove tudo a partir do [BANCODADOS]
                 conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
-                index = conexaoLines.Count;
+                index = bancoIndex;
             }
             else
             {
@@ -133,18 +130,14 @@ namespace TrocaBaseGUI.ViewModels
                 index = conexaoLines.Count;
             }
 
-            Console.WriteLine("index: " + index + " ");
+            string newConn = dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
+               ? CreateConnectionString(sqlServerDb, domain, db)
+               : CreateConnectionString(oracleDb, domain, db);
 
-            return;
+            var newConnLines = newConn.Split('\n');
 
-            if (dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db)))
-            {
-                conexaoLines[index] = CreateConnectionString(sqlServerDb, domain, db);
-            }
-            else if (dbs.Any(d => d.DbType.ToLower().StartsWith("o") && d.Name.Equals(db)))
-            {
-                conexaoLines[index] = CreateConnectionString(oracleDb, domain, db);
-            }
+            // Adiciona a nova string
+            conexaoLines.InsertRange(index, newConnLines);
 
             File.WriteAllLines(ConexaoFile, conexaoLines);
             selectedBase = db;

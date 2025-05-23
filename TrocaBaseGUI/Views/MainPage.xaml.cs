@@ -16,7 +16,6 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page
     {
-        //public ObservableCollection<Banco> listaBancos { get; set; }
         public ObservableCollection<DatabaseModel> listaBancos { get; set; }
         public ObservableCollection<SysDirectory> hist { get; set; }
         private MainViewModel viewModel;
@@ -32,7 +31,6 @@ namespace TrocaBaseGUI.Views
             this.DataContext = viewModel;
 
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
-            //listaBancos = new ObservableCollection<Banco>(viewModel.dbFiles ?? new ObservableCollection<Banco>());
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
@@ -40,10 +38,7 @@ namespace TrocaBaseGUI.Views
             tabSelected = TabControl.SelectedIndex;
             dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
             CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
-            //IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
-
-            //Console.WriteLine(hist.Count());
 
             GetFilter(listaBancos);
         }
@@ -75,7 +70,6 @@ namespace TrocaBaseGUI.Views
 
         private void Refresh()
         {
-            //IsThereDbDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.DbDirectory) ? "Nenhuma base encontrada.\nSelecione um diretório." : "";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
             //viewModel.AtualizarDbFiles();
@@ -116,6 +110,7 @@ namespace TrocaBaseGUI.Views
 
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
+            viewModel.SaveState();
             Application.Current.Shutdown();
         }
 
@@ -152,27 +147,6 @@ namespace TrocaBaseGUI.Views
                 Refresh();
             }
         }
-
-        //private void SelecionarDiretorioBase_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var dialog = new CommonOpenFileDialog
-        //    {
-        //        IsFolderPicker = true,
-        //        InitialDirectory = @"C:\",
-        //        Title = "Selecione o diretório das bases."
-        //    };
-
-        //    if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-        //    {
-        //        // Atualiza o DbDirectory no ViewModel
-        //        viewModel.SetBaseAddress(dialog.FileName);
-
-        //        // Altera o texto do TextBlock diretamente no código-behind
-        //        dirBase.Text = $"...\\{System.IO.Path.GetFileName(dialog.FileName)}";
-
-        //        Refresh();
-        //    }
-        //}
 
         private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
