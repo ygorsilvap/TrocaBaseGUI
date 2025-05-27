@@ -11,6 +11,7 @@ using System.Net;
 using Oracle.ManagedDataAccess.Client;
 using System.ServiceProcess;
 using System.Windows.Shapes;
+using TrocaBaseGUI.Services;
 
 namespace TrocaBaseGUI.ViewModels
 {
@@ -21,7 +22,7 @@ namespace TrocaBaseGUI.ViewModels
         public static string exeFile;
         public string hostname;
 
-        public string domain = "MTZNOTFS058680.linx-inves.com.br";
+        //public string domain = "MTZNOTFS058680.linx-inves.com.br";
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
 
@@ -32,77 +33,87 @@ namespace TrocaBaseGUI.ViewModels
         public MainViewModel()
         {
             LoadState();
-            LoadSqlServerDatabases();
-            GetOracleInstances();
-            GetOracleInstancesDatabases();  
+            //LoadSqlServerDatabases();
+            var sqlService = new SqlServerService(SQLServerConnection);
+            sqlService.LoadSqlServerDatabases().ForEach(db => Databases.Add(db));
+            //Databases = new ObservableCollection<DatabaseModel>(sqlService.LoadSqlServerDatabases());
+
+            var oracleService = new OracleService();
+            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;")
+                .ForEach(db => Databases.Add(db));
+            //oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;")
+            //    .ForEach(db => Databases.Add(db));
+
+            //GetOracleInstances();
+            //GetOracleInstancesDatabases();  
             hostname = Dns.GetHostName();
         }
 
         
-        public void LoadSqlServerDatabases()
-        {
-            using (var conn = new SqlConnection(SQLServerConnection.GetConnectionString()))
-            {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
-                var reader = cmd.ExecuteReader();
+        //public void LoadSqlServerDatabases()
+        //{
+        //    using (var conn = new SqlConnection(SQLServerConnection.GetConnectionString()))
+        //    {
+        //        conn.Open();
+        //        var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
+        //        var reader = cmd.ExecuteReader();
 
-                Databases.Clear();
-                while (reader.Read())
-                {
-                    Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Instance = "local"});
-                }
-            }
-        }
+        //        Databases.Clear();
+        //        while (reader.Read())
+        //        {
+        //            Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Instance = "local"});
+        //        }
+        //    }
+        //}
 
-        public List<string> GetOracleInstances()
-        {
-            List<string> inst = new List<string>();
+        //public List<string> GetOracleInstances()
+        //{
+        //    List<string> inst = new List<string>();
 
-            // Lista todos os serviços do sistema
-            ServiceController[] services = ServiceController.GetServices();
+        //    // Lista todos os serviços do sistema
+        //    ServiceController[] services = ServiceController.GetServices();
 
-            foreach (ServiceController service in services)
-            {
-                // Verifica se o nome do serviço contém "Oracle"
-                if (service.ServiceName.Contains("OracleService"))
-                {
-                    if(service.Status.ToString().ToLower().Equals("running")) inst.Add(service.ServiceName.Remove(0, 13));
-                }
-            }
-            return inst;
-        }
+        //    foreach (ServiceController service in services)
+        //    {
+        //        // Verifica se o nome do serviço contém "Oracle"
+        //        if (service.ServiceName.Contains("OracleService"))
+        //        {
+        //            if(service.Status.ToString().ToLower().Equals("running")) inst.Add(service.ServiceName.Remove(0, 13));
+        //        }
+        //    }
+        //    return inst;
+        //}
 
-        public void GetOracleInstancesDatabases()
-        {
-            string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
-                "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
+        //public void GetOracleInstancesDatabases()
+        //{
+        //    string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
+        //        "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
-          //string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
+        //    string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
+        //  //string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
 
-            using (OracleConnection conn = new OracleConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    Console.WriteLine("Conexão realizada com sucesso!");
+        //    using (OracleConnection conn = new OracleConnection(connectionString))
+        //    {
+        //        try
+        //        {
+        //            conn.Open();
+        //            Console.WriteLine("Conexão realizada com sucesso!");
 
-                    OracleCommand cmd = new OracleCommand("SELECT username FROM dba_users WHERE account_status = 'OPEN' AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') " + 
-                        $"AND username NOT IN ({exception}) ORDER BY username", conn);
-                    OracleDataReader reader = cmd.ExecuteReader();
+        //            OracleCommand cmd = new OracleCommand("SELECT username FROM dba_users WHERE account_status = 'OPEN' AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') " + 
+        //                $"AND username NOT IN ({exception}) ORDER BY username", conn);
+        //            OracleDataReader reader = cmd.ExecuteReader();
 
-                    while (reader.Read())
-                    {
-                        Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Instance = "local" });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Erro: " + ex.Message);
-                }
-            }
-        }
+        //            while (reader.Read())
+        //            {
+        //                Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Instance = "local" });
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("Erro: " + ex.Message);
+        //        }
+        //    }
+        //}
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
@@ -143,21 +154,21 @@ namespace TrocaBaseGUI.ViewModels
             selectedBase = db;
         }
 
-        public string CreateConnectionString(string dbType, string domain, string db)
-        {
-            string connString = "";
-            if (dbType.ToLower().Contains("sqlserver"))
-            {
-                connString += $"{dbType}\n";
-                connString += $"[DATABASE]={domain}:{db.ToUpper()}\n";
-            } else
-            {
-                connString += $"{dbType}\n";
-                connString += $"[DATABASE]={domain}/LINX\n";
-                connString += $"[USUARIO_ORACLE]={db.ToUpper()}\n";
-            }
-            return connString;
-        }
+        //public string CreateConnectionString(string dbType, string domain, string db)
+        //{
+        //    string connString = "";
+        //    if (dbType.ToLower().Contains("sqlserver"))
+        //    {
+        //        connString += $"{dbType}\n";
+        //        connString += $"[DATABASE]={domain}:{db.ToUpper()}\n";
+        //    } else
+        //    {
+        //        connString += $"{dbType}\n";
+        //        connString += $"[DATABASE]={domain}/LINX\n";
+        //        connString += $"[USUARIO_ORACLE]={db.ToUpper()}\n";
+        //    }
+        //    return connString;
+        //}
 
         static Boolean IsThereConexaoDat()
         {

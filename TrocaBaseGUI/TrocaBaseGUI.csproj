@@ -272,6 +272,10 @@
     <Compile Include="Models\DomainModel.cs" />
     <Compile Include="Models\OracleConnectionModel.cs" />
     <Compile Include="Models\SqlServerConnectionModel.cs" />
+    <Compile Include="Services\ConexaoFileService.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\OracleService.cs" />
+    <Compile Include="Services\SqlServerService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
@@ -302,7 +306,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Banco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
