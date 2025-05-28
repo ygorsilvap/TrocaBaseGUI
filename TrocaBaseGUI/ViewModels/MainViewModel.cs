@@ -17,12 +17,10 @@ namespace TrocaBaseGUI.ViewModels
 {
     internal class MainViewModel
     {
-        public static string ConexaoFile;
+        public string ConexaoFile = new ConexaoFileService().ConexaoFile;
         static string selectedBase;
         public static string exeFile;
         public string hostname;
-
-        //public string domain = "MTZNOTFS058680.linx-inves.com.br";
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
 
@@ -33,19 +31,13 @@ namespace TrocaBaseGUI.ViewModels
         public MainViewModel()
         {
             LoadState();
-            //LoadSqlServerDatabases();
             var sqlService = new SqlServerService(SQLServerConnection);
             sqlService.LoadSqlServerDatabases().ForEach(db => Databases.Add(db));
-            //Databases = new ObservableCollection<DatabaseModel>(sqlService.LoadSqlServerDatabases());
 
             var oracleService = new OracleService();
             oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;")
                 .ForEach(db => Databases.Add(db));
-            //oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;")
-            //    .ForEach(db => Databases.Add(db));
 
-            //GetOracleInstances();
-            //GetOracleInstancesDatabases();  
             hostname = Dns.GetHostName();
         }
 
@@ -117,6 +109,7 @@ namespace TrocaBaseGUI.ViewModels
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
+            var conexaoService = new ConexaoFileService();
             string oracleDb = "[BANCODADOS]=ORACLE";
             string sqlServerDb = "[BANCODADOS]=SQLSERVER";
             var conexaoLines = File.ReadAllLines(ConexaoFile).ToList();
@@ -137,13 +130,13 @@ namespace TrocaBaseGUI.ViewModels
                     conexaoLines.Add("");
                     conexaoLines.Add("");
                 }
-
                 index = conexaoLines.Count;
             }
 
+
             string newConn = dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
-               ? CreateConnectionString(sqlServerDb, domain, db)
-               : CreateConnectionString(oracleDb, domain, db);
+               ? conexaoService.CreateConnectionString(sqlServerDb, conexaoService.Domain, db)
+               : conexaoService.CreateConnectionString(oracleDb, conexaoService.Domain, db);
 
             var newConnLines = newConn.Split('\n');
 
@@ -154,34 +147,18 @@ namespace TrocaBaseGUI.ViewModels
             selectedBase = db;
         }
 
-        //public string CreateConnectionString(string dbType, string domain, string db)
+        //static Boolean IsThereConexaoDat()
         //{
-        //    string connString = "";
-        //    if (dbType.ToLower().Contains("sqlserver"))
+        //    if (selectedBase == "")
         //    {
-        //        connString += $"{dbType}\n";
-        //        connString += $"[DATABASE]={domain}:{db.ToUpper()}\n";
-        //    } else
-        //    {
-        //        connString += $"{dbType}\n";
-        //        connString += $"[DATABASE]={domain}/LINX\n";
-        //        connString += $"[USUARIO_ORACLE]={db.ToUpper()}\n";
+        //        return false;
         //    }
-        //    return connString;
+        //    else
+        //    {
+        //        return true;
+        //    }
+
         //}
-
-        static Boolean IsThereConexaoDat()
-        {
-            if (selectedBase == "")
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-        }
 
         public static string ToCapitalize(string str)
         {
@@ -220,20 +197,10 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        //public void SetBaseAddress(string add)
+        //public void SetConexaoAddress(string add)
         //{
-        //    DbDirectory = add;
+        //    ConexaoFile = add + @"\conexao.dat";
         //}
-
-        public void SetConexaoAddress(string add)
-        {
-            ConexaoFile = add + @"\conexao.dat";
-        }
-
-        public Boolean ValidateSystemPath(string path)
-        {
-            return File.Exists(path + "\\conexao.dat") ? true : false;
-        }
 
         public void SaveState()
         {

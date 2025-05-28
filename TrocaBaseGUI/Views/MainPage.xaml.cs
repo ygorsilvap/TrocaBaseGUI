@@ -80,10 +80,10 @@ namespace TrocaBaseGUI.Views
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
 
-            if (!string.IsNullOrEmpty(MainViewModel.ConexaoFile))
+            if (!string.IsNullOrEmpty(viewModel.ConexaoFile))
             {
-                conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(MainViewModel.ConexaoFile)) ||
-                    !File.ReadAllText(MainViewModel.ConexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
+                conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(viewModel.ConexaoFile)) ||
+                    !File.ReadAllText(viewModel.ConexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
             }
             else
             {
@@ -176,7 +176,7 @@ namespace TrocaBaseGUI.Views
 
         private void CloseNSysButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start($@"{System.IO.Path.GetDirectoryName(MainViewModel.ConexaoFile)}\{MainViewModel.exeFile}.exe");
+            Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.ConexaoFile)}\{MainViewModel.exeFile}.exe");
             Application.Current.Shutdown();
         }
 
