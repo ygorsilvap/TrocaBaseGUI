@@ -12,10 +12,11 @@ using Oracle.ManagedDataAccess.Client;
 using System.ServiceProcess;
 using System.Windows.Shapes;
 using TrocaBaseGUI.Services;
+using System.ServiceModel.Channels;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    internal class MainViewModel
+    public class MainViewModel
     {
         public string ConexaoFile = new ConexaoFileService().ConexaoFile;
         static string selectedBase;
@@ -38,74 +39,11 @@ namespace TrocaBaseGUI.ViewModels
             oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;")
                 .ForEach(db => Databases.Add(db));
 
+            SetDisplayName(Databases);
+
             hostname = Dns.GetHostName();
         }
 
-        
-        //public void LoadSqlServerDatabases()
-        //{
-        //    using (var conn = new SqlConnection(SQLServerConnection.GetConnectionString()))
-        //    {
-        //        conn.Open();
-        //        var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
-        //        var reader = cmd.ExecuteReader();
-
-        //        Databases.Clear();
-        //        while (reader.Read())
-        //        {
-        //            Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Instance = "local"});
-        //        }
-        //    }
-        //}
-
-        //public List<string> GetOracleInstances()
-        //{
-        //    List<string> inst = new List<string>();
-
-        //    // Lista todos os serviços do sistema
-        //    ServiceController[] services = ServiceController.GetServices();
-
-        //    foreach (ServiceController service in services)
-        //    {
-        //        // Verifica se o nome do serviço contém "Oracle"
-        //        if (service.ServiceName.Contains("OracleService"))
-        //        {
-        //            if(service.Status.ToString().ToLower().Equals("running")) inst.Add(service.ServiceName.Remove(0, 13));
-        //        }
-        //    }
-        //    return inst;
-        //}
-
-        //public void GetOracleInstancesDatabases()
-        //{
-        //    string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
-        //        "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
-
-        //    string connectionString = "User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;"; 
-        //  //string connectionString = "User Id=sys;Password=oracle;Data Source=DESKTOP-N8OLEBQ:1521/LINX;DBA Privilege=SYSDBA;";
-
-        //    using (OracleConnection conn = new OracleConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            conn.Open();
-        //            Console.WriteLine("Conexão realizada com sucesso!");
-
-        //            OracleCommand cmd = new OracleCommand("SELECT username FROM dba_users WHERE account_status = 'OPEN' AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') " + 
-        //                $"AND username NOT IN ({exception}) ORDER BY username", conn);
-        //            OracleDataReader reader = cmd.ExecuteReader();
-
-        //            while (reader.Read())
-        //            {
-        //                Databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Instance = "local" });
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine("Erro: " + ex.Message);
-        //        }
-        //    }
-        //}
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
@@ -140,11 +78,28 @@ namespace TrocaBaseGUI.ViewModels
 
             var newConnLines = newConn.Split('\n');
 
+            Console.WriteLine(newConn);
+
             // Adiciona a nova string
             conexaoLines.InsertRange(index, newConnLines);
 
             File.WriteAllLines(ConexaoFile, conexaoLines);
             selectedBase = db;
+        }
+
+        public void SetDisplayName(ObservableCollection<DatabaseModel> db, string newDisplayName = "")
+        {
+            foreach (var item in db)
+            {
+                if(String.IsNullOrEmpty(item.DisplayName))
+                {
+                    item.DisplayName = ToCapitalize(item.Name); 
+                } else
+                {
+                    item.DisplayName = newDisplayName;
+                    
+                }
+            }
         }
 
         //static Boolean IsThereConexaoDat()
@@ -196,11 +151,6 @@ namespace TrocaBaseGUI.ViewModels
                 History.RemoveAt(History.Count - 1); // Remove o mais antigo (último)
             }
         }
-
-        //public void SetConexaoAddress(string add)
-        //{
-        //    ConexaoFile = add + @"\conexao.dat";
-        //}
 
         public void SaveState()
         {

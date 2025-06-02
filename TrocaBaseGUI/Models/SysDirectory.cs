@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace TrocaBaseGUI.Models
 {
@@ -36,6 +37,17 @@ namespace TrocaBaseGUI.Models
                 OnPropertyChanged(nameof(ExeFile));
             }
         }
+
+        //private ObservableCollection<SysDirectory> history;
+        //public ObservableCollection<SysDirectory> History
+        //{
+        //    get => history;
+        //    set
+        //    {
+        //        history = value;
+        //        OnPropertyChanged(nameof(History));
+        //    }
+        //}
 
 
         public SysDirectory(string address, string fullPathAddress, string exeFile)

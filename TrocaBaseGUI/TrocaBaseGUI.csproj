@@ -268,18 +268,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\DatabaseModel.cs" />
-    <Compile Include="Models\Diretorio.cs" />
+    <Compile Include="Models\DatabaseViewModel.cs" />
+    <Compile Include="Models\SysDirectory.cs" />
     <Compile Include="Models\DomainModel.cs" />
     <Compile Include="Models\OracleConnectionModel.cs" />
     <Compile Include="Models\SqlServerConnectionModel.cs" />
     <Compile Include="Services\ConexaoFileService.cs" />
-    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\AppStateService.cs" />
     <Compile Include="Services\OracleService.cs" />
     <Compile Include="Services\SqlServerService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditDbPage.xaml.cs">
+      <DependentUpon>EditDbPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -300,6 +304,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\EditDbPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -13,6 +13,17 @@ public class DatabaseModel : INotifyPropertyChanged
         }
     }
 
+    private string displayName;
+    public string DisplayName
+    {
+        get => displayName;
+        set
+        {
+            displayName = value;
+            OnPropertyChanged(nameof(DisplayName));
+        }
+    }
+
     private string dbType;
     public string DbType
     {

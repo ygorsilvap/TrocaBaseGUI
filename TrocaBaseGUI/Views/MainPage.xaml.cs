@@ -9,13 +9,13 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
 using System.Diagnostics;
 using System;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using System.Threading;
+using TrocaBaseGUI.Services;
 
 namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page
     {
+        public ConexaoFileService ConexaoFileService { get; set; } = new ConexaoFileService();
         public ObservableCollection<DatabaseModel> listaBancos { get; set; }
         public ObservableCollection<SysDirectory> hist { get; set; }
         private MainViewModel viewModel;
@@ -140,7 +140,7 @@ namespace TrocaBaseGUI.Views
             {
                 viewModel.AddDirectory($"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}",
                     System.IO.Path.GetDirectoryName(dialog.FileName), System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
-                viewModel.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
 
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
@@ -155,7 +155,7 @@ namespace TrocaBaseGUI.Views
 
             if (selectedItem != null)
             {
-                viewModel.SetConexaoAddress(selectedItem.FullPathAddress);
+                ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
                 MainViewModel.exeFile = selectedItem.ExeFile;
             }
             Refresh();
@@ -183,6 +183,17 @@ namespace TrocaBaseGUI.Views
         private void ToSettings_Click(object sender, RoutedEventArgs e)
         {
             ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new SettingsPage());
+        }
+
+        private void EditarBase_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+
+            if (menuItem?.DataContext is DatabaseModel db)
+            {
+                Console.WriteLine("base: " + db.DisplayName);
+                ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new EditDbPage(viewModel));
+            }
         }
     }
 }

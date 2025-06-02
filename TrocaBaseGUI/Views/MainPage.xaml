@@ -34,11 +34,16 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Renomear" Click="EditarBase_Click" />
+                            </ContextMenu>
+                        </Grid.ContextMenu>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="275" />
                             <ColumnDefinition Width="70" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" Text="{Binding DbType}" VerticalAlignment="Center" Foreground="Gray" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     </Grid>
                 </DataTemplate>

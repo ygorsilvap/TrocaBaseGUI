@@ -33,7 +33,7 @@ namespace TrocaBaseGUI.Services
         }
         public string CreateConnectionString(string dbType, string domain, string db)
         {
-            if (db.ToLower().Contains("sqlserver"))
+            if (dbType.ToLower().Contains("sqlserver"))
             {
                 return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={domain}:{db.ToUpper()}";
             }
@@ -42,29 +42,6 @@ namespace TrocaBaseGUI.Services
                 return $"[BANCODADOS]=ORACLE\n[DATABASE]={domain}/LINX\n[USUARIO_ORACLE]={db.ToUpper()}";
             }
         }
-
-        //public void WriteConnectionToFile(string conexaoPath, string connectionString)
-        //{
-        //    var lines = File.ReadAllLines(conexaoPath).ToList();
-        //    int bancoIndex = lines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
-
-        //    if (bancoIndex >= 0)
-        //    {
-        //        lines.RemoveRange(bancoIndex, lines.Count - bancoIndex);
-        //    }
-        //    else if (!string.IsNullOrWhiteSpace(lines.LastOrDefault()))
-        //    {
-        //        lines.Add(""); lines.Add("");
-        //    }
-
-        //    lines.AddRange(connectionString.Split('\n'));
-        //    File.WriteAllLines(conexaoPath, lines);
-        //}
-
-        //public bool ValidateConexaoFile(string path)
-        //{
-        //    return File.Exists(Path.Combine(path, "conexao.dat"));
-        //}
 
         public Boolean ValidateSystemPath(string path)
         {
