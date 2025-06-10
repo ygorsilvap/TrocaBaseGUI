@@ -268,7 +268,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\DatabaseModel.cs" />
-    <Compile Include="Models\DatabaseViewModel.cs" />
     <Compile Include="Models\SysDirectory.cs" />
     <Compile Include="Models\DomainModel.cs" />
     <Compile Include="Models\OracleConnectionModel.cs" />
@@ -278,6 +277,7 @@
     <Compile Include="Services\OracleService.cs" />
     <Compile Include="Services\SqlServerService.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

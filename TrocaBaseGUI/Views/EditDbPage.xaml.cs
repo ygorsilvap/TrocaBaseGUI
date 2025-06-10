@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using TrocaBaseGUI.ViewModels;
@@ -7,16 +9,21 @@ namespace TrocaBaseGUI.Views
 {
     public partial class EditDbPage : Page
     {
-        private MainViewModel _mainViewModel;
-        public EditDbPage(MainViewModel viewModel)
+        public DatabaseModel _db;
+        public MainViewModel _vmDbs;
+        public EditDbPage(MainViewModel vmDbs, DatabaseModel db)
         {
             InitializeComponent();
-            _mainViewModel = viewModel;
+            _db = db;
+            renameInput.Text = _db.DisplayName;
+            _vmDbs = vmDbs;
         }
 
         private void SaveName_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new MainPage());
+            DatabaseModel.SetDisplayName(_db, renameInput.Text);
+
+            NavigationService.GoBack();
         }
     }
 }

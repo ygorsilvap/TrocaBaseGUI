@@ -10,6 +10,7 @@ using System.IO;
 using System.Diagnostics;
 using System;
 using TrocaBaseGUI.Services;
+using TrocaBaseGUI.Utils;
 
 namespace TrocaBaseGUI.Views
 {
@@ -37,10 +38,14 @@ namespace TrocaBaseGUI.Views
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
-            CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
+            CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
-
             GetFilter(listaBancos);
+
+            //foreach (var item in listaBancos)
+            //{
+            //    Console.WriteLine("isS: " + item.IsSelected);
+            //}
         }
         private void GetFilter(ObservableCollection<DatabaseModel> db)
         {
@@ -68,7 +73,7 @@ namespace TrocaBaseGUI.Views
             lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
         }
 
-        private void Refresh()
+        public void Refresh()
         {
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
@@ -90,7 +95,7 @@ namespace TrocaBaseGUI.Views
                 conexaoCheck.Text = "";
             }
             //dirBase.Text = string.IsNullOrEmpty(System.IO.Path.GetFileName(MainViewModel.DbDirectory)) ? "" : $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
-            CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{MainViewModel.ToCapitalize(MainViewModel.exeFile)}";
+            CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
             GetFilter(listaBancos);
         }
@@ -100,6 +105,8 @@ namespace TrocaBaseGUI.Views
             if (DataContext is MainViewModel vm && !String.IsNullOrEmpty(MainViewModel.exeFile))
             {
                 vm.SelectBase(vm.Databases, lstTodosBancos.SelectedItem.ToString());
+                //destacar seleção de base
+                
             } else
             {
                 MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -191,9 +198,10 @@ namespace TrocaBaseGUI.Views
 
             if (menuItem?.DataContext is DatabaseModel db)
             {
-                Console.WriteLine("base: " + db.DisplayName);
-                ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new EditDbPage(viewModel));
+                ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new EditDbPage(viewModel, db));
             }
         }
+
+
     }
 }

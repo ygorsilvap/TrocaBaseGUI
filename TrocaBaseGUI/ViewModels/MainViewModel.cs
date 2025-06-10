@@ -39,7 +39,7 @@ namespace TrocaBaseGUI.ViewModels
             oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;")
                 .ForEach(db => Databases.Add(db));
 
-            SetDisplayName(Databases);
+            foreach (var item in Databases) DatabaseModel.SetDisplayName(item);
 
             hostname = Dns.GetHostName();
         }
@@ -78,48 +78,16 @@ namespace TrocaBaseGUI.ViewModels
 
             var newConnLines = newConn.Split('\n');
 
-            Console.WriteLine(newConn);
-
             // Adiciona a nova string
             conexaoLines.InsertRange(index, newConnLines);
 
             File.WriteAllLines(ConexaoFile, conexaoLines);
+
+            if(dbs.Any(b => b.IsSelected == true)) dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+
+            dbs.FirstOrDefault(b => b.Name.Equals(db)).IsSelected = true;
+
             selectedBase = db;
-        }
-
-        public void SetDisplayName(ObservableCollection<DatabaseModel> db, string newDisplayName = "")
-        {
-            foreach (var item in db)
-            {
-                if(String.IsNullOrEmpty(item.DisplayName))
-                {
-                    item.DisplayName = ToCapitalize(item.Name); 
-                } else
-                {
-                    item.DisplayName = newDisplayName;
-                    
-                }
-            }
-        }
-
-        //static Boolean IsThereConexaoDat()
-        //{
-        //    if (selectedBase == "")
-        //    {
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        return true;
-        //    }
-
-        //}
-
-        public static string ToCapitalize(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-                return str;
-            return char.ToUpper(str[0]) + str.Substring(1).ToLower();
         }
 
         public ObservableCollection<DatabaseModel> InstanceFilter(string instance, ObservableCollection<DatabaseModel> db)

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using TrocaBaseGUI.Utils;
 
 public class DatabaseModel : INotifyPropertyChanged
 {
@@ -46,11 +48,34 @@ public class DatabaseModel : INotifyPropertyChanged
         }
     }
 
+    private bool isSelected = false;
+    public bool IsSelected
+    {
+        get => isSelected;
+        set
+        {
+            isSelected = value;
+            OnPropertyChanged(nameof(IsSelected));
+        }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged(string prop)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+    }
+
+    public static void SetDisplayName(DatabaseModel db, string newDisplayName = "")
+    {
+        if (String.IsNullOrEmpty(db.DisplayName))
+        {
+            db.DisplayName = StringUtils.ToCapitalize(db.Name);
+        }
+        else
+        {
+            db.DisplayName = newDisplayName;
+        }
     }
 
     public override string ToString()

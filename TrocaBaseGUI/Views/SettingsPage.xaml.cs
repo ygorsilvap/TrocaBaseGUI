@@ -23,7 +23,7 @@ namespace TrocaBaseGUI.Views
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new MainPage());
+            NavigationService.GoBack();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
