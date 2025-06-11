@@ -35,7 +35,6 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
                             <Setter Property="Background" Value="LightGray"/>
-                            <Setter Property="FontWeight" Value="Bold"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -53,7 +52,17 @@
                             <ColumnDefinition Width="275" />
                             <ColumnDefinition Width="70" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{Binding DisplayName}" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                            </TextBlock>
                         <TextBlock Grid.Column="2" Text="{Binding DbType}" VerticalAlignment="Center" Foreground="Gray" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     </Grid>
                 </DataTemplate>
