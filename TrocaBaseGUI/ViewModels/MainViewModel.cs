@@ -18,7 +18,9 @@ namespace TrocaBaseGUI.ViewModels
 {
     public class MainViewModel
     {
-        public string ConexaoFile = new ConexaoFileService().ConexaoFile;
+        //public static ConexaoFileService conexaoFileService { get; set; } = new ConexaoFileService();
+        //public string ConexaoFile = conexaoFileService.ConexaoFile;
+        public static string ConexaoFile = new ConexaoFileService().ConexaoFile;
         static string selectedBase;
         public static string exeFile;
         public string hostname;
@@ -33,7 +35,8 @@ namespace TrocaBaseGUI.ViewModels
         {
             LoadState();
             var sqlService = new SqlServerService(SQLServerConnection);
-            sqlService.LoadSqlServerDatabases().ForEach(db => Databases.Add(db));
+            sqlService.LoadSqlServerDatabases("MTZNOTFS058680").ForEach(db => Databases.Add(db));
+            
 
             var oracleService = new OracleService();
             oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;")
@@ -42,6 +45,13 @@ namespace TrocaBaseGUI.ViewModels
             foreach (var item in Databases) DatabaseModel.SetDisplayName(item);
 
             hostname = Dns.GetHostName();
+
+            foreach (var item in Databases)
+            {
+                Console.WriteLine("t: " + item.DbType);
+            }
+            Console.WriteLine(SQLServerConnection);
+            Console.WriteLine("cnx: " + ConexaoFile);
         }
 
 
@@ -90,6 +100,12 @@ namespace TrocaBaseGUI.ViewModels
             selectedBase = db;
         }
 
+        //public void VmSetConexaoAddress(string path)
+        //{
+
+        //    ConexaoFile.SetConexaoAddress(path);
+        //}
+
         public ObservableCollection<DatabaseModel> InstanceFilter(string instance, ObservableCollection<DatabaseModel> db)
         {
             return new ObservableCollection<DatabaseModel>(db.Where(i => i.Instance.Equals(instance)));
@@ -113,7 +129,7 @@ namespace TrocaBaseGUI.ViewModels
             History.Insert(0, new SysDirectory(endereco, enderecoCompleto, exe));
             exeFile = exe;
 
-            // Garante que só existam no máximo 5
+            // Garante que só existam no máximo X itens no histórico
             while (History.Count > MaxHistory)
             {
                 History.RemoveAt(History.Count - 1); // Remove o mais antigo (último)

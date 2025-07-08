@@ -16,7 +16,7 @@ namespace TrocaBaseGUI.Services
             get => conexaoFile;
             set
             {
-                domain = value;
+                conexaoFile = value;
                 OnPropertyChanged(nameof(ConexaoFile));
             }
         }
@@ -50,7 +50,16 @@ namespace TrocaBaseGUI.Services
 
         public void SetConexaoAddress(string add)
         {
-            ConexaoFile = add + @"\conexao.dat";
+            if (ValidateSystemPath(add))
+            {
+                Console.WriteLine("teste setcon vm-----------S ");
+                conexaoFile = add + @"\conexao.dat";
+            }
+            else
+            {
+                Console.WriteLine("caminho inválido");
+            }
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -10,13 +10,13 @@ namespace TrocaBaseGUI.Views
     public partial class EditDbPage : Page
     {
         public DatabaseModel _db;
-        public MainViewModel _vmDbs;
-        public EditDbPage(MainViewModel vmDbs, DatabaseModel db)
+        public MainViewModel _viewModelDbs;
+        public EditDbPage(MainViewModel viewModelDbs, DatabaseModel db)
         {
             InitializeComponent();
             _db = db;
             renameInput.Text = _db.DisplayName;
-            _vmDbs = vmDbs;
+            _viewModelDbs = viewModelDbs;
         }
 
         private void SaveName_Click(object sender, RoutedEventArgs e)

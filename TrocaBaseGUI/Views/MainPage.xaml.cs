@@ -11,11 +11,13 @@ using System.Diagnostics;
 using System;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.Utils;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page
     {
+        public string vmConexaoFile;
         public ConexaoFileService ConexaoFileService { get; set; } = new ConexaoFileService();
         public ObservableCollection<DatabaseModel> listaBancos { get; set; }
         public ObservableCollection<SysDirectory> hist { get; set; }
@@ -30,7 +32,9 @@ namespace TrocaBaseGUI.Views
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
-
+            //////////////////////////////////
+            vmConexaoFile = viewModel.ConexaoFile;
+            //////////////////////////////////
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
@@ -42,10 +46,6 @@ namespace TrocaBaseGUI.Views
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
 
-            //foreach (var item in listaBancos)
-            //{
-            //    Console.WriteLine("isS: " + item.IsSelected);
-            //}
         }
         private void GetFilter(ObservableCollection<DatabaseModel> db)
         {
@@ -147,7 +147,15 @@ namespace TrocaBaseGUI.Views
             {
                 viewModel.AddDirectory($"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}",
                     System.IO.Path.GetDirectoryName(dialog.FileName), System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
-                ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+
+                //ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                //MainViewModel.ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                //viewModel.VmSetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                //viewModel.VmSetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                //ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+
+
+                Console.WriteLine("cnx: " + viewModel.ConexaoFile);
 
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
@@ -160,10 +168,16 @@ namespace TrocaBaseGUI.Views
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectory;
 
-            if (selectedItem != null)
+            if (selectedItem != null)  //&& DataContext is MainViewModel vm
             {
+                //ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
+                //MainViewModel.ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
+                //viewModel.VmSetConexaoAddress(selectedItem.FullPathAddress);
                 ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
+
                 MainViewModel.exeFile = selectedItem.ExeFile;
+                //Console.WriteLine("cnx: " + MainViewModel.ConexaoFile);
+
             }
             Refresh();
         }
@@ -189,7 +203,8 @@ namespace TrocaBaseGUI.Views
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new SettingsPage());
+
+            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new SettingsPage(viewModel));
         }
 
         private void EditarBase_Click(object sender, RoutedEventArgs e)

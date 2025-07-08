@@ -16,10 +16,10 @@ namespace TrocaBaseGUI.Services
             _connection = connection;
         }
 
-        public List<DatabaseModel> LoadSqlServerDatabases()
+        public List<DatabaseModel> LoadSqlServerDatabases(string server)
         {
             var databases = new List<DatabaseModel>();
-            using (var conn = new SqlConnection(_connection.GetConnectionString()))
+            using (var conn = new SqlConnection(_connection.GetConnectionString(server)))
             {
                 conn.Open();
                 var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);

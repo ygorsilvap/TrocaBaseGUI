@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 public class SqlServerConnectionModel : INotifyPropertyChanged
 {
-    private string server = "MTZNOTFS058680";
+    private string server; //= "MTZNOTFS058680";
     //private string server = "DESKTOP-N8OLEBQ\\SQLExpress";
     public string Server
     {
@@ -39,15 +39,15 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { useIntegratedSecurity = value; OnPropertyChanged(); }
     }
 
-    public string GetConnectionString()
+    public string GetConnectionString(string server)
     {
         if (UseIntegratedSecurity)
         {
-            return $"Server={Server};Integrated Security=True;";
+            return $"Server={server};Integrated Security=True;";
         }
         else
         {
-            return $"Server={Server};User Id={Username};Password={Password};";
+            return $"Server={server};User Id={Username};Password={Password};";
         }
     }
 
