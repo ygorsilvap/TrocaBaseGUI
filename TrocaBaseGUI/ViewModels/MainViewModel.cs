@@ -13,54 +13,58 @@ using System.ServiceProcess;
 using System.Windows.Shapes;
 using TrocaBaseGUI.Services;
 using System.ServiceModel.Channels;
+using System.ComponentModel;
 
 namespace TrocaBaseGUI.ViewModels
 {
     public class MainViewModel
     {
-        //public static ConexaoFileService conexaoFileService { get; set; } = new ConexaoFileService();
-        //public string ConexaoFile = conexaoFileService.ConexaoFile;
-        public static string ConexaoFile = new ConexaoFileService().ConexaoFile;
+        public ConexaoFileService conexaoFileService { get; set; }
+        //public string conexaoFile => conexaoFileService.ConexaoFile;
+        public string conexaoFile
+        {
+            get => conexaoFileService.ConexaoFile;
+            set => conexaoFileService.ConexaoFile = value;
+        }
         static string selectedBase;
         public static string exeFile;
         public string hostname;
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
-
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
-
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
         public MainViewModel()
         {
+            conexaoFileService = new ConexaoFileService();
             LoadState();
             var sqlService = new SqlServerService(SQLServerConnection);
-            sqlService.LoadSqlServerDatabases("MTZNOTFS058680").ForEach(db => Databases.Add(db));
-            
-
+            sqlService.LoadSqlServerDatabases("DESKTOP-N8OLEBQ\\SQLExpress").ForEach(db => Databases.Add(db));
+            //DESKTOP-N8OLEBQ\\SQLExpress
+            //MTZNOTFS058680
             var oracleService = new OracleService();
-            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680:1521/LINX;DBA Privilege=SYSDBA;")
+            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=localhost:1521/LINX;DBA Privilege=SYSDBA;")
                 .ForEach(db => Databases.Add(db));
 
             foreach (var item in Databases) DatabaseModel.SetDisplayName(item);
 
             hostname = Dns.GetHostName();
 
-            foreach (var item in Databases)
+            conexaoFileService.PropertyChanged += (s, e) =>
             {
-                Console.WriteLine("t: " + item.DbType);
-            }
-            Console.WriteLine(SQLServerConnection);
-            Console.WriteLine("cnx: " + ConexaoFile);
+                if (e.PropertyName == nameof(ConexaoFileService.ConexaoFile))
+                {
+                    OnPropertyChanged(nameof(conexaoFile));
+                }
+            };
         }
-
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
-            var conexaoService = new ConexaoFileService();
+            var conexaoService = conexaoFileService;
             string oracleDb = "[BANCODADOS]=ORACLE";
             string sqlServerDb = "[BANCODADOS]=SQLSERVER";
-            var conexaoLines = File.ReadAllLines(ConexaoFile).ToList();
+            var conexaoLines = File.ReadAllLines(conexaoFile).ToList();
             int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
             int index;
 
@@ -91,7 +95,7 @@ namespace TrocaBaseGUI.ViewModels
             // Adiciona a nova string
             conexaoLines.InsertRange(index, newConnLines);
 
-            File.WriteAllLines(ConexaoFile, conexaoLines);
+            File.WriteAllLines(conexaoFile, conexaoLines);
 
             if(dbs.Any(b => b.IsSelected == true)) dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
 
@@ -99,12 +103,6 @@ namespace TrocaBaseGUI.ViewModels
 
             selectedBase = db;
         }
-
-        //public void VmSetConexaoAddress(string path)
-        //{
-
-        //    ConexaoFile.SetConexaoAddress(path);
-        //}
 
         public ObservableCollection<DatabaseModel> InstanceFilter(string instance, ObservableCollection<DatabaseModel> db)
         {
@@ -142,22 +140,23 @@ namespace TrocaBaseGUI.ViewModels
             string HistoricoSerialized = JsonSerializer.Serialize(historyList);
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
             {
-                Properties.Settings.Default.historico = HistoricoSerialized;
+                Properties.Settings.Default.HistoricoMem = HistoricoSerialized;
             }
 
-            Properties.Settings.Default.ExeFile = exeFile;
-            Properties.Settings.Default.conexaoFile = ConexaoFile;
+            Properties.Settings.Default.ExeFileMem = exeFile;
+            Properties.Settings.Default.ConexaoFileMem = conexaoFile;
             Properties.Settings.Default.Conexao = selectedBase;
             Properties.Settings.Default.Save();
         }
 
         public void LoadState()
         {
-            exeFile = Properties.Settings.Default.ExeFile;
-            ConexaoFile = Properties.Settings.Default.conexaoFile;
+            exeFile = Properties.Settings.Default.ExeFileMem;
+            conexaoFile = Properties.Settings.Default.ConexaoFileMem;
+            //conexaoFileService.SetConexaoAddress(Properties.Settings.Default.ConexaoFileMem);
             selectedBase = Properties.Settings.Default.Conexao;
 
-            string HistoricoSerialized = Properties.Settings.Default.historico;
+            string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
             {
                 History =
@@ -168,13 +167,19 @@ namespace TrocaBaseGUI.ViewModels
 
         public void ClearApp()
         {
-            ConexaoFile = "";
+            //conexaoFile = "";
             selectedBase = "";
             exeFile = "";
 
             History.Clear();
-            Properties.Settings.Default.historico = "";
+            Properties.Settings.Default.HistoricoMem = "";
             Properties.Settings.Default.Save();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

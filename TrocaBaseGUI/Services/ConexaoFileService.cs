@@ -31,6 +31,7 @@ namespace TrocaBaseGUI.Services
                 OnPropertyChanged(nameof(Domain));
             }
         }
+
         public string CreateConnectionString(string dbType, string domain, string db)
         {
             if (dbType.ToLower().Contains("sqlserver"))
@@ -50,10 +51,10 @@ namespace TrocaBaseGUI.Services
 
         public void SetConexaoAddress(string add)
         {
+            if (String.IsNullOrEmpty(add)) return;
             if (ValidateSystemPath(add))
             {
-                Console.WriteLine("teste setcon vm-----------S ");
-                conexaoFile = add + @"\conexao.dat";
+                ConexaoFile = Path.Combine(add, "conexao.dat");
             }
             else
             {

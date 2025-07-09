@@ -38,12 +38,12 @@ namespace TrocaBaseGUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string conexaoFile {
+        public string ConexaoFileMem {
             get {
-                return ((string)(this["conexaoFile"]));
+                return ((string)(this["ConexaoFileMem"]));
             }
             set {
-                this["conexaoFile"] = value;
+                this["ConexaoFileMem"] = value;
             }
         }
         
@@ -86,24 +86,24 @@ namespace TrocaBaseGUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string historico {
+        public string HistoricoMem {
             get {
-                return ((string)(this["historico"]));
+                return ((string)(this["HistoricoMem"]));
             }
             set {
-                this["historico"] = value;
+                this["HistoricoMem"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ExeFile {
+        public string ExeFileMem {
             get {
-                return ((string)(this["ExeFile"]));
+                return ((string)(this["ExeFileMem"]));
             }
             set {
-                this["ExeFile"] = value;
+                this["ExeFileMem"] = value;
             }
         }
     }

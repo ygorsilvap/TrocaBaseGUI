@@ -10,7 +10,7 @@
         <TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <TextBox Margin="330,176,100,306" TextWrapping="Wrap" Text="TextBox"/>
         <TextBox Margin="330,236,100,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
-        <Button Content="Testar Conexão" HorizontalAlignment="Left" Margin="100,280,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" HorizontalAlignment="Left" Margin="100,280,0,0" VerticalAlignment="Top" Width="120"/>
         <Button Content="Testar Conexão" Margin="330,280,100,0" VerticalAlignment="Top"/>
         <Button Content="Voltar" Click="VoltarButton_Click" Margin="230,390,230,72" Height="38"/>
         <TextBlock HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>

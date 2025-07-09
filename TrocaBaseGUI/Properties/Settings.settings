@@ -5,7 +5,7 @@
     <Setting Name="dbDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="conexaoFile" Type="System.String" Scope="User">
+    <Setting Name="ConexaoFileMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Conexao" Type="System.String" Scope="User">
@@ -17,10 +17,10 @@
     <Setting Name="RbSelected" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="historico" Type="System.String" Scope="User">
+    <Setting Name="HistoricoMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ExeFile" Type="System.String" Scope="User">
+    <Setting Name="ExeFileMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

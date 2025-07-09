@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TrocaBaseGUI.Services
 {
-    internal class SqlServerService
+    public class SqlServerService
     {
         private readonly SqlServerConnectionModel _connection;
 

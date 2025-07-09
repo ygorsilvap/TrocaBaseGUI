@@ -17,8 +17,6 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page
     {
-        public string vmConexaoFile;
-        public ConexaoFileService ConexaoFileService { get; set; } = new ConexaoFileService();
         public ObservableCollection<DatabaseModel> listaBancos { get; set; }
         public ObservableCollection<SysDirectory> hist { get; set; }
         private MainViewModel viewModel;
@@ -32,9 +30,8 @@ namespace TrocaBaseGUI.Views
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
-            //////////////////////////////////
-            vmConexaoFile = viewModel.ConexaoFile;
-            //////////////////////////////////
+
+
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
@@ -85,10 +82,10 @@ namespace TrocaBaseGUI.Views
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
 
-            if (!string.IsNullOrEmpty(viewModel.ConexaoFile))
+            if (!string.IsNullOrEmpty(viewModel.conexaoFile))
             {
-                conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(viewModel.ConexaoFile)) ||
-                    !File.ReadAllText(viewModel.ConexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
+                conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(viewModel.conexaoFile)) ||
+                    !File.ReadAllText(viewModel.conexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
             }
             else
             {
@@ -148,14 +145,9 @@ namespace TrocaBaseGUI.Views
                 viewModel.AddDirectory($"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}",
                     System.IO.Path.GetDirectoryName(dialog.FileName), System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
 
-                //ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
-                //MainViewModel.ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
-                //viewModel.VmSetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
-                //viewModel.VmSetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
-                //ConexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                viewModel.conexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
 
-
-                Console.WriteLine("cnx: " + viewModel.ConexaoFile);
+                Console.WriteLine("cnx: " + viewModel.conexaoFile);
 
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
@@ -170,13 +162,8 @@ namespace TrocaBaseGUI.Views
 
             if (selectedItem != null)  //&& DataContext is MainViewModel vm
             {
-                //ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
-                //MainViewModel.ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
-                //viewModel.VmSetConexaoAddress(selectedItem.FullPathAddress);
-                ConexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
-
+                viewModel.conexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
                 MainViewModel.exeFile = selectedItem.ExeFile;
-                //Console.WriteLine("cnx: " + MainViewModel.ConexaoFile);
 
             }
             Refresh();
@@ -197,7 +184,7 @@ namespace TrocaBaseGUI.Views
 
         private void CloseNSysButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.ConexaoFile)}\{MainViewModel.exeFile}.exe");
+            Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{MainViewModel.exeFile}.exe");
             Application.Current.Shutdown();
         }
 
