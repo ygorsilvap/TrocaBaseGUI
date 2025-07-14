@@ -7,7 +7,7 @@
     <Grid Background="White">
         <Rectangle Margin="80,80,80,122" Stroke="Black"/>
         <TextBox x:Name="sqlServerServer" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Text="{Binding Server}" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
         <TextBox Margin="330,176,100,306" TextWrapping="Wrap" Text="TextBox"/>
         <TextBox Margin="330,236,100,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
         <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" HorizontalAlignment="Left" Margin="100,280,0,0" VerticalAlignment="Top" Width="120"/>
@@ -16,7 +16,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <TextBlock HorizontalAlignment="Left" Margin="330,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
         <TextBlock HorizontalAlignment="Left" Margin="330,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <!--<TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>-->
         <TextBlock HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="100,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock FontSize="18" FontWeight="Bold" Margin="330,94,100,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 

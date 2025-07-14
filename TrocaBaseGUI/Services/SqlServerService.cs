@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TrocaBaseGUI.Services
 {
@@ -31,6 +32,31 @@ namespace TrocaBaseGUI.Services
                 }
             }
             return databases;
+        }
+
+        public Boolean ValidateConnection(string server)
+        {
+            using (var conn = new SqlConnection(_connection.GetConnectionString(server)))
+            {
+                    try
+                    {
+                        conn.Open();
+                        if (conn.State == System.Data.ConnectionState.Open)
+                        {
+                            conn.Close();
+                        }
+                        return true;
+                    }
+                    catch
+                    {
+                        if (conn.State == System.Data.ConnectionState.Open)
+                        {
+                            conn.Close();
+                        }
+                        return false;
+                    }
+
+            }
         }
     }
 }

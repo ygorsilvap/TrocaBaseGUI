@@ -39,11 +39,11 @@ namespace TrocaBaseGUI.ViewModels
             conexaoFileService = new ConexaoFileService();
             LoadState();
             var sqlService = new SqlServerService(SQLServerConnection);
-            sqlService.LoadSqlServerDatabases("DESKTOP-N8OLEBQ\\SQLExpress").ForEach(db => Databases.Add(db));
+            sqlService.LoadSqlServerDatabases(SQLServerConnection.Server).ForEach(db => Databases.Add(db));
             //DESKTOP-N8OLEBQ\\SQLExpress
             //MTZNOTFS058680
             var oracleService = new OracleService();
-            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=localhost:1521/LINX;DBA Privilege=SYSDBA;")
+            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680.linx-inves.com.br:1521/LINX;DBA Privilege=SYSDBA;")
                 .ForEach(db => Databases.Add(db));
 
             foreach (var item in Databases) DatabaseModel.SetDisplayName(item);

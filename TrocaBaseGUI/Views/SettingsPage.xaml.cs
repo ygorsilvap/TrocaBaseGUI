@@ -16,7 +16,7 @@ namespace TrocaBaseGUI.Views
         {
             _viewModel = viewModel;
             InitializeComponent();
-            sqlServerServer.Text = "DESKTOP-N8OLEBQ\\SQLExpress";
+            //sqlServerServer.Text = "MTZNOTFS058680";
         }
 
         public void sqlServerSettings(string server)
@@ -26,13 +26,15 @@ namespace TrocaBaseGUI.Views
 
         private void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if(sqlServerService.ValidateConnection(sqlServerServer.Text))
             {
-            sqlServerService.LoadSqlServerDatabases(sqlServerServer.Text);
+                sqlServerSettings(sqlServerServer.Text);
+                _viewModel.SQLServerConnection.Server = sqlServerServer.Text;
+                MessageBox.Show("Conexão com o SQL Server estabelecida.");
             }
-            catch
+            else
             {
-                Console.WriteLine("FALHA NA CONEXAO");
+                MessageBox.Show("Falha ao conectar ao SQL Server. Verifique o servidor informado.");
             }
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
