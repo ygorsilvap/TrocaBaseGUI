@@ -106,5 +106,17 @@ namespace TrocaBaseGUI.Properties {
                 this["ExeFileMem"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SqlServerMem {
+            get {
+                return ((string)(this["SqlServerMem"]));
+            }
+            set {
+                this["SqlServerMem"] = value;
+            }
+        }
     }
 }

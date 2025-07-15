@@ -74,7 +74,7 @@ public class DatabaseModel : INotifyPropertyChanged
         }
         else
         {
-            db.DisplayName = newDisplayName;
+            db.DisplayName = String.IsNullOrEmpty(newDisplayName) ? db.Name : newDisplayName;
         }
     }
 

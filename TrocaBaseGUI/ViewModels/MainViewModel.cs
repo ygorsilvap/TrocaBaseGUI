@@ -5,14 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using TrocaBaseGUI.Models;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
 using System.Net;
-using Oracle.ManagedDataAccess.Client;
-using System.ServiceProcess;
-using System.Windows.Shapes;
 using TrocaBaseGUI.Services;
-using System.ServiceModel.Channels;
 using System.ComponentModel;
 
 namespace TrocaBaseGUI.ViewModels
@@ -20,7 +14,6 @@ namespace TrocaBaseGUI.ViewModels
     public class MainViewModel
     {
         public ConexaoFileService conexaoFileService { get; set; }
-        //public string conexaoFile => conexaoFileService.ConexaoFile;
         public string conexaoFile
         {
             get => conexaoFileService.ConexaoFile;
@@ -31,6 +24,7 @@ namespace TrocaBaseGUI.ViewModels
         public string hostname;
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public SqlServerService SqlService;
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
@@ -38,15 +32,15 @@ namespace TrocaBaseGUI.ViewModels
         {
             conexaoFileService = new ConexaoFileService();
             LoadState();
-            var sqlService = new SqlServerService(SQLServerConnection);
-            sqlService.LoadSqlServerDatabases(SQLServerConnection.Server).ForEach(db => Databases.Add(db));
-            //DESKTOP-N8OLEBQ\\SQLExpress
-            //MTZNOTFS058680
+
+            SqlService = new SqlServerService(SQLServerConnection);
+            openSqlConn(SqlService);
+
+            //MTZNOTFS058680.linx-inves.com.br
             var oracleService = new OracleService();
-            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=MTZNOTFS058680.linx-inves.com.br:1521/LINX;DBA Privilege=SYSDBA;")
+            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=localhost:1521/LINX;DBA Privilege=SYSDBA;")
                 .ForEach(db => Databases.Add(db));
 
-            foreach (var item in Databases) DatabaseModel.SetDisplayName(item);
 
             hostname = Dns.GetHostName();
 
@@ -59,6 +53,24 @@ namespace TrocaBaseGUI.ViewModels
             };
         }
 
+        public void openSqlConn(SqlServerService sqlservice)
+        {
+            if (String.IsNullOrEmpty(SQLServerConnection.Server))
+            {
+                Console.WriteLine("sem sql conx");
+            }
+            else
+            {
+                sqlservice.LoadSqlServerDatabases(SQLServerConnection.Server).ForEach(db => {
+                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return;
+                    }
+                    Databases.Add(db);
+                });
+                Console.WriteLine("\nserver: " + SQLServerConnection.Server + "\n");
+            }
+        }
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
             var conexaoService = conexaoFileService;
@@ -146,6 +158,7 @@ namespace TrocaBaseGUI.ViewModels
             Properties.Settings.Default.ExeFileMem = exeFile;
             Properties.Settings.Default.ConexaoFileMem = conexaoFile;
             Properties.Settings.Default.Conexao = selectedBase;
+            Properties.Settings.Default.SqlServerMem = SQLServerConnection.Server;
             Properties.Settings.Default.Save();
         }
 
@@ -155,6 +168,7 @@ namespace TrocaBaseGUI.ViewModels
             conexaoFile = Properties.Settings.Default.ConexaoFileMem;
             //conexaoFileService.SetConexaoAddress(Properties.Settings.Default.ConexaoFileMem);
             selectedBase = Properties.Settings.Default.Conexao;
+            SQLServerConnection.Server = Properties.Settings.Default.SqlServerMem;
 
             string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
@@ -170,6 +184,8 @@ namespace TrocaBaseGUI.ViewModels
             //conexaoFile = "";
             selectedBase = "";
             exeFile = "";
+            SQLServerConnection.Server = "";
+            Databases = new ObservableCollection<DatabaseModel>();
 
             History.Clear();
             Properties.Settings.Default.HistoricoMem = "";

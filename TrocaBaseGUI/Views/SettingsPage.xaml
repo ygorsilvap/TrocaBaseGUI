@@ -6,19 +6,20 @@
 
     <Grid Background="White">
         <Rectangle Margin="80,80,80,122" Stroke="Black"/>
-        <TextBox x:Name="sqlServerServer" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Text="{Binding Server}" Width="120"/>
+        <TextBox x:Name="sqlServerServer" FontSize="11" Padding="1, 0" Margin="100,176,300,306" Text="{Binding SQLServerConnection.Server}"/>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox Margin="330,176,100,306" TextWrapping="Wrap" Text="TextBox"/>
-        <TextBox Margin="330,236,100,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
-        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" HorizontalAlignment="Left" Margin="100,280,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Testar Conexão" Margin="330,280,100,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="OracleUser" Margin="300,176,100,306" TextWrapping="Wrap" Text="TextBox" Width="150"/>
+        <TextBox Margin="300,236,130,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" HorizontalAlignment="Left" Margin="100,210,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Testar Conexão" Margin="300,280,130,0" VerticalAlignment="Top"/>
         <Button Content="Voltar" Click="VoltarButton_Click" Margin="230,390,230,72" Height="38"/>
         <TextBlock HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="330,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="330,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="300,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <!--<TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>-->
         <TextBlock HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="100,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
-        <TextBlock FontSize="18" FontWeight="Bold" Margin="330,94,100,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock FontSize="18" FontWeight="Bold" Margin="300,94,130,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <Button Content="Salvar" Click="SalvarButton_Click" Margin="230,332,230,140"/>
 
     </Grid>
 </Page>

@@ -24,17 +24,20 @@ namespace TrocaBaseGUI.Views
         public string rbSelected;
         public string sysSelected;
 
-        public MainPage()
+        public MainPage(MainViewModel vm)
         {
             InitializeComponent();
 
-            viewModel = new MainViewModel();
+            viewModel = vm;
             this.DataContext = viewModel;
 
+            viewModel.openSqlConn(viewModel.SqlService);
 
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
+
+            foreach (var item in viewModel.Databases) DatabaseModel.SetDisplayName(item);
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
@@ -44,6 +47,7 @@ namespace TrocaBaseGUI.Views
             GetFilter(listaBancos);
 
         }
+
         private void GetFilter(ObservableCollection<DatabaseModel> db)
         {
             if (!(DataContext is MainViewModel vm)) return;
@@ -191,7 +195,7 @@ namespace TrocaBaseGUI.Views
         private void ToSettings_Click(object sender, RoutedEventArgs e)
         {
 
-            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new SettingsPage(viewModel));
+            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new SettingsPage());
         }
 
         private void EditarBase_Click(object sender, RoutedEventArgs e)
