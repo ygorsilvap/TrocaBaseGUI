@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
@@ -8,7 +10,7 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace TrocaBaseGUI.Services
 {
-    internal class OracleService
+    public class OracleService
     {
         public List<string> GetRunningInstances()
         {
@@ -36,6 +38,31 @@ namespace TrocaBaseGUI.Services
                 }
             }
             return databases;
+        }
+
+        public Boolean ValidateConnection(string connectionString)
+        {
+            using (var conn = new OracleConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    if (conn.State == System.Data.ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
+                    return true;
+                }
+                catch
+                {
+                    if (conn.State == System.Data.ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
+                    return false;
+                }
+
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ namespace TrocaBaseGUI.Views
             this.DataContext = viewModel;
 
             viewModel.openSqlConn(viewModel.SqlService);
+            viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
 
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());

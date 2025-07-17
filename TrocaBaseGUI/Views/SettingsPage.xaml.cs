@@ -33,7 +33,7 @@ namespace TrocaBaseGUI.Views
             if(_viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
                 SetSqlServerSettings(sqlServerServer.Text);
-                _viewModel.SQLServerConnection.Server = sqlServerServer.Text;
+                //_viewModel.SQLServerConnection.Server = sqlServerServer.Text;
                 MessageBox.Show("Conexão com o SQL Server estabelecida.");
             }
             else
@@ -41,9 +41,32 @@ namespace TrocaBaseGUI.Views
                 MessageBox.Show("Falha ao conectar ao SQL Server. Verifique o servidor informado.");
             }
         }
+
+        private void OracleTestConn_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Text, OraclePort.Text)))
+            {
+                SetOracleSettings(OracleUser.Text, OraclePassword.Text, OraclePort.Text);
+                MessageBox.Show("Conexão com o Oracle estabelecida.");
+            }
+            else
+            {
+                MessageBox.Show("Falha ao conectar ao Oracle. Verifique a string informada.");
+            }
+        }
+
+        public void SetOracleSettings(string user, string password, string port)
+        {
+            _viewModel.OracleConnection.User = user;
+            _viewModel.OracleConnection.Password = password;
+            _viewModel.OracleConnection.Port = port;
+        }
+
+
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
             SetSqlServerSettings(sqlServerServer.Text);
+            SetOracleSettings(OracleUser.Text, OraclePassword.Text, OraclePort.Text);
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {

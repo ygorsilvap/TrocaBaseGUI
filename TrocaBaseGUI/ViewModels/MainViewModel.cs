@@ -8,6 +8,7 @@ using TrocaBaseGUI.Models;
 using System.Net;
 using TrocaBaseGUI.Services;
 using System.ComponentModel;
+using System.Data.SqlClient;
 
 namespace TrocaBaseGUI.ViewModels
 {
@@ -24,6 +25,8 @@ namespace TrocaBaseGUI.ViewModels
         public string hostname;
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public OracleConnectionModel OracleConnection { get; set; } = new OracleConnectionModel();
+        public OracleService OracleService;
         public SqlServerService SqlService;
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
         private const int MaxHistory = 10;
@@ -36,11 +39,9 @@ namespace TrocaBaseGUI.ViewModels
             SqlService = new SqlServerService(SQLServerConnection);
             openSqlConn(SqlService);
 
-            //MTZNOTFS058680.linx-inves.com.br
-            var oracleService = new OracleService();
-            oracleService.GetDatabases("User Id=sys;Password=oracle;Data Source=localhost:1521/LINX;DBA Privilege=SYSDBA;")
-                .ForEach(db => Databases.Add(db));
-
+            OracleService = new OracleService();
+            //openOracleConn(OracleService, "localhost", "oracle", "1521");
+            openOracleConn(OracleService, OracleConnection.User, OracleConnection.Password, OracleConnection.Port);
 
             hostname = Dns.GetHostName();
 
@@ -70,6 +71,27 @@ namespace TrocaBaseGUI.ViewModels
                 });
                 Console.WriteLine("\nserver: " + SQLServerConnection.Server + "\n");
             }
+        }
+
+        public void openOracleConn(OracleService oracleService, string hostname, string password, string port)
+        {
+            if (String.IsNullOrEmpty(OracleConnection.GetConnectionString(hostname, password, port)))
+            {
+                Console.WriteLine("sem ora conx");
+            }
+            else
+            {
+                oracleService.GetDatabases(OracleConnection.GetConnectionString(hostname, password, port))
+                .ForEach(db => {
+                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return;
+                    }
+                    Databases.Add(db);
+                    });
+                Console.WriteLine("\noracle: " + OracleConnection.GetConnectionString(hostname, password, port) + "\n");
+            }
+
         }
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {

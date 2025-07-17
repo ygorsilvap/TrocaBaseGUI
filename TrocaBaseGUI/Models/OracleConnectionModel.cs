@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Net;
+using System;
 
 public class OracleConnectionModel : INotifyPropertyChanged
 {
-    private string userId;
-    public string UserId
+    private string user;
+    public string User
     {
-        get => userId;
-        set { userId = value; OnPropertyChanged(); }
+        get => user;
+        set { user = value; OnPropertyChanged(); }
     }
 
     private string password;
@@ -26,16 +27,23 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { hostname = value; OnPropertyChanged(); }
     }
 
-    private string porta;
-    public string Porta
+    private string port;
+    public string Port
     {
-        get => porta;
-        set { porta = value; OnPropertyChanged(); }
+        get => port;
+        set { port = value; OnPropertyChanged(); }
     }
 
-    public string GetConnectionString()
+    public string GetConnectionString(string hostname, string password, string port)
     {
-        return $"User Id={UserId};Password={Password};Data Source={Hostname}:1521/LINX;DBA Privilege=SYSDBA;";
+        if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hostname) || string.IsNullOrEmpty(port))
+        {
+            Console.WriteLine("GetConnectionString INVALID PARAMS");
+            return "";
+        } else
+        {
+          return $"User Id=sys;Password={password};Data Source={hostname}:{port}/LINX;DBA Privilege=SYSDBA;";
+        }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
