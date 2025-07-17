@@ -8,8 +8,9 @@
         <Rectangle Margin="80,79,80,123" Stroke="Black"/>
         <TextBox x:Name="sqlServerServer" FontSize="11" Padding="1, 0" Margin="100,176,300,306" Text="{Binding SQLServerConnection.Server}"/>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="OracleUser" FontSize="11" Margin="300,176,100,306" TextWrapping="Wrap" Text="TextBox" Width="150"/>
-        <TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+        <TextBox x:Name="OracleUser" FontSize="11" Margin="300,176,100,306" TextWrapping="Wrap" Text="{Binding OracleConnection.User}" Width="150"/>
+        <TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>
+        <TextBox x:Name="OraclePort" FontSize="11" Margin="390,340,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Port}" VerticalAlignment="Top"/>
         <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Margin="120,279,310,0" VerticalAlignment="Top"/>
         <Button Content="Testar Conexão" Click="OracleTestConn_Click" Margin="310,279,120,0" VerticalAlignment="Top"/>
         <Button Content="Voltar" Click="VoltarButton_Click" Margin="230,390,230,72" Height="38"/>
@@ -20,7 +21,6 @@
         <TextBlock HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="100,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock FontSize="18" FontWeight="Bold" Margin="300,94,130,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <Button Content="Salvar" Click="SalvarButton_Click" Margin="230,334,230,138"/>
-        <TextBox x:Name="OraclePort" FontSize="11" Margin="390,340,100,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="390,321,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="pt-br" Text="Porta"/></TextBlock>
 
     </Grid>

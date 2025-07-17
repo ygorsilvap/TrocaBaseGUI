@@ -75,7 +75,7 @@ namespace TrocaBaseGUI.ViewModels
 
         public void openOracleConn(OracleService oracleService, string hostname, string password, string port)
         {
-            if (String.IsNullOrEmpty(OracleConnection.GetConnectionString(hostname, password, port)))
+            if (!OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port)))
             {
                 Console.WriteLine("sem ora conx");
             }
@@ -88,9 +88,25 @@ namespace TrocaBaseGUI.ViewModels
                         return;
                     }
                     Databases.Add(db);
-                    });
+                });
                 Console.WriteLine("\noracle: " + OracleConnection.GetConnectionString(hostname, password, port) + "\n");
             }
+            //if (String.IsNullOrEmpty(OracleConnection.GetConnectionString(hostname, password, port)))
+            //{
+            //    Console.WriteLine("sem ora conx");
+            //}
+            //else
+            //{
+            //    oracleService.GetDatabases(OracleConnection.GetConnectionString(hostname, password, port))
+            //    .ForEach(db => {
+            //        if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
+            //        {
+            //            return;
+            //        }
+            //        Databases.Add(db);
+            //        });
+            //    Console.WriteLine("\noracle: " + OracleConnection.GetConnectionString(hostname, password, port) + "\n");
+            //}
 
         }
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
