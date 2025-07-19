@@ -27,7 +27,7 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { hostname = value; OnPropertyChanged(); }
     }
 
-    private string port;
+    private string port = "1521";
     public string Port
     {
         get => port;

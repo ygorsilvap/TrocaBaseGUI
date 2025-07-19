@@ -21,6 +21,7 @@ namespace TrocaBaseGUI.Views
             _viewModel = mainWindow.MainVM; 
             this.DataContext = _viewModel;
 
+            OraclePort.Text = _viewModel.OracleConnection.Port;
         }
 
         public void SetSqlServerSettings(string server)
@@ -62,7 +63,6 @@ namespace TrocaBaseGUI.Views
             _viewModel.OracleConnection.Port = port;
         }
 
-
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
             SetSqlServerSettings(sqlServerServer.Text);
@@ -73,9 +73,6 @@ namespace TrocaBaseGUI.Views
             var mainWindow = (MainWindow)Application.Current.MainWindow;
 
             mainWindow.MainFramePublic.Navigate(new MainPage(_viewModel));
-
         }
-
-
     }
 }

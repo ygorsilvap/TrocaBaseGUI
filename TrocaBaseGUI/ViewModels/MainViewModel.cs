@@ -40,7 +40,6 @@ namespace TrocaBaseGUI.ViewModels
             openSqlConn(SqlService);
 
             OracleService = new OracleService();
-            //openOracleConn(OracleService, "localhost", "oracle", "1521");
             openOracleConn(OracleService, OracleConnection.User, OracleConnection.Password, OracleConnection.Port);
 
             hostname = Dns.GetHostName();
@@ -91,23 +90,6 @@ namespace TrocaBaseGUI.ViewModels
                 });
                 Console.WriteLine("\noracle: " + OracleConnection.GetConnectionString(hostname, password, port) + "\n");
             }
-            //if (String.IsNullOrEmpty(OracleConnection.GetConnectionString(hostname, password, port)))
-            //{
-            //    Console.WriteLine("sem ora conx");
-            //}
-            //else
-            //{
-            //    oracleService.GetDatabases(OracleConnection.GetConnectionString(hostname, password, port))
-            //    .ForEach(db => {
-            //        if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
-            //        {
-            //            return;
-            //        }
-            //        Databases.Add(db);
-            //        });
-            //    Console.WriteLine("\noracle: " + OracleConnection.GetConnectionString(hostname, password, port) + "\n");
-            //}
-
         }
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
@@ -197,6 +179,9 @@ namespace TrocaBaseGUI.ViewModels
             Properties.Settings.Default.ConexaoFileMem = conexaoFile;
             Properties.Settings.Default.Conexao = selectedBase;
             Properties.Settings.Default.SqlServerMem = SQLServerConnection.Server;
+            Properties.Settings.Default.OraServerMem = OracleConnection.User;
+            Properties.Settings.Default.OraPasswordMem = OracleConnection.Password;
+            Properties.Settings.Default.OraPortMem = OracleConnection.Port;
             Properties.Settings.Default.Save();
         }
 
@@ -207,6 +192,9 @@ namespace TrocaBaseGUI.ViewModels
             //conexaoFileService.SetConexaoAddress(Properties.Settings.Default.ConexaoFileMem);
             selectedBase = Properties.Settings.Default.Conexao;
             SQLServerConnection.Server = Properties.Settings.Default.SqlServerMem;
+            OracleConnection.User = Properties.Settings.Default.OraServerMem;
+            OracleConnection.Password = Properties.Settings.Default.OraPasswordMem;
+            OracleConnection.Port = string.IsNullOrEmpty(OracleConnection.Port) ? "1521" : Properties.Settings.Default.OraPortMem;
 
             string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
@@ -223,6 +211,9 @@ namespace TrocaBaseGUI.ViewModels
             selectedBase = "";
             exeFile = "";
             SQLServerConnection.Server = "";
+            OracleConnection.User = "";
+            OracleConnection.Password = "";
+            OracleConnection.Port = "";
             Databases = new ObservableCollection<DatabaseModel>();
 
             History.Clear();

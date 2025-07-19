@@ -118,5 +118,41 @@ namespace TrocaBaseGUI.Properties {
                 this["SqlServerMem"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OraServerMem {
+            get {
+                return ((string)(this["OraServerMem"]));
+            }
+            set {
+                this["OraServerMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OraPasswordMem {
+            get {
+                return ((string)(this["OraPasswordMem"]));
+            }
+            set {
+                this["OraPasswordMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OraPortMem {
+            get {
+                return ((string)(this["OraPortMem"]));
+            }
+            set {
+                this["OraPortMem"] = value;
+            }
+        }
     }
 }
