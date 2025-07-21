@@ -9,6 +9,7 @@ using System.Net;
 using TrocaBaseGUI.Services;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace TrocaBaseGUI.ViewModels
 {
@@ -53,22 +54,35 @@ namespace TrocaBaseGUI.ViewModels
             };
         }
 
-        public void openSqlConn(SqlServerService sqlservice)
+        public async Task openSqlConn(SqlServerService sqlservice)
         {
-            if (String.IsNullOrEmpty(SQLServerConnection.Server))
+            if (await sqlservice.ValidateConnection(SQLServerConnection.Server))
             {
-                Console.WriteLine("sem sql conx");
-            }
-            else
-            {
-                sqlservice.LoadSqlServerDatabases(SQLServerConnection.Server).ForEach(db => {
+                var databases = await sqlservice.LoadSqlServerDatabases(SQLServerConnection.Server);
+                databases.ForEach(db => {
                     if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         return;
                     }
-                    Databases.Add(db);
+                        Databases.Add(db);
                 });
-                Console.WriteLine("\nserver: " + SQLServerConnection.Server + "\n");
+                Console.WriteLine("\n[Conexão com SQL Server estabelecida]\n");
+            }
+            else
+            {
+                if (Databases.Count() > 0)
+                {
+                    var removable = Databases
+                        .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s"))
+                        .ToList();
+
+                    foreach (var item in removable)
+                    {
+                       Databases.Remove(item);
+                    }
+                }
+
+                Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
             }
         }
 
@@ -76,7 +90,7 @@ namespace TrocaBaseGUI.ViewModels
         {
             if (!OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port)))
             {
-                Console.WriteLine("sem ora conx");
+                Console.WriteLine("\n[Conexão com Oracle inválida]\n");
             }
             else
             {
@@ -88,7 +102,7 @@ namespace TrocaBaseGUI.ViewModels
                     }
                     Databases.Add(db);
                 });
-                Console.WriteLine("\noracle: " + OracleConnection.GetConnectionString(hostname, password, port) + "\n");
+                Console.WriteLine("\n[Conexão com Oracle estabelecida]\n");
             }
         }
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
@@ -194,7 +208,7 @@ namespace TrocaBaseGUI.ViewModels
             SQLServerConnection.Server = Properties.Settings.Default.SqlServerMem;
             OracleConnection.User = Properties.Settings.Default.OraServerMem;
             OracleConnection.Password = Properties.Settings.Default.OraPasswordMem;
-            OracleConnection.Port = string.IsNullOrEmpty(OracleConnection.Port) ? "1521" : Properties.Settings.Default.OraPortMem;
+            OracleConnection.Port = string.IsNullOrEmpty(OracleConnection.Port) ? Properties.Settings.Default.OraPortMem : "1521";
 
             string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
@@ -213,7 +227,7 @@ namespace TrocaBaseGUI.ViewModels
             SQLServerConnection.Server = "";
             OracleConnection.User = "";
             OracleConnection.Password = "";
-            OracleConnection.Port = "";
+            OracleConnection.Port = "1521";
             Databases = new ObservableCollection<DatabaseModel>();
 
             History.Clear();

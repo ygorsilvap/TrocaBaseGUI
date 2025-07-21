@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace TrocaBaseGUI.Services
 {
@@ -17,16 +19,16 @@ namespace TrocaBaseGUI.Services
             _connection = connection;
         }
 
-        public List<DatabaseModel> LoadSqlServerDatabases(string server)
+        public async Task<List<DatabaseModel>> LoadSqlServerDatabases(string server)
         {
             var databases = new List<DatabaseModel>();
             using (var conn = new SqlConnection(_connection.GetConnectionString(server)))
             {
-                conn.Open();
+                await conn.OpenAsync();
                 var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
-                var reader = cmd.ExecuteReader();
+                var reader = await cmd.ExecuteReaderAsync();
 
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Instance = "local" });
                 }
@@ -34,28 +36,25 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public Boolean ValidateConnection(string server)
+        public async Task<Boolean> ValidateConnection(string server, int timeoutSeconds = 3)
         {
-            using (var conn = new SqlConnection(_connection.GetConnectionString(server)))
+            try
             {
-                    try
-                    {
-                        conn.Open();
-                        if (conn.State == System.Data.ConnectionState.Open)
-                        {
-                            conn.Close();
-                        }
-                        return true;
-                    }
-                    catch
-                    {
-                        if (conn.State == System.Data.ConnectionState.Open)
-                        {
-                            conn.Close();
-                        }
-                        return false;
-                    }
+                var connectionString = _connection.GetConnectionString(server);
 
+                if (!connectionString.ToLower().Contains("connect timeout"))
+                    connectionString += ";Connect Timeout=" + timeoutSeconds;
+
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+                    await conn.OpenAsync(cts.Token);
+                    return conn.State == System.Data.ConnectionState.Open;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }

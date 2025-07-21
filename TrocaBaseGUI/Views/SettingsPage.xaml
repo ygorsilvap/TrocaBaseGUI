@@ -9,7 +9,9 @@
         <TextBox x:Name="sqlServerServer" FontSize="11" Padding="1, 0" Margin="100,176,300,306" Text="{Binding SQLServerConnection.Server}"/>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
         <TextBox x:Name="OracleUser" FontSize="11" Margin="300,176,100,306" TextWrapping="Wrap" Text="{Binding OracleConnection.User}" Width="150"/>
-        <TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>
+        <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
+        <PasswordBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" VerticalAlignment="Top"/>
+
         <TextBox x:Name="OraclePort" FontSize="11" Margin="390,340,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Port}" VerticalAlignment="Top"/>
         <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Margin="120,279,310,0" VerticalAlignment="Top"/>
         <Button Content="Testar Conexão" Click="OracleTestConn_Click" Margin="310,279,120,0" VerticalAlignment="Top"/>

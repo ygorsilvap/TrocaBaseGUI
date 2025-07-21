@@ -31,8 +31,10 @@ namespace TrocaBaseGUI.Views
             viewModel = vm;
             this.DataContext = viewModel;
 
-            viewModel.openSqlConn(viewModel.SqlService);
-            viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
+            this.Loaded += MainPage_Loaded;
+
+            //viewModel.openSqlConn(viewModel.SqlService);
+            //viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
 
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
@@ -46,7 +48,22 @@ namespace TrocaBaseGUI.Views
             CloseNSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
+        }
 
+        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            //await viewModel.openSqlConn(viewModel.SqlService);
+            //viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
+
+            listaBancos.Clear();
+
+            foreach (var db in viewModel.Databases)
+            {
+                DatabaseModel.SetDisplayName(db);
+                listaBancos.Add(db);
+            }
+
+            GetFilter(listaBancos);
         }
 
         private void GetFilter(ObservableCollection<DatabaseModel> db)

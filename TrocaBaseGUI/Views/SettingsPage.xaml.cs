@@ -18,23 +18,22 @@ namespace TrocaBaseGUI.Views
             InitializeComponent();
 
             var mainWindow = (MainWindow)Application.Current.MainWindow;
-            _viewModel = mainWindow.MainVM; 
+            _viewModel = mainWindow.MainVM;
             this.DataContext = _viewModel;
 
             OraclePort.Text = _viewModel.OracleConnection.Port;
+            OraclePassword.Password = _viewModel.OracleConnection.Password;
         }
-
         public void SetSqlServerSettings(string server)
         {
             _viewModel.SQLServerConnection.Server = server;
         }
 
-        private void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
+        private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
         {
-            if(_viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
+            if(await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
                 SetSqlServerSettings(sqlServerServer.Text);
-                //_viewModel.SQLServerConnection.Server = sqlServerServer.Text;
                 MessageBox.Show("Conexão com o SQL Server estabelecida.");
             }
             else
@@ -45,9 +44,9 @@ namespace TrocaBaseGUI.Views
 
         private void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Text, OraclePort.Text)))
+            if (_viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text)))
             {
-                SetOracleSettings(OracleUser.Text, OraclePassword.Text, OraclePort.Text);
+                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
                 MessageBox.Show("Conexão com o Oracle estabelecida.");
             }
             else
@@ -66,7 +65,7 @@ namespace TrocaBaseGUI.Views
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
             SetSqlServerSettings(sqlServerServer.Text);
-            SetOracleSettings(OracleUser.Text, OraclePassword.Text, OraclePort.Text);
+            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {
