@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using TrocaBaseGUI.ViewModels;
 
@@ -18,7 +19,7 @@ namespace TrocaBaseGUI.Views
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MainVM.SaveState(); // Salva os dados antes de fechar
+            MainVM.SaveState();
         }
     }
 }

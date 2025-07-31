@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -36,7 +37,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string server, int timeoutSeconds = 3)
+        public async Task<Boolean> ValidateConnection(string server, int timeoutSeconds = 2)
         {
             try
             {

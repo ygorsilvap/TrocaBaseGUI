@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -12,6 +16,8 @@ namespace TrocaBaseGUI.Views
     {
 
         public MainViewModel _viewModel;
+        public List<double> SqlMedT = new List<double>();
+        public List<double> OraMedT = new List<double>();
 
         public SettingsPage()
         {
@@ -29,25 +35,50 @@ namespace TrocaBaseGUI.Views
             _viewModel.SQLServerConnection.Server = server;
         }
 
+        public double AverageCalc(List<double> arr)
+        {
+            double sum = 0;
+            foreach (var n in arr)
+            {
+                sum += n;
+            }
+            return sum = sum / arr.Count;
+        }
+
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             if(await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
                 SetSqlServerSettings(sqlServerServer.Text);
-                MessageBox.Show("Conexão com o SQL Server estabelecida.");
+                sw.Stop();
+                TimeSpan elapsed = sw.Elapsed;
+                SqlMedT.Add(elapsed.TotalMilliseconds);
+                Console.WriteLine($"\n\n\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
+                //MessageBox.Show("Conexão com o SQL Server estabelecida.");
             }
             else
             {
                 MessageBox.Show("Falha ao conectar ao SQL Server. Verifique o servidor informado.");
             }
+
         }
 
         private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text)))
             {
                 SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
-                MessageBox.Show("Conexão com o Oracle estabelecida.");
+                sw.Stop();
+                TimeSpan elapsed = sw.Elapsed;
+                OraMedT.Add(elapsed.TotalMilliseconds);
+                Console.WriteLine($"\n\n\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
+                //MessageBox.Show("Conexão com o Oracle estabelecida.");
             }
             else
             {

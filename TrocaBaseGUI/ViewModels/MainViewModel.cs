@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel
     {
         public ConexaoFileService conexaoFileService { get; set; }
         public string conexaoFile
@@ -53,7 +53,6 @@ namespace TrocaBaseGUI.ViewModels
                 }
             };
         }
-
         public async Task openSqlConn(SqlServerService sqlservice)
         {
             if (await sqlservice.ValidateConnection(SQLServerConnection.Server))
@@ -66,6 +65,7 @@ namespace TrocaBaseGUI.ViewModels
                     }
                         Databases.Add(db);
                 });
+                SQLServerConnection.SqlLoaded = true;
                 Console.WriteLine("\n[Conexão com SQL Server estabelecida]\n");
             }
             else
@@ -81,28 +81,41 @@ namespace TrocaBaseGUI.ViewModels
                        Databases.Remove(item);
                     }
                 }
-
+                SQLServerConnection.SqlLoaded = false;
                 Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
             }
         }
 
         public async Task openOracleConn(OracleService oracleService, string hostname, string password, string port)
         {
-            if (!await OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port)))
+            if (await OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port)))
             {
-                Console.WriteLine("\n[Conexão com Oracle inválida]\n");
+                oracleService.GetDatabases(OracleConnection.GetConnectionString(hostname, password, port))
+                    .ForEach(db => {
+                        if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            return;
+                        }
+                        Databases.Add(db);
+                    });
+                OracleConnection.OracleLoaded = true;
+                Console.WriteLine("\n[Conexão com Oracle estabelecida]\n");
             }
             else
             {
-                oracleService.GetDatabases(OracleConnection.GetConnectionString(hostname, password, port))
-                .ForEach(db => {
-                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
+                if (Databases.Count() > 0)
+                {
+                    var removable = Databases
+                        .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("o"))
+                        .ToList();
+
+                    foreach (var item in removable)
                     {
-                        return;
+                        Databases.Remove(item);
                     }
-                    Databases.Add(db);
-                });
-                Console.WriteLine("\n[Conexão com Oracle estabelecida]\n");
+                }
+                OracleConnection.OracleLoaded = false;
+                Console.WriteLine("\n[Conexão com Oracle inválida]\n");
             }
         }
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)

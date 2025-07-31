@@ -52,8 +52,8 @@ namespace TrocaBaseGUI.Views
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            //await viewModel.openSqlConn(viewModel.SqlService);
-            //viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
+            await viewModel.openSqlConn(viewModel.SqlService);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
 
             listaBancos.Clear();
 
@@ -64,6 +64,8 @@ namespace TrocaBaseGUI.Views
             }
 
             GetFilter(listaBancos);
+
+
         }
 
         private void GetFilter(ObservableCollection<DatabaseModel> db)
