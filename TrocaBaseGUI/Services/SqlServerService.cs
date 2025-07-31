@@ -37,7 +37,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string server, int timeoutSeconds = 1)
+        public async Task<Boolean> ValidateConnection(string server, double timeoutSeconds = 300)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace TrocaBaseGUI.Services
 
                 using (var conn = new SqlConnection(connectionString))
                 {
-                    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+                    using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutSeconds));
                     await conn.OpenAsync(cts.Token);
                     return conn.State == System.Data.ConnectionState.Open;
                 }

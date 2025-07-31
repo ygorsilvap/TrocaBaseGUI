@@ -68,14 +68,8 @@ public class DatabaseModel : INotifyPropertyChanged
 
     public static void SetDisplayName(DatabaseModel db, string newDisplayName = "")
     {
-        if (String.IsNullOrEmpty(db.DisplayName))
-        {
-            db.DisplayName = StringUtils.ToCapitalize(db.Name);
-        }
-        else
-        {
-            db.DisplayName = String.IsNullOrEmpty(newDisplayName) ? StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
-        }
+        db.DisplayName = String.IsNullOrEmpty(db.DisplayName) || String.IsNullOrEmpty(newDisplayName) ? 
+            StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
     }
 
     public override string ToString()

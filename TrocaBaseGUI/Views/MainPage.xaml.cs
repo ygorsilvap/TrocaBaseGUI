@@ -33,14 +33,12 @@ namespace TrocaBaseGUI.Views
 
             this.Loaded += MainPage_Loaded;
 
-            //viewModel.openSqlConn(viewModel.SqlService);
-            //viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
-
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
-            foreach (var item in viewModel.Databases) DatabaseModel.SetDisplayName(item);
+            foreach (var item in viewModel.Databases) DatabaseModel.SetDisplayName(item, item.DisplayName);
+            
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
@@ -59,13 +57,11 @@ namespace TrocaBaseGUI.Views
 
             foreach (var db in viewModel.Databases)
             {
-                DatabaseModel.SetDisplayName(db);
+                DatabaseModel.SetDisplayName(db, db.DisplayName);
                 listaBancos.Add(db);
             }
 
             GetFilter(listaBancos);
-
-
         }
 
         private void GetFilter(ObservableCollection<DatabaseModel> db)

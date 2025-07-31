@@ -47,25 +47,27 @@ namespace TrocaBaseGUI.Views
 
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
             if(await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
                 SetSqlServerSettings(sqlServerServer.Text);
-                sw.Stop();
-                TimeSpan elapsed = sw.Elapsed;
-                SqlMedT.Add(elapsed.TotalMilliseconds);
-                Console.WriteLine($"\n\n\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
-                Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
-                //MessageBox.Show("Conexão com o SQL Server estabelecida.");
+                //sw.Stop();
+                //TimeSpan elapsed = sw.Elapsed;
+                //SqlMedT.Add(elapsed.TotalMilliseconds);
+                //Console.WriteLine("\n\n\nTUDO CERTO");
+                //Console.WriteLine($"\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                //Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
+                MessageBox.Show("Conexão com o SQL Server estabelecida.");
             }
             else
             {
-                sw.Stop();
-                TimeSpan elapsed = sw.Elapsed;
-                SqlMedT.Add(elapsed.TotalMilliseconds);
-                Console.WriteLine($"\n\n\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
-                Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
+                //sw.Stop();
+                //TimeSpan elapsed = sw.Elapsed;
+                //SqlMedT.Add(elapsed.TotalMilliseconds);
+                //Console.WriteLine("\n\n\nNADA CERTO");
+                //Console.WriteLine($"\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                //Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
                 MessageBox.Show("Falha ao conectar ao SQL Server. Verifique o servidor informado.");
             }
 
@@ -73,25 +75,27 @@ namespace TrocaBaseGUI.Views
 
         private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
             if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text)))
             {
                 SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
-                sw.Stop();
-                TimeSpan elapsed = sw.Elapsed;
-                OraMedT.Add(elapsed.TotalMilliseconds);
-                Console.WriteLine($"\n\n\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
-                Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
-                //MessageBox.Show("Conexão com o Oracle estabelecida.");
+                //sw.Stop();
+                //TimeSpan elapsed = sw.Elapsed;
+                //OraMedT.Add(elapsed.TotalMilliseconds);
+                //Console.WriteLine("\n\n\nTUDO CERTO");
+                //Console.WriteLine($"\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                //Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
+                MessageBox.Show("Conexão com o Oracle estabelecida.");
             }
             else
             {
-                sw.Stop();
-                TimeSpan elapsed = sw.Elapsed;
-                OraMedT.Add(elapsed.TotalMilliseconds);
-                Console.WriteLine($"\n\n\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
-                Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
+                //sw.Stop();
+                //TimeSpan elapsed = sw.Elapsed;
+                //OraMedT.Add(elapsed.TotalMilliseconds);
+                //Console.WriteLine("\n\n\nNADA CERTO");
+                //Console.WriteLine($"\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                //Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
                 MessageBox.Show("Falha ao conectar ao Oracle. Verifique a string informada.");
             }
         }

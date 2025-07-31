@@ -40,7 +40,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string connectionString, int timeoutSeconds = 1)
+        public async Task<Boolean> ValidateConnection(string connectionString, double timeoutSeconds = 300)
         {
             using (var conn = new OracleConnection(connectionString))
             {
@@ -64,9 +64,9 @@ namespace TrocaBaseGUI.Services
                     }
                 });
 
-                if(await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
+                if(await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromMilliseconds(timeoutSeconds))) == openTask)
                 {
-                    return openTask.Result;
+                    return true;
                 } else
                 {
                     return false;

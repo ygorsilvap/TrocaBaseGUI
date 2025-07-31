@@ -22,8 +22,10 @@ namespace TrocaBaseGUI.Views
         private void SaveName_Click(object sender, RoutedEventArgs e)
         {
             DatabaseModel.SetDisplayName(_db, renameInput.Text);
-
             NavigationService.GoBack();
+            //var mainWindow = (MainWindow)Application.Current.MainWindow;
+
+            //mainWindow.MainFramePublic.Navigate(new MainPage(_viewModelDbs));
         }
     }
 }

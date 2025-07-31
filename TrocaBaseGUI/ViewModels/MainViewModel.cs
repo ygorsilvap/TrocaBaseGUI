@@ -38,10 +38,10 @@ namespace TrocaBaseGUI.ViewModels
             LoadState();
 
             SqlService = new SqlServerService(SQLServerConnection);
-            openSqlConn(SqlService);
+            //openSqlConn(SqlService);
 
             OracleService = new OracleService();
-            openOracleConn(OracleService, OracleConnection.User, OracleConnection.Password, OracleConnection.Port);
+            //openOracleConn(OracleService, OracleConnection.User, OracleConnection.Password, OracleConnection.Port);
 
             hostname = Dns.GetHostName();
 
@@ -202,6 +202,13 @@ namespace TrocaBaseGUI.ViewModels
                 Properties.Settings.Default.HistoricoMem = HistoricoSerialized;
             }
 
+            List<DatabaseModel> dbList = Databases.ToList();
+            string DatabasesSerialized = JsonSerializer.Serialize(dbList);
+            if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))
+            {
+                Properties.Settings.Default.DatabasesMem = DatabasesSerialized;
+            }
+
             Properties.Settings.Default.ExeFileMem = exeFile;
             Properties.Settings.Default.ConexaoFileMem = conexaoFile;
             Properties.Settings.Default.Conexao = selectedBase;
@@ -229,6 +236,14 @@ namespace TrocaBaseGUI.ViewModels
                 History =
                 JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
                 ?? new ObservableCollection<SysDirectory>();
+            }
+
+            string DatabasesSerialized = Properties.Settings.Default.DatabasesMem;
+            if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))
+            {
+                Databases =
+                    JsonSerializer.Deserialize<ObservableCollection<DatabaseModel>>(DatabasesSerialized)
+                    ?? new ObservableCollection<DatabaseModel>();
             }
         }
 
