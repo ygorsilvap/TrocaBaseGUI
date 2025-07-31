@@ -40,7 +40,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string connectionString, int timeoutSeconds = 2)
+        public async Task<Boolean> ValidateConnection(string connectionString, int timeoutSeconds = 1)
         {
             using (var conn = new OracleConnection(connectionString))
             {

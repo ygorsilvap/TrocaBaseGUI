@@ -61,6 +61,11 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
+                sw.Stop();
+                TimeSpan elapsed = sw.Elapsed;
+                SqlMedT.Add(elapsed.TotalMilliseconds);
+                Console.WriteLine($"\n\n\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
                 MessageBox.Show("Falha ao conectar ao SQL Server. Verifique o servidor informado.");
             }
 
@@ -82,6 +87,11 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
+                sw.Stop();
+                TimeSpan elapsed = sw.Elapsed;
+                OraMedT.Add(elapsed.TotalMilliseconds);
+                Console.WriteLine($"\n\n\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
+                Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
                 MessageBox.Show("Falha ao conectar ao Oracle. Verifique a string informada.");
             }
         }
