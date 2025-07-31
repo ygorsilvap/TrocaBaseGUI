@@ -34,6 +34,13 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { port = value; OnPropertyChanged(); }
     }
 
+    private bool _oracleLoaded;
+    public bool OracleLoaded
+    {
+        get => _oracleLoaded;
+        set { _oracleLoaded = value; OnPropertyChanged(); }
+    }
+
     public string GetConnectionString(string hostname, string password, string port)
     {
         if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hostname) || string.IsNullOrEmpty(port))

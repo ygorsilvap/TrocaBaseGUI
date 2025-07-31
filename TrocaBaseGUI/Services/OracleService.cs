@@ -40,18 +40,26 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public Boolean ValidateConnection(string connectionString)
+        public async Task<Boolean> ValidateConnection(string connectionString, int timeoutSeconds = 3)
         {
             using (var conn = new OracleConnection(connectionString))
             {
+                var openTask = Task.Run(() => conn.Open());
                 try
                 {
-                    conn.Open();
-                    if (conn.State == System.Data.ConnectionState.Open)
+                    if(await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
                     {
-                        conn.Close();
+                        if (conn.State == System.Data.ConnectionState.Open)
+                        {
+                            conn.Close();
+                        }
+                        return true;
                     }
-                    return true;
+                    else
+                    {
+                        return false;
+                    }
+
                 }
                 catch
                 {

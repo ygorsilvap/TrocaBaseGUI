@@ -42,9 +42,9 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        private void OracleTestConn_Click(object sender, RoutedEventArgs e)
+        private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text)))
+            if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text)))
             {
                 SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
                 MessageBox.Show("Conexão com o Oracle estabelecida.");

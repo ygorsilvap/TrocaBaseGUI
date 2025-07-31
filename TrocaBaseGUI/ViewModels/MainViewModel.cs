@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
         public ConexaoFileService conexaoFileService { get; set; }
         public string conexaoFile
@@ -86,9 +86,9 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public void openOracleConn(OracleService oracleService, string hostname, string password, string port)
+        public async Task openOracleConn(OracleService oracleService, string hostname, string password, string port)
         {
-            if (!OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port)))
+            if (!await OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port)))
             {
                 Console.WriteLine("\n[Conexão com Oracle inválida]\n");
             }

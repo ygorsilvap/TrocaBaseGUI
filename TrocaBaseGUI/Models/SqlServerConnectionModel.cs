@@ -38,6 +38,13 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { useIntegratedSecurity = value; OnPropertyChanged(); }
     }
 
+    private bool _sqlLoaded;
+    public bool SqlLoaded
+    {
+        get => _sqlLoaded;
+        set { _sqlLoaded = value; OnPropertyChanged(); }
+    }
+
     public string GetConnectionString(string server)
     {
         if (UseIntegratedSecurity)

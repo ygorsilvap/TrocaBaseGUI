@@ -16,7 +16,7 @@
         <!-- Botão -->
         <Button Content="Fechar" Click="CloseApp_Click" Margin="90,390,123,72"/>
 
-        <Button x:Name="CloseNSysButton" Content="{Binding exeName}" Click="CloseNSysButton_Click" Height="38" Margin="300,390,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Button x:Name="OpenSysButton" Content="{Binding exeName}" Click="OpenSysButton_Click" Height="38" Margin="300,390,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
         <!-- TabControl só para trocar contexto -->
         <TabControl Margin="80,100,80,330" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Grid.ColumnSpan="2">
