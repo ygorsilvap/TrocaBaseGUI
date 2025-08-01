@@ -1,0 +1,13 @@
+﻿<Window x:Class="TrocaBaseGUI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrocaBaseGUI"
+        mc:Ignorable="d"
+        Title="TrocaBase" Height="500" Width="550"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing">
+
+    <Frame x:Name="MainFrame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+</Window>

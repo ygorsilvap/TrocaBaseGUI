@@ -1,0 +1,21 @@
+﻿<Page x:Class="TrocaBaseGUI.Views.EditDbPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="FormularioPage"
+      Height="500" Width="550">
+
+    <Grid Background="White">
+        <Rectangle Margin="80,80,80,122" Stroke="Black"/>
+        <TextBlock FontSize="16" FontWeight="SemiBold" Margin="215,95,215,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Renomear base"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="100,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Nome da base"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <!--<TextBox x:Name = "RenameInput" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Width="120"/>-->
+        <TextBox x:Name = "renameInput" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" FontSize="16" FontWeight="Light" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="[dbType]"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="330,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="330,176,0,306" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="[user db]"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="330,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Conexão"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="330,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="[conn info]"/></TextBlock>
+        <Button Content="Salvar" Margin="215,330,215,0" VerticalAlignment="Top" Click="SaveName_Click"/>
+
+    </Grid>
+</Page>
