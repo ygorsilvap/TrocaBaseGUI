@@ -37,7 +37,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string server, double timeoutSeconds = 3000)
+        public async Task<Boolean> ValidateConnection(string server, double timeoutSeconds = 300)
         {
             try
             {
