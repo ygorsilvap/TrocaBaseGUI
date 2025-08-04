@@ -11,8 +11,7 @@ using System.Diagnostics;
 using System;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.Utils;
-//using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TrocaBaseGUI.Views
 {

@@ -64,23 +64,37 @@ namespace TrocaBaseGUI.Services
         {
             using var conn = new OracleConnection(connectionString);
 
-            try
-            {
+                    try
+                    {
                 var openTask = conn.OpenAsync();
 
                 if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
-                {
+                        {
                     await conn.CloseAsync();
                     return false;
-                }
+                        }
                 else
                 {
-                    return true;
-                }
+                        return true;
+                    }
             }
-            catch
-            {
-                return true;
+                    catch
+                    {
+                        if (conn.State == System.Data.ConnectionState.Open)
+                        {
+                            conn.Close();
+                        }
+                        return false;
+                    }
+                });
+
+                if(await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromMilliseconds(timeoutSeconds))) == openTask)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
             }
         }
     }
