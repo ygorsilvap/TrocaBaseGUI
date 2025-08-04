@@ -20,7 +20,7 @@ public class OracleConnectionModel : INotifyPropertyChanged
 
     }
 
-    //private string hostname = Dns.GetHostName();
+    private string hostname = Dns.GetHostName();
     public string Hostname
     {
         get => hostname;
