@@ -224,6 +224,9 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-
+        private void CopyStringClick_Click(object sender, RoutedEventArgs e)
+        {
+            //string teste = viewModel.conexaoFileService.CreateConnectionString();
+        }
     }
 }

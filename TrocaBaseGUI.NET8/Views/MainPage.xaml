@@ -49,6 +49,7 @@
                         <Grid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Renomear" Click="EditarBase_Click" />
+                                <MenuItem Header="Copiar Dados de Conexão" Click="CopyStringClick_Click" />
                             </ContextMenu>
                         </Grid.ContextMenu>
                         <Grid.ColumnDefinitions>

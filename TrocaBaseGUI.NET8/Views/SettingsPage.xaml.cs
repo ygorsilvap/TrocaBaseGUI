@@ -49,8 +49,10 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if(await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
+            
+            if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
+                
                 SetSqlServerSettings(sqlServerServer.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
@@ -62,6 +64,7 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
+                
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //SqlMedT.Add(elapsed.TotalMilliseconds);
@@ -117,6 +120,7 @@ namespace TrocaBaseGUI.Views
             var mainWindow = (MainWindow)Application.Current.MainWindow;
 
             mainWindow.MainFramePublic.Navigate(new MainPage(_viewModel));
+            
         }
     }
 }

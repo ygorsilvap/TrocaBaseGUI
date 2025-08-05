@@ -55,6 +55,7 @@ namespace TrocaBaseGUI.ViewModels
         }
         public async Task openSqlConn(SqlServerService sqlservice)
         {
+            
             if (await sqlservice.ValidateConnection(SQLServerConnection.Server))
             {
                 var databases = await sqlservice.LoadSqlServerDatabases(SQLServerConnection.Server);

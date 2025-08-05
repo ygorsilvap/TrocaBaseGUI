@@ -49,11 +49,11 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
     {
         if (UseIntegratedSecurity)
         {
-            return $"Server={server};Integrated Security=True;";
+            return $"Server={server};Integrated Security=True;TrustServerCertificate=True;";
         }
         else
         {
-            return $"Server={server};User Id={Username};Password={Password};";
+            return $"Server={server};User Id={Username};Password={Password};TrustServerCertificate=True;";
         }
     }
 

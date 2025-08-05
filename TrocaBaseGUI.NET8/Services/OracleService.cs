@@ -25,8 +25,11 @@ namespace TrocaBaseGUI.Services
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-
             var databases = new List<DatabaseModel>();
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return databases;
+
             using (var conn = new OracleConnection(connectionString))
             {
                 await conn.OpenAsync();
@@ -52,11 +55,11 @@ namespace TrocaBaseGUI.Services
                 if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
                 {
                     await conn.CloseAsync();
-                    return false;
+                    return true;
                 }
                 else
                 {
-                    return true;
+                    return false;
                 }
             }
             catch

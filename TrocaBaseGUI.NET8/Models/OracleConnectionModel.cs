@@ -20,12 +20,12 @@ public class OracleConnectionModel : INotifyPropertyChanged
 
     }
 
-    private string hostname = Dns.GetHostName();
-    public string Hostname
-    {
-        get => hostname;
-        set { hostname = value; OnPropertyChanged(); }
-    }
+    //private string hostname = Dns.GetHostName();
+    //public string Hostname
+    //{
+    //    get => hostname;
+    //    set { hostname = value; OnPropertyChanged(); }
+    //}
 
     private string port = "1521";
     public string Port

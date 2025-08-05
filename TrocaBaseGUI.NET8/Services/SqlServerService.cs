@@ -53,8 +53,9 @@ namespace TrocaBaseGUI.Services
                     return conn.State == System.Data.ConnectionState.Open;
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                Debug.WriteLine($"[ValidateConnection] Falha: {ex.GetType().Name} - {ex.Message}");
                 return false;
             }
         }
