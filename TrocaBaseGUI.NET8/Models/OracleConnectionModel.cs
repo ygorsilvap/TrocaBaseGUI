@@ -34,22 +34,22 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { port = value; OnPropertyChanged(); }
     }
 
-    private bool _oracleLoaded;
-    public bool OracleLoaded
-    {
-        get => _oracleLoaded;
-        set { _oracleLoaded = value; OnPropertyChanged(); }
-    }
+    //private bool _oracleLoaded;
+    //public bool OracleLoaded
+    //{
+    //    get => _oracleLoaded;
+    //    set { _oracleLoaded = value; OnPropertyChanged(); }
+    //}
 
-    public string GetConnectionString(string hostname, string password, string port)
+    public string GetConnectionString(string hostname, string password, string port, string instance)
     {
-        if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hostname) || string.IsNullOrEmpty(port))
+        if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hostname) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
         {
             Console.WriteLine("GetConnectionString INVALID PARAMS");
             return "";
         } else
         {
-          return $"User Id=sys;Password={password};Data Source={hostname}:{port}/LINX;DBA Privilege=SYSDBA;";
+          return $"User Id=sys;Password={password};Data Source={hostname}:{port}/{instance};DBA Privilege=SYSDBA;";
         }
     }
 

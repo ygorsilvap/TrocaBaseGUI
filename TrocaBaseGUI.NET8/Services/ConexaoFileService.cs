@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace TrocaBaseGUI.Services
             }
         }
 
-        private string domain = "MTZNOTFS058680.linx-inves.com.br";
+        private string domain = Dns.GetHostEntry(string.Empty).HostName;
         public string Domain
         {
             get => domain;
@@ -46,7 +47,7 @@ namespace TrocaBaseGUI.Services
 
         public Boolean ValidateSystemPath(string path)
         {
-            return File.Exists(path + "\\conexao.dat") ? true : false;
+            return File.Exists(path + "\\conexao.dat") || File.Exists(path + "\\ConexaoServidor.dat") ? true : false;
         }
 
         public void SetConexaoAddress(string add)

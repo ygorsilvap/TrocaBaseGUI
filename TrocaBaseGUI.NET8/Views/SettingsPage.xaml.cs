@@ -80,7 +80,8 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text)))
+            if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
+                _viewModel.OracleService.GetRunningInstances().Count > 0)
             {
                 SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
                 //sw.Stop();

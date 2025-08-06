@@ -31,7 +31,7 @@ namespace TrocaBaseGUI.Services
 
                 while (await reader.ReadAsync())
                 {
-                    databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Instance = "local" });
+                    databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local" });
                 }
             }
             return databases;
@@ -58,6 +58,11 @@ namespace TrocaBaseGUI.Services
                 Debug.WriteLine($"[ValidateConnection] Falha: {ex.GetType().Name} - {ex.Message}");
                 return false;
             }
+        }
+
+        public string CreateSQLServerConnectionString(string domain, string db)
+        {
+            return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={domain}:{db.ToUpper()}";
         }
     }
 }

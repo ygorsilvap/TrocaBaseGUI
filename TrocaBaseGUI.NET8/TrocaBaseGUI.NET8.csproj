@@ -21,15 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets\icon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Remove="MainWindow.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="collage(1).ico" />
+    <Content Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,10 +36,6 @@
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.9.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Assets\icon.ico" />
   </ItemGroup>
 
 </Project>

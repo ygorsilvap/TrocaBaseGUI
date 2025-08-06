@@ -25,7 +25,7 @@ namespace TrocaBaseGUI.Services
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
-            var databases = new List<DatabaseModel>();
+            List<DatabaseModel> databases = new List<DatabaseModel>();
 
             if (string.IsNullOrWhiteSpace(connectionString))
                 return databases;
@@ -33,43 +33,56 @@ namespace TrocaBaseGUI.Services
             using (var conn = new OracleConnection(connectionString))
             {
                 await conn.OpenAsync();
-                var cmd = new OracleCommand("SELECT username FROM dba_users WHERE account_status = 'OPEN' AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') " + $"AND username NOT IN ({exception}) ORDER BY username", conn);
+                var cmd = new OracleCommand(@"
+                    SELECT username, SYS_CONTEXT('USERENV', 'INSTANCE_NAME') as instance
+                    FROM dba_users
+                    WHERE account_status = 'OPEN' 
+                    AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') 
+                    AND username NOT IN (" + exception + @")
+                    ORDER BY username", conn); 
                 var reader = await cmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Instance = "local" });
+                    databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "local", Instance = reader.GetString(1) });
                 }
             }
             return databases;
         }
 
 
-        public async Task<bool> ValidateConnection(string connectionString, double timeoutSeconds = 3000)
+        public async Task<bool> ValidateConnection(string connectionString, double timeoutSeconds = 300)
         {
             using var conn = new OracleConnection(connectionString);
 
-            try
-            {
                 var openTask = conn.OpenAsync();
 
                 if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
                 {
-                    await conn.CloseAsync();
-                    return true;
+                    try
+                        {
+                            await openTask;
+                            await conn.CloseAsync();
+                            return true;
+                        }
+                    catch
+                        {
+                            if (conn.State == System.Data.ConnectionState.Open)
+                            {
+                                conn.Close();
+                            }
+                            return false;
+                        }
                 }
                 else
                 {
                     return false;
                 }
-            }
-            catch
-            {
-                if (conn.State == System.Data.ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                return false;
-            }
+        }
+
+        public string CreateOracleConnectionString(string domain, string instance, string db)
+        {
+
+            return $"[BANCODADOS]=ORACLE\n[DATABASE]={domain}/{instance}\n[USUARIO_ORACLE]={db.ToUpper()}";
         }
     }
 }

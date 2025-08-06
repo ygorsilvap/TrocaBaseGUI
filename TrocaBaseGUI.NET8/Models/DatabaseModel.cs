@@ -36,7 +36,6 @@ public class DatabaseModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(DbType));
         }
     }
-
     private string instance;
     public string Instance
     {
@@ -45,6 +44,17 @@ public class DatabaseModel : INotifyPropertyChanged
         {
             instance = value;
             OnPropertyChanged(nameof(Instance));
+        }
+    }
+
+    private string environment;
+    public string Environment
+    {
+        get => environment;
+        set
+        {
+            environment = value;
+            OnPropertyChanged(nameof(Environment));
         }
     }
 

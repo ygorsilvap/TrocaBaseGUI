@@ -68,7 +68,7 @@ namespace TrocaBaseGUI.Views
         {
             if (!(DataContext is MainViewModel vm)) return;
 
-            string instance = tabSelected == 0 ? "local" : "server";
+            string environment = tabSelected == 0 ? "local" : "server";
             string type = null;
 
             if (rbOracle.IsChecked == true)
@@ -81,11 +81,11 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
-                lstTodosBancos.ItemsSource = vm.InstanceFilter(instance, db);
+                lstTodosBancos.ItemsSource = vm.InstanceFilter(environment, db);
                 return;
             }
 
-            ObservableCollection<DatabaseModel> bases = vm.InstanceFilter(instance, db);
+            ObservableCollection<DatabaseModel> bases = vm.InstanceFilter(environment, db);
 
             lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
         }
