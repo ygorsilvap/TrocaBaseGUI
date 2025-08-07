@@ -43,6 +43,12 @@ namespace TrocaBaseGUI.Views
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
+
+            foreach (var h in viewModel.History)
+            {
+                Debug.WriteLine($"\n\n\nHISTORY:{h.Address}, {h.SelectedBase}\n\n\n");
+            }
+
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
@@ -173,6 +179,7 @@ namespace TrocaBaseGUI.Views
 
                 Refresh();
             }
+            Debug.WriteLine($"\n\n\nConFile: {viewModel.conexaoFileService.ConexaoAddress}\n\n\n");
         }
 
         private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -184,7 +191,8 @@ namespace TrocaBaseGUI.Views
             {
                 viewModel.conexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
                 MainViewModel.exeFile = selectedItem.ExeFile;
-
+                DatabaseModel.SetSelection(listaBancos, 
+                    viewModel.History.FirstOrDefault(d => d.FullPathAddress.Equals(viewModel.conexaoFileService.ConexaoAddress)).SelectedBase);
             }
             Refresh();
         }

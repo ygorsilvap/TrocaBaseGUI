@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace TrocaBaseGUI.Models
 {
+    [Serializable]
     public class SysDirectory : INotifyPropertyChanged
     {
         private string address;
@@ -38,6 +39,17 @@ namespace TrocaBaseGUI.Models
             }
         }
 
+        private string selectedBase;
+        public string SelectedBase
+        {
+            get => selectedBase;
+            set
+            {
+                selectedBase = value;
+                OnPropertyChanged(nameof(SelectedBase));
+            }
+        }
+
         //private ObservableCollection<SysDirectory> history;
         //public ObservableCollection<SysDirectory> History
         //{
@@ -50,11 +62,12 @@ namespace TrocaBaseGUI.Models
         //}
 
 
-        public SysDirectory(string address, string fullPathAddress, string exeFile)
+        public SysDirectory(string address, string fullPathAddress, string exeFile, string selectedBase = "")
         {
             Address = address;
             FullPathAddress = fullPathAddress;
             ExeFile = exeFile;
+            SelectedBase = selectedBase;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -22,6 +22,17 @@ namespace TrocaBaseGUI.Services
             }
         }
 
+        private string conexaoAddress;
+        public string ConexaoAddress
+        {
+            get => conexaoAddress;
+            set
+            {
+                conexaoAddress = value;
+                OnPropertyChanged(nameof(ConexaoAddress));
+            }
+        }
+
         private string domain = Dns.GetHostEntry(string.Empty).HostName;
         public string Domain
         {
@@ -56,6 +67,7 @@ namespace TrocaBaseGUI.Services
             if (ValidateSystemPath(add))
             {
                 ConexaoFile = Path.Combine(add, "conexao.dat");
+                ConexaoAddress = add;
             }
             else
             {

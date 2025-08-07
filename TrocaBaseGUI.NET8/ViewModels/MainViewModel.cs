@@ -22,9 +22,7 @@ namespace TrocaBaseGUI.ViewModels
             get => conexaoFileService.ConexaoFile;
             set => conexaoFileService.ConexaoFile = value;
         }
-        static string selectedBase;
         public static string exeFile;
-        ///public string hostname;
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
         public OracleConnectionModel OracleConnection { get; set; } = new OracleConnectionModel();
@@ -39,10 +37,7 @@ namespace TrocaBaseGUI.ViewModels
             LoadState();
 
             SqlService = new SqlServerService(SQLServerConnection);
-            //openSqlConn(SqlService);
-
             OracleService = new OracleService();
-            //openOracleConn(OracleService, OracleConnection.User, OracleConnection.Password, OracleConnection.Port);
 
             conexaoFileService.PropertyChanged += (s, e) =>
             {
@@ -126,28 +121,30 @@ namespace TrocaBaseGUI.ViewModels
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, string db)
         {
             var conexaoService = conexaoFileService;
-            //string oracleDb = "[BANCODADOS]=ORACLE";
-            //string sqlServerDb = "[BANCODADOS]=SQLSERVER";
-            var conexaoLines = File.ReadAllLines(conexaoFile).ToList();
+            List<String> conexaoLines = File.ReadAllLines(conexaoFile).ToList();
             int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
-            int index;
+            int index = 0;
 
-            if (bancoIndex >= 0)
+            if(conexaoLines.Count > 0)
             {
-                // Remove tudo a partir do [BANCODADOS]
-                conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
-                index = bancoIndex;
-            }
-            else
-            {
-                // Se não encontrou, adiciona duas linhas vazias e escreve no final
-                if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
+                if (bancoIndex >= 0)
                 {
-                    conexaoLines.Add("");
-                    conexaoLines.Add("");
+                    // Remove tudo a partir do [BANCODADOS]
+                    conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
+                    index = bancoIndex;
                 }
-                index = conexaoLines.Count;
+                else
+                {
+                    // Se não encontrou, adiciona duas linhas vazias e escreve no final
+                    if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
+                    {
+                        conexaoLines.Add("");
+                        conexaoLines.Add("");
+                    }
+                    index = conexaoLines.Count;
+                }
             }
+
 
 
             string newConn = dbs.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
@@ -161,11 +158,13 @@ namespace TrocaBaseGUI.ViewModels
 
             File.WriteAllLines(conexaoFile, conexaoLines);
 
-            if(dbs.Any(b => b.IsSelected == true)) dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+            DatabaseModel.SetSelection(dbs, db);
 
-            dbs.FirstOrDefault(b => b.Name.Equals(db)).IsSelected = true;
+            string cnxPath = conexaoFileService.ConexaoAddress;
+            string selectedCnx = History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).FullPathAddress;
 
-            selectedBase = db;
+            if (cnxPath.Equals(selectedCnx))
+                History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).SelectedBase = db;
         }
 
         public ObservableCollection<DatabaseModel> InstanceFilter(string environment, ObservableCollection<DatabaseModel> db)
@@ -216,7 +215,6 @@ namespace TrocaBaseGUI.ViewModels
 
             Properties.Settings.Default.ExeFileMem = exeFile;
             Properties.Settings.Default.ConexaoFileMem = conexaoFile;
-            Properties.Settings.Default.Conexao = selectedBase;
             Properties.Settings.Default.SqlServerMem = SQLServerConnection.Server;
             Properties.Settings.Default.OraServerMem = OracleConnection.User;
             Properties.Settings.Default.OraPasswordMem = OracleConnection.Password;
@@ -229,7 +227,6 @@ namespace TrocaBaseGUI.ViewModels
             exeFile = Properties.Settings.Default.ExeFileMem;
             conexaoFile = Properties.Settings.Default.ConexaoFileMem;
             //conexaoFileService.SetConexaoAddress(Properties.Settings.Default.ConexaoFileMem);
-            selectedBase = Properties.Settings.Default.Conexao;
             SQLServerConnection.Server = Properties.Settings.Default.SqlServerMem;
             OracleConnection.User = Properties.Settings.Default.OraServerMem;
             OracleConnection.Password = Properties.Settings.Default.OraPasswordMem;
@@ -255,7 +252,7 @@ namespace TrocaBaseGUI.ViewModels
         public void ClearApp()
         {
             //conexaoFile = "";
-            selectedBase = "";
+            //selectedBase = "";
             exeFile = "";
             SQLServerConnection.Server = "";
             OracleConnection.User = "";

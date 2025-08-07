@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Net;
 using TrocaBaseGUI.Utils;
 
 public class DatabaseModel : INotifyPropertyChanged
@@ -80,6 +83,16 @@ public class DatabaseModel : INotifyPropertyChanged
     {
         db.DisplayName = String.IsNullOrEmpty(db.DisplayName) || String.IsNullOrEmpty(newDisplayName) ? 
             StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
+    }
+
+    public static void SetSelection(ObservableCollection<DatabaseModel> dbs, string db)
+    {
+        if (dbs.Any(b => b.IsSelected == true)) 
+            dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+
+        if(dbs.Any(dbs => dbs.Name.Equals(db)))
+            dbs.FirstOrDefault(b => b.Name.Equals(db)).IsSelected = true;
+        else Debug.WriteLine($"\n\n\nDatabase {db} not found in the collection.\n\n\n");
     }
 
     public override string ToString()

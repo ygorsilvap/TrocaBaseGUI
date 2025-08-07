@@ -166,5 +166,17 @@ namespace TrocaBaseGUI.Properties {
                 this["DatabasesMem"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConexaoFileServiceMem {
+            get {
+                return ((string)(this["ConexaoFileServiceMem"]));
+            }
+            set {
+                this["ConexaoFileServiceMem"] = value;
+            }
+        }
     }
 }
