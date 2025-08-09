@@ -25,10 +25,12 @@ namespace TrocaBaseGUI.ViewModels
         public static string exeFile;
 
         public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        //public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel();
         public OracleConnectionModel OracleConnection { get; set; } = new OracleConnectionModel();
         public OracleService OracleService;
         public SqlServerService SqlService;
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
+        //public ObservableCollection<DatabaseModel> serverDatabases { get; set; } = new ObservableCollection<DatabaseModel>();
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
         public MainViewModel()
@@ -47,12 +49,11 @@ namespace TrocaBaseGUI.ViewModels
                 }
             };
         }
-        public async Task openSqlConn(SqlServerService sqlservice)
+        public async Task openSqlConn(SqlServerService sqlservice, string server)
         {
-            
-            if (await sqlservice.ValidateConnection(SQLServerConnection.Server))
+            if (await sqlservice.ValidateConnection(server))
             {
-                var databases = await sqlservice.LoadSqlServerDatabases(SQLServerConnection.Server);
+                var databases = await sqlservice.LoadSqlServerDatabases(server);
                 databases.ForEach(db => {
                     if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
                     {
@@ -167,7 +168,7 @@ namespace TrocaBaseGUI.ViewModels
                 History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).SelectedBase = db;
         }
 
-        public ObservableCollection<DatabaseModel> InstanceFilter(string environment, ObservableCollection<DatabaseModel> db)
+        public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)
         {
             return new ObservableCollection<DatabaseModel>(db.Where(i => i.Environment.Equals(environment)));
         }

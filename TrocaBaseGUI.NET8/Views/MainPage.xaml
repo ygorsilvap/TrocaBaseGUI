@@ -7,42 +7,181 @@
     mc:Ignorable="d"
     Title="TrocaBase" Height="500" Width="550">
 
-    <Grid Margin="10,0,0,0" Background="White">
+    <Grid Margin="0,0,0,0" Background="#101e24">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="121*"/>
-            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Botão -->
-        <Button Content="Fechar" Click="CloseApp_Click" Margin="90,390,123,72"/>
 
-        <Button x:Name="OpenSysButton" Content="{Binding exeName}" Click="OpenSysButton_Click" Height="38" Margin="300,390,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <!-- Botão -->
+        <Button Content="Fechar" Click="CloseApp_Click" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="90,420,290,42">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button x:Name="OpenSysButton" Content="{Binding exeName}" Click="OpenSysButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Content="Dir. Sistema" Background="#101e24" Foreground="#f5f4f3" BorderBrush="#2a353a" Click="SelecionarExecutavel_Click" HorizontalAlignment="Left" Padding="24, 2" Margin="320,90,0,0" VerticalAlignment="Top" Height="22" Width="113">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
 
         <!-- TabControl só para trocar contexto -->
-        <TabControl Margin="80,100,80,330" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Grid.ColumnSpan="2">
-            <TabItem Header="Local"/>
-            <TabItem Header="Server"/>
+        <TabControl Margin="80,130,369,345" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Background="#101e24">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border
+                            Name="Border"
+                            Background="#121f24"
+                            BorderBrush="#2a353a"
+                            BorderThickness="1"
+                            CornerRadius="5,5,0,0"
+                            Padding="8,4">
+                                    <ContentPresenter x:Name="ContentSite"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              ContentSource="Header"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <!-- Aba selecionada -->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#18262c"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#2a353a"/>
+                                        <Setter Property="Foreground" Value="#f5f4f3"/>
+                                    </Trigger>
+                                    <!-- Mouse sobre a aba -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Local" Foreground="#f5f4f3" Margin="-2,0,2,0" />
+            <TabItem Header="Server" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
         </TabControl>
         <!-- ListBox única -->
         <ListBox x:Name="lstTodosBancos"
-                 Margin="80,122,80,138"
+                 Margin="80,155,80,112"
                  ItemsSource="{Binding listaBancos}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
                  BorderThickness="1"
-                 Grid.ColumnSpan="2">
+                 BorderBrush="#28343a"
+                 Background="#101e24"
+                 Foreground="#f5f4f3">
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="{TemplateBinding Background}"
+                    BorderBrush="#28343a"
+                    BorderThickness="1"
+                    CornerRadius="0, 5, 5, 5"
+                    SnapsToDevicePixels="True"
+                    Padding="{TemplateBinding Padding}">
+                        <ScrollViewer Focusable="false" Padding="0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </ListBox.Template>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="3"
+                                Padding="2"
+                                SnapsToDevicePixels="True">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#06565C"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#335254"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="FontWeight" Value="Normal" />
-                    <Style.Triggers>
+                    <!--<Style.Triggers>
                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
                             <Setter Property="Background" Value="LightGray"/>
                         </DataTrigger>
-                    </Style.Triggers>
+                    </Style.Triggers>-->
                 </Style>
             </ListBox.ItemContainerStyle>
-            
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -66,28 +205,130 @@
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
-                            </TextBlock>
+                        </TextBlock>
                         <TextBlock Grid.Column="2" Text="{Binding DbType}" VerticalAlignment="Center" Foreground="Gray" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- Radio Buttons -->
-        <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" HorizontalAlignment="Left" Margin="81,60,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="151,60,0,0" VerticalAlignment="Top" />
-        <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Margin="221,60,0,0" VerticalAlignment="Top"/>
-        <Button Content="Dir. Sistema" Click="SelecionarExecutavel_Click" HorizontalAlignment="Left" Padding="24, 2" Margin="320,60,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" SelectedValuePath="Address" SelectionChanged="dirSys_SelectionChanged" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="113" Height="20" Grid.ColumnSpan="2"/>
-        <TextBlock x:Name="conexaoCheck" HorizontalAlignment="Left" Height="29" Margin="205,86,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="103"/>
-        <Button Grid.Column="1" Click="ToSettings_Click" HorizontalAlignment="Left" Margin="140,15,0,0" VerticalAlignment="Top">
-            <TextBlock Text="⚙️" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        </Button>
-        <Button Grid.Column="1" Click="ClearAll_Click" HorizontalAlignment="Left" Margin="140,50,0,0" VerticalAlignment="Top">
-            <TextBlock Text="Clr" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        </Button>
-        <TextBlock x:Name="IsThereSysDirectory" HorizontalAlignment="Left" Margin="171,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
+        <StackPanel Orientation="Horizontal" Margin="80,90,240,388">
+            <StackPanel.Resources>
+                <Style TargetType="RadioButton">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <BulletDecorator Background="Transparent">
+                                    <!-- Círculo do RadioButton -->
+                                    <BulletDecorator.Bullet>
+                                        <Border x:Name="OuterCircle"
+                                        Width="14" Height="14"
+                                        CornerRadius="7"
+                                        BorderThickness="2"
+                                        BorderBrush="Gray"
+                                        Background="#101e24">
+                                            <Ellipse x:Name="InnerCircle"
+                                             Fill="Transparent"
+                                             Margin="3"/>
+                                        </Border>
+                                    </BulletDecorator.Bullet>
 
+                                    <!-- Texto -->
+                                    <ContentPresenter VerticalAlignment="Center"
+                                              Margin="4,0,0,0"/>
+                                </BulletDecorator>
 
+                                <ControlTemplate.Triggers>
+                                    <!-- Quando selecionado -->
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#0ad6f9"/>
+                                        <Setter TargetName="InnerCircle" Property="Fill" Value="#101e24"/>
+                                    </Trigger>
+
+                                    <!-- Quando mouse passa por cima -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#056D80"/>
+                                    </Trigger>
+
+                                    <!-- Quando desabilitado -->
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="LightGray"/>
+                                        <Setter TargetName="InnerCircle" Property="Fill" Value="LightGray"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+            <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" Foreground="#f5f4f3" Margin="0,0,0,0" VerticalAlignment="Top"/>
+            <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top" />
+            <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Foreground="#f5f4f3" Margin="25,0,0,0" VerticalAlignment="Top"/>
+
+        </StackPanel>
+        <ComboBox x:Name="dirSys" ItemsSource="{Binding History}" SelectedValuePath="Address" SelectionChanged="dirSys_SelectionChanged" FontSize="11" DisplayMemberPath="Address" HorizontalAlignment="Left" Margin="320,120,0,0" VerticalAlignment="Top" Width="113" Height="20"/>
+        <TextBlock x:Name="conexaoCheck"  HorizontalAlignment="Center" Height="29" Margin="0,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="104"/>
+        <Button Click="ToSettings_Click" HorizontalAlignment="Left" Margin="492,172,0,0" VerticalAlignment="Top" Height="23" Width="22" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24">
+            <TextBlock Text="⚙️" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="2.312,1.368"/>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Click="ClearAll_Click" HorizontalAlignment="Left" Margin="484,218,0,0" VerticalAlignment="Top" Height="23" Width="38" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24">
+            <TextBlock Text="Reset" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Click="ToSettings_Click" Content="✖" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="495,15,24,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
+            <Button.Style>
+            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Style.Triggers>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Foreground" Value="#2a353a"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#101e24"/>
+                    </Trigger>
+
+                    </Style.Triggers>
+            </Style>
+            </Button.Style>
+        </Button>
+        <TextBlock x:Name="IsThereSysDirectory" Foreground="#f5f4f3" HorizontalAlignment="Center" Margin="0,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Height="16"/>
     </Grid>
 </Page>

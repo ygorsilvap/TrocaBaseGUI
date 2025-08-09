@@ -44,19 +44,16 @@ namespace TrocaBaseGUI.Views
             tabSelected = TabControl.SelectedIndex;
             dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
 
-            foreach (var h in viewModel.History)
-            {
-                Debug.WriteLine($"\n\n\nHISTORY:{h.Address}, {h.SelectedBase}\n\n\n");
-            }
-
-            OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Fechar e iniciar sistema" : $"Fechar e iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            await viewModel.openSqlConn(viewModel.SqlService);
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.SQLServerConnection.Server);
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.SQLServerConnection.Server);
+
             await viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
 
             listaBancos.Clear();
@@ -87,11 +84,11 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
-                lstTodosBancos.ItemsSource = vm.InstanceFilter(environment, db);
+                lstTodosBancos.ItemsSource = vm.EnvironmentFilter(environment, db);
                 return;
             }
 
-            ObservableCollection<DatabaseModel> bases = vm.InstanceFilter(environment, db);
+            ObservableCollection<DatabaseModel> bases = vm.EnvironmentFilter(environment, db);
 
             lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
         }
