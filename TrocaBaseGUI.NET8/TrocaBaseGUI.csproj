@@ -21,7 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\database.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="MainWindow.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\database.png" />
   </ItemGroup>
 
   <ItemGroup>

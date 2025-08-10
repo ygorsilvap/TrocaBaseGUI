@@ -1,16 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TrocaBaseGUI.Models;
-using TrocaBaseGUI.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System.IO;
-using System.Diagnostics;
-using System;
+using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.Utils;
+using TrocaBaseGUI.ViewModels;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TrocaBaseGUI.Views
@@ -105,15 +106,15 @@ namespace TrocaBaseGUI.Views
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
 
-            if (!string.IsNullOrEmpty(viewModel.conexaoFile))
-            {
-                conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(viewModel.conexaoFile)) ||
-                    !File.ReadAllText(viewModel.conexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
-            }
-            else
-            {
-                conexaoCheck.Text = "";
-            }
+            //if (!string.IsNullOrEmpty(viewModel.conexaoFile))
+            //{
+            //    conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(viewModel.conexaoFile)) ||
+            //        !File.ReadAllText(viewModel.conexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
+            //}
+            //else
+            //{
+            //    conexaoCheck.Text = "";
+            //}
             //dirBase.Text = string.IsNullOrEmpty(System.IO.Path.GetFileName(MainViewModel.DbDirectory)) ? "" : $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
@@ -231,7 +232,12 @@ namespace TrocaBaseGUI.Views
 
         private void CopyStringClick_Click(object sender, RoutedEventArgs e)
         {
-            //string teste = viewModel.conexaoFileService.CreateConnectionString();
+            string db = lstTodosBancos.SelectedItem.ToString();
+            string connString = viewModel.Databases.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
+                   ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.conexaoFileService.Domain, db)
+                   : viewModel.OracleService.CreateOracleConnectionString(viewModel.conexaoFileService.Domain, viewModel.Databases.First(d => d.Name.Equals(db)).Instance, db);
+
+            Clipboard.SetText(connString);
         }
     }
 }

@@ -2,11 +2,10 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="FormularioPage"
-      
       Height="500" Width="550">
 
-    <Grid Background="White">
-        <Rectangle Margin="80,79,80,123" Stroke="Black"/>
+    <Grid Background="#101e24">
+        <Rectangle Margin="80,79,80,123" Stroke="#2a353a" RadiusX="5" RadiusY="5"/>
         <TextBox x:Name="sqlServerServer" FontSize="11" Padding="1, 0" Margin="100,176,300,306" Text="{Binding SQLServerConnection.Server}"/>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
         <TextBox x:Name="OracleUser" FontSize="11" Margin="300,176,100,306" TextWrapping="Wrap" Text="{Binding OracleConnection.User}" Width="150"/>
@@ -14,17 +13,100 @@
         <PasswordBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" VerticalAlignment="Top"/>
 
         <TextBox x:Name="OraclePort" FontSize="11" Margin="390,340,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Port}" VerticalAlignment="Top"/>
-        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Margin="120,279,310,0" VerticalAlignment="Top"/>
-        <Button Content="Testar Conexão" Click="OracleTestConn_Click" Margin="310,279,120,0" VerticalAlignment="Top"/>
-        <Button Content="Voltar" Click="VoltarButton_Click" Margin="230,390,230,72" Height="38"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="300,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="120,279,310,0" VerticalAlignment="Top">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Content="Testar Conexão" Click="OracleTestConn_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="310,279,120,0" VerticalAlignment="Top">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Content="Voltar" Click="VoltarButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="230,390,230,72" Height="38">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <!--<TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>-->
-        <TextBlock HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="100,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
-        <TextBlock FontSize="18" FontWeight="Bold" Margin="300,94,130,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <Button Content="Salvar" Click="SalvarButton_Click" Margin="230,334,230,138"/>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="100,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
+        <TextBlock Foreground="#f5f4f3" FontSize="18" FontWeight="Bold" Margin="300,94,130,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <Button Content="Salvar" Click="SalvarButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="230,334,230,138">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <TextBlock HorizontalAlignment="Left" Margin="390,321,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="pt-br" Text="Porta"/></TextBlock>
-
     </Grid>
 </Page>

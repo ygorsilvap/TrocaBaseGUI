@@ -44,18 +44,6 @@ namespace TrocaBaseGUI.Services
             }
         }
 
-        public string CreateConnectionString(string dbType, string domain, string db)
-        {
-            if (dbType.ToLower().Contains("sqlserver"))
-            {
-                return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={domain}:{db.ToUpper()}";
-            }
-            else
-            {
-                return $"[BANCODADOS]=ORACLE\n[DATABASE]={domain}/LINX\n[USUARIO_ORACLE]={db.ToUpper()}";
-            }
-        }
-
         public Boolean ValidateSystemPath(string path)
         {
             return File.Exists(path + "\\conexao.dat") || File.Exists(path + "\\ConexaoServidor.dat") ? true : false;
