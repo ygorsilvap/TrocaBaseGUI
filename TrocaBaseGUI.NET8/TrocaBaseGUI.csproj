@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <None Remove="Assets\database.png" />
+    <None Remove="Assets\settings.png" />
+    <None Remove="Assets\settings80.png" />
+    <None Remove="Assets\settings90.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +33,8 @@
 
   <ItemGroup>
     <Resource Include="Assets\database.png" />
+    <Resource Include="Assets\settings80.png" />
+    <Resource Include="Assets\settings90.png" />
   </ItemGroup>
 
   <ItemGroup>

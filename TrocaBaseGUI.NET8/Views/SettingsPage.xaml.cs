@@ -123,5 +123,16 @@ namespace TrocaBaseGUI.Views
             mainWindow.MainFramePublic.Navigate(new MainPage(_viewModel));
             
         }
+
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.SaveState();
+            Application.Current.Shutdown();
+        }
+
+        private void MinApp_Click(object sender, RoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(Application.Current.MainWindow);
+        }
     }
 }

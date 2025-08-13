@@ -142,6 +142,11 @@ namespace TrocaBaseGUI.Views
             Application.Current.Shutdown();
         }
 
+        private void MinApp_Click(object sender, RoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(Application.Current.MainWindow);
+        }
+
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             GetFilter(listaBancos);

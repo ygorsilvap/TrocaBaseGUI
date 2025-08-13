@@ -10,7 +10,8 @@
         Closing="Window_Closing"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent"
+        ResizeMode="NoResize">
 
     <Border Background="#101e24" CornerRadius="20" BorderBrush="#2a353a" BorderThickness="1" Padding="6">
         <Frame x:Name="MainFrame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden" Background="#101e24" MouseDown="Border_MouseDown"/>
