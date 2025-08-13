@@ -13,7 +13,6 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-
         <Button Content="Fechar" Click="CloseApp_Click" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="90,420,290,42">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
@@ -476,60 +475,6 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="textBlock" Property="TextElement.FontSize" Value="25"/>
                             <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#7F9599"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-        <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="495,15,24,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="5"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="contentPresenter"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  RecognizesAccessKey="True"
-                                  TextElement.Foreground="{TemplateBinding Foreground}"
-                                  TextElement.FontSize="{TemplateBinding FontSize}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-        <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,75,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="5"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="contentPresenter"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  RecognizesAccessKey="True"
-                                  TextElement.Foreground="{TemplateBinding Foreground}"
-                                  TextElement.FontSize="{TemplateBinding FontSize}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

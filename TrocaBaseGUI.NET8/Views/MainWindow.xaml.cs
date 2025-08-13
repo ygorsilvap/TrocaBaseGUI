@@ -29,5 +29,16 @@ namespace TrocaBaseGUI.Views
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
+
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            MainVM.SaveState();
+            Application.Current.Shutdown();
+        }
+
+        private void MinApp_Click(object sender, RoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(Application.Current.MainWindow);
+        }
     }
 }

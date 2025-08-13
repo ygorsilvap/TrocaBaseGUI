@@ -12,14 +12,15 @@ using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
 {
-    public partial class SettingsPage : Page
+    public partial class ServerSettingsPage : Page
     {
 
         public MainViewModel _viewModel;
         public List<double> SqlMedT = new List<double>();
         public List<double> OraMedT = new List<double>();
+        public int tabSelected;
 
-        public SettingsPage()
+        public ServerSettingsPage()
         {
             InitializeComponent();
 
@@ -27,6 +28,7 @@ namespace TrocaBaseGUI.Views
             _viewModel = mainWindow.MainVM;
             this.DataContext = _viewModel;
 
+            TabControl.SelectedIndex = 1;
             OraclePort.Text = _viewModel.OracleConnection.Port;
             OraclePassword.Password = _viewModel.OracleConnection.Password;
         }
@@ -49,10 +51,10 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            
+
             if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
-                
+
                 SetSqlServerSettings(sqlServerServer.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
@@ -64,7 +66,7 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
-                
+
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //SqlMedT.Add(elapsed.TotalMilliseconds);
@@ -121,18 +123,17 @@ namespace TrocaBaseGUI.Views
             var mainWindow = (MainWindow)Application.Current.MainWindow;
 
             mainWindow.MainFramePublic.Navigate(new MainPage(_viewModel));
-            
+
         }
 
-        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _viewModel.SaveState();
-            Application.Current.Shutdown();
-        }
-
-        private void MinApp_Click(object sender, RoutedEventArgs e)
-        {
-            SystemCommands.MinimizeWindow(Application.Current.MainWindow);
+            if (e.Source is TabControl tabControl)
+                tabSelected = tabControl.SelectedIndex;
+            if (tabSelected == 0)
+            {
+                ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new LocalSettingsPage());
+            }
         }
     }
 }

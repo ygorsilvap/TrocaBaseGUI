@@ -13,7 +13,64 @@
         Background="Transparent"
         ResizeMode="NoResize">
 
+
     <Border Background="#101e24" CornerRadius="20" BorderBrush="#2a353a" BorderThickness="1" Padding="6">
-        <Frame x:Name="MainFrame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden" Background="#101e24" MouseDown="Border_MouseDown"/>
+        <Grid>
+            <Frame x:Name="MainFrame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden" Background="#101e24" MouseDown="Border_MouseDown"/>
+            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,24,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter x:Name="contentPresenter"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  RecognizesAccessKey="True"
+                                  TextElement.Foreground="{TemplateBinding Foreground}"
+                                  TextElement.FontSize="{TemplateBinding FontSize}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,75,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter x:Name="contentPresenter"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  RecognizesAccessKey="True"
+                                  TextElement.Foreground="{TemplateBinding Foreground}"
+                                  TextElement.FontSize="{TemplateBinding FontSize}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
     </Border>
 </Window>

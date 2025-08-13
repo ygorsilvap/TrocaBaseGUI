@@ -105,17 +105,6 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-
-            //if (!string.IsNullOrEmpty(viewModel.conexaoFile))
-            //{
-            //    conexaoCheck.Text = string.IsNullOrEmpty(File.ReadAllText(viewModel.conexaoFile)) ||
-            //        !File.ReadAllText(viewModel.conexaoFile).Contains("[NOMEBANCO]") ? "Nenhuma base selecionada." : "";
-            //}
-            //else
-            //{
-            //    conexaoCheck.Text = "";
-            //}
-            //dirBase.Text = string.IsNullOrEmpty(System.IO.Path.GetFileName(MainViewModel.DbDirectory)) ? "" : $"...\\{System.IO.Path.GetFileName(MainViewModel.DbDirectory)}";
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
             GetFilter(listaBancos);
@@ -140,11 +129,6 @@ namespace TrocaBaseGUI.Views
         {
             viewModel.SaveState();
             Application.Current.Shutdown();
-        }
-
-        private void MinApp_Click(object sender, RoutedEventArgs e)
-        {
-            SystemCommands.MinimizeWindow(Application.Current.MainWindow);
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
@@ -222,7 +206,7 @@ namespace TrocaBaseGUI.Views
         private void ToSettings_Click(object sender, RoutedEventArgs e)
         {
 
-            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new SettingsPage());
+            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new LocalSettingsPage());
         }
 
         private void EditarBase_Click(object sender, RoutedEventArgs e)
