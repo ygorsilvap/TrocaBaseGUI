@@ -24,9 +24,10 @@ namespace TrocaBaseGUI.ViewModels
         }
         public static string exeFile;
 
-        public SqlServerConnectionModel SQLServerConnection { get; set; } = new SqlServerConnectionModel();
-        //public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel();
-        public OracleConnectionModel OracleConnection { get; set; } = new OracleConnectionModel();
+        public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel();
+        public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel();
         public OracleService OracleService;
         public SqlServerService SqlService;
         public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
@@ -38,7 +39,7 @@ namespace TrocaBaseGUI.ViewModels
             conexaoFileService = new ConexaoFileService();
             LoadState();
 
-            SqlService = new SqlServerService(SQLServerConnection);
+            SqlService = new SqlServerService(LocalSQLServerConnection);
             OracleService = new OracleService();
 
             conexaoFileService.PropertyChanged += (s, e) =>
@@ -61,7 +62,7 @@ namespace TrocaBaseGUI.ViewModels
                     }
                         Databases.Add(db);
                 });
-                SQLServerConnection.SqlLoaded = true;
+                LocalSQLServerConnection.SqlLoaded = true;
                 Console.WriteLine("\n[Conexão com SQL Server estabelecida]\n");
             }
             else
@@ -77,7 +78,7 @@ namespace TrocaBaseGUI.ViewModels
                        Databases.Remove(item);
                     }
                 }
-                SQLServerConnection.SqlLoaded = false;
+                LocalSQLServerConnection.SqlLoaded = false;
                 Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
             }
         }
@@ -86,9 +87,9 @@ namespace TrocaBaseGUI.ViewModels
         {
             foreach (string instance in oracleService.GetRunningInstances())
             {
-                if (await OracleService.ValidateConnection(OracleConnection.GetConnectionString(hostname, password, port, instance)))
+                if (await OracleService.ValidateConnection(LocalOracleConnection.GetConnectionString(hostname, password, port, instance)))
                 {
-                    List<DatabaseModel> dbs = await oracleService.GetDatabases(OracleConnection.GetConnectionString(hostname, password, port, instance));
+                    List<DatabaseModel> dbs = await oracleService.GetDatabases(LocalOracleConnection.GetConnectionString(hostname, password, port, instance));
                     dbs.ForEach(db =>
                     {
                         if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase)))
@@ -161,6 +162,7 @@ namespace TrocaBaseGUI.ViewModels
 
             DatabaseModel.SetSelection(dbs, db);
 
+            //Refatorar
             string cnxPath = conexaoFileService.ConexaoAddress;
             string selectedCnx = History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).FullPathAddress;
 
@@ -216,10 +218,10 @@ namespace TrocaBaseGUI.ViewModels
 
             Properties.Settings.Default.ExeFileMem = exeFile;
             Properties.Settings.Default.ConexaoFileMem = conexaoFile;
-            Properties.Settings.Default.SqlServerMem = SQLServerConnection.Server;
-            Properties.Settings.Default.OraServerMem = OracleConnection.User;
-            Properties.Settings.Default.OraPasswordMem = OracleConnection.Password;
-            Properties.Settings.Default.OraPortMem = OracleConnection.Port;
+            Properties.Settings.Default.SqlServerMem = LocalSQLServerConnection.Server;
+            Properties.Settings.Default.OraServerMem = LocalOracleConnection.User;
+            Properties.Settings.Default.OraPasswordMem = LocalOracleConnection.Password;
+            Properties.Settings.Default.OraPortMem = LocalOracleConnection.Port;
             Properties.Settings.Default.Save();
         }
 
@@ -228,10 +230,10 @@ namespace TrocaBaseGUI.ViewModels
             exeFile = Properties.Settings.Default.ExeFileMem;
             conexaoFile = Properties.Settings.Default.ConexaoFileMem;
             //conexaoFileService.SetConexaoAddress(Properties.Settings.Default.ConexaoFileMem);
-            SQLServerConnection.Server = Properties.Settings.Default.SqlServerMem;
-            OracleConnection.User = Properties.Settings.Default.OraServerMem;
-            OracleConnection.Password = Properties.Settings.Default.OraPasswordMem;
-            OracleConnection.Port = string.IsNullOrEmpty(OracleConnection.Port) ? Properties.Settings.Default.OraPortMem : "1521";
+            LocalSQLServerConnection.Server = Properties.Settings.Default.SqlServerMem;
+            LocalOracleConnection.User = Properties.Settings.Default.OraServerMem;
+            LocalOracleConnection.Password = Properties.Settings.Default.OraPasswordMem;
+            LocalOracleConnection.Port = string.IsNullOrEmpty(LocalOracleConnection.Port) ? Properties.Settings.Default.OraPortMem : "1521";
 
             string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
             if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
@@ -255,10 +257,10 @@ namespace TrocaBaseGUI.ViewModels
             //conexaoFile = "";
             //selectedBase = "";
             exeFile = "";
-            SQLServerConnection.Server = "";
-            OracleConnection.User = "";
-            OracleConnection.Password = "";
-            OracleConnection.Port = "1521";
+            LocalSQLServerConnection.Server = "";
+            LocalOracleConnection.User = "";
+            LocalOracleConnection.Password = "";
+            LocalOracleConnection.Port = "1521";
             Databases = new ObservableCollection<DatabaseModel>();
 
             History.Clear();

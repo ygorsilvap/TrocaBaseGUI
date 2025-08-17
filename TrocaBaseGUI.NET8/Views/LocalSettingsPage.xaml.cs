@@ -29,12 +29,13 @@ namespace TrocaBaseGUI.Views
             this.DataContext = _viewModel;
 
             tabSelected = TabControl.SelectedIndex;
-            OraclePort.Text = _viewModel.OracleConnection.Port;
-            OraclePassword.Password = _viewModel.OracleConnection.Password;
+            OraclePassword.Password = _viewModel.LocalOracleConnection.Password;
+            SqlServerPassword.Password = _viewModel.LocalSQLServerConnection.Password;
+
         }
         public void SetSqlServerSettings(string server)
         {
-            _viewModel.SQLServerConnection.Server = server;
+            _viewModel.LocalSQLServerConnection.Server = server;
         }
 
         public double AverageCalc(List<double> arr)
@@ -82,10 +83,10 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
+            if (await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
                 _viewModel.OracleService.GetRunningInstances().Count > 0)
             {
-                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
+                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text, OracleInstance.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //OraMedT.Add(elapsed.TotalMilliseconds);
@@ -106,17 +107,18 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        public void SetOracleSettings(string user, string password, string port)
+        public void SetOracleSettings(string user, string password, string instance, string port)
         {
-            _viewModel.OracleConnection.User = user;
-            _viewModel.OracleConnection.Password = password;
-            _viewModel.OracleConnection.Port = port;
+            _viewModel.LocalOracleConnection.User = user;
+            _viewModel.LocalOracleConnection.Password = password;
+            _viewModel.LocalOracleConnection.Instance = instance;
+            _viewModel.LocalOracleConnection.Port = port;
         }
 
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
             SetSqlServerSettings(sqlServerServer.Text);
-            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
+            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text, OracleInstance.Text);
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {

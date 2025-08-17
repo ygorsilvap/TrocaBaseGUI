@@ -44,7 +44,7 @@
             <TabItem Header="Local" Foreground="#f5f4f3" Margin="-2,0,2,0" />
             <TabItem Header="Server" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
         </TabControl>
-        <TextBox x:Name="sqlServerServer" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="100,170,300,312" Text="{Binding SQLServerConnection.Server}">
+        <TextBox x:Name="sqlServerServer" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="100,170,300,312" Text="{Binding ServerSQLServerConnection.Server}">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -64,7 +64,7 @@
             </TextBox.Style>
         </TextBox>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="OracleUser"  Foreground="#f5f4f3" FontSize="11" Margin="300,170,100,312" TextWrapping="Wrap" Text="{Binding OracleConnection.User}" Width="150">
+        <TextBox x:Name="OracleUser"  Foreground="#f5f4f3" FontSize="11" Margin="300,170,100,312" TextWrapping="Wrap" Text="{Binding ServerOracleConnection.User}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -104,7 +104,7 @@
             </PasswordBox.Style>
         </PasswordBox>
 
-        <TextBox x:Name="OraclePort" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="390,395,100,88" TextWrapping="Wrap" MaxLength="5" Text="{Binding OracleConnection.Port}"/>
+        <TextBox x:Name="OraclePort" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="390,395,100,88" TextWrapping="Wrap" MaxLength="5" Text="{Binding ServerOracleConnection.Port}"/>
 
         <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="120,332,310,140">
             <Button.Template>
@@ -223,7 +223,7 @@
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,272,0,204" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <TextBlock Foreground="#999897" HorizontalAlignment="Left" Margin="134,272,0,0" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="(Opcional)"/></TextBlock>
 
-        <TextBox x:Name="OracleUser_Copy"  Foreground="#f5f4f3" FontSize="11" Margin="300,295,100,187" TextWrapping="Wrap" Text="{Binding OracleConnection.User}" Width="150">
+        <TextBox x:Name="OracleUser_Copy"  Foreground="#f5f4f3" FontSize="11" Margin="300,295,100,187" TextWrapping="Wrap" Text="{Binding ServerOracleConnection.User}" Width="150">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">

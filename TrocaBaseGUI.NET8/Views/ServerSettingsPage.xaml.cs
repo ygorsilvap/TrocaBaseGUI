@@ -29,12 +29,12 @@ namespace TrocaBaseGUI.Views
             this.DataContext = _viewModel;
 
             TabControl.SelectedIndex = 1;
-            OraclePort.Text = _viewModel.OracleConnection.Port;
-            OraclePassword.Password = _viewModel.OracleConnection.Password;
+
+            OraclePassword.Password = _viewModel.ServerOracleConnection.Password;
         }
         public void SetSqlServerSettings(string server)
         {
-            _viewModel.SQLServerConnection.Server = server;
+            _viewModel.ServerSQLServerConnection.Server = server;
         }
 
         public double AverageCalc(List<double> arr)
@@ -82,7 +82,7 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(_viewModel.OracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
+            if (await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
                 _viewModel.OracleService.GetRunningInstances().Count > 0)
             {
                 SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
@@ -108,9 +108,9 @@ namespace TrocaBaseGUI.Views
 
         public void SetOracleSettings(string user, string password, string port)
         {
-            _viewModel.OracleConnection.User = user;
-            _viewModel.OracleConnection.Password = password;
-            _viewModel.OracleConnection.Port = port;
+            _viewModel.ServerOracleConnection.User = user;
+            _viewModel.ServerOracleConnection.Password = password;
+            _viewModel.ServerOracleConnection.Port = port;
         }
 
         private void SalvarButton_Click(object sender, RoutedEventArgs e)

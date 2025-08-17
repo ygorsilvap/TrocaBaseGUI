@@ -37,11 +37,11 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string server, double timeoutSeconds = 300)
+        public async Task<Boolean> ValidateConnection(string server, string password = null, double timeoutSeconds = 300)
         {
             try
             {
-                var connectionString = _connection.GetConnectionString(server);
+                var connectionString = _connection.GetConnectionString(server, password);
 
                 if (!connectionString.ToLower().Contains("connect timeout"))
                     connectionString += ";Connect Timeout=" + timeoutSeconds;

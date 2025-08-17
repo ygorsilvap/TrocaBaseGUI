@@ -17,7 +17,7 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { database = value; OnPropertyChanged(); }
     }
 
-    private string username;
+    private string username = "CNP";
     public string Username
     {
         get => username;
@@ -45,15 +45,15 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { _sqlLoaded = value; OnPropertyChanged(); }
     }
 
-    public string GetConnectionString(string server)
+    public string GetConnectionString(string server, string password = null)
     {
-        if (UseIntegratedSecurity)
+        if (String.IsNullOrEmpty(password) && UseIntegratedSecurity)
         {
             return $"Server={server};Integrated Security=True;TrustServerCertificate=True;";
         }
         else
         {
-            return $"Server={server};User Id={Username};Password={Password};TrustServerCertificate=True;";
+            return $"Server={server};User Id={Username};Password={password};TrustServerCertificate=True;";
         }
     }
 

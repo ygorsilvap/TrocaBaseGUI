@@ -52,10 +52,10 @@ namespace TrocaBaseGUI.Views
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.SQLServerConnection.Server);
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.SQLServerConnection.Server);
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
 
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.OracleConnection.User, viewModel.OracleConnection.Password, viewModel.OracleConnection.Port);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.User, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port);
 
             listaBancos.Clear();
 
