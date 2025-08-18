@@ -30,11 +30,14 @@ namespace TrocaBaseGUI.Views
 
             TabControl.SelectedIndex = 1;
 
+            SqlServerPassword.Password = _viewModel.ServerSQLServerConnection.Password;
             OraclePassword.Password = _viewModel.ServerOracleConnection.Password;
         }
-        public void SetSqlServerSettings(string server)
+        public void SetSqlServerSettings(string server, string password, string usuario = null)
         {
             _viewModel.ServerSQLServerConnection.Server = server;
+            _viewModel.ServerSQLServerConnection.Password = password;
+            _viewModel.ServerSQLServerConnection.Username = usuario ?? "CNP";
         }
 
         public double AverageCalc(List<double> arr)
@@ -52,10 +55,10 @@ namespace TrocaBaseGUI.Views
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
 
-            if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
+            if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text, sqlServerUser.Text, SqlServerPassword.Password))
             {
-
-                SetSqlServerSettings(sqlServerServer.Text);
+                
+                SetSqlServerSettings(sqlServerServer.Text, SqlServerPassword.Password, sqlServerUser.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //SqlMedT.Add(elapsed.TotalMilliseconds);
@@ -73,7 +76,7 @@ namespace TrocaBaseGUI.Views
                 //Console.WriteLine("\n\n\nNADA CERTO");
                 //Console.WriteLine($"\nSQL Elapsed time: {elapsed.TotalMilliseconds} ms\n");
                 //Console.WriteLine($"SQL Average time: {AverageCalc(SqlMedT)}ms\n");
-                MessageBox.Show("Falha ao conectar ao SQL Server. Verifique o servidor informado.");
+                MessageBox.Show("Falha ao conectar ao SQL Server. Verifique os dados informados.");
             }
 
         }
@@ -82,10 +85,9 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
-                _viewModel.OracleService.GetRunningInstances().Count > 0)
+            if (await _viewModel.OracleService.ValidateConnection(_viewModel.ServerOracleConnection.GetServerConnectionString(oracleServer.Text, OraclePassword.Password, oraclePort.Text, oracleInstance.Text)))
             {
-                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
+                SetOracleSettings(oracleServer.Text, OraclePassword.Password, oraclePort.Text, oracleInstance.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //OraMedT.Add(elapsed.TotalMilliseconds);
@@ -102,21 +104,22 @@ namespace TrocaBaseGUI.Views
                 //Console.WriteLine("\n\n\nNADA CERTO");
                 //Console.WriteLine($"\nORA Elapsed time: {elapsed.TotalMilliseconds} ms\n");
                 //Console.WriteLine($"ORA Average time: {AverageCalc(OraMedT)}ms\n");
-                MessageBox.Show("Falha ao conectar ao Oracle. Verifique a string informada.");
+                MessageBox.Show("Falha ao conectar ao Oracle. Os dados informados.");
             }
         }
 
-        public void SetOracleSettings(string user, string password, string port)
+        public void SetOracleSettings(string server, string password, string port, string instance)
         {
-            _viewModel.ServerOracleConnection.User = user;
+            _viewModel.ServerOracleConnection.Server = server;
             _viewModel.ServerOracleConnection.Password = password;
             _viewModel.ServerOracleConnection.Port = port;
+            _viewModel.ServerOracleConnection.Instance = instance;
         }
 
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
-            SetSqlServerSettings(sqlServerServer.Text);
-            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text);
+            SetSqlServerSettings(sqlServerServer.Text, SqlServerPassword.Password, sqlServerUser.Text);
+            SetOracleSettings(oracleServer.Text, OraclePassword.Password, oraclePort.Text, oracleInstance.Text);
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {

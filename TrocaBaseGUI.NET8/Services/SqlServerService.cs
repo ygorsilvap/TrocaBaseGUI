@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
+using System.Net;
 
 namespace TrocaBaseGUI.Services
 {
@@ -20,28 +21,56 @@ namespace TrocaBaseGUI.Services
             _connection = connection;
         }
 
-        public async Task<List<DatabaseModel>> LoadSqlServerDatabases(string server)
+        public async Task<List<DatabaseModel>> LoadSqlServerDatabases(string server, string username = "CNP", string password = null)
         {
             var databases = new List<DatabaseModel>();
-            using (var conn = new SqlConnection(_connection.GetConnectionString(server)))
+            using (var conn = new SqlConnection(_connection.GetConnectionString(server, username, password)))
             {
                 await conn.OpenAsync();
-                var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
+                //var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
+                var cmd = new SqlCommand(@"
+                            CREATE TABLE #Bancos (DatabaseName NVARCHAR(128));
+
+                            DECLARE @sql NVARCHAR(MAX) = N'';
+
+                            SELECT @sql = @sql + '
+                            IF EXISTS (SELECT 1 FROM [' + name + '].sys.tables WHERE name = ''fat_movimento_capa'')
+                            BEGIN
+                                INSERT INTO #Bancos(DatabaseName)
+                                VALUES (''' + name + ''');
+                            END
+                            '
+                            FROM sys.databases
+                            WHERE database_id > 4;
+
+                            EXEC sp_executesql @sql;
+
+                            -- Retorna todos os bancos ordenados
+                            SELECT DatabaseName FROM #Bancos ORDER BY DatabaseName;
+
+                            DROP TABLE #Bancos;
+                    ", conn);
                 var reader = await cmd.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
                 {
-                    databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local" });
+                    if (String.IsNullOrWhiteSpace(password)) 
+                    { 
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local", Server = server });
+                    } else
+                    {
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "server", Server = server });
+                    }
                 }
             }
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string server, string password = null, double timeoutSeconds = 300)
+        public async Task<Boolean> ValidateConnection(string server, string username = "CNP", string password = null, double timeoutSeconds = 3000)
         {
             try
             {
-                var connectionString = _connection.GetConnectionString(server, password);
+                var connectionString = _connection.GetConnectionString(server, username, password);
 
                 if (!connectionString.ToLower().Contains("connect timeout"))
                     connectionString += ";Connect Timeout=" + timeoutSeconds;
@@ -60,9 +89,18 @@ namespace TrocaBaseGUI.Services
             }
         }
 
-        public string CreateSQLServerConnectionString(string domain, string db)
+        public string CreateSQLServerConnectionString(string environment, string db, string server = null)
         {
-            return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={domain}:{db.ToUpper()}";
+            //CRIAR A DIFERENÇA DE CONN STRING DE LOCAL PARA SERVER. TROCAR O SERVER DO LOCAL PARA DNS.GETHOSTNAME
+            if(environment.ToLower() == "local" && 
+                (server.ToLower().Contains(Dns.GetHostEntry(string.Empty).HostName) || Dns.GetHostEntry(string.Empty).HostName.ToLower().Contains(server.ToLower())))
+            {
+                return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={Dns.GetHostEntry(string.Empty).HostName}:{db.ToUpper()}";
+            }
+            else
+            {
+                return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={server}:{db.ToUpper()}";
+            }
         }
     }
 }

@@ -48,14 +48,22 @@ namespace TrocaBaseGUI.Views
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
+
+            foreach (var item in viewModel.Databases)
+            {
+                Debug.WriteLine($"\n\nDatabase: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n\n");
+            }
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            //Local
             await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
-
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.User, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.Server, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port);
+            
+            //Server
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection.Server, viewModel.ServerSQLServerConnection.Username, viewModel.ServerSQLServerConnection.Password);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection.Server, viewModel.ServerOracleConnection.Password, viewModel.ServerOracleConnection.Port, viewModel.ServerOracleConnection.Instance);
 
             listaBancos.Clear();
 
@@ -221,10 +229,12 @@ namespace TrocaBaseGUI.Views
 
         private void CopyStringClick_Click(object sender, RoutedEventArgs e)
         {
+
+            //Possível bug é copiar os dados errados de bases que tenha nomes iguais no server e local
             string db = lstTodosBancos.SelectedItem.ToString();
             string connString = viewModel.Databases.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
-                   ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.conexaoFileService.Domain, db)
-                   : viewModel.OracleService.CreateOracleConnectionString(viewModel.conexaoFileService.Domain, viewModel.Databases.First(d => d.Name.Equals(db)).Instance, db);
+                   ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Environment, db, viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Server)
+                   : viewModel.OracleService.CreateOracleConnectionString(viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Environment, viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Server, viewModel.Databases.First(d => d.Name.Equals(db)).Instance, db);
 
             Clipboard.SetText(connString);
         }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 public class SqlServerConnectionModel : INotifyPropertyChanged
 {
@@ -38,22 +39,16 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { useIntegratedSecurity = value; OnPropertyChanged(); }
     }
 
-    private bool _sqlLoaded = false;
-    public bool SqlLoaded
-    {
-        get => _sqlLoaded;
-        set { _sqlLoaded = value; OnPropertyChanged(); }
-    }
 
-    public string GetConnectionString(string server, string password = null)
+    public string GetConnectionString(string server, string username = "CNP", string password = null)
     {
-        if (String.IsNullOrEmpty(password) && UseIntegratedSecurity)
+        if (String.IsNullOrEmpty(password))
         {
             return $"Server={server};Integrated Security=True;TrustServerCertificate=True;";
         }
         else
         {
-            return $"Server={server};User Id={Username};Password={password};TrustServerCertificate=True;";
+            return $"Server={server};User Id={username};Password={password};TrustServerCertificate=True;";
         }
     }
 

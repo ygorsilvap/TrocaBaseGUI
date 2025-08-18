@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TrocaBaseGUI.NET8.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TrocaBaseGUI.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="dbDirectory" Type="System.String" Scope="User">
@@ -23,22 +23,46 @@
     <Setting Name="ExeFileMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SqlServerMem" Type="System.String" Scope="User">
+    <Setting Name="LocalSqlServerMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OraServerMem" Type="System.String" Scope="User">
+    <Setting Name="LocalOraServerMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OraPasswordMem" Type="System.String" Scope="User">
+    <Setting Name="LocalOraPasswordMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OraPortMem" Type="System.String" Scope="User">
+    <Setting Name="LocalOraPortMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DatabasesMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ConexaoFileServiceMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LocalOraInstanceMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerSqlServerMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerSqlServerPasswordMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerSqlServerUsernameMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerOraServerMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerOraPasswordMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerOraPortMem" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServerOraInstanceMem" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

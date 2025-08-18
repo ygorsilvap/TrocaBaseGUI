@@ -35,7 +35,15 @@ namespace TrocaBaseGUI.Views
         }
         public void SetSqlServerSettings(string server)
         {
-            _viewModel.LocalSQLServerConnection.Server = server;
+            if(string.IsNullOrEmpty(server))
+            {
+                MessageBox.Show("O campo do servidor SQL Server não pode estar vazio.");
+                return;
+            }
+            else
+            {
+                _viewModel.LocalSQLServerConnection.Server = server;
+            }
         }
 
         public double AverageCalc(List<double> arr)
@@ -52,10 +60,8 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            
             if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
             {
-                
                 SetSqlServerSettings(sqlServerServer.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
@@ -83,10 +89,10 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection.GetConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
+            if (await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection.GetLocalConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
                 _viewModel.OracleService.GetRunningInstances().Count > 0)
             {
-                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text, OracleInstance.Text);
+                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //OraMedT.Add(elapsed.TotalMilliseconds);
@@ -107,9 +113,9 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        public void SetOracleSettings(string user, string password, string instance, string port)
+        public void SetOracleSettings(string server, string password, string instance, string port)
         {
-            _viewModel.LocalOracleConnection.User = user;
+            _viewModel.LocalOracleConnection.Server = server;
             _viewModel.LocalOracleConnection.Password = password;
             _viewModel.LocalOracleConnection.Instance = instance;
             _viewModel.LocalOracleConnection.Port = port;
@@ -118,7 +124,7 @@ namespace TrocaBaseGUI.Views
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
             SetSqlServerSettings(sqlServerServer.Text);
-            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OraclePort.Text, OracleInstance.Text);
+            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {

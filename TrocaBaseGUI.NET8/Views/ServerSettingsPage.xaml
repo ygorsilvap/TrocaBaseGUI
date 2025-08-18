@@ -64,7 +64,7 @@
             </TextBox.Style>
         </TextBox>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="OracleUser"  Foreground="#f5f4f3" FontSize="11" Margin="300,170,100,312" TextWrapping="Wrap" Text="{Binding ServerOracleConnection.User}" Width="150">
+        <TextBox x:Name="oracleServer" Foreground="#f5f4f3" FontSize="11" Margin="300,170,100,312" Text="{Binding ServerOracleConnection.Server}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -104,7 +104,7 @@
             </PasswordBox.Style>
         </PasswordBox>
 
-        <TextBox x:Name="OraclePort" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="390,395,100,88" TextWrapping="Wrap" MaxLength="5" Text="{Binding ServerOracleConnection.Port}"/>
+        <TextBox x:Name="oraclePort" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="390,395,100,88" TextWrapping="Wrap" MaxLength="5" Text="{Binding ServerOracleConnection.Port}"/>
 
         <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="120,332,310,140">
             <Button.Template>
@@ -172,7 +172,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor(server)"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,205,0,271" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <!--<TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>-->
@@ -201,7 +201,7 @@
             </Button.Template>
         </Button>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="390,373,0,111" TextWrapping="Wrap"><Run Language="pt-br" Text="Porta"/></TextBlock>
-        <PasswordBox x:Name="OraclePassword_Copy" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="100,295,300,187">
+        <PasswordBox x:Name="SqlServerPassword" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="100,230,300,252">
             <PasswordBox.Style>
                 <Style TargetType="{x:Type PasswordBox}">
                     <Setter Property="Template">
@@ -220,10 +220,8 @@
                 </Style>
             </PasswordBox.Style>
         </PasswordBox>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,272,0,204" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock Foreground="#999897" HorizontalAlignment="Left" Margin="134,272,0,0" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="(Opcional)"/></TextBlock>
-
-        <TextBox x:Name="OracleUser_Copy"  Foreground="#f5f4f3" FontSize="11" Margin="300,295,100,187" TextWrapping="Wrap" Text="{Binding ServerOracleConnection.User}" Width="150">
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,205,0,271" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBox x:Name="oracleInstance"  Foreground="#f5f4f3" FontSize="11" Margin="300,295,100,187" Text="{Binding ServerOracleConnection.Instance}" Width="150">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -243,6 +241,25 @@
             </TextBox.Style>
         </TextBox>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Instância"/></TextBlock>
-        <TextBlock Foreground="#999897" HorizontalAlignment="Left" Margin="348,272,0,0" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="(Opcional)"/></TextBlock>
+        <TextBox x:Name="sqlServerUser" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="100,295,300,187" Text="{Binding ServerSQLServerConnection.Username}">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border Background="#19262c"  
+                                    BorderBrush="#2a353a"  
+                                    BorderThickness="1"  
+                                    CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                        Margin="0" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="14"><Run Language="pt-br" Text="Usuário"/><LineBreak/><Run Language="pt-br"/></TextBlock>
     </Grid>
 </Page>

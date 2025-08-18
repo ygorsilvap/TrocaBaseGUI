@@ -2,16 +2,26 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Oracle.ManagedDataAccess.Client;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace TrocaBaseGUI.Services
 {
     public class OracleService
     {
+        private readonly OracleConnectionModel _connection;
+
+        public OracleService(OracleConnectionModel connection)
+        {
+            _connection = connection;
+        }
         public List<string> GetRunningInstances()
         {
             return ServiceController.GetServices()
@@ -20,13 +30,19 @@ namespace TrocaBaseGUI.Services
                 .ToList();
         }
 
-        public async Task<List<DatabaseModel>> GetDatabases(string connectionString)
+        public async Task<List<DatabaseModel>> GetDatabases(string server, string password, string port, string instance, string serverInstance = null)
         {
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
             List<DatabaseModel> databases = new List<DatabaseModel>();
 
+            //corrigir essa verificação para retirar o serverInstance redundante da chamada no openOracleConn
+            string connectionString = string.IsNullOrEmpty(serverInstance) ?
+            _connection.GetLocalConnectionString(server, password, port, instance) :
+                _connection.GetServerConnectionString(server, password, port, instance);
+
+            //MessageBox.Show($"\n\n{connectionString}\n\n");
             if (string.IsNullOrWhiteSpace(connectionString))
                 return databases;
 
@@ -43,7 +59,14 @@ namespace TrocaBaseGUI.Services
                 var reader = await cmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "local", Instance = reader.GetString(1) });
+                    if (connectionString.Contains("DBA"))
+                    {
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "local", Instance = instance, Server = server });
+                    }
+                    else
+                    {
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "server", Instance = instance, Server = server });
+                    }
                 }
             }
             return databases;
@@ -56,33 +79,50 @@ namespace TrocaBaseGUI.Services
 
                 var openTask = conn.OpenAsync();
 
-                if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
+            if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
+            {
+                try
                 {
-                    try
-                        {
-                            await openTask;
-                            await conn.CloseAsync();
-                            return true;
-                        }
-                    catch
-                        {
-                            if (conn.State == System.Data.ConnectionState.Open)
-                            {
-                                conn.Close();
-                            }
-                            return false;
-                        }
+                    await openTask;
+                    await conn.CloseAsync();
+                    return true;
                 }
-                else
+                catch (Exception ex)
                 {
-                    return false;
+                    if (conn.State == System.Data.ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
+                    if (connectionString.Contains("DBA"))
+                    {
+                        Debug.WriteLine($"[ValidateLocalConnection] Falha: {ex.GetType().Name} - {ex.Message}");
+                        return false;
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[ValidateServerConnection] Falha: {ex.GetType().Name} - {ex.Message}");
+
+                        return false;
+                    }
                 }
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public string CreateOracleConnectionString(string domain, string instance, string db)
+        public string CreateOracleConnectionString(string environment, string server, string instance, string db)
         {
-
-            return $"[BANCODADOS]=ORACLE\n[DATABASE]={domain}/{instance}\n[USUARIO_ORACLE]={db.ToUpper()}";
+            //CRIAR A DIFERENÇA DE CONN STRING DE LOCAL PARA SERVER. TROCAR O SERVER DO LOCAL PARA DNS.GETHOSTNAME
+            if (environment.ToLower() == "local")
+            {
+                return $"[BANCODADOS]=ORACLE\n[DATABASE]={Dns.GetHostEntry(string.Empty).HostName}/{instance}\n[USUARIO_ORACLE]={db.ToUpper()}";
+            }
+            else
+            {
+                return $"[BANCODADOS]=ORACLE\n[DATABASE]={server}/{instance}\n[USUARIO_ORACLE]={db.ToUpper()}";
+            }
         }
     }
 }

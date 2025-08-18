@@ -12,7 +12,7 @@ namespace TrocaBaseGUI.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -110,48 +110,48 @@ namespace TrocaBaseGUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SqlServerMem {
+        public string LocalSqlServerMem {
             get {
-                return ((string)(this["SqlServerMem"]));
+                return ((string)(this["LocalSqlServerMem"]));
             }
             set {
-                this["SqlServerMem"] = value;
+                this["LocalSqlServerMem"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string OraServerMem {
+        public string LocalOraServerMem {
             get {
-                return ((string)(this["OraServerMem"]));
+                return ((string)(this["LocalOraServerMem"]));
             }
             set {
-                this["OraServerMem"] = value;
+                this["LocalOraServerMem"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string OraPasswordMem {
+        public string LocalOraPasswordMem {
             get {
-                return ((string)(this["OraPasswordMem"]));
+                return ((string)(this["LocalOraPasswordMem"]));
             }
             set {
-                this["OraPasswordMem"] = value;
+                this["LocalOraPasswordMem"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string OraPortMem {
+        public string LocalOraPortMem {
             get {
-                return ((string)(this["OraPortMem"]));
+                return ((string)(this["LocalOraPortMem"]));
             }
             set {
-                this["OraPortMem"] = value;
+                this["LocalOraPortMem"] = value;
             }
         }
         
@@ -176,6 +176,102 @@ namespace TrocaBaseGUI.Properties {
             }
             set {
                 this["ConexaoFileServiceMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LocalOraInstanceMem {
+            get {
+                return ((string)(this["LocalOraInstanceMem"]));
+            }
+            set {
+                this["LocalOraInstanceMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerSqlServerMem {
+            get {
+                return ((string)(this["ServerSqlServerMem"]));
+            }
+            set {
+                this["ServerSqlServerMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerSqlServerPasswordMem {
+            get {
+                return ((string)(this["ServerSqlServerPasswordMem"]));
+            }
+            set {
+                this["ServerSqlServerPasswordMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerSqlServerUsernameMem {
+            get {
+                return ((string)(this["ServerSqlServerUsernameMem"]));
+            }
+            set {
+                this["ServerSqlServerUsernameMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerOraServerMem {
+            get {
+                return ((string)(this["ServerOraServerMem"]));
+            }
+            set {
+                this["ServerOraServerMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerOraPasswordMem {
+            get {
+                return ((string)(this["ServerOraPasswordMem"]));
+            }
+            set {
+                this["ServerOraPasswordMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerOraPortMem {
+            get {
+                return ((string)(this["ServerOraPortMem"]));
+            }
+            set {
+                this["ServerOraPortMem"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerOraInstanceMem {
+            get {
+                return ((string)(this["ServerOraInstanceMem"]));
+            }
+            set {
+                this["ServerOraInstanceMem"] = value;
             }
         }
     }

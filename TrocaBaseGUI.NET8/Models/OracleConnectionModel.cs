@@ -2,14 +2,15 @@
 using System.Runtime.CompilerServices;
 using System.Net;
 using System;
+using System.Windows.Forms;
 
 public class OracleConnectionModel : INotifyPropertyChanged
 {
-    private string user;
-    public string User
+    private string server;
+    public string Server
     {
-        get => user;
-        set { user = value; OnPropertyChanged(); }
+        get => server;
+        set { server = value; OnPropertyChanged(); }
     }
 
     private string password;
@@ -34,15 +35,28 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { port = value; OnPropertyChanged(); }
     }
 
-    public string GetConnectionString(string hostname, string password, string port, string instance)
+    public string GetLocalConnectionString(string server, string password, string port, string instance)
     {
-        if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hostname) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
+        if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
         {
             Console.WriteLine("GetConnectionString INVALID PARAMS");
             return "";
         } else
+        { 
+          return $"User Id=sys;Password={password};Data Source={server}:{port}/{instance};DBA Privilege=SYSDBA;";
+        }
+    }
+    public string GetServerConnectionString(string server, string password, string port, string instance)
+    {
+        if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
         {
-          return $"User Id=sys;Password={password};Data Source={hostname}:{port}/{instance};DBA Privilege=SYSDBA;";
+            Console.WriteLine("GetConnectionString INVALID PARAMS");
+            return "";
+        }
+        else
+        {
+            //Rever o User ID=LINX
+            return $"User Id=LINX;Password={password};Data Source={server}:{port}/{instance};";
         }
     }
 

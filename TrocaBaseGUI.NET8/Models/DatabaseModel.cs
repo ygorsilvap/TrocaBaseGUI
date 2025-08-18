@@ -39,6 +39,8 @@ public class DatabaseModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(DbType));
         }
     }
+
+    //Oracle only
     private string instance;
     public string Instance
     {
@@ -58,6 +60,17 @@ public class DatabaseModel : INotifyPropertyChanged
         {
             environment = value;
             OnPropertyChanged(nameof(Environment));
+        }
+    }
+
+    private string server;
+    public string Server
+    {
+        get => server;
+        set
+        {
+            server = value;
+            OnPropertyChanged(nameof(Server));
         }
     }
 
