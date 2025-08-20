@@ -95,12 +95,12 @@ namespace TrocaBaseGUI.Services
                     }
                     if (connectionString.Contains("DBA"))
                     {
-                        Debug.WriteLine($"[ValidateLocalConnection] Falha: {ex.GetType().Name} - {ex.Message}");
+                        Debug.WriteLine($"[Validate-Oracle-Local] Falha: {ex.GetType().Name} - {ex.Message}");
                         return false;
                     }
                     else
                     {
-                        Debug.WriteLine($"[ValidateServerConnection] Falha: {ex.GetType().Name} - {ex.Message}");
+                        Debug.WriteLine($"[Validate-Oracle-Server] Falha: {ex.GetType().Name} - {ex.Message}");
 
                         return false;
                     }

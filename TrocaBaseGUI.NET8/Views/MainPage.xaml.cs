@@ -49,14 +49,15 @@ namespace TrocaBaseGUI.Views
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
 
-            foreach (var item in viewModel.Databases)
-            {
-                Debug.WriteLine($"\n\nDatabase: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n\n");
-            }
+            //foreach (var item in viewModel.Databases)
+            //{
+            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            //}
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            //Debug.WriteLine()
             //Local
             await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
             await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.Server, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port);
@@ -72,6 +73,12 @@ namespace TrocaBaseGUI.Views
                 DatabaseModel.SetDisplayName(db, db.DisplayName);
                 listaBancos.Add(db);
             }
+
+            //DatabaseModel.SetSelection(listaBancos,
+            //    viewModel.History.FirstOrDefault(d => d.FullPathAddress.Equals(viewModel.conexaoFileService.ConexaoAddress)).SelectedBase,
+            //    viewModel.SelDatabase.Id);
+
+            DatabaseModel.SetSelection(listaBancos,viewModel.SelDatabase.Id);
 
             GetFilter(listaBancos);
         }
@@ -122,9 +129,9 @@ namespace TrocaBaseGUI.Views
         {
             if (DataContext is MainViewModel vm && !String.IsNullOrEmpty(MainViewModel.exeFile))
             {
-                vm.SelectBase(vm.Databases, lstTodosBancos.SelectedItem.ToString());
-                //destacar seleção de base
-                
+                Debug.WriteLine($"\n\nn: {lstTodosBancos.SelectedItem.ToString()}, id: {viewModel.SelDatabase.Id}");
+                //vm.SelectBase(vm.Databases, lstTodosBancos.SelectedItem.ToString());
+                vm.SelectBase(vm.Databases, viewModel.SelDatabase.Id);
             } else
             {
                 MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -186,8 +193,9 @@ namespace TrocaBaseGUI.Views
             {
                 viewModel.conexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
                 MainViewModel.exeFile = selectedItem.ExeFile;
-                DatabaseModel.SetSelection(listaBancos, 
-                    viewModel.History.FirstOrDefault(d => d.FullPathAddress.Equals(viewModel.conexaoFileService.ConexaoAddress)).SelectedBase);
+
+                if(listaBancos.Count() > 0)
+                    DatabaseModel.SetSelection(listaBancos, viewModel.SelDatabase.Id);
             }
             Refresh();
         }
@@ -213,7 +221,6 @@ namespace TrocaBaseGUI.Views
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)
         {
-
             ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new LocalSettingsPage());
         }
 
@@ -229,12 +236,14 @@ namespace TrocaBaseGUI.Views
 
         private void CopyStringClick_Click(object sender, RoutedEventArgs e)
         {
-
-            //Possível bug é copiar os dados errados de bases que tenha nomes iguais no server e local
-            string db = lstTodosBancos.SelectedItem.ToString();
-            string connString = viewModel.Databases.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
-                   ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Environment, db, viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Server)
-                   : viewModel.OracleService.CreateOracleConnectionString(viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Environment, viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Server, viewModel.Databases.First(d => d.Name.Equals(db)).Instance, db);
+            //string db = lstTodosBancos.SelectedItem.ToString();
+            //string connString = viewModel.Databases.Any(d => d.DbType.ToLower().StartsWith("s") && d.Name.Equals(db))
+            //       ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Environment, db, viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Server)
+            //       : viewModel.OracleService.CreateOracleConnectionString(viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Environment, viewModel.Databases.FirstOrDefault(d => d.Name.Equals(db)).Server, viewModel.Databases.First(d => d.Name.Equals(db)).Instance, db);
+            
+            string connString = viewModel.SelDatabase.DbType.ToLower().StartsWith("s")
+                ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.SelDatabase.Environment, viewModel.SelDatabase.Name, viewModel.SelDatabase.Server)
+                : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelDatabase.Environment, viewModel.SelDatabase.Server, viewModel.SelDatabase.Instance, viewModel.SelDatabase.Name);
 
             Clipboard.SetText(connString);
         }

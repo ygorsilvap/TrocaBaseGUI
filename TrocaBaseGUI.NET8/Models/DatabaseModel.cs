@@ -7,6 +7,16 @@ using TrocaBaseGUI.Utils;
 
 public class DatabaseModel : INotifyPropertyChanged
 {
+    private int id;
+    public int Id
+    {
+        get => id;
+        set
+        {
+            id = value;
+            OnPropertyChanged(nameof(Id));
+        }
+    }
     private string name;
     public string Name
     {
@@ -98,14 +108,20 @@ public class DatabaseModel : INotifyPropertyChanged
             StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
     }
 
-    public static void SetSelection(ObservableCollection<DatabaseModel> dbs, string db)
+    public static void SetSelection(ObservableCollection<DatabaseModel> dbs, int id)
     {
-        if (dbs.Any(b => b.IsSelected == true)) 
+        if (dbs.Any(b => b.IsSelected == true))
             dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
 
-        if(dbs.Any(dbs => dbs.Name.Equals(db)))
-            dbs.FirstOrDefault(b => b.Name.Equals(db)).IsSelected = true;
-        else Debug.WriteLine($"\n\n\nDatabase {db} not found in the collection.\n\n\n");
+        dbs[id].IsSelected = true;
+
+
+        //if (string.IsNullOrEmpty(environment))
+        //environment = dbs.FirstOrDefault(b => b.Name.Equals(db)).Environment;
+
+        //if (dbs.Any(dbs => dbs.Name.Equals(db) && dbs.Environment.Equals(environment)))
+        //    dbs.FirstOrDefault(b => b.Name.Equals(db) && b.Environment.Equals(environment)).IsSelected = true;
+        //else Debug.WriteLine($"\n\n\nDatabase {db} not found in the collection.\n\n\n");
     }
 
     public override string ToString()

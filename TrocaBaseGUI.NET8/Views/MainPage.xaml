@@ -121,6 +121,7 @@
         <ListBox x:Name="lstTodosBancos"
                  Margin="80,155,80,112"
                  ItemsSource="{Binding listaBancos}"
+                 SelectedItem="{Binding SelDatabase}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
                  BorderThickness="1"
                  BorderBrush="#28343a"

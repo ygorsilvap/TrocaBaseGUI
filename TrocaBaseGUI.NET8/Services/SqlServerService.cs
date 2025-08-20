@@ -23,11 +23,12 @@ namespace TrocaBaseGUI.Services
 
         public async Task<List<DatabaseModel>> LoadSqlServerDatabases(string server, string username = "CNP", string password = null)
         {
-            var databases = new List<DatabaseModel>();
+            List<DatabaseModel> databases = new List<DatabaseModel>();
             using (var conn = new SqlConnection(_connection.GetConnectionString(server, username, password)))
             {
+                //MessageBox.Show(_connection.GetConnectionString(server, username, password));
+
                 await conn.OpenAsync();
-                //var cmd = new SqlCommand("SELECT name FROM sys.databases WHERE database_id > 4", conn);
                 var cmd = new SqlCommand(@"
                             CREATE TABLE #Bancos (DatabaseName NVARCHAR(128));
 
@@ -84,8 +85,17 @@ namespace TrocaBaseGUI.Services
             }
             catch(Exception ex)
             {
-                Debug.WriteLine($"[ValidateConnection] Falha: {ex.GetType().Name} - {ex.Message}");
-                return false;
+
+                if (_connection.GetConnectionString(server, username, password).Contains("Password"))
+                {
+                    Debug.WriteLine($"[ValidateConnection-SQLServer-Server] Falha: {ex.GetType().Name} - {ex.Message}");
+                    return false;
+                }
+                else
+                {
+                    Debug.WriteLine($"[ValidateConnection-SQLServer-Local] Falha: {ex.GetType().Name} - {ex.Message}");
+                    return false;
+                }
             }
         }
 
