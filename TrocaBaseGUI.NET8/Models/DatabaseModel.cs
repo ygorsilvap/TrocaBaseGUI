@@ -114,14 +114,11 @@ public class DatabaseModel : INotifyPropertyChanged
             dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
 
         dbs[id].IsSelected = true;
+    }
 
-
-        //if (string.IsNullOrEmpty(environment))
-        //environment = dbs.FirstOrDefault(b => b.Name.Equals(db)).Environment;
-
-        //if (dbs.Any(dbs => dbs.Name.Equals(db) && dbs.Environment.Equals(environment)))
-        //    dbs.FirstOrDefault(b => b.Name.Equals(db) && b.Environment.Equals(environment)).IsSelected = true;
-        //else Debug.WriteLine($"\n\n\nDatabase {db} not found in the collection.\n\n\n");
+    public static int GetSelection(ObservableCollection<DatabaseModel> dbs)
+    {
+        return dbs.FirstOrDefault(b => b.IsSelected == true).Id;
     }
 
     public override string ToString()

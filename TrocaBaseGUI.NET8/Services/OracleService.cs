@@ -30,19 +30,15 @@ namespace TrocaBaseGUI.Services
                 .ToList();
         }
 
-        public async Task<List<DatabaseModel>> GetDatabases(string server, string password, string port, string instance, string serverInstance = null)
+        public async Task<List<DatabaseModel>> GetDatabases(string server, string password, string port, string instance, string environment)
         {
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
             List<DatabaseModel> databases = new List<DatabaseModel>();
 
-            //corrigir essa verificação para retirar o serverInstance redundante da chamada no openOracleConn
-            string connectionString = string.IsNullOrEmpty(serverInstance) ?
-            _connection.GetLocalConnectionString(server, password, port, instance) :
-                _connection.GetServerConnectionString(server, password, port, instance);
+            string connectionString = _connection.GetConnectionString(server, password, port, instance, environment);
 
-            //MessageBox.Show($"\n\n{connectionString}\n\n");
             if (string.IsNullOrWhiteSpace(connectionString))
                 return databases;
 
@@ -72,12 +68,14 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-
-        public async Task<bool> ValidateConnection(string connectionString, double timeoutSeconds = 300)
+        public async Task<bool> ValidateConnection(string server, string password, string port, string instance, string environment, double timeoutSeconds = 3000)
         {
+            string connectionString = _connection.GetConnectionString(server, password, port, instance, environment);
             using var conn = new OracleConnection(connectionString);
 
-                var openTask = conn.OpenAsync();
+            Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
+
+            var openTask = conn.OpenAsync();
 
             if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
             {
@@ -111,6 +109,44 @@ namespace TrocaBaseGUI.Services
                 return false;
             }
         }
+        //public async Task<bool> ValidateConnection(string connectionString, double timeoutSeconds = 300)
+        //{
+        //    using var conn = new OracleConnection(connectionString);
+
+        //        var openTask = conn.OpenAsync();
+
+        //    if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
+        //    {
+        //        try
+        //        {
+        //            await openTask;
+        //            await conn.CloseAsync();
+        //            return true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            if (conn.State == System.Data.ConnectionState.Open)
+        //            {
+        //                conn.Close();
+        //            }
+        //            if (connectionString.Contains("DBA"))
+        //            {
+        //                Debug.WriteLine($"[Validate-Oracle-Local] Falha: {ex.GetType().Name} - {ex.Message}");
+        //                return false;
+        //            }
+        //            else
+        //            {
+        //                Debug.WriteLine($"[Validate-Oracle-Server] Falha: {ex.GetType().Name} - {ex.Message}");
+
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public string CreateOracleConnectionString(string environment, string server, string instance, string db)
         {

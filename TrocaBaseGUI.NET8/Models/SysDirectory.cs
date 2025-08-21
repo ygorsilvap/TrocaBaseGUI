@@ -39,8 +39,8 @@ namespace TrocaBaseGUI.Models
             }
         }
 
-        private string selectedBase;
-        public string SelectedBase
+        private int selectedBase = -1;
+        public int SelectedBase
         {
             get => selectedBase;
             set
@@ -50,24 +50,22 @@ namespace TrocaBaseGUI.Models
             }
         }
 
-        //private ObservableCollection<SysDirectory> history;
-        //public ObservableCollection<SysDirectory> History
-        //{
-        //    get => history;
-        //    set
-        //    {
-        //        history = value;
-        //        OnPropertyChanged(nameof(History));
-        //    }
-        //}
 
-
-        public SysDirectory(string address, string fullPathAddress, string exeFile, string selectedBase = "")
+        public SysDirectory(string address, string fullPathAddress, string exeFile, int selectedBase = -1)
         {
             Address = address;
             FullPathAddress = fullPathAddress;
             ExeFile = exeFile;
             SelectedBase = selectedBase;
+        }
+
+        public void SetSelectedDb(ObservableCollection<SysDirectory> hist, int id)
+        {
+            if (hist.Any(i => i.SelectedBase >= 0))
+                hist.FirstOrDefault(i => i.SelectedBase >= 0).selectedBase = -1;
+
+            SelectedBase = id;
+            OnPropertyChanged(nameof(SelectedBase));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

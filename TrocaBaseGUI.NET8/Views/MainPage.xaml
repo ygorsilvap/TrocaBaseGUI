@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:TrocaBaseGUI"
     mc:Ignorable="d"
+    Loaded="MainPage_Loaded"
     Title="TrocaBase" Height="500" Width="550">
 
     <Grid Margin="0,0,0,0" Background="#101e24">
@@ -120,7 +121,7 @@
         </TabControl>
         <ListBox x:Name="lstTodosBancos"
                  Margin="80,155,80,112"
-                 ItemsSource="{Binding listaBancos}"
+                 ItemsSource="{Binding DatabaseList}"
                  SelectedItem="{Binding SelDatabase}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
                  BorderThickness="1"

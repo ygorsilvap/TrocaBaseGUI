@@ -89,10 +89,11 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection.GetLocalConnectionString(OracleUser.Text, OraclePassword.Password, OraclePort.Text, _viewModel.OracleService.GetRunningInstances()[0])) &&
-                _viewModel.OracleService.GetRunningInstances().Count > 0)
+            if (_viewModel.OracleService.GetRunningInstances().Count > 0 && 
+                await _viewModel.OracleService.ValidateConnection(OracleServer.Text, OraclePassword.Password, OraclePort.Text, 
+                        _viewModel.OracleService.GetRunningInstances()[0], _viewModel.LocalOracleConnection.Environment))
             {
-                SetOracleSettings(OracleUser.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
+                SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //OraMedT.Add(elapsed.TotalMilliseconds);
@@ -124,7 +125,7 @@ namespace TrocaBaseGUI.Views
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
             SetSqlServerSettings(sqlServerServer.Text);
-            SetOracleSettings(OracleUser.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
+            SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
         }
         private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {

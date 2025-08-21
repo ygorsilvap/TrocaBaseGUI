@@ -64,7 +64,7 @@
             </TextBox.Style>
         </TextBox>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="OracleUser"  Foreground="#f5f4f3" FontSize="11" Margin="300,170,100,312" TextWrapping="Wrap" Text="{Binding LocalOracleConnection.Server}" Width="150">
+        <TextBox x:Name="OracleServer"  Foreground="#f5f4f3" FontSize="11" Margin="300,170,100,312" TextWrapping="Wrap" Text="{Binding LocalOracleConnection.Server}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">

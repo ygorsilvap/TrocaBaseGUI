@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Net;
 using System;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 public class OracleConnectionModel : INotifyPropertyChanged
 {
@@ -35,29 +36,49 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { port = value; OnPropertyChanged(); }
     }
 
-    public string GetLocalConnectionString(string server, string password, string port, string instance)
+    private string environment;
+    public string Environment
     {
-        if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
-        {
-            Console.WriteLine("GetConnectionString INVALID PARAMS");
-            return "";
-        } else
-        { 
-          return $"User Id=sys;Password={password};Data Source={server}:{port}/{instance};DBA Privilege=SYSDBA;";
-        }
+        get => environment;
+        set { environment = value; OnPropertyChanged(); }
     }
-    public string GetServerConnectionString(string server, string password, string port, string instance)
+
+    //public string GetLocalConnectionString(string server, string password, string port, string instance)
+    //{
+    //    if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
+    //    {
+    //        Console.WriteLine("GetConnectionString INVALID PARAMS");
+    //        return "";
+    //    } else
+    //    { 
+    //      return $"User Id=sys;Password={password};Data Source={server}:{port}/{instance};DBA Privilege=SYSDBA;";
+    //    }
+    //}
+    //public string GetServerConnectionString(string server, string password, string port, string instance)
+    //{
+    //    if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
+    //    {
+    //        Console.WriteLine("GetConnectionString INVALID PARAMS");
+    //        return "";
+    //    }
+    //    else
+    //    {
+    //        //Rever o User ID=LINX
+    //        return $"User Id=LINX;Password={password};Data Source={server}:{port}/{instance};";
+    //    }
+    //}
+
+    public string GetConnectionString(string server, string password, string port, string instance, string environment)
     {
         if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
         {
-            Console.WriteLine("GetConnectionString INVALID PARAMS");
+            Debug.WriteLine("GetConnectionString INVALID PARAMS");
             return "";
         }
-        else
-        {
-            //Rever o User ID=LINX
-            return $"User Id=LINX;Password={password};Data Source={server}:{port}/{instance};";
-        }
+        //Rever o User ID=LINX
+        return environment == "local"
+            ? $"User Id=sys;Password={password};Data Source={server}:{port}/{instance};DBA Privilege=SYSDBA;"
+            : $"User Id=LINX;Password={password};Data Source={server}:{port}/{instance};";
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
