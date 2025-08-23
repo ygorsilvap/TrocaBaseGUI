@@ -8,12 +8,12 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.Utils;
 using TrocaBaseGUI.ViewModels;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TrocaBaseGUI.Views
 {
@@ -60,6 +60,7 @@ namespace TrocaBaseGUI.Views
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            searchPlaceholder();
             //Local
             //await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
             await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
@@ -249,10 +250,65 @@ namespace TrocaBaseGUI.Views
 
             Clipboard.SetText(connString);
         }
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void dbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(dbSearch.Text) || dbSearch.Text.Equals("Pesquisar Bases...", StringComparison.CurrentCultureIgnoreCase))
+            {
+                dbSearch.Text = string.Empty;
+                dbSearch.Foreground = (Brush)new BrushConverter().ConvertFromString("#f5f4f3");
+            }
+        }
+
+        private void dbSearch_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(dbSearch.Text))
+            {
+                searchPlaceholder();
+            }
+        }
+
+        public void searchPlaceholder()
+        {
+            dbSearch.Text = "Pesquisar Bases...";
+            dbSearch.Foreground = (Brush)new BrushConverter().ConvertFromString("#999897");
+        }
+
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Grid.Focus();
+        }
+
+        private void dbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            lstTodosBancos.ItemsSource = listaBancos.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()));
+            //Debug.WriteLine(dbSearch.Text);
+        }
+
+        private void Db_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine($"\n\nLost Focus\n\n");
+
+            //var ctx = (ListBox)sender;
+
+
+
+            //foreach (var item in ctx.Items)
+            //{
+            //    if (item is MenuItem mi)
+            //    {
+            //        var border = mi.Template.FindName("Border", mi) as Border;
+            //        border.Background = (Brush)new BrushConverter().ConvertFromString("Red");
+            //        border.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#2a353a");
+            //    }
+            //}
+
+        }
     }
 }

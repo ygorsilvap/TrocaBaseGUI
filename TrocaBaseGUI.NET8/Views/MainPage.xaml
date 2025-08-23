@@ -8,7 +8,7 @@
     Loaded="MainPage_Loaded"
     Title="TrocaBase" Height="500" Width="550">
 
-    <Grid Margin="0,0,0,0" Background="#101e24">
+    <Grid x:Name="Grid" Margin="0,0,0,0" Background="#101e24" Focusable="True" MouseDown="Grid_MouseDown">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="0*"/>
@@ -59,7 +59,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="Dir. Sistema" Background="#101e24" Foreground="#f5f4f3" BorderBrush="#2a353a" Click="SelecionarExecutavel_Click" HorizontalAlignment="Left" Padding="24, 2" Margin="320,90,0,0" VerticalAlignment="Top" Height="22" Width="113">
+        <Button Content="Dir. Sistema" Background="#101e24" Foreground="#f5f4f3" BorderBrush="#2a353a" Click="SelecionarExecutavel_Click" Padding="24, 2" Margin="357,90,80,0" VerticalAlignment="Top" Height="22">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -117,8 +117,30 @@
                 </Style>
             </TabControl.Resources>
             <TabItem Header="Local" Foreground="#f5f4f3" Margin="-2,0,2,0" />
-            <TabItem Header="Server" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
+            <TabItem Header="Server" Foreground="#f5f4f3" Margin="-2,0,0,0" HorizontalAlignment="Left" Width="51"/>
         </TabControl>
+
+
+        <TextBox x:Name="dbSearch" TextChanged="dbSearch_TextChanged" PreviewMouseLeftButtonDown="dbSearchPlaceholder_MouseDown" LostFocus="dbSearch_LostFocus" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="203,132,217,350">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TextBox">
+                                <Border Background="#19262c"  
+                                        BorderBrush="#2a353a"  
+                                        BorderThickness="1"  
+                                        CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="0" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
         <ListBox x:Name="lstTodosBancos"
                  Margin="80,155,80,112"
                  ItemsSource="{Binding listaBancos}"
@@ -127,7 +149,8 @@
                  BorderThickness="1"
                  BorderBrush="#28343a"
                  Background="#101e24"
-                 Foreground="#f5f4f3">
+                 Foreground="#f5f4f3"
+                 Focusable="True" LostFocus="Db_LostFocus">
             <ListBox.Template>
                 <ControlTemplate TargetType="ListBox">
                     <Border Background="{TemplateBinding Background}"
@@ -190,15 +213,15 @@
                                                         BorderThickness="1"
                                                         CornerRadius="1"
                                                         Padding="5">
-                                                        <ContentPresenter ContentSource="Header" />
+                                                        <ContentPresenter ContentSource="Header"/>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsPressed" Value="True">
+                                                            <Setter TargetName="Border" Property="Background" Value="#2a353a" />
+                                                        </Trigger>
                                                         <Trigger Property="IsHighlighted" Value="True">
                                                             <Setter TargetName="Border" Property="Background" Value="#18262b" />
                                                             <Setter TargetName="Border" Property="BorderBrush" Value="#2a353a" />
-                                                        </Trigger>
-                                                        <Trigger Property="IsPressed" Value="True">
-                                                            <Setter TargetName="Border" Property="Background" Value="#2a353a" />
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
@@ -290,10 +313,8 @@
           SelectionChanged="dirSys_SelectionChanged"
           FontSize="11"
           DisplayMemberPath="Address"
-          HorizontalAlignment="Left"
-          Margin="320,120,0,0"
+          Margin="357,120,80,0"
           VerticalAlignment="Top"
-          Width="113"
           Height="20">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
