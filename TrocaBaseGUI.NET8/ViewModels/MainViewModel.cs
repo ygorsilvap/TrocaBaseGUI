@@ -55,20 +55,22 @@ namespace TrocaBaseGUI.ViewModels
             };
 
         }
-        public async Task openSqlConn(SqlServerService sqlservice, string server, string username = "CNP", string password = null)
+
+        //Refatorar
+        public async Task openSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection)
         {
-            if (await sqlservice.ValidateConnection(server, username, password))
+            if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
-                var databases = await sqlservice.LoadSqlServerDatabases(server, username, password);
+                var databases = await sqlservice.GetDatabases(sqlServerConnection);
 
                 databases.ForEach(db => {
-                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) && 
+                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
                     d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
                     {
                         return;
                     }
-                        Databases.Add(db);
-                        Databases[Databases.Count - 1].Id = Databases.Count - 1;
+                    Databases.Add(db);
+                    Databases[Databases.Count - 1].Id = Databases.Count - 1;
                 });
                 Console.WriteLine("\n[Conexão com SQL Server estabelecida]\n");
             }
@@ -76,110 +78,35 @@ namespace TrocaBaseGUI.ViewModels
             {
                 if (Databases.Count() > 0)
                 {
-                    var environment = string.IsNullOrEmpty(password) ? "local" : "server";
+                    var environment = string.IsNullOrEmpty(sqlServerConnection.Password) ? "local" : "server";
                     var removable = Databases
                         .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s") && item.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase))
                         .ToList();
 
                     foreach (var item in removable)
                     {
-                       Databases.Remove(item);
+                        Databases.Remove(item);
                     }
                 }
                 Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
             }
         }
-
-        //Refatorar
-        //public async Task openOracleConn(OracleService oracleService, string server, string password, string port, string serverInstance = null)
-        //{
-        //    if (string.IsNullOrEmpty(serverInstance))
-        //    {
-        //        foreach (string instance in oracleService.GetRunningInstances())
-        //        {
-        //            if (await OracleService.ValidateConnection(LocalOracleConnection.GetLocalConnectionString(server, password, port, instance)))
-        //            {
-        //                List<DatabaseModel> dbs = await oracleService.GetDatabases(server, password, port, instance);
-        //                dbs.ForEach(db =>
-        //                {
-        //                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) && d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
-        //                    {
-        //                        return;
-        //                    }
-        //                    Databases.Add(db);
-        //                    Databases[Databases.Count - 1].Id = Databases.Count - 1;
-        //                });
-        //                Console.WriteLine("\n[Conexão com Oracle estabelecida]\n");
-        //            }
-        //            else
-        //            {
-        //                if (Databases.Count() > 0)
-        //                {
-        //                    var removable = Databases
-        //                        .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("o") &&
-        //                        item.Environment.Equals("local", StringComparison.OrdinalIgnoreCase))
-        //                        .ToList();
-
-        //                    foreach (var item in removable)
-        //                    {
-        //                        Databases.Remove(item);
-        //                    }
-        //                }
-        //                Console.WriteLine("\n[Conexão com Oracle inválida]\n");
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (await OracleService.ValidateConnection(ServerOracleConnection.GetServerConnectionString(server, password, port, serverInstance)))
-        //        {
-        //            //serverInstance redundante a ser removido//talvez já removi, não lembro
-        //            List<DatabaseModel> dbs = await oracleService.GetDatabases(server, password, port, serverInstance, serverInstance);
-        //            dbs.ForEach(db =>
-        //            {
-        //                if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) && d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
-        //                {
-        //                    return;
-        //                }
-        //                Databases.Add(db);
-        //                Databases[Databases.Count - 1].Id = Databases.Count - 1;
-        //            });
-        //            Console.WriteLine("\n[Conexão com Oracle estabelecida]\n");
-        //        }
-        //        else
-        //        {
-        //            if (Databases.Count() > 0)
-        //            {
-        //                var removable = Databases
-        //                    .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("o") &&
-        //                        item.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
-        //                    .ToList();
-
-        //                foreach (var item in removable)
-        //                {
-        //                    Databases.Remove(item);
-        //                }
-        //            }
-        //            Console.WriteLine("\n[Conexão com Oracle inválida]\n");
-        //        }
-        //    }
-
-        //}
-        public async Task openOracleConn(OracleService oracleService, string server, string password, string port, string serverInstance = null)
+        public async Task openOracleConn(OracleService oracleService, OracleConnectionModel oracleConnection)
         {
-            List<String> instances = string.IsNullOrEmpty(serverInstance) ? 
-                oracleService.GetRunningInstances() : new List<string> { serverInstance };
+            if (oracleConnection.IsValid())
+                return;
+
+            List<String> instances = string.IsNullOrEmpty(oracleConnection.Instance) ?
+                oracleService.GetRunningInstances() : new List<string> { oracleConnection.Instance };
 
             foreach (string instance in instances)
             {
-                if (await OracleService.ValidateConnection(server, password, port, instance, 
-                    string.IsNullOrEmpty(serverInstance) ? "local" : "server"))
+                if (await OracleService.ValidateConnection(oracleConnection, instance))
                 {
-                    List<DatabaseModel> dbs = await oracleService.GetDatabases(server, password, port, instance, 
-                                                    string.IsNullOrEmpty(serverInstance) ? "local" : "server");
+                    List<DatabaseModel> dbs = await oracleService.GetDatabases(oracleConnection, instance);
                     dbs.ForEach(db =>
                     {
-                        if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) && 
+                        if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
                                           d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
                             return;
 
@@ -188,21 +115,23 @@ namespace TrocaBaseGUI.ViewModels
                     });
                     return;
                 }
-                
+
                 if (Databases.Count() > 0)
                 {
                     var removable = Databases
-                        .Where(db => db.DbType != null && 
+                        .Where(db => db.DbType != null &&
                             db.DbType.ToLower().StartsWith("o") &&
-                            db.Environment.Equals(string.IsNullOrEmpty(serverInstance) ? 
-                                "local" : "server", StringComparison.OrdinalIgnoreCase))
+                            db.Environment.Equals(oracleConnection.Environment, StringComparison.OrdinalIgnoreCase))
                         .ToList();
 
-                    removable.ForEach(db => Databases.Remove(db));
+                    removable.ForEach(db => {
+                        Debug.WriteLine($"\nRemovendo {db.Name} - {db.Environment}\n");
+                        Databases.Remove(db);
+                    });
                 }
             }
         }
-        public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id)
+        public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
         {
             var conexaoService = conexaoFileService;
             List<String> conexaoLines = File.ReadAllLines(conexaoFile).ToList();
@@ -248,13 +177,10 @@ namespace TrocaBaseGUI.ViewModels
             File.WriteAllLines(conexaoFile, conexaoLines);
 
             DatabaseModel.SetSelection(dbs, dbs[id].Id);
+            SysDirectory.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
+            SelDatabase = dbs[id];
 
-            //Refatorar
-
-            if (cnxPath.Equals(selectedCnx))
-                History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).SelectedBase = dbs[id].Id;
-                SelDatabase = dbs[id];
-            //Debug.WriteLine($"\n\nid: {History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).SelectedBase}, name: {id}");
+            //Debug.WriteLine($"\n\nid: {History.FirstOrDefault(d => d.SelectedBase > -1).SelectedBase}, name: {id}");
         }
 
         public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)
@@ -350,13 +276,13 @@ namespace TrocaBaseGUI.ViewModels
                 ?? new ObservableCollection<SysDirectory>();
             }
 
-            //string DatabasesSerialized = Properties.Settings.Default.DatabasesMem;
-            //if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))
-            //{
-            //    Databases =
-            //        JsonSerializer.Deserialize<ObservableCollection<DatabaseModel>>(DatabasesSerialized)
-            //        ?? new ObservableCollection<DatabaseModel>();
-            //}
+            string DatabasesSerialized = Properties.Settings.Default.DatabasesMem;
+            if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))
+            {
+                Databases =
+                    JsonSerializer.Deserialize<ObservableCollection<DatabaseModel>>(DatabasesSerialized)
+                    ?? new ObservableCollection<DatabaseModel>();
+            }
         }
 
         public void ClearApp()

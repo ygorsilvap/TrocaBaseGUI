@@ -60,7 +60,8 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text))
+            SqlServerConnectionModel sqlServerConnection = new SqlServerConnectionModel() { Server = sqlServerServer.Text };
+            if (await _viewModel.SqlService.ValidateConnection(sqlServerConnection))
             {
                 SetSqlServerSettings(sqlServerServer.Text);
                 //sw.Stop();
@@ -89,9 +90,14 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (_viewModel.OracleService.GetRunningInstances().Count > 0 && 
-                await _viewModel.OracleService.ValidateConnection(OracleServer.Text, OraclePassword.Password, OraclePort.Text, 
-                        _viewModel.OracleService.GetRunningInstances()[0], _viewModel.LocalOracleConnection.Environment))
+            OracleConnectionModel oracleConnection = new OracleConnectionModel() 
+                { Server = OracleServer.Text, Password = OraclePassword.Password, Port = OraclePort.Text, Environment = _viewModel.LocalOracleConnection.Environment };
+
+            if (_viewModel.OracleService.GetRunningInstances().Count > 0 &&
+                    await _viewModel.OracleService.ValidateConnection(oracleConnection, _viewModel.OracleService.GetRunningInstances()[0]))
+            //await _viewModel.OracleService.ValidateConnection(OracleServer.Text, OraclePassword.Password, OraclePort.Text, 
+            //        _viewModel.OracleService.GetRunningInstances()[0], _viewModel.LocalOracleConnection.Environment))
+
             {
                 SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
                 //sw.Stop();

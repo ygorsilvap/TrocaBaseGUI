@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,15 +17,16 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TrocaBaseGUI.Views
 {
-    public partial class MainPage : Page
+    public partial class MainPage : Page, INotifyPropertyChanged
     {
         public ObservableCollection<DatabaseModel> listaBancos { get; set; }
-        public ObservableCollection<DatabaseModel> DatabaseList { get; set; }
         public ObservableCollection<SysDirectory> hist { get; set; }
         private MainViewModel viewModel;
         public int tabSelected;
         public string rbSelected;
         public string sysSelected;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainPage(MainViewModel vm)
         {
@@ -33,17 +35,13 @@ namespace TrocaBaseGUI.Views
             viewModel = vm;
             this.DataContext = viewModel;
 
-            //this.Loaded += MainPage_Loaded;
-
             hist = new ObservableCollection<SysDirectory>(viewModel.History);
 
-            listaBancos = new ObservableCollection<DatabaseModel>();
+            listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
-            DatabaseList = new ObservableCollection<DatabaseModel>();
-
             //foreach (var item in viewModel.Databases) DatabaseModel.SetDisplayName(item, item.DisplayName);
-            foreach (var item in DatabaseList) DatabaseModel.SetDisplayName(item, item.DisplayName);
+            foreach (var item in listaBancos) DatabaseModel.SetDisplayName(item, item.DisplayName);
 
 
             RadioButton_Checked(rbTodos, null);
@@ -62,19 +60,21 @@ namespace TrocaBaseGUI.Views
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine()
             //Local
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.Server, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port);
-            
+            //await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
+            //await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.Server, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port, viewModel.LocalOracleConnection.Environment);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
+            //Debug.WriteLine($"\n\nOKOKOKOKOKOK\n\n");
+
             //Server
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection.Server, viewModel.ServerSQLServerConnection.Username, viewModel.ServerSQLServerConnection.Password);
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection.Server, viewModel.ServerOracleConnection.Password, viewModel.ServerOracleConnection.Port, viewModel.ServerOracleConnection.Instance);
+            //await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection.Server, viewModel.ServerSQLServerConnection.Username, viewModel.ServerSQLServerConnection.Password);
+            //await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection.Server, viewModel.ServerOracleConnection.Password, viewModel.ServerOracleConnection.Port, viewModel.ServerOracleConnection.Environment, viewModel.ServerOracleConnection.Instance);
+            //await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
 
             listaBancos.Clear();
 
-            //foreach (var db in viewModel.Databases)
-            foreach (var db in DatabaseList)
+            foreach (var db in viewModel.Databases)
             {
                 DatabaseModel.SetDisplayName(db, db.DisplayName);
                 listaBancos.Add(db);
@@ -133,9 +133,7 @@ namespace TrocaBaseGUI.Views
         {
             if (DataContext is MainViewModel vm && !String.IsNullOrEmpty(MainViewModel.exeFile))
             {
-                //Debug.WriteLine($"\n\nn: {lstTodosBancos.SelectedItem.ToString()}, id: {viewModel.SelDatabase.Id}");
-                //vm.SelectBase(vm.Databases, lstTodosBancos.SelectedItem.ToString());
-                vm.SelectBase(vm.Databases, viewModel.SelDatabase.Id);
+                vm.SelectBase(vm.Databases, viewModel.SelDatabase.Id, dirSys.SelectedValue.ToString());
             } else
             {
                 MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -191,20 +189,22 @@ namespace TrocaBaseGUI.Views
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectory;
 
-            if (selectedItem != null)  //&& DataContext is MainViewModel vm
+            string selectedDir = comboBox.SelectedValue as string;
+
+            int selectedBaseDir = SysDirectory.GetDir(viewModel.History, selectedDir).SelectedBase;
+
+            if (selectedItem != null)
             {
                 viewModel.conexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
                 MainViewModel.exeFile = selectedItem.ExeFile;
 
                 if (listaBancos.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0))
                 {
-                    //DatabaseModel.SetSelection(listaBancos, viewModel.SelDatabase.Id);
-                    DatabaseModel.SetSelection(listaBancos, viewModel.History.FirstOrDefault(i => i.SelectedBase >= 0).SelectedBase);
-                    viewModel.History.FirstOrDefault(i => i.SelectedBase >= 0).SetSelectedDb(hist, selectedItem.SelectedBase);
-                    viewModel.SelDatabase = listaBancos[DatabaseModel.GetSelection(listaBancos)];
+                    DatabaseModel.SetSelection(listaBancos, selectedBaseDir);
+                    viewModel.SelDatabase = listaBancos[selectedBaseDir];
                 }
             }
-            //Refresh();
+            Refresh();
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
@@ -249,5 +249,10 @@ namespace TrocaBaseGUI.Views
 
             Clipboard.SetText(connString);
         }
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

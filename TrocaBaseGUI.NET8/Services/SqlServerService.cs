@@ -21,13 +21,11 @@ namespace TrocaBaseGUI.Services
             _connection = connection;
         }
 
-        public async Task<List<DatabaseModel>> LoadSqlServerDatabases(string server, string username = "CNP", string password = null)
+        public async Task<List<DatabaseModel>> GetDatabases(SqlServerConnectionModel sqlServerConnection)
         {
             List<DatabaseModel> databases = new List<DatabaseModel>();
-            using (var conn = new SqlConnection(_connection.GetConnectionString(server, username, password)))
+            using (var conn = new SqlConnection(_connection.GetConnectionString(sqlServerConnection)))
             {
-                //MessageBox.Show(_connection.GetConnectionString(server, username, password));
-
                 await conn.OpenAsync();
                 var cmd = new SqlCommand(@"
                             CREATE TABLE #Bancos (DatabaseName NVARCHAR(128));
@@ -55,23 +53,27 @@ namespace TrocaBaseGUI.Services
 
                 while (await reader.ReadAsync())
                 {
-                    if (String.IsNullOrWhiteSpace(password)) 
+                    if (String.IsNullOrWhiteSpace(sqlServerConnection.Password)) 
                     { 
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local", Server = server });
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local", Server = sqlServerConnection.Server });
                     } else
                     {
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "server", Server = server });
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "server", Server = sqlServerConnection.Server });
                     }
                 }
             }
             return databases;
         }
 
-        public async Task<Boolean> ValidateConnection(string server, string username = "CNP", string password = null, double timeoutSeconds = 3000)
+
+        //Refatorar
+        public async Task<Boolean> ValidateConnection(SqlServerConnectionModel sqlServerConnection, double timeoutSeconds = 3000)
         {
             try
             {
-                var connectionString = _connection.GetConnectionString(server, username, password);
+                var connectionString = _connection.GetConnectionString(sqlServerConnection);
+
+                Debug.WriteLine($"\n\n{connectionString}\n\n");
 
                 if (!connectionString.ToLower().Contains("connect timeout"))
                     connectionString += ";Connect Timeout=" + timeoutSeconds;
@@ -83,10 +85,10 @@ namespace TrocaBaseGUI.Services
                     return conn.State == System.Data.ConnectionState.Open;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
-                if (_connection.GetConnectionString(server, username, password).Contains("Password"))
+                if (_connection.GetConnectionString(sqlServerConnection).Contains("Password"))
                 {
                     Debug.WriteLine($"[ValidateConnection-SQLServer-Server] Falha: {ex.GetType().Name} - {ex.Message}");
                     return false;

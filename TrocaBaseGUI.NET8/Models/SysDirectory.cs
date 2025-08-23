@@ -59,14 +59,22 @@ namespace TrocaBaseGUI.Models
             SelectedBase = selectedBase;
         }
 
-        public void SetSelectedDb(ObservableCollection<SysDirectory> hist, int id)
+        public static SysDirectory GetDir(ObservableCollection<SysDirectory> hist, string addr)
         {
-            if (hist.Any(i => i.SelectedBase >= 0))
-                hist.FirstOrDefault(i => i.SelectedBase >= 0).selectedBase = -1;
+            if (string.IsNullOrEmpty(addr))
+                return null;
 
-            SelectedBase = id;
-            OnPropertyChanged(nameof(SelectedBase));
+            return hist.FirstOrDefault(d => d.FullPathAddress.EndsWith(addr));
         }
+
+        //public void SetSelectedDb(ObservableCollection<SysDirectory> hist, string addr, int id)
+        //{
+        //    if (hist == null || string.IsNullOrEmpty(addr))
+        //        return;
+
+        //    SysDirectory.GetDir(hist, addr).SelectedBase = id;
+        //    OnPropertyChanged(nameof(SelectedBase));
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 

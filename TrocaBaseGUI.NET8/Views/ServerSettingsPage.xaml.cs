@@ -54,8 +54,9 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
+            SqlServerConnectionModel sqlServerConnection = new SqlServerConnectionModel() { Server = sqlServerServer.Text, Username = sqlServerUser.Text, Password = SqlServerPassword.Password };
 
-            if (await _viewModel.SqlService.ValidateConnection(sqlServerServer.Text, sqlServerUser.Text, SqlServerPassword.Password))
+            if (await _viewModel.SqlService.ValidateConnection(sqlServerConnection))
             {
                 
                 SetSqlServerSettings(sqlServerServer.Text, SqlServerPassword.Password, sqlServerUser.Text);
@@ -85,8 +86,11 @@ namespace TrocaBaseGUI.Views
         {
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
-            if (await _viewModel.OracleService.ValidateConnection(oracleServer.Text, OraclePassword.Password, oraclePort.Text, 
-                        oracleInstance.Text, _viewModel.ServerOracleConnection.Environment))
+            OracleConnectionModel oracleConnection = new OracleConnectionModel()
+                { Server = oracleServer.Text, Password = OraclePassword.Password, Port = oraclePort.Text, 
+                    Environment = _viewModel.LocalOracleConnection.Environment, Instance = oracleInstance.Text };
+
+            if (await _viewModel.OracleService.ValidateConnection(oracleConnection, oracleConnection.Instance))
             {
                 SetOracleSettings(oracleServer.Text, OraclePassword.Password, oraclePort.Text, oracleInstance.Text);
                 //sw.Stop();

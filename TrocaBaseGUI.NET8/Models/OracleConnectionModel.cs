@@ -68,17 +68,22 @@ public class OracleConnectionModel : INotifyPropertyChanged
     //    }
     //}
 
-    public string GetConnectionString(string server, string password, string port, string instance, string environment)
+    public bool IsValid()
     {
-        if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
+        return string.IsNullOrEmpty(Server) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Port);
+    }
+
+    public string GetConnectionString(OracleConnectionModel oracleConnection, string instance)
+    {
+        if (string.IsNullOrEmpty(oracleConnection.Password) || string.IsNullOrEmpty(oracleConnection.Server) || string.IsNullOrEmpty(oracleConnection.Port) || string.IsNullOrEmpty(instance))
         {
             Debug.WriteLine("GetConnectionString INVALID PARAMS");
             return "";
         }
         //Rever o User ID=LINX
         return environment == "local"
-            ? $"User Id=sys;Password={password};Data Source={server}:{port}/{instance};DBA Privilege=SYSDBA;"
-            : $"User Id=LINX;Password={password};Data Source={server}:{port}/{instance};";
+            ? $"User Id=sys;Password={oracleConnection.Password};Data Source={oracleConnection.Server}:{oracleConnection.Port}/{instance};DBA Privilege=SYSDBA;"
+            : $"User Id=LINX;Password={oracleConnection.Password};Data Source={oracleConnection.Server}:{oracleConnection.Port}/{instance};";
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

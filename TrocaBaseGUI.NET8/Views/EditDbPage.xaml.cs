@@ -16,8 +16,10 @@ namespace TrocaBaseGUI.Views
             InitializeComponent();
             _db = db;
             renameInput.Text = _db.DisplayName;
+            dbType.Text = _db.DbType;
             _viewModelDbs = viewModelDbs;
         }
+
 
         private void SaveName_Click(object sender, RoutedEventArgs e)
         {

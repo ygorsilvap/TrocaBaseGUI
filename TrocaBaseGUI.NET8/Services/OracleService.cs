@@ -30,14 +30,16 @@ namespace TrocaBaseGUI.Services
                 .ToList();
         }
 
-        public async Task<List<DatabaseModel>> GetDatabases(string server, string password, string port, string instance, string environment)
+        public async Task<List<DatabaseModel>> GetDatabases(OracleConnectionModel oracleConnection, string instance)
         {
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
 
             List<DatabaseModel> databases = new List<DatabaseModel>();
 
-            string connectionString = _connection.GetConnectionString(server, password, port, instance, environment);
+            //Debug.WriteLine($"\n\n{oracleConnection.Server}, {oracleConnection.Password}, {oracleConnection.Port}, {oracleConnection.Instance}, {oracleConnection.Environment}\n\n");
+
+            string connectionString = _connection.GetConnectionString(oracleConnection, instance);
 
             if (string.IsNullOrWhiteSpace(connectionString))
                 return databases;
@@ -51,29 +53,29 @@ namespace TrocaBaseGUI.Services
                     WHERE account_status = 'OPEN' 
                     AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') 
                     AND username NOT IN (" + exception + @")
-                    ORDER BY username", conn); 
+                    ORDER BY username", conn);
                 var reader = await cmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
                     if (connectionString.Contains("DBA"))
                     {
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "local", Instance = instance, Server = server });
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "local", Instance = instance, Server = oracleConnection.Server });
                     }
                     else
                     {
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "server", Instance = instance, Server = server });
+                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "server", Instance = instance, Server = oracleConnection.Server });
                     }
                 }
             }
             return databases;
         }
 
-        public async Task<bool> ValidateConnection(string server, string password, string port, string instance, string environment, double timeoutSeconds = 3000)
+        public async Task<bool> ValidateConnection(OracleConnectionModel oracleConnection, string instance, double timeoutSeconds = 3000)
         {
-            string connectionString = _connection.GetConnectionString(server, password, port, instance, environment);
+            string connectionString = _connection.GetConnectionString(oracleConnection, instance);
             using var conn = new OracleConnection(connectionString);
 
-            Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
+            //Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
 
             var openTask = conn.OpenAsync();
 
@@ -109,11 +111,15 @@ namespace TrocaBaseGUI.Services
                 return false;
             }
         }
-        //public async Task<bool> ValidateConnection(string connectionString, double timeoutSeconds = 300)
+
+        //public async Task<bool> ValidateConnection(string server, string password, string port, string instance, string environment, double timeoutSeconds = 3000)
         //{
+        //    string connectionString = _connection.GetConnectionString(server, password, port, instance, environment);
         //    using var conn = new OracleConnection(connectionString);
 
-        //        var openTask = conn.OpenAsync();
+        //    //Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
+
+        //    var openTask = conn.OpenAsync();
 
         //    if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
         //    {

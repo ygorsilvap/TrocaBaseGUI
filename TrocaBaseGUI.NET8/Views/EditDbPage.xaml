@@ -10,7 +10,7 @@
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Nome da base"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <!--<TextBox x:Name = "RenameInput" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Width="120"/>-->
         <TextBox x:Name = "renameInput" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Width="120"/>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" FontSize="16" FontWeight="Light" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" Text="[dbType]"/></TextBlock>
+        <TextBlock x:Name="dbType" Text="{Binding DbType}" Foreground="#f5f4f3" HorizontalAlignment="Left" FontSize="16" FontWeight="Light" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" /></TextBlock>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,176,0,306" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="[user db]"/></TextBlock>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Conexão"/><LineBreak/><Run Language="pt-br"/></TextBlock>
