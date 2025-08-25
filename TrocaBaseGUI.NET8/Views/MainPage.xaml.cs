@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -46,9 +47,10 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-            dirSys.SelectedValue = hist.Count > 0 ? hist.First().Address : "";
+            dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
 
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            OpenExeButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
 
@@ -62,11 +64,8 @@ namespace TrocaBaseGUI.Views
         {
             searchPlaceholder();
             //Local
-            //await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection.Server);
             await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
-            //await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection.Server, viewModel.LocalOracleConnection.Password, viewModel.LocalOracleConnection.Port, viewModel.LocalOracleConnection.Environment);
             await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
-            //Debug.WriteLine($"\n\nOKOKOKOKOKOK\n\n");
 
             //Server
             //await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection.Server, viewModel.ServerSQLServerConnection.Username, viewModel.ServerSQLServerConnection.Password);
@@ -173,16 +172,19 @@ namespace TrocaBaseGUI.Views
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok && File.Exists(dialog.FileName))
             {
-                viewModel.AddDirectory($"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}",
-                    System.IO.Path.GetDirectoryName(dialog.FileName), System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
+                string folder = $"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}";
+                string path = System.IO.Path.GetDirectoryName(dialog.FileName);
+                string exeName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+                ObservableCollection<string> exeList = new ObservableCollection<string>(Directory.GetFiles(path, "*.exe").Select(f => System.IO.Path.GetFileNameWithoutExtension(f)).ToList());
 
-                viewModel.conexaoFileService.SetConexaoAddress(System.IO.Path.GetDirectoryName(dialog.FileName));
+                viewModel.AddDirectory(folder, path, exeName, exeList);
+
+                viewModel.conexaoFileService.SetConexaoAddress(path);
 
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
                 Refresh();
             }
-            //Debug.WriteLine($"\n\n\nConFile: {viewModel.conexaoFileService.ConexaoAddress}\n\n\n");
         }
 
         private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -192,11 +194,16 @@ namespace TrocaBaseGUI.Views
 
             string selectedDir = comboBox.SelectedValue as string;
 
+            if (string.IsNullOrEmpty(selectedDir)) return;
+
+            viewModel.ExeFilesList = SysDirectory.GetDir(viewModel.History, selectedDir)?.ExeList;
+            exeSys.ItemsSource = viewModel.ExeFilesList;
+
             int selectedBaseDir = SysDirectory.GetDir(viewModel.History, selectedDir).SelectedBase;
 
             if (selectedItem != null)
             {
-                viewModel.conexaoFileService.SetConexaoAddress(selectedItem.FullPathAddress);
+                viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
                 MainViewModel.exeFile = selectedItem.ExeFile;
 
                 if (listaBancos.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0))
@@ -205,7 +212,17 @@ namespace TrocaBaseGUI.Views
                     viewModel.SelDatabase = listaBancos[selectedBaseDir];
                 }
             }
+
             Refresh();
+        }
+
+        //pegar o exe selecionado, esse método não traz nada ainda. (WIP)
+        private void exeSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            var selectedItem = comboBox.SelectedItem as SysDirectory;
+
+            Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
@@ -224,7 +241,6 @@ namespace TrocaBaseGUI.Views
         private void OpenSysButton_Click(object sender, RoutedEventArgs e)
         {
             Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{MainViewModel.exeFile}.exe");
-            //Application.Current.Shutdown();
         }
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)
@@ -279,7 +295,6 @@ namespace TrocaBaseGUI.Views
             dbSearch.Foreground = (Brush)new BrushConverter().ConvertFromString("#999897");
         }
 
-
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Grid.Focus();
@@ -291,6 +306,7 @@ namespace TrocaBaseGUI.Views
             //Debug.WriteLine(dbSearch.Text);
         }
 
+        //WIP
         private void Db_LostFocus(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine($"\n\nLost Focus\n\n");
@@ -310,5 +326,6 @@ namespace TrocaBaseGUI.Views
             //}
 
         }
+
     }
 }

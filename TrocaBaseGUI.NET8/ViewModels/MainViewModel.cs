@@ -37,6 +37,8 @@ namespace TrocaBaseGUI.ViewModels
 
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectory> History { get; set; } = new ObservableCollection<SysDirectory>();
+        public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
+
         public MainViewModel()
         {
             conexaoFileService = new ConexaoFileService();
@@ -139,8 +141,8 @@ namespace TrocaBaseGUI.ViewModels
             int index = 0;
 
             string cnxPath = conexaoFileService.ConexaoAddress;
-            string selectedCnx = History.Any(d => d.FullPathAddress.Equals(cnxPath)) ?
-                History.FirstOrDefault(d => d.FullPathAddress.Equals(cnxPath)).FullPathAddress : string.Empty;
+            string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
+                History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
 
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
@@ -193,17 +195,17 @@ namespace TrocaBaseGUI.ViewModels
             return new ObservableCollection<DatabaseModel>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
         }
 
-        public void AddDirectory(string endereco, string enderecoCompleto, string exe)
+        public void AddDirectory(string folder, string path, string exe, ObservableCollection<string> exeList)
         {
             // Verifica se já existe o diretório no histórico
-            var existente = History.FirstOrDefault(d => d.Address == endereco);
+            var existente = History.FirstOrDefault(d => d.Folder == folder);
             if (existente != null)
             {
                 History.Remove(existente); // Remove para mover para o topo
             }
 
             // Adiciona no início da lista
-            History.Insert(0, new SysDirectory(endereco, enderecoCompleto, exe));
+            History.Insert(0, new SysDirectory(folder, path, exe, exeList));
             exeFile = exe;
 
             // Garante que só existam no máximo X itens no histórico
@@ -268,13 +270,13 @@ namespace TrocaBaseGUI.ViewModels
             ServerOracleConnection.Port = string.IsNullOrEmpty(ServerOracleConnection.Port) ? Properties.Settings.Default.ServerOraPortMem : "1521";
             ServerOracleConnection.Instance = Properties.Settings.Default.ServerOraInstanceMem;
 
-            string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
-            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-            {
-                History =
-                JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
-                ?? new ObservableCollection<SysDirectory>();
-            }
+            //string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
+            //if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+            //{
+            //    History =
+            //    JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
+            //    ?? new ObservableCollection<SysDirectory>();
+            //}
 
             string DatabasesSerialized = Properties.Settings.Default.DatabasesMem;
             if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))

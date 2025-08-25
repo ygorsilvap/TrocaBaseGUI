@@ -6,25 +6,25 @@ namespace TrocaBaseGUI.Models
     [Serializable]
     public class SysDirectory : INotifyPropertyChanged
     {
-        private string address;
-        public string Address
+        private string folder;
+        public string Folder
         {
-            get => address;
+            get => folder;
             set
             {
-                address = value;
-                OnPropertyChanged(nameof(Address));
+                folder = value;
+                OnPropertyChanged(nameof(Folder));
             }
         }
 
-        private string fullPathAddress;
-        public string FullPathAddress
+        private string path;
+        public string Path
         {
-            get => fullPathAddress;
+            get => path;
             set
             {
-                fullPathAddress = value;
-                OnPropertyChanged(nameof(FullPathAddress));
+                path = value;
+                OnPropertyChanged(nameof(Path));
             }
         }
 
@@ -36,6 +36,17 @@ namespace TrocaBaseGUI.Models
             {
                 exeFile = value;
                 OnPropertyChanged(nameof(ExeFile));
+            }
+        }
+
+        private ObservableCollection<string> exeList;
+        public ObservableCollection<string> ExeList
+        {
+            get => exeList;
+            set
+            {
+                exeList = value;
+                OnPropertyChanged(nameof(ExeList));
             }
         }
 
@@ -51,30 +62,22 @@ namespace TrocaBaseGUI.Models
         }
 
 
-        public SysDirectory(string address, string fullPathAddress, string exeFile, int selectedBase = -1)
+        public SysDirectory(string address, string fullPathAddress, string exeFile, ObservableCollection<string> exeList, int selectedBase = -1)
         {
-            Address = address;
-            FullPathAddress = fullPathAddress;
+            Folder = address;
+            Path = fullPathAddress;
             ExeFile = exeFile;
+            ExeList = exeList;
             SelectedBase = selectedBase;
         }
 
         public static SysDirectory GetDir(ObservableCollection<SysDirectory> hist, string addr)
         {
-            if (string.IsNullOrEmpty(addr))
+            if (string.IsNullOrEmpty(addr) || hist.Count < 1)
                 return null;
 
-            return hist.FirstOrDefault(d => d.FullPathAddress.EndsWith(addr));
+            return hist.FirstOrDefault(d => d.Path.EndsWith(addr));
         }
-
-        //public void SetSelectedDb(ObservableCollection<SysDirectory> hist, string addr, int id)
-        //{
-        //    if (hist == null || string.IsNullOrEmpty(addr))
-        //        return;
-
-        //    SysDirectory.GetDir(hist, addr).SelectedBase = id;
-        //    OnPropertyChanged(nameof(SelectedBase));
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -85,7 +88,7 @@ namespace TrocaBaseGUI.Models
 
         public override string ToString()
         {
-            return Address ?? FullPathAddress;
+            return Folder ?? Path;
         }
     }
 }
