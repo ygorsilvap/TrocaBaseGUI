@@ -80,6 +80,7 @@ namespace TrocaBaseGUI.ViewModels
             {
                 if (Databases.Count() > 0)
                 {
+                    //Refatorar
                     var environment = string.IsNullOrEmpty(sqlServerConnection.Password) ? "local" : "server";
                     var removable = Databases
                         .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s") && item.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase))
@@ -95,6 +96,7 @@ namespace TrocaBaseGUI.ViewModels
         }
         public async Task openOracleConn(OracleService oracleService, OracleConnectionModel oracleConnection)
         {
+            //Revisar lógica
             if (oracleConnection.IsValid())
                 return;
 

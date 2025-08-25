@@ -43,31 +43,6 @@ public class OracleConnectionModel : INotifyPropertyChanged
         set { environment = value; OnPropertyChanged(); }
     }
 
-    //public string GetLocalConnectionString(string server, string password, string port, string instance)
-    //{
-    //    if(string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
-    //    {
-    //        Console.WriteLine("GetConnectionString INVALID PARAMS");
-    //        return "";
-    //    } else
-    //    { 
-    //      return $"User Id=sys;Password={password};Data Source={server}:{port}/{instance};DBA Privilege=SYSDBA;";
-    //    }
-    //}
-    //public string GetServerConnectionString(string server, string password, string port, string instance)
-    //{
-    //    if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(instance))
-    //    {
-    //        Console.WriteLine("GetConnectionString INVALID PARAMS");
-    //        return "";
-    //    }
-    //    else
-    //    {
-    //        //Rever o User ID=LINX
-    //        return $"User Id=LINX;Password={password};Data Source={server}:{port}/{instance};";
-    //    }
-    //}
-
     public bool IsValid()
     {
         return string.IsNullOrEmpty(Server) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Port);
@@ -80,8 +55,8 @@ public class OracleConnectionModel : INotifyPropertyChanged
             Debug.WriteLine("GetConnectionString INVALID PARAMS");
             return "";
         }
-        //Rever o User ID=LINX
-        return environment == "local"
+        //Revisar o User ID=LINX
+        return oracleConnection.Environment == "local"
             ? $"User Id=sys;Password={oracleConnection.Password};Data Source={oracleConnection.Server}:{oracleConnection.Port}/{instance};DBA Privilege=SYSDBA;"
             : $"User Id=LINX;Password={oracleConnection.Password};Data Source={oracleConnection.Server}:{oracleConnection.Port}/{instance};";
     }

@@ -39,19 +39,6 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { useIntegratedSecurity = value; OnPropertyChanged(); }
     }
 
-
-    //public string GetConnectionString(string server, string username = "CNP", string password = null)
-    //{
-    //    if (String.IsNullOrEmpty(password))
-    //    {
-    //        return $"Server={server};Integrated Security=True;TrustServerCertificate=True;";
-    //    }
-    //    else
-    //    {
-    //        return $"Server={server};User Id={username};Password={password};TrustServerCertificate=True;";
-    //    }
-    //}
-
     public string GetConnectionString(SqlServerConnectionModel sqlServerConnection)
     {
         if (String.IsNullOrEmpty(sqlServerConnection.Password))

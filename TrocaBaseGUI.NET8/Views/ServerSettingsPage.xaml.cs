@@ -88,7 +88,7 @@ namespace TrocaBaseGUI.Views
             //sw.Start();
             OracleConnectionModel oracleConnection = new OracleConnectionModel()
                 { Server = oracleServer.Text, Password = OraclePassword.Password, Port = oraclePort.Text, 
-                    Environment = _viewModel.LocalOracleConnection.Environment, Instance = oracleInstance.Text };
+                    Environment = _viewModel.ServerOracleConnection.Environment, Instance = oracleInstance.Text };
 
             if (await _viewModel.OracleService.ValidateConnection(oracleConnection, oracleConnection.Instance))
             {

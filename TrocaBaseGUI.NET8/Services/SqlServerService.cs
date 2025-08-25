@@ -73,8 +73,6 @@ namespace TrocaBaseGUI.Services
             {
                 var connectionString = _connection.GetConnectionString(sqlServerConnection);
 
-                Debug.WriteLine($"\n\n{connectionString}\n\n");
-
                 if (!connectionString.ToLower().Contains("connect timeout"))
                     connectionString += ";Connect Timeout=" + timeoutSeconds;
 

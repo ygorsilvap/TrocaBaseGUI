@@ -75,7 +75,7 @@ namespace TrocaBaseGUI.Services
             string connectionString = _connection.GetConnectionString(oracleConnection, instance);
             using var conn = new OracleConnection(connectionString);
 
-            //Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
+            Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
 
             var openTask = conn.OpenAsync();
 
