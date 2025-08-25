@@ -270,13 +270,13 @@ namespace TrocaBaseGUI.ViewModels
             ServerOracleConnection.Port = string.IsNullOrEmpty(ServerOracleConnection.Port) ? Properties.Settings.Default.ServerOraPortMem : "1521";
             ServerOracleConnection.Instance = Properties.Settings.Default.ServerOraInstanceMem;
 
-            //string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
-            //if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-            //{
-            //    History =
-            //    JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
-            //    ?? new ObservableCollection<SysDirectory>();
-            //}
+            string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
+            if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+            {
+                History =
+                JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
+                ?? new ObservableCollection<SysDirectory>();
+            }
 
             string DatabasesSerialized = Properties.Settings.Default.DatabasesMem;
             if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))

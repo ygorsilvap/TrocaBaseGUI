@@ -68,9 +68,8 @@ namespace TrocaBaseGUI.Views
             await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
 
             //Server
-            //await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection.Server, viewModel.ServerSQLServerConnection.Username, viewModel.ServerSQLServerConnection.Password);
-            //await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection.Server, viewModel.ServerOracleConnection.Password, viewModel.ServerOracleConnection.Port, viewModel.ServerOracleConnection.Environment, viewModel.ServerOracleConnection.Instance);
-            //await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
 
             listaBancos.Clear();
 
