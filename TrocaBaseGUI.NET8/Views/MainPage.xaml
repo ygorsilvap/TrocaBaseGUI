@@ -14,7 +14,7 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="OpenExeButton" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="90,420,310,42">
+        <Button x:Name="OpenExeButton" Click="OpenSecondaryExeButton_Click" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="90,420,310,42">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -173,7 +173,7 @@
             </ComboBox.Style>
         </ComboBox>
 
-        <Button x:Name="OpenSysButton" Content="{Binding exeName}" Click="OpenSysButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
+        <Button x:Name="OpenSysButton" Content="{Binding exeName}" Click="OpenMainExeButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -446,9 +446,9 @@
         <ComboBox x:Name="dirSys"
           ItemsSource="{Binding History}"
           SelectedValuePath="Folder"
+          DisplayMemberPath="Folder"
           SelectionChanged="dirSys_SelectionChanged"
           FontSize="11"
-          DisplayMemberPath="Folder"
           Margin="357,120,80,0"
           VerticalAlignment="Top"
           Height="20">

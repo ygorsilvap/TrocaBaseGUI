@@ -13,9 +13,12 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows;
 using Microsoft.IdentityModel.Tokens;
+using Oracle.ManagedDataAccess.Client;
 
 namespace TrocaBaseGUI.ViewModels
 {
+
+    //REFATORAR TODO O TRATAMENTO DE EXEFILE E SYSDIRECTORY//TALVEZ ADD INDEX NO SYSDIRECTORY
     public class MainViewModel
     {
         public ConexaoFileService conexaoFileService { get; set; }
@@ -61,6 +64,10 @@ namespace TrocaBaseGUI.ViewModels
         //Refatorar
         public async Task openSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection)
         {
+            //Revisar lógica
+            if (sqlServerConnection.IsValid())
+                return;
+
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
                 var databases = await sqlservice.GetDatabases(sqlServerConnection);
@@ -142,7 +149,7 @@ namespace TrocaBaseGUI.ViewModels
             int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
             int index = 0;
 
-            string cnxPath = conexaoFileService.ConexaoAddress;
+            string cnxPath = conexaoFileService.ConexaoFilePath;
             string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
                 History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
 

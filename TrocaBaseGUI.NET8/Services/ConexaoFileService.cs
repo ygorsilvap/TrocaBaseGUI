@@ -22,46 +22,40 @@ namespace TrocaBaseGUI.Services
             }
         }
 
-        private string conexaoAddress;
-        public string ConexaoAddress
+        private string conexaoFilePath;
+        public string ConexaoFilePath
         {
-            get => conexaoAddress;
+            get => conexaoFilePath;
             set
             {
-                conexaoAddress = value;
-                OnPropertyChanged(nameof(ConexaoAddress));
-            }
-        }
-
-        private string domain = Dns.GetHostEntry(string.Empty).HostName;
-        public string Domain
-        {
-            get => domain;
-            set
-            {
-                domain = value;
-                OnPropertyChanged(nameof(Domain));
+                conexaoFilePath = value;
+                OnPropertyChanged(nameof(ConexaoFilePath));
             }
         }
 
         public Boolean ValidateSystemPath(string path)
         {
-            return File.Exists(path + "\\conexao.dat") || File.Exists(path + "\\ConexaoServidor.dat") ? true : false;
+            //Tratar do case das strings para ignorar case
+            return File.Exists(path + "\\conexao.dat") || File.Exists(path + "\\ConexaoServidor.dat");
         }
 
         public void SetConexaoAddress(string add)
         {
+            //if (String.IsNullOrEmpty(add) || ValidateSystemPath(add)) return;
+
+            //ConexaoFile = Path.Combine(add, "conexao.dat");
+            //ConexaoFilePath = add;
+
             if (String.IsNullOrEmpty(add)) return;
             if (ValidateSystemPath(add))
             {
                 ConexaoFile = Path.Combine(add, "conexao.dat");
-                ConexaoAddress = add;
+                ConexaoFilePath = add;
             }
             else
             {
                 Console.WriteLine("caminho inválido");
             }
-            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

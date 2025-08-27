@@ -38,7 +38,10 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         get => useIntegratedSecurity;
         set { useIntegratedSecurity = value; OnPropertyChanged(); }
     }
-
+    public bool IsValid()
+    {
+        return string.IsNullOrEmpty(Server) || string.IsNullOrEmpty(Password);
+    }
     public string GetConnectionString(SqlServerConnectionModel sqlServerConnection)
     {
         if (String.IsNullOrEmpty(sqlServerConnection.Password))

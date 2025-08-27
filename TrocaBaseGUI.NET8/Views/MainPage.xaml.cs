@@ -26,6 +26,7 @@ namespace TrocaBaseGUI.Views
         public int tabSelected;
         public string rbSelected;
         public string sysSelected;
+        public string exeSelected;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -41,7 +42,6 @@ namespace TrocaBaseGUI.Views
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
-            //foreach (var item in viewModel.Databases) DatabaseModel.SetDisplayName(item, item.DisplayName);
             foreach (var item in listaBancos) DatabaseModel.SetDisplayName(item, item.DisplayName);
 
 
@@ -116,8 +116,6 @@ namespace TrocaBaseGUI.Views
         {
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
-            //viewModel.AtualizarDbFiles();
-
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
 
@@ -186,6 +184,7 @@ namespace TrocaBaseGUI.Views
             }
         }
 
+        //Refatorar
         private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
@@ -203,9 +202,9 @@ namespace TrocaBaseGUI.Views
             if (selectedItem != null)
             {
                 viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
-                MainViewModel.exeFile = selectedItem.ExeFile;
+                MainViewModel.exeFile = selectedItem.MainExeFile;
 
-                if (listaBancos.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0))
+                if (listaBancos.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0) && selectedBaseDir > 0)
                 {
                     DatabaseModel.SetSelection(listaBancos, selectedBaseDir);
                     viewModel.SelDatabase = listaBancos[selectedBaseDir];
@@ -215,11 +214,13 @@ namespace TrocaBaseGUI.Views
             Refresh();
         }
 
-        //pegar o exe selecionado, esse método não traz nada ainda. (WIP)
         private void exeSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
-            var selectedItem = comboBox.SelectedItem as SysDirectory;
+            var selectedItem = comboBox.SelectedItem as string;
+
+            exeSelected = selectedItem;
+            OpenExeButton.Content = $"Iniciar \n{exeSelected}";
 
             Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
         }
@@ -237,9 +238,15 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        private void OpenSysButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void OpenMainExeButton_Click(object sender, RoutedEventArgs e)
+        {   
             Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{MainViewModel.exeFile}.exe");
+        }
+
+        private void OpenSecondaryExeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{exeSelected}.exe");
+            Debug.WriteLine($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{exeSelected}.exe");
         }
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)
@@ -271,6 +278,7 @@ namespace TrocaBaseGUI.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //criar função de resetar o placeholder para quando trocar de tab o campo resetar
         private void dbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(dbSearch.Text) || dbSearch.Text.Equals("Pesquisar Bases...", StringComparison.CurrentCultureIgnoreCase))
@@ -301,8 +309,9 @@ namespace TrocaBaseGUI.Views
 
         private void dbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            lstTodosBancos.ItemsSource = listaBancos.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()));
-            //Debug.WriteLine(dbSearch.Text);
+            string environment = tabSelected == 0 ? "local" : "server";
+            lstTodosBancos.ItemsSource = listaBancos.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
+            && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
         }
 
         //WIP

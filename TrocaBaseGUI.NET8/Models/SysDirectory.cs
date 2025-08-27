@@ -28,14 +28,14 @@ namespace TrocaBaseGUI.Models
             }
         }
 
-        private string exeFile;
-        public string ExeFile
+        private string mainExeFile;
+        public string MainExeFile
         {
-            get => exeFile;
+            get => mainExeFile;
             set
             {
-                exeFile = value;
-                OnPropertyChanged(nameof(ExeFile));
+                mainExeFile = value;
+                OnPropertyChanged(nameof(MainExeFile));
             }
         }
 
@@ -61,12 +61,13 @@ namespace TrocaBaseGUI.Models
             }
         }
 
+        public SysDirectory() { }
 
         public SysDirectory(string address, string fullPathAddress, string exeFile, ObservableCollection<string> exeList, int selectedBase = -1)
         {
             Folder = address;
             Path = fullPathAddress;
-            ExeFile = exeFile;
+            MainExeFile = exeFile;
             ExeList = exeList;
             SelectedBase = selectedBase;
         }
