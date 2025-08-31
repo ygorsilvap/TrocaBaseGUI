@@ -1,0 +1,141 @@
+﻿<Page x:Class="TrocaBaseGUI.Views.DoisCParamsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TrocaBaseGUI.Views"
+      mc:Ignorable="d" 
+      Title="DoisCParamsPage"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      Height="500" Width="550">
+
+    <Grid Background="#101e24">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="427"/>
+        </Grid.RowDefinitions>
+       <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,22,60,70" CornerRadius="0, 0, 5, 5" Grid.Row="1"/>-->
+        <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
+        <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
+
+        <CheckBox x:Name="loginCheckbox" IsChecked="{Binding appState.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,66,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="17" Grid.Row="1"><Run Text="Login Padrão"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="loginPadrao" TextChanged="loginPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultLogin}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,66,205,343" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TextBox">
+                                <Border x:Name="Border"
+                                    Background="#19262c"  
+                                        BorderBrush="#2a353a"  
+                                        BorderThickness="1"  
+                                        CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        
+        <CheckBox x:Name="senhaCheckbox" IsChecked="{Binding appState.DefaultPasswordCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="senhaCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,96,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><Run Text=" Padrão"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="senhaPadrao" TextChanged="senhaPadrao_TextChanged" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,96,205,313" Text="" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border x:Name="Border"
+                                    Background="#19262c"  
+                                        BorderBrush="#2a353a"  
+                                        BorderThickness="1"  
+                                        CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <CheckBox x:Name="editorCheckbox" IsChecked="{Binding appState.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="editorCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,136,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Editor de Texto:"/></TextBlock>
+        <TextBox x:Name="editorTexto" TextChanged="editorTexto_TextChanged" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,136,205,273" Text="" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border x:Name="Border"
+                                    Background="#19262c"  
+                                        BorderBrush="#2a353a"  
+                                        BorderThickness="1"  
+                                        CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <CheckBox x:Name="dirCheckbox" IsChecked="{Binding appState.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="dirCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,166,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Dir. Atualização:"/></TextBlock>
+        <TextBox x:Name="dirAtualizacao" TextChanged="dirAtualizacao_TextChanged" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,166,205,243" Text="" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border x:Name="Border"
+                                    Background="#19262c"  
+                                        BorderBrush="#2a353a"  
+                                        BorderThickness="1"  
+                                        CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        
+        <CheckBox x:Name="ultMenuWebCheckbox" Click="ultMenuWebCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,206,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Height="16" Grid.Row="1" Text="Utiliza Menu Web"/>
+    </Grid>
+</Page>

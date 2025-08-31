@@ -14,7 +14,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             id = value;
-            OnPropertyChanged(nameof(Id));
+            OnPropertyChanged();
         }
     }
     private string name;
@@ -24,7 +24,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             name = value;
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged();
         }
     }
 
@@ -35,7 +35,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             displayName = value;
-            OnPropertyChanged(nameof(DisplayName));
+            OnPropertyChanged();
         }
     }
 
@@ -46,7 +46,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             dbType = value;
-            OnPropertyChanged(nameof(DbType));
+            OnPropertyChanged();
         }
     }
 
@@ -58,7 +58,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             instance = value;
-            OnPropertyChanged(nameof(Instance));
+            OnPropertyChanged();
         }
     }
 
@@ -69,7 +69,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             environment = value;
-            OnPropertyChanged(nameof(Environment));
+            OnPropertyChanged();
         }
     }
 
@@ -80,7 +80,7 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             server = value;
-            OnPropertyChanged(nameof(Server));
+            OnPropertyChanged();
         }
     }
 
@@ -91,13 +91,13 @@ public class DatabaseModel : INotifyPropertyChanged
         set
         {
             isSelected = value;
-            OnPropertyChanged(nameof(IsSelected));
+            OnPropertyChanged();
         }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void OnPropertyChanged(string prop)
+    protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string prop = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }

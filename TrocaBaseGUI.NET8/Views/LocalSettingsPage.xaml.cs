@@ -18,17 +18,15 @@ namespace TrocaBaseGUI.Views
         public MainViewModel _viewModel;
         public List<double> SqlMedT = new List<double>();
         public List<double> OraMedT = new List<double>();
-        public int tabSelected;
 
         public LocalSettingsPage()
         {
             InitializeComponent();
 
-            var mainWindow = (MainWindow)Application.Current.MainWindow;
-            _viewModel = mainWindow.MainVM;
+            var mainWindow = (SettingsWindow)Application.Current.MainWindow;
+            _viewModel = mainWindow.viewModel;
             this.DataContext = _viewModel;
 
-            tabSelected = TabControl.SelectedIndex;
             OraclePassword.Password = _viewModel.LocalOracleConnection.Password;
             SqlServerPassword.Password = _viewModel.LocalSQLServerConnection.Password;
 
@@ -132,24 +130,6 @@ namespace TrocaBaseGUI.Views
         {
             SetSqlServerSettings(sqlServerServer.Text);
             SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
-        }
-        private void VoltarButton_Click(object sender, RoutedEventArgs e)
-        {
-            var mainWindow = (MainWindow)Application.Current.MainWindow;
-
-            mainWindow.MainFramePublic.Navigate(new MainPage(_viewModel));
-            
-        }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.Source is TabControl tabControl)
-                tabSelected = tabControl.SelectedIndex;
-
-            if (tabSelected == 1)
-            {
-                ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new ServerSettingsPage());
-            }
         }
     }
 }

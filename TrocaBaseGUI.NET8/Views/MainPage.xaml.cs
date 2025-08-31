@@ -21,7 +21,7 @@ namespace TrocaBaseGUI.Views
     public partial class MainPage : Page, INotifyPropertyChanged
     {
         public ObservableCollection<DatabaseModel> listaBancos { get; set; }
-        public ObservableCollection<SysDirectory> hist { get; set; }
+        public ObservableCollection<SysDirectoryModel> hist { get; set; }
         private MainViewModel viewModel;
         public int tabSelected;
         public string rbSelected;
@@ -37,7 +37,7 @@ namespace TrocaBaseGUI.Views
             viewModel = vm;
             this.DataContext = viewModel;
 
-            hist = new ObservableCollection<SysDirectory>(viewModel.History);
+            hist = new ObservableCollection<SysDirectoryModel>(viewModel.History);
 
             listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
             lstTodosBancos.ItemsSource = listaBancos;
@@ -58,6 +58,7 @@ namespace TrocaBaseGUI.Views
             //{
             //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
             //}
+            Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.DefaultLoginCheckbox}\n\n");
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -188,16 +189,16 @@ namespace TrocaBaseGUI.Views
         private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
-            var selectedItem = comboBox.SelectedItem as SysDirectory;
+            var selectedItem = comboBox.SelectedItem as SysDirectoryModel;
 
             string selectedDir = comboBox.SelectedValue as string;
 
             if (string.IsNullOrEmpty(selectedDir)) return;
 
-            viewModel.ExeFilesList = SysDirectory.GetDir(viewModel.History, selectedDir)?.ExeList;
+            viewModel.ExeFilesList = SysDirectoryModel.GetDir(viewModel.History, selectedDir)?.ExeList;
             exeSys.ItemsSource = viewModel.ExeFilesList;
 
-            int selectedBaseDir = SysDirectory.GetDir(viewModel.History, selectedDir).SelectedBase;
+            int selectedBaseDir = SysDirectoryModel.GetDir(viewModel.History, selectedDir).SelectedBase;
 
             if (selectedItem != null)
             {
@@ -251,7 +252,12 @@ namespace TrocaBaseGUI.Views
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new LocalSettingsPage());
+            var settings = new SettingsWindow();
+
+            Application.Current.MainWindow = settings;
+            settings.Show();
+
+            Window.GetWindow(this)?.Close();
         }
 
         private void EditarBase_Click(object sender, RoutedEventArgs e)

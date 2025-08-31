@@ -1,0 +1,165 @@
+﻿<Window x:Class="TrocaBaseGUI.Views.ServerPortsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrocaBaseGUI.Views"
+        mc:Ignorable="d"
+        Title="ServerPortsWindow" Height="450" Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        x:Name="serverPortsWindow">
+    <Border Background="#101e24" CornerRadius="10" BorderBrush="#2a353a" BorderThickness="1" Padding="6" Height="450" VerticalAlignment="Top">
+        <Grid>
+            <!--<Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="#101e24"/>-->
+            <ListBox x:Name="AppList"
+                 Margin="29,69,29,45"
+                 ItemsSource="{Binding appList}"
+                 BorderThickness="1"
+                 BorderBrush="#28343a"
+                 Background="#101e24"
+                 Foreground="#f5f4f3"
+                 Focusable="True" RenderTransformOrigin="0.5,0.5" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-0.037"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </ListBox.RenderTransform>
+                <ListBox.Template>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="#28343a"
+                            BorderThickness="1"
+                            CornerRadius="5, 5, 5, 5"
+                            SnapsToDevicePixels="True"
+                            Padding="{TemplateBinding Padding}">
+                            <ScrollViewer Focusable="false" Padding="0"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </ListBox.Template>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- conteúdo -->
+                                <RowDefinition Height="1"/>
+                                <!-- linha separadora -->
+                            </Grid.RowDefinitions>
+                            
+                            <Grid>
+                                <TextBlock Text="{Binding App}" FontSize="12" Padding="5,5,0,5" Margin="0,0,182,0"/>
+                                <Border Background="#19262c" BorderBrush="#2a353a" BorderThickness="1" CornerRadius="5" 
+                                        Margin="138,5,128,5">
+                                    <TextBox x:Name="serverPort" 
+                                         Padding="0,-1,0,1"
+                                         Height="15" Width="47"
+                                         Background="Transparent" 
+                                         Foreground="#f5f4f3" 
+                                         FontSize="12" 
+                                         TextWrapping="Wrap" 
+                                         MaxLength="5" 
+                                         TextAlignment="Center"
+                                         Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" 
+                                         BorderThickness="0"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+                                </Border>
+                                <Border Background="#19262c" BorderBrush="#2a353a" BorderThickness="1" CornerRadius="5" 
+                                        Margin="205,5,61,5">
+                                    <TextBox x:Name="serverPort2" 
+                                         Padding="0,-1,0,1"
+                                         Height="15" Width="47"
+                                         Background="Transparent" 
+                                         Foreground="#f5f4f3" 
+                                         FontSize="12" 
+                                         TextWrapping="Wrap" 
+                                         MaxLength="5" 
+                                         TextAlignment="Center"
+                                         Text="" 
+                                         BorderThickness="0"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                            <Border Height="1" Background="#252E33" Grid.Row="1" Margin="3,2,17,-2"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="3"
+                                    Padding="2"
+                                    SnapsToDevicePixels="True" 
+                                    Width="320">
+                                        <ContentPresenter />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#101e24"/>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="#2a353a"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#101e24"/>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="#2a353a"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="FontWeight" Value="Normal" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+
+            <Button Content="Voltar" Click="VoltarButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="115,401,115,10" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="5"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Border>
+</Window>

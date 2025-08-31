@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -39,23 +40,39 @@ namespace TrocaBaseGUI.Services
             return File.Exists(path + "\\conexao.dat") || File.Exists(path + "\\ConexaoServidor.dat");
         }
 
-        public void SetConexaoAddress(string add)
+        //Refatorar 
+        public string GetConexaoType(string path)
         {
-            //if (String.IsNullOrEmpty(add) || ValidateSystemPath(add)) return;
-
-            //ConexaoFile = Path.Combine(add, "conexao.dat");
-            //ConexaoFilePath = add;
-
-            if (String.IsNullOrEmpty(add)) return;
-            if (ValidateSystemPath(add))
+            if (File.Exists($"{path}\\conexao.dat"))
             {
-                ConexaoFile = Path.Combine(add, "conexao.dat");
-                ConexaoFilePath = add;
+                return "conexao.dat";
+            }
+            else if (File.Exists(Path.Combine(path, "ConexaoServidor.dat")))
+            {
+                return "ConexaoServidor.dat";
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void SetConexaoAddress(string path)
+        {
+            if (String.IsNullOrEmpty(path)) return;
+
+            if (ValidateSystemPath(path))
+            {
+                //ConexaoFile = Path.Combine(path, "conexao.dat");
+                ConexaoFile = Path.Combine(path, GetConexaoType(path));
+                ConexaoFilePath = path;
             }
             else
             {
                 Console.WriteLine("caminho inválido");
             }
+
+            Debug.WriteLine($"Caminho do arquivo de conexão: {ConexaoFile}");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -10,18 +10,20 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainWindow : Window
     {
-        public MainViewModel MainVM { get; private set; }
+        //public MainViewModel MainVM { get; private set; }
+        public MainViewModel viewModel;
         public Frame MainFramePublic => MainFrame;
         public MainWindow()
         {
             InitializeComponent();
+            viewModel = MainViewModel.Instance;
+            DataContext = viewModel;
 
-            MainVM = new MainViewModel();
-            MainFrame.Navigate(new MainPage(MainVM));
+            MainFrame.Navigate(new MainPage(viewModel));
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MainVM.SaveState();
+            viewModel.SaveState();
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -32,7 +34,7 @@ namespace TrocaBaseGUI.Views
 
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
-            MainVM.SaveState();
+            viewModel.SaveState();
             Application.Current.Shutdown();
         }
 
