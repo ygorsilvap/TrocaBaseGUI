@@ -77,45 +77,20 @@ namespace TrocaBaseGUI.Models
             { serverOracleConnection = value; OnPropertyChanged(); }
         }
 
-
-        private bool defaultLoginCheckbox;
-        public bool DefaultLoginCheckbox
+        private AppParams localParams = new AppParams();
+        public AppParams LocalParams
         {
-            get => defaultLoginCheckbox;
+            get => localParams;
             set
-            { defaultLoginCheckbox = value; OnPropertyChanged(); }
+            { localParams = value; OnPropertyChanged(); }
         }
 
-        private bool defaultPasswordCheckbox;
-        public bool DefaultPasswordCheckbox
+        private AppParams serverParams = new AppParams();
+        public AppParams ServerParams
         {
-            get => defaultPasswordCheckbox;
+            get => serverParams;
             set
-            { defaultPasswordCheckbox = value; OnPropertyChanged(); }
-        }
-
-        private bool editorCheckbox;
-        public bool EditorCheckbox
-        {
-            get => editorCheckbox;
-            set
-            { editorCheckbox = value; OnPropertyChanged(); }
-        }
-
-        private bool dirUpdateCheckbox;
-        public bool DirUpdateCheckbox
-        {
-            get => dirUpdateCheckbox;
-            set
-            { dirUpdateCheckbox = value; OnPropertyChanged(); }
-        }
-
-        private bool useWebMenuCheckbox;
-        public bool UseWebMenuCheckbox
-        {
-            get => useWebMenuCheckbox;
-            set
-            { useWebMenuCheckbox = value; OnPropertyChanged(); }
+            { serverParams = value; OnPropertyChanged(); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

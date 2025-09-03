@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Text.Json;
+using Microsoft.IdentityModel.Tokens;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
 
@@ -83,8 +84,8 @@ namespace TrocaBaseGUI.ViewModels
         public async Task openSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection)
         {
             //Revisar lógica
-            if (sqlServerConnection.IsValid())
-                return;
+            //if (sqlServerConnection.IsValid())
+            //    return;
 
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
@@ -161,6 +162,26 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
+        public string CreateConnectionFileSettings(ConexaoFileModel conexao, AppParams appParams)
+        {
+            if(conexao.Tier == 2)
+            {
+                string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
+                string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
+                string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
+                string diretorioAtualizacao = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
+                string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
+                string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, diretorioAtualizacao, useWebMenu);
+
+                //Debug.WriteLine($"\n\n'{settings}'\n\n");
+
+                return settings;
+            } else
+            {
+                return "";
+            }
+
+        }
 
         //Continuar daqui, talvez refazer
 
@@ -228,10 +249,8 @@ namespace TrocaBaseGUI.ViewModels
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
         {
             var conexaoService = conexaoFileService;
-            List<String> conexaoLines = File.ReadAllLines(conexaoFile).ToList();
-            int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
-            int index = 0;
 
+            //Rever a necessidade disso
             string cnxPath = conexaoFileService.ConexaoFilePath;
             string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
                 History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
@@ -239,43 +258,70 @@ namespace TrocaBaseGUI.ViewModels
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
 
-            if (conexaoLines.Count > 0)
-            {
-                if (bancoIndex >= 0)
-                {
-                    // Remove tudo a partir do [BANCODADOS]
-                    conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
-                    index = bancoIndex;
-                }
-                else
-                {
-                    // Se não encontrou, adiciona duas linhas vazias e escreve no final
-                    if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
-                    {
-                        conexaoLines.Add("");
-                        conexaoLines.Add("");
-                    }
-                    index = conexaoLines.Count;
-                }
-            }
+            string conexaoSettings = CreateConnectionFileSettings(Conexao2Camadas, appState.LocalParams);
 
             string newConn = dbs[id].DbType.ToLower().StartsWith("s")
-               ? SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)
-               : OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name);
+               ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
+               : $"{OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name)}\n\n";
 
-            var newConnLines = newConn.Split('\n');
-
-            //Adiciona a nova string
-            conexaoLines.InsertRange(index, newConnLines);
-
-            File.WriteAllLines(conexaoFile, conexaoLines);
+            File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoSettings));
 
             DatabaseModel.SetSelection(dbs, dbs[id].Id);
             SysDirectoryModel.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
             SelDatabase = dbs[id];
-
-            //Debug.WriteLine($"\n\nid: {History.FirstOrDefault(d => d.SelectedBase > -1).SelectedBase}, name: {id}");
         }
+
+        //public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
+        //{
+        //    var conexaoService = conexaoFileService;
+        //    List<String> conexaoLines = File.ReadAllLines(conexaoFile).ToList();
+        //    int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
+        //    int index = 0;
+
+        //    string cnxPath = conexaoFileService.ConexaoFilePath;
+        //    string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
+        //        History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
+
+        //    if (string.IsNullOrEmpty(selectedCnx))
+        //        return;
+
+        //    if (conexaoLines.Count > 0)
+        //    {
+        //        if (bancoIndex >= 0)
+        //        {
+        //            // Remove tudo a partir do [BANCODADOS]
+        //            conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
+        //            index = bancoIndex;
+        //        }
+        //        else
+        //        {
+        //            // Se não encontrou, adiciona duas linhas vazias e escreve no final
+        //            if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
+        //            {
+        //                conexaoLines.Add("");
+        //                conexaoLines.Add("");
+        //            }
+        //            index = conexaoLines.Count;
+        //        }
+        //    }
+
+        //    string newConn = dbs[id].DbType.ToLower().StartsWith("s")
+        //       ? SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)
+        //       : OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name);
+
+        //    var newConnLines = newConn.Split('\n');
+
+        //    //Adiciona a nova string
+        //    conexaoLines.InsertRange(index, newConnLines);
+
+        //    File.WriteAllLines(conexaoFile, conexaoLines);
+
+        //    DatabaseModel.SetSelection(dbs, dbs[id].Id);
+        //    SysDirectoryModel.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
+        //    SelDatabase = dbs[id];
+
+        //    //Debug.WriteLine($"\n\nid: {History.FirstOrDefault(d => d.SelectedBase > -1).SelectedBase}, name: {id}");
+        //}
 
         public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)
         {
@@ -354,7 +400,6 @@ namespace TrocaBaseGUI.ViewModels
             //Properties.Settings.Default.ServerOraInstanceMem = ServerOracleConnection.Instance;
 
             //Properties.Settings.Default.Save();
-        
 
         public void LoadState()
         {

@@ -35,7 +35,7 @@ namespace TrocaBaseGUI.Views
         {
             if(string.IsNullOrEmpty(server))
             {
-                MessageBox.Show("O campo do servidor SQL Server não pode estar vazio.");
+                //MessageBox.Show("O campo do servidor SQL Server não pode estar vazio.");
                 return;
             }
             else
@@ -62,6 +62,7 @@ namespace TrocaBaseGUI.Views
             if (await _viewModel.SqlService.ValidateConnection(sqlServerConnection))
             {
                 SetSqlServerSettings(sqlServerServer.Text);
+                await _viewModel.openSqlConn(_viewModel.SqlService, _viewModel.LocalSQLServerConnection);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //SqlMedT.Add(elapsed.TotalMilliseconds);
@@ -93,11 +94,9 @@ namespace TrocaBaseGUI.Views
 
             if (_viewModel.OracleService.GetRunningInstances().Count > 0 &&
                     await _viewModel.OracleService.ValidateConnection(oracleConnection, _viewModel.OracleService.GetRunningInstances()[0]))
-            //await _viewModel.OracleService.ValidateConnection(OracleServer.Text, OraclePassword.Password, OraclePort.Text, 
-            //        _viewModel.OracleService.GetRunningInstances()[0], _viewModel.LocalOracleConnection.Environment))
-
             {
                 SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
+                await _viewModel.openOracleConn(_viewModel.OracleService, _viewModel.LocalOracleConnection);
                 //sw.Stop();
                 //TimeSpan elapsed = sw.Elapsed;
                 //OraMedT.Add(elapsed.TotalMilliseconds);

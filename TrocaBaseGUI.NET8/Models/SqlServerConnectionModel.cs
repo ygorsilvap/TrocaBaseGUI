@@ -40,7 +40,7 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
     }
     public bool IsValid()
     {
-        return string.IsNullOrEmpty(Server) || string.IsNullOrEmpty(Password);
+        return string.IsNullOrEmpty(Server);// || string.IsNullOrEmpty(Password);
     }
     public string GetConnectionString(SqlServerConnectionModel sqlServerConnection)
     {

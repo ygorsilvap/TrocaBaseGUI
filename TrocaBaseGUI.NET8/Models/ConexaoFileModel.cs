@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 namespace TrocaBaseGUI.Models
 {
     public class ConexaoFileModel : INotifyPropertyChanged
+
     {
         public ConexaoFileModel() 
         {
@@ -15,61 +16,61 @@ namespace TrocaBaseGUI.Models
             }
         }
 
-        //Construtor 2Camadas
-        public ConexaoFileModel(string path, int tier, string defaultLogin = null, string defaultPassword = null,
-            string textEditorPath = null, string updateFolder = null, string useWebMenu = null)
-        {
-            Path = path;
-            Tier = tier;
-            DefaultLogin = defaultLogin;
-            DefaultPassword = defaultPassword;
-            TextEditorPath = textEditorPath;
-            UpdateFolder = updateFolder;
-            UseWebMenu = useWebMenu;
-            UseRedirect = null;
-            RedirectPort = null;
-            ServerPorts = null;
-            ClientPorts = null;
-            RedirectPorts = null;
-        }
+        ////Construtor 2Camadas
+        //public ConexaoFileModel(string path, int tier, string defaultLogin = null, string defaultPassword = null,
+        //    string textEditorPath = null, string updateFolder = null, string useWebMenu = null)
+        //{
+        //    Path = path;
+        //    Tier = tier;
+        //    DefaultLogin = defaultLogin;
+        //    DefaultPassword = defaultPassword;
+        //    TextEditorPath = textEditorPath;
+        //    UpdateFolder = updateFolder;
+        //    UseWebMenu = useWebMenu;
+        //    UseRedirect = null;
+        //    RedirectPort = null;
+        //    ServerPorts = null;
+        //    ClientPorts = null;
+        //    RedirectPorts = null;
+        //}
 
-        //Construtor 3Camadas Portas Padrões
-        public ConexaoFileModel(string path, int tier, string defaultLogin = null, string defaultPassword = null,
-            string textEditorPath = null, string updateFolder = null, string useWebMenu = null, string useRedirect = null, string redirectPort = null)
-        {
-            Path = path;
-            Tier = tier;
-            DefaultLogin = defaultLogin;
-            DefaultPassword = defaultPassword;
-            TextEditorPath = textEditorPath;
-            UpdateFolder = updateFolder;
-            UseWebMenu = useWebMenu;
-            UseRedirect = useRedirect;
-            RedirectPort = redirectPort;
-            ServerPorts = CreateDefaultAppConn();
-            ClientPorts = CreateDefaultAppConn();
-            RedirectPorts = CreateDefaultAppConnNames();
-        }
+        ////Construtor 3Camadas Portas Padrões
+        //public ConexaoFileModel(string path, int tier, string defaultLogin = null, string defaultPassword = null,
+        //    string textEditorPath = null, string updateFolder = null, string useWebMenu = null, string useRedirect = null, string redirectPort = null)
+        //{
+        //    Path = path;
+        //    Tier = tier;
+        //    DefaultLogin = defaultLogin;
+        //    DefaultPassword = defaultPassword;
+        //    TextEditorPath = textEditorPath;
+        //    UpdateFolder = updateFolder;
+        //    UseWebMenu = useWebMenu;
+        //    UseRedirect = useRedirect;
+        //    RedirectPort = redirectPort;
+        //    ServerPorts = CreateDefaultAppConn();
+        //    ClientPorts = CreateDefaultAppConn();
+        //    RedirectPorts = CreateDefaultAppConnNames();
+        //}
 
-        //Construtor 3Camadas Portas Customizadas
-        public ConexaoFileModel(string path, int tier, string redirectPort,
-            ObservableCollection<AppConn> serverPorts, ObservableCollection<AppConn> clientPorts,
-            ObservableCollection<AppConn> redirectPorts, string defaultLogin = null, string defaultPassword = null,
-            string textEditorPath = null, string updateFolder = null, string useWebMenu = null, string useRedirect = null)
-        {
-            Path = path;
-            Tier = tier;
-            DefaultLogin = defaultLogin;
-            DefaultPassword = defaultPassword;
-            TextEditorPath = textEditorPath;
-            UpdateFolder = updateFolder;
-            UseWebMenu = useWebMenu;
-            UseRedirect = useRedirect;
-            RedirectPort = redirectPort;
-            ServerPorts = serverPorts ?? CreateDefaultAppConn();
-            ClientPorts = clientPorts ?? CreateDefaultAppConn();
-            RedirectPorts = redirectPorts ?? CreateDefaultAppConnNames();
-        }
+        ////Construtor 3Camadas Portas Customizadas
+        //public ConexaoFileModel(string path, int tier, string redirectPort,
+        //    ObservableCollection<AppConn> serverPorts, ObservableCollection<AppConn> clientPorts,
+        //    ObservableCollection<AppConn> redirectPorts, string defaultLogin = null, string defaultPassword = null,
+        //    string textEditorPath = null, string updateFolder = null, string useWebMenu = null, string useRedirect = null)
+        //{
+        //    Path = path;
+        //    Tier = tier;
+        //    DefaultLogin = defaultLogin;
+        //    DefaultPassword = defaultPassword;
+        //    TextEditorPath = textEditorPath;
+        //    UpdateFolder = updateFolder;
+        //    UseWebMenu = useWebMenu;
+        //    UseRedirect = useRedirect;
+        //    RedirectPort = redirectPort;
+        //    ServerPorts = serverPorts ?? CreateDefaultAppConn();
+        //    ClientPorts = clientPorts ?? CreateDefaultAppConn();
+        //    RedirectPorts = redirectPorts ?? CreateDefaultAppConnNames();
+        //}
 
         private static readonly string[] AppNames = new[]
         {
@@ -152,16 +153,16 @@ namespace TrocaBaseGUI.Models
             { updateFolder = value; OnPropertyChanged(); }
         }
 
-        private string useWebMenu;
-        public string UseWebMenu
+        private bool useWebMenu;
+        public bool UseWebMenu
         {
             get => useWebMenu;
             set
             { useWebMenu = value; OnPropertyChanged(); }
         }
 
-        private string useRedirect;
-        public string UseRedirect
+        private bool useRedirect;
+        public bool UseRedirect
         {
             get => useRedirect;
             set
@@ -180,66 +181,24 @@ namespace TrocaBaseGUI.Models
         public ObservableCollection<AppConn> ServerPorts
         {
             get => serverPorts;
-            set
-            { serverPorts = value; OnPropertyChanged(); }
+            set { serverPorts = value; OnPropertyChanged(); }
         }
 
         private ObservableCollection<AppConn> clientPorts = CreateDefaultAppConn();
         public ObservableCollection<AppConn> ClientPorts
         {
             get => clientPorts;
-            set
-            { clientPorts = value; OnPropertyChanged(); }
+            set { clientPorts = value; OnPropertyChanged(); }
         }
+
 
         //Verificar o funcionamento das portas do redirecionador para definir a função
         private ObservableCollection<AppConn> redirectPorts = CreateDefaultAppConnNames();
         public ObservableCollection<AppConn> RedirectPorts
         {
             get => redirectPorts;
-            set
-            { redirectPorts = value; OnPropertyChanged(); }
+            set { redirectPorts = value; OnPropertyChanged(); }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
-    public class AppConn : INotifyPropertyChanged
-    {
-        public AppConn() { }
-        public AppConn(string app = "", string port = "", string server = "")
-        {
-            App = app;
-            Port = port;
-            Server = server;
-        }
-
-        private string app;
-        public string App
-        {
-            get => app;
-            set
-            { app = value; OnPropertyChanged(); }
-        }
-        private string port;
-        public string Port
-        {
-            get => port;
-            set
-            { port = value; OnPropertyChanged(); }
-        }
-
-        private string server;
-        public string Server
-        {
-            get => server;
-            set
-            { server = value; OnPropertyChanged(); }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

@@ -54,11 +54,12 @@ namespace TrocaBaseGUI.Views
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(listaBancos);
 
-            //foreach (var item in viewModel.Databases)
-            //{
-            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            //}
-            Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.DefaultLoginCheckbox}\n\n");
+            foreach (var item in listaBancos)
+            {
+                
+                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            }
+            //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -341,5 +342,17 @@ namespace TrocaBaseGUI.Views
 
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //Debug.WriteLine($"\n\nTier: {viewModel.Conexao2Camadas.Tier}");
+            //Debug.WriteLine($"\nDefaultLogin: {viewModel.Conexao2Camadas.DefaultLogin}");
+            //Debug.WriteLine($"\nDefaultPassword: {viewModel.Conexao2Camadas.DefaultPassword}");
+            //Debug.WriteLine($"\nTextEditorPath: {viewModel.Conexao2Camadas.TextEditorPath}");
+            //Debug.WriteLine($"\nUpdateFolder: {viewModel.Conexao2Camadas.UpdateFolder}");
+            //Debug.WriteLine($"\nUseWebMenu: {viewModel.Conexao2Camadas.UseWebMenu}\n\n");
+            //Debug.WriteLine($"\n\nUseRedirect: {viewModel.Conexao3Camadas.UseRedirect}\n\n");
+            //Debug.WriteLine($"\n\nRedirectPort: {viewModel.Conexao3Camadas.RedirectPort}\n\n");
+            viewModel.CreateConnectionFileSettings(viewModel.Conexao2Camadas, viewModel.appState.LocalParams);
+        }
     }
 }

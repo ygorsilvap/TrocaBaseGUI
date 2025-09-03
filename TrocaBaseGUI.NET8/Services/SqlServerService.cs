@@ -69,6 +69,9 @@ namespace TrocaBaseGUI.Services
         //Refatorar
         public async Task<Boolean> ValidateConnection(SqlServerConnectionModel sqlServerConnection, double timeoutSeconds = 3000)
         {
+            if (sqlServerConnection.IsValid())
+                return false;
+
             try
             {
                 var connectionString = _connection.GetConnectionString(sqlServerConnection);
