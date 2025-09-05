@@ -23,7 +23,7 @@ namespace TrocaBaseGUI.Views
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            viewModel.SaveState();
+            viewModel.appStateService.SaveState(viewModel);
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -34,7 +34,7 @@ namespace TrocaBaseGUI.Views
 
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.SaveState();
+            viewModel.appStateService.SaveState(viewModel);
             Application.Current.Shutdown();
         }
 

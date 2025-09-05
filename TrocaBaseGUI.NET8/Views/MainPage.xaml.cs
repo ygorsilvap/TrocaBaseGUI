@@ -20,7 +20,7 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page, INotifyPropertyChanged
     {
-        public ObservableCollection<DatabaseModel> listaBancos { get; set; }
+        public ObservableCollection<DatabaseModel> dbList { get; set; } = new ObservableCollection<DatabaseModel>();
         public ObservableCollection<SysDirectoryModel> hist { get; set; }
         private MainViewModel viewModel;
         public int tabSelected;
@@ -39,10 +39,9 @@ namespace TrocaBaseGUI.Views
 
             hist = new ObservableCollection<SysDirectoryModel>(viewModel.History);
 
-            listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
-            lstTodosBancos.ItemsSource = listaBancos;
-
-            foreach (var item in listaBancos) DatabaseModel.SetDisplayName(item, item.DisplayName);
+            //dbList = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
+            //lstTodosBancos.ItemsSource = dbList;
+            //foreach (var item in dbList) DatabaseModel.SetDisplayName(item, item.DisplayName);
 
 
             RadioButton_Checked(rbTodos, null);
@@ -52,13 +51,13 @@ namespace TrocaBaseGUI.Views
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             OpenExeButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
-            GetFilter(listaBancos);
+            GetFilter(dbList);
 
-            foreach (var item in listaBancos)
-            {
-                
-                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            }
+            //foreach (var item in listaBancos)
+            //{
+
+            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            //}
             //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
         }
 
@@ -73,24 +72,21 @@ namespace TrocaBaseGUI.Views
             await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
             await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
 
-            listaBancos.Clear();
+            dbList.Clear();
 
             foreach (var db in viewModel.Databases)
             {
                 DatabaseModel.SetDisplayName(db, db.DisplayName);
-                listaBancos.Add(db);
+                dbList.Add(db);
             }
 
-            //DatabaseModel.SetSelection(listaBancos,viewModel.SelDatabase.Id);
-            //DatabaseModel.SetSelection(listaBancos, viewModel.History.FirstOrDefault(i => i.SelectedBase >= 0).SelectedBase);
-
-
-            GetFilter(listaBancos);
+            GetFilter(dbList);
         }
 
         private void GetFilter(ObservableCollection<DatabaseModel> db)
         {
             if (!(DataContext is MainViewModel vm)) return;
+
 
             string environment = tabSelected == 0 ? "local" : "server";
             string type = null;
@@ -118,14 +114,14 @@ namespace TrocaBaseGUI.Views
         {
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
-            listaBancos = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
-            lstTodosBancos.ItemsSource = listaBancos;
+            dbList = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
+            lstTodosBancos.ItemsSource = dbList;
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
-            GetFilter(listaBancos);
+            GetFilter(dbList);
         }
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -140,16 +136,9 @@ namespace TrocaBaseGUI.Views
 
             Refresh();
         }
-
-        private void CloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            viewModel.SaveState();
-            Application.Current.Shutdown();
-        }
-
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            GetFilter(listaBancos);
+            GetFilter(dbList);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -157,7 +146,7 @@ namespace TrocaBaseGUI.Views
             if (e.Source is TabControl tabControl)
                 tabSelected = tabControl.SelectedIndex;
 
-            GetFilter(listaBancos);
+            GetFilter(dbList);
         }
 
         private void SelecionarExecutavel_Click(object sender, RoutedEventArgs e)
@@ -206,10 +195,10 @@ namespace TrocaBaseGUI.Views
                 viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
                 MainViewModel.exeFile = selectedItem.MainExeFile;
 
-                if (listaBancos.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0) && selectedBaseDir > 0)
+                if (dbList.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0) && selectedBaseDir > 0)
                 {
-                    DatabaseModel.SetSelection(listaBancos, selectedBaseDir);
-                    viewModel.SelDatabase = listaBancos[selectedBaseDir];
+                    DatabaseModel.SetSelection(dbList, selectedBaseDir);
+                    viewModel.SelDatabase = dbList[selectedBaseDir];
                 }
             }
 
@@ -317,7 +306,7 @@ namespace TrocaBaseGUI.Views
         private void dbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             string environment = tabSelected == 0 ? "local" : "server";
-            lstTodosBancos.ItemsSource = listaBancos.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
+            lstTodosBancos.ItemsSource = dbList.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
             && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
         }
 
@@ -352,7 +341,7 @@ namespace TrocaBaseGUI.Views
             //Debug.WriteLine($"\nUseWebMenu: {viewModel.Conexao2Camadas.UseWebMenu}\n\n");
             //Debug.WriteLine($"\n\nUseRedirect: {viewModel.Conexao3Camadas.UseRedirect}\n\n");
             //Debug.WriteLine($"\n\nRedirectPort: {viewModel.Conexao3Camadas.RedirectPort}\n\n");
-            viewModel.CreateConnectionFileSettings(viewModel.Conexao2Camadas, viewModel.appState.LocalParams);
+            viewModel.conexaoFileService.CreateConnectionFileSettings(viewModel.Conexao2Camadas, viewModel.appState.LocalParams);
         }
     }
 }

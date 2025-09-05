@@ -279,7 +279,7 @@
 
         <ListBox x:Name="lstTodosBancos"
                  Margin="80,155,80,112"
-                 ItemsSource="{Binding listaBancos}"
+                 ItemsSource="{Binding Databases}"
                  SelectedItem="{Binding SelDatabase}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
                  BorderThickness="1"

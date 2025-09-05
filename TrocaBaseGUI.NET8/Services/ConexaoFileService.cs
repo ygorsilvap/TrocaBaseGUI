@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using TrocaBaseGUI.Models;
 
 namespace TrocaBaseGUI.Services
 {
@@ -73,6 +74,28 @@ namespace TrocaBaseGUI.Services
             }
 
             Debug.WriteLine($"Caminho do arquivo de conexão: {ConexaoFile}");
+        }
+
+        public string CreateConnectionFileSettings(ConexaoFileModel conexao, AppParams appParams)
+        {
+            if (conexao.Tier == 2)
+            {
+                string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
+                string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
+                string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
+                string diretorioAtualizacao = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
+                string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
+                string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, diretorioAtualizacao, useWebMenu);
+
+                //Debug.WriteLine($"\n\n'{settings}'\n\n");
+
+                return settings;
+            }
+            else
+            {
+                return "";
+            }
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

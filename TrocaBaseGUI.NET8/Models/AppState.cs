@@ -10,6 +10,8 @@ namespace TrocaBaseGUI.Models
 {
     public class AppState : INotifyPropertyChanged
     {
+        public AppState() { }
+
         private List<SysDirectoryModel> history;
         public List<SysDirectoryModel> History
         {

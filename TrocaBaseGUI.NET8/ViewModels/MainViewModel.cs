@@ -40,11 +40,13 @@ namespace TrocaBaseGUI.ViewModels
         public ObservableCollection<SysDirectoryModel> History { get; set; } = new ObservableCollection<SysDirectoryModel>();
         public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
         public AppState appState { get; set; } = new AppState();
+        public AppStateService appStateService { get; set; } = new AppStateService();
 
         public MainViewModel()
         {
             conexaoFileService = new ConexaoFileService();
-            LoadState();
+
+            appStateService.LoadState(this);
 
             SqlService = new SqlServerService(LocalSQLServerConnection);
             OracleService = new OracleService(LocalOracleConnection);
@@ -56,27 +58,6 @@ namespace TrocaBaseGUI.ViewModels
                     OnPropertyChanged(nameof(conexaoFile));
                 }
             };
-            appState = new AppState()
-            {
-                History = History.ToList(),
-                Databases = Databases.ToList(),
-                ExeFile = exeFile,
-                ConexaoFile = conexaoFile,
-                LocalSQLServerConnection = LocalSQLServerConnection,
-                ServerSQLServerConnection = ServerSQLServerConnection,
-                LocalOracleConnection = LocalOracleConnection,
-                ServerOracleConnection = ServerOracleConnection
-            };
-
-            //foreach(var item in Conexao3Camadas.ClientPorts)
-            //{
-            //    Debug.WriteLine($"Client App: {item.App} - Port: {item.Port}");
-            //}
-
-            //foreach (var item in Conexao3Camadas.ServerPorts)
-            //{
-            //    Debug.WriteLine($"Server App: {item.App} - Port: {item.Port}");
-            //}
 
         }
 
@@ -84,8 +65,8 @@ namespace TrocaBaseGUI.ViewModels
         public async Task openSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection)
         {
             //Revisar lógica
-            //if (sqlServerConnection.IsValid())
-            //    return;
+            if (sqlServerConnection.IsValid())
+                return;
 
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
@@ -162,90 +143,6 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public string CreateConnectionFileSettings(ConexaoFileModel conexao, AppParams appParams)
-        {
-            if(conexao.Tier == 2)
-            {
-                string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
-                string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
-                string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
-                string diretorioAtualizacao = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
-                string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
-                string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, diretorioAtualizacao, useWebMenu);
-
-                //Debug.WriteLine($"\n\n'{settings}'\n\n");
-
-                return settings;
-            } else
-            {
-                return "";
-            }
-
-        }
-
-        //Continuar daqui, talvez refazer
-
-        //public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
-        //{
-        //    var conexaoService = conexaoFileService;
-        //    List<String> conexaoLines = File.ReadAllLines(conexaoFile).ToList();
-        //    int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
-        //    int index = 0;
-
-        //    string cnxPath = conexaoFileService.ConexaoFilePath;
-        //    string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
-        //        History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
-
-        //    if (string.IsNullOrEmpty(selectedCnx))
-        //        return;
-
-        //    if (conexaoLines.Count > 0)
-        //    {
-        //        if (bancoIndex >= 0)
-        //        {
-        //            int lastFreeIndex = conexaoLines.Any(line => line.IndexOf("[porta", StringComparison.OrdinalIgnoreCase) >= 0) ?
-        //                                conexaoLines.IndexOf(conexaoLines.First(l => l.ToLower().StartsWith("[porta") || l.ToLower().StartsWith("//[porta"))) : 
-        //                                conexaoLines.IndexOf(conexaoLines.FirstOrDefault(l => l.Equals(string.Empty)));
-
-        //            conexaoLines.RemoveRange(bancoIndex, lastFreeIndex - bancoIndex);
-
-        //            index = bancoIndex;
-        //        }
-        //        else
-        //        {
-        //            ////Se não encontrou, adiciona duas linhas vazias e escreve no final
-        //            //if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
-        //            //{
-        //            //    conexaoLines.Add("");
-        //            //    conexaoLines.Add("");
-        //            //}
-        //            //index = conexaoLines.Count;
-        //        }
-        //    }
-
-        //    string newConn = dbs[id].DbType.ToLower().StartsWith("s")
-        //       ? SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)
-        //       : OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name);
-
-        //    var newConnLines = newConn.Split('\n');
-
-        //    //Adiciona a nova string
-        //    conexaoLines.InsertRange(index, newConnLines);
-
-        //    if (!string.IsNullOrEmpty(conexaoLines[conexaoLines.IndexOf(newConnLines.Last()) + 1]))
-        //        conexaoLines.Insert(conexaoLines.IndexOf(newConnLines.Last()) + 1, "");
-
-
-        //    //Debug.WriteLine($"\n{newConnLines.Last()}\n");
-
-
-        //    File.WriteAllLines(conexaoFile, conexaoLines);
-
-        //    DatabaseModel.SetSelection(dbs, dbs[id].Id);
-        //    SysDirectory.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
-        //    SelDatabase = dbs[id];
-        //}
-
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
         {
             var conexaoService = conexaoFileService;
@@ -258,7 +155,7 @@ namespace TrocaBaseGUI.ViewModels
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
 
-            string conexaoSettings = CreateConnectionFileSettings(Conexao2Camadas, appState.LocalParams);
+            string conexaoSettings = conexaoService.CreateConnectionFileSettings(Conexao2Camadas, appState.LocalParams);
 
             string newConn = dbs[id].DbType.ToLower().StartsWith("s")
                ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
@@ -270,58 +167,6 @@ namespace TrocaBaseGUI.ViewModels
             SysDirectoryModel.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
             SelDatabase = dbs[id];
         }
-
-        //public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
-        //{
-        //    var conexaoService = conexaoFileService;
-        //    List<String> conexaoLines = File.ReadAllLines(conexaoFile).ToList();
-        //    int bancoIndex = conexaoLines.FindIndex(line => line.IndexOf("[BANCODADOS]", StringComparison.OrdinalIgnoreCase) >= 0);
-        //    int index = 0;
-
-        //    string cnxPath = conexaoFileService.ConexaoFilePath;
-        //    string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
-        //        History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
-
-        //    if (string.IsNullOrEmpty(selectedCnx))
-        //        return;
-
-        //    if (conexaoLines.Count > 0)
-        //    {
-        //        if (bancoIndex >= 0)
-        //        {
-        //            // Remove tudo a partir do [BANCODADOS]
-        //            conexaoLines.RemoveRange(bancoIndex, conexaoLines.Count - bancoIndex);
-        //            index = bancoIndex;
-        //        }
-        //        else
-        //        {
-        //            // Se não encontrou, adiciona duas linhas vazias e escreve no final
-        //            if (!string.IsNullOrWhiteSpace(conexaoLines.Last()))
-        //            {
-        //                conexaoLines.Add("");
-        //                conexaoLines.Add("");
-        //            }
-        //            index = conexaoLines.Count;
-        //        }
-        //    }
-
-        //    string newConn = dbs[id].DbType.ToLower().StartsWith("s")
-        //       ? SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)
-        //       : OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name);
-
-        //    var newConnLines = newConn.Split('\n');
-
-        //    //Adiciona a nova string
-        //    conexaoLines.InsertRange(index, newConnLines);
-
-        //    File.WriteAllLines(conexaoFile, conexaoLines);
-
-        //    DatabaseModel.SetSelection(dbs, dbs[id].Id);
-        //    SysDirectoryModel.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
-        //    SelDatabase = dbs[id];
-
-        //    //Debug.WriteLine($"\n\nid: {History.FirstOrDefault(d => d.SelectedBase > -1).SelectedBase}, name: {id}");
-        //}
 
         public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)
         {
@@ -346,114 +191,8 @@ namespace TrocaBaseGUI.ViewModels
 
             while (History.Count > MaxHistory)
             {
-                History.RemoveAt(History.Count - 1); 
+                History.RemoveAt(History.Count - 1);
             }
-        }
-
-        public void SaveState()
-        {
-            //var state = new AppState
-            //{
-            //    History = History.ToList(),
-            //    Databases = Databases.ToList(),
-            //    ExeFile = exeFile,
-            //    ConexaoFile = conexaoFile,
-            //    LocalSQLServerConnection = LocalSQLServerConnection,
-            //    ServerSQLServerConnection = ServerSQLServerConnection,
-            //    LocalOracleConnection = LocalOracleConnection,
-            //    ServerOracleConnection = ServerOracleConnection
-            //};
-
-            string json = JsonSerializer.Serialize(appState, new JsonSerializerOptions { WriteIndented = true });
-            Properties.Settings.Default.AppStateJson = json;
-            Properties.Settings.Default.Save();
-        }
-            //List<SysDirectoryModel> historyList = History.ToList();
-            //string HistoricoSerialized = JsonSerializer.Serialize(historyList);
-            //if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-            //{
-            //    Properties.Settings.Default.HistoricoMem = HistoricoSerialized;
-            //}
-
-            //List<DatabaseModel> dbList = Databases.ToList();
-            //string DatabasesSerialized = JsonSerializer.Serialize(dbList);
-            //if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))
-            //{
-            //    Properties.Settings.Default.DatabasesMem = DatabasesSerialized;
-            //}
-
-            //Properties.Settings.Default.ExeFileMem = exeFile;
-            //Properties.Settings.Default.ConexaoFileMem = conexaoFile;
-
-            //Properties.Settings.Default.LocalSqlServerMem = LocalSQLServerConnection.Server;
-            //Properties.Settings.Default.ServerSqlServerMem = ServerSQLServerConnection.Server;
-            //Properties.Settings.Default.ServerSqlServerPasswordMem = ServerSQLServerConnection.Password;
-            //Properties.Settings.Default.ServerSqlServerUsernameMem = ServerSQLServerConnection.Username;
-
-            //Properties.Settings.Default.LocalOraServerMem = LocalOracleConnection.Server;
-            //Properties.Settings.Default.LocalOraPasswordMem = LocalOracleConnection.Password;
-            //Properties.Settings.Default.LocalOraPortMem = LocalOracleConnection.Port;
-
-            //Properties.Settings.Default.ServerOraServerMem = ServerOracleConnection.Server;
-            //Properties.Settings.Default.ServerOraPasswordMem = ServerOracleConnection.Password;
-            //Properties.Settings.Default.ServerOraPortMem = ServerOracleConnection.Port;
-            //Properties.Settings.Default.ServerOraInstanceMem = ServerOracleConnection.Instance;
-
-            //Properties.Settings.Default.Save();
-
-        public void LoadState()
-        {
-            string json = Properties.Settings.Default.AppStateJson;
-
-            if (!string.IsNullOrEmpty(json))
-            {
-                var state = JsonSerializer.Deserialize<AppState>(json);
-
-                if (state != null)
-                {
-                    History = new ObservableCollection<SysDirectoryModel>(state.History);
-                    Databases = new ObservableCollection<DatabaseModel>(state.Databases);
-                    exeFile = state.ExeFile;
-                    conexaoFile = state.ConexaoFile;
-
-                    LocalSQLServerConnection = state.LocalSQLServerConnection;
-                    ServerSQLServerConnection = state.ServerSQLServerConnection;
-                    LocalOracleConnection = state.LocalOracleConnection;
-                    ServerOracleConnection = state.ServerOracleConnection;
-                }
-            }
-            //exeFile = Properties.Settings.Default.ExeFileMem;
-            //conexaoFile = Properties.Settings.Default.ConexaoFileMem;
-            ////conexaoFileService.SetConexaoAddress(Properties.Settings.Default.ConexaoFileMem);
-            //LocalSQLServerConnection.Server = Properties.Settings.Default.LocalSqlServerMem;
-            //ServerSQLServerConnection.Server = Properties.Settings.Default.ServerSqlServerMem;
-            //ServerSQLServerConnection.Password = Properties.Settings.Default.ServerSqlServerPasswordMem;
-            //ServerSQLServerConnection.Username = string.IsNullOrEmpty(Properties.Settings.Default.ServerSqlServerUsernameMem) ? "CNP" : Properties.Settings.Default.ServerSqlServerUsernameMem;
-
-            //LocalOracleConnection.Server = Properties.Settings.Default.LocalOraServerMem;
-            //LocalOracleConnection.Password = Properties.Settings.Default.LocalOraPasswordMem;
-            //LocalOracleConnection.Port = string.IsNullOrEmpty(LocalOracleConnection.Port) ? Properties.Settings.Default.LocalOraPortMem : "1521";
-
-            //ServerOracleConnection.Server = Properties.Settings.Default.ServerOraServerMem;
-            //ServerOracleConnection.Password = Properties.Settings.Default.ServerOraPasswordMem;
-            //ServerOracleConnection.Port = string.IsNullOrEmpty(ServerOracleConnection.Port) ? Properties.Settings.Default.ServerOraPortMem : "1521";
-            //ServerOracleConnection.Instance = Properties.Settings.Default.ServerOraInstanceMem;
-
-            //string HistoricoSerialized = Properties.Settings.Default.HistoricoMem;
-            //if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-            //{
-            //    History =
-            //    JsonSerializer.Deserialize<ObservableCollection<SysDirectoryModel>>(HistoricoSerialized)
-            //    ?? new ObservableCollection<SysDirectoryModel>();
-            //}
-
-            //string DatabasesSerialized = Properties.Settings.Default.DatabasesMem;
-            //if (DatabasesSerialized != null && !string.IsNullOrEmpty(DatabasesSerialized))
-            //{
-            //    Databases =
-            //        JsonSerializer.Deserialize<ObservableCollection<DatabaseModel>>(DatabasesSerialized)
-            //        ?? new ObservableCollection<DatabaseModel>();
-            //}
         }
 
         //Refazer

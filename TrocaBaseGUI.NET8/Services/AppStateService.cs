@@ -1,97 +1,139 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TrocaBaseGUI.Models;
+using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Services
 {
-
-
-    internal class AppStateService
+    public class AppStateService
     {
-        //public void SaveState(SysDirectory sysDir)
-        //{
-        //    List<SysDirectory> historyList = sysDir.ToList();
-        //    string HistoricoSerialized = JsonSerializer.Serialize(historyList);
-        //    if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
-        //    {
-        //        Properties.Settings.Default.historico = HistoricoSerialized;
-        //    }
+        private ObservableCollection<SysDirectoryModel> _history = new();
+        public ObservableCollection<SysDirectoryModel> History
+        {
+            get => _history;
+            set { _history = value; OnPropertyChanged(); }
+        }
 
-        //    Properties.Settings.Default.ExeFile = sysDir.ExeFile;
-        //    Properties.Settings.Default.conexaoFile = sysDir.ConexaoFile;
-        //    Properties.Settings.Default.Conexao = selectedBase;
+        private ObservableCollection<DatabaseModel> _databases = new();
+        public ObservableCollection<DatabaseModel> Databases
+        {
+            get => _databases;
+            set { _databases = value; OnPropertyChanged(); }
+        }
+
+        public string ExeFile { get; set; }
+        public string ConexaoFile { get; set; }
+        public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "local" };
+        public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "server" };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        //public void SaveState(AppState appState)
+        //{
+        //    var state = new AppState
+        //    {
+        //        History = appState.History.ToList(),
+        //        Databases = appState.Databases.ToList(),
+        //        ExeFile = appState.ExeFile,
+        //        ConexaoFile = appState.ConexaoFile,
+        //        LocalSQLServerConnection = appState.LocalSQLServerConnection,
+        //        ServerSQLServerConnection = appState.ServerSQLServerConnection,
+        //        LocalOracleConnection = appState.LocalOracleConnection,
+        //        ServerOracleConnection = appState.ServerOracleConnection,
+        //        LocalParams = appState.LocalParams ?? new AppParams(),
+        //        ServerParams = appState.ServerParams ?? new AppParams()
+        //    };
+
+        //    string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
+        //    Properties.Settings.Default.AppStateJson = json;
         //    Properties.Settings.Default.Save();
         //}
 
-        //public void LoadState(ObservableCollection<SysDirectory> sysDir)
+        //public void LoadState(AppState appState)
         //{
-        //    exeFile = Properties.Settings.Default.ExeFile;
-        //    ConexaoFile = Properties.Settings.Default.conexaoFile;
-        //    selectedBase = Properties.Settings.Default.Conexao;
+        //    string json = Properties.Settings.Default.AppStateJson;
 
-        //    string HistoricoSerialized = Properties.Settings.Default.historico;
-        //    if (HistoricoSerialized != null && !string.IsNullOrEmpty(HistoricoSerialized))
+        //    if (!string.IsNullOrEmpty(json))
         //    {
-        //        History =
-        //        JsonSerializer.Deserialize<ObservableCollection<SysDirectory>>(HistoricoSerialized)
-        //        ?? new ObservableCollection<SysDirectory>();
+        //        var state = JsonSerializer.Deserialize<AppState>(json);
+
+        //        if (state != null)
+        //        {
+        //            appState.History = new ObservableCollection<SysDirectoryModel>(state.History).ToList();
+        //            appState.Databases = new ObservableCollection<DatabaseModel>(state.Databases).ToList();
+        //            appState.ExeFile = state.ExeFile;
+        //            appState.ConexaoFile = state.ConexaoFile;
+
+        //            appState.LocalSQLServerConnection = state.LocalSQLServerConnection;
+        //            appState.ServerSQLServerConnection = state.ServerSQLServerConnection;
+        //            appState.LocalOracleConnection = state.LocalOracleConnection;
+        //            appState.ServerOracleConnection = state.ServerOracleConnection;
+
+        //            appState.LocalParams = state.LocalParams ?? new AppParams();
+        //            appState.ServerParams = state.ServerParams ?? new AppParams();
+
+        //            //appState = state;
+        //        }
         //    }
         //}
 
-        //public void ClearApp(ObservableCollection<SysDirectory> sysDir)
-        //{
-        //    ConexaoFile = "";
-        //    selectedBase = "";
-        //    exeFile = "";
+        public void SaveState(MainViewModel vm)
+        {
+            var state = new AppState
+            {
+                History = vm.History.ToList(),
+                Databases = vm.Databases.ToList(),
+                ExeFile = MainViewModel.exeFile,
+                ConexaoFile = vm.conexaoFile,
+                LocalSQLServerConnection = vm.LocalSQLServerConnection,
+                ServerSQLServerConnection = vm.ServerSQLServerConnection,
+                LocalOracleConnection = vm.LocalOracleConnection,
+                ServerOracleConnection = vm.ServerOracleConnection,
+                LocalParams = vm.appState.LocalParams ?? new AppParams(),
+                ServerParams = vm.appState.ServerParams ?? new AppParams()
+            };
 
-        //    History.Clear();
-        //    Properties.Settings.Default.historico = "";
-        //    Properties.Settings.Default.Save();
-        //}
+            string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
+            Properties.Settings.Default.AppStateJson = json;
+            Properties.Settings.Default.Save();
+        }
 
-        //public void AddDirectory(string endereco, string enderecoCompleto, string exe)
-        //{
-        //    // Verifica se já existe o diretório no histórico
-        //    var existente = History.FirstOrDefault(d => d.Address == endereco);
-        //    if (existente != null)
-        //    {
-        //        History.Remove(existente); // Remove para mover para o topo
-        //    }
+        public void LoadState(MainViewModel vm)
+        {
+            string json = Properties.Settings.Default.AppStateJson;
 
-        //    // Adiciona no início da lista
-        //    History.Insert(0, new SysDirectory(endereco, enderecoCompleto, exe));
-        //    exeFile = exe;
+            if (!string.IsNullOrEmpty(json))
+            {
+                var state = JsonSerializer.Deserialize<AppState>(json);
 
-        //    // Garante que só existam no máximo 5
-        //    while (History.Count > MaxHistory)
-        //    {
-        //        History.RemoveAt(History.Count - 1); // Remove o mais antigo (último)
-        //    }
-        //}
+                if (state != null)
+                {
+                    vm.History = new ObservableCollection<SysDirectoryModel>(state.History);
+                    vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
+                    MainViewModel.exeFile = state.ExeFile;
+                    vm.conexaoFile = state.ConexaoFile;
 
-        //public void AddDirectory(ObservableCollection<SysDirectory> sysDir)
-        //{
-        //    // Verifica se já existe o diretório no histórico
-        //    var existente = History.FirstOrDefault(d => d.Address == endereco);
-        //    if (existente != null)
-        //    {
-        //        History.Remove(existente); // Remove para mover para o topo
-        //    }
+                    vm.LocalSQLServerConnection = state.LocalSQLServerConnection;
+                    vm.ServerSQLServerConnection = state.ServerSQLServerConnection;
+                    vm.LocalOracleConnection = state.LocalOracleConnection;
+                    vm.ServerOracleConnection = state.ServerOracleConnection;
 
-        //    // Adiciona no início da lista
-        //    History.Insert(0, new SysDirectory(endereco, enderecoCompleto, exe));
-        //    exeFile = exe;
+                    vm.appState.LocalParams = state.LocalParams ?? new AppParams();
+                    vm.appState.ServerParams = state.ServerParams ?? new AppParams();
 
-        //    // Garante que só existam no máximo 5
-        //    while (History.Count > MaxHistory)
-        //    {
-        //        History.RemoveAt(History.Count - 1); // Remove o mais antigo (último)
-        //    }
-        //}
+                    //appState = state;
+                }
+            }
+        }
     }
 }
