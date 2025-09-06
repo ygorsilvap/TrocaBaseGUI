@@ -51,7 +51,7 @@
 
         <CheckBox x:Name="senhaCheckbox" IsChecked="{Binding appState.ServerParams.DefaultPasswordCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="senhaCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,96,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><Run Text=" Padrão"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="senhaPadrao" TextChanged="senhaPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultPassword}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,96,205,313" Grid.Row="1">
+        <TextBox x:Name="senhaPadrao" TextChanged="senhaPadrao_TextChanged" Text="{Binding Conexao3Camadas.DefaultPassword}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,96,205,313" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -136,7 +136,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <CheckBox x:Name="ultMenuWebCheckbox" Click="ultMenuWebCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,206,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <CheckBox x:Name="ultMenuWebCheckbox" Click="ultMenuWebCheckbox_Checked" IsChecked="{Binding Conexao3Camadas.UseWebMenu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,206,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Height="16" Grid.Row="1" Text="Utiliza Menu Web"/>
 
         <Button x:Name="txtEditorPathBtn" Click="SelectTextEditorPath_Click" IsEnabled="{Binding appState.ServerParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="#788d91" FontSize="16" HorizontalAlignment="Left" Margin="348,133,0,0" VerticalAlignment="Top" Height="18" Width="20" BorderBrush="#2a353a"  Background="#101e24" RenderTransformOrigin="0.511,0.257" Grid.Row="1">
@@ -253,7 +253,7 @@
                 </Button.Template>
             </Button>
         </Button>
-        <Button Content="Editar Portas" Click="SetPortsButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="100,317,330,80" Grid.Row="1">
+        <Button Content="Editar Portas" Click="SetPortsButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="100,317,310,80" Grid.Row="1">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -275,8 +275,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        
-        <CheckBox x:Name="useRedirectCheckbox" Click="useRedirectCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,246,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+
+        <CheckBox x:Name="useRedirectCheckbox" Click="useRedirectCheckbox_Checked" IsChecked="{Binding Conexao3Camadas.UseRedirect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,246,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,245,0,165" TextWrapping="Wrap" Width="118" Grid.Row="1" Text="Utiliza Redirecionador"/>
 
         <TextBox x:Name="redirectPort" TextChanged="redirectPort_TextChanged" Text="{Binding Conexao3Camadas.RedirectPort}" TextAlignment="Center" MaxLength = "5" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Margin="227,245,275,164" Grid.Row="1">
@@ -306,7 +306,7 @@
             </TextBox.Style>
         </TextBox>
         <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#f5f4f3" Margin="222,218,0,183" Grid.Row="1" TextWrapping="Wrap" Text="       Porta Redirecionador" Width="67"/>
-        <Button Content="Atualizar Arquivos" Click="updateConnFiles_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="330,317,100,80" Grid.Row="1">
+        <Button Content="Atualizar Redirecionador" Click="updateRedirectorFile_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="310,317,100,80" Grid.Row="1">
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="Border"
@@ -355,5 +355,32 @@
             </TextBox.Style>
         </TextBox>
         <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#f5f4f3" Margin="300,218,0,183" Grid.Row="1" TextWrapping="Wrap" Text="    Porta Verificador" Width="43"/>
+        <TextBox x:Name="dbServer" TextChanged="dbServer_TextChanged" Text="{Binding Conexao3Camadas.DbServer}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="200,286,205,123" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Border x:Name="Border"
+                                    Background="#19262c"  
+                                    BorderBrush="#2a353a"  
+                                    BorderThickness="1"  
+                                    CornerRadius="4">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                        Margin="0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="75,285,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="17" Grid.Row="1"><Run Text="Server Redirecionador"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
     </Grid>
 </Page>

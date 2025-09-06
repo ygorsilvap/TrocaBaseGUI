@@ -77,6 +77,7 @@
         <Border Background="#19262c" BorderBrush="#2a353a" BorderThickness="1" CornerRadius="5" 
         Margin="390,128,100,83" Grid.Row="2">
             <TextBox x:Name="OraclePort" 
+             TextAlignment="Center"
              Background="Transparent" 
              Foreground="#f5f4f3" 
              FontSize="11" 

@@ -15,6 +15,13 @@
         </Grid.ColumnDefinitions>
 
         <Button x:Name="OpenExeButton" Click="OpenSecondaryExeButton_Click" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="90,420,310,42">
+            <Button.Content>
+                <TextBlock x:Name="OpenExeButtonText"
+                   Text="Abrir Executável"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center"/>
+            </Button.Content>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -173,7 +180,14 @@
             </ComboBox.Style>
         </ComboBox>
 
-        <Button x:Name="OpenSysButton" Content="{Binding exeName}" Click="OpenMainExeButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
+        <Button x:Name="OpenSysButton" Click="OpenMainExeButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Height="38" Background="#101e24" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
+            <Button.Content>
+                <TextBlock x:Name="OpenSysButtonText"
+                   Text="Abrir Executável"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center"/>
+            </Button.Content>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"

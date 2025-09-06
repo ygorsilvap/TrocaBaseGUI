@@ -113,12 +113,21 @@ namespace TrocaBaseGUI.Views
         private void useRedirectCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             _viewModel.Conexao3Camadas.UseRedirect = (bool)useRedirectCheckbox.IsChecked;
-            redirectPort.IsEnabled = _viewModel.Conexao3Camadas.UseRedirect;
         }
 
         private void redirectPort_TextChanged(object sender, TextChangedEventArgs e)
         {
             _viewModel.Conexao3Camadas.RedirectPort = redirectPort.Text;
+        }
+
+        private void verifierPort_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _viewModel.Conexao3Camadas.VerifierPort = verifierPort.Text;
+        }
+
+        private void dbServer_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _viewModel.Conexao3Camadas.DbServer = dbServer.Text;
         }
 
         private void SetParams()
@@ -139,7 +148,6 @@ namespace TrocaBaseGUI.Views
             ultMenuWebCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseWebMenu;
 
             useRedirectCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseRedirect || !string.IsNullOrEmpty(_viewModel.Conexao3Camadas.RedirectPort);
-            redirectPort.IsEnabled = (bool)useRedirectCheckbox.IsChecked;
         }
 
         private void SetPortsButton_Click(object sender, RoutedEventArgs e)
@@ -155,14 +163,16 @@ namespace TrocaBaseGUI.Views
             dlg.ShowDialog();
         }
 
-        private void updateConnFiles_Click(object sender, RoutedEventArgs e)
+        private void updateRedirectorFile_Click(object sender, RoutedEventArgs e)
         {
-            //sobscrever todos arquivos de conexao 3 camadas
+            if(string.IsNullOrEmpty(_viewModel.Conexao3Camadas.RedirectPort))
+            {
+                MessageBox.Show("O campo 'Porta Redirecionador' não pode ficar vazio.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            _viewModel.conexaoFileService.UpdateRedirectorFile(_viewModel.conexaoRedirecionadorFile, _viewModel.Conexao3Camadas);
         }
 
-        private void verifierPort_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
-        }
     }
 }

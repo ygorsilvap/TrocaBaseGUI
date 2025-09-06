@@ -86,24 +86,6 @@ namespace TrocaBaseGUI.Models
             "221", "222", "223", "224", "225", "226", "227", "228", "229"
         };
 
-        private static ObservableCollection<AppConn> CreateDefaultAppConnNames()
-        {
-            var list = new ObservableCollection<AppConn>();
-            foreach (var nome in AppNames)
-                list.Add(new AppConn { App = nome });
-            return list;
-        }
-
-        private static ObservableCollection<AppConn> CreateDefaultAppConn()
-        {
-            var list = CreateDefaultAppConnNames();
-            for (int i = 0; i < list.Count && i < AppDefaultPorts.Length; i++)
-            {
-                list[i].Port = AppDefaultPorts[i];
-            }
-            return list;
-        }
-
         //private string path;
         //public string Path
         //{
@@ -168,12 +150,20 @@ namespace TrocaBaseGUI.Models
             { useRedirect = value; OnPropertyChanged(); }
         }
 
-        private string redirectPort;
+        private string redirectPort = "240";
         public string RedirectPort
         {
             get => redirectPort;
             set
             { redirectPort = value; OnPropertyChanged(); }
+        }
+
+        private string dbServer;
+        public string DbServer
+        {
+            get => dbServer;
+            set
+            { dbServer = value; OnPropertyChanged(); }
         }
 
         private string verifierPort = "210";
@@ -195,5 +185,24 @@ namespace TrocaBaseGUI.Models
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        private static ObservableCollection<AppConn> CreateDefaultAppConnNames()
+        {
+            var list = new ObservableCollection<AppConn>();
+            foreach (var nome in AppNames)
+                list.Add(new AppConn { App = nome });
+            return list;
+        }
+
+        private static ObservableCollection<AppConn> CreateDefaultAppConn()
+        {
+            var list = CreateDefaultAppConnNames();
+            for (int i = 0; i < list.Count && i < AppDefaultPorts.Length; i++)
+            {
+                list[i].Port = AppDefaultPorts[i];
+            }
+            return list;
+        }
+
     }
 }

@@ -43,6 +43,20 @@ namespace TrocaBaseGUI.Models
             set
             { conexaoFile = value; OnPropertyChanged(); }
         }
+        private ConexaoFileModel conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
+        public ConexaoFileModel Conexao2Camadas
+        {
+            get => conexao2Camadas;
+            set
+            { conexao2Camadas = value; OnPropertyChanged(); }
+        }
+        private ConexaoFileModel conexao3Camadas = new ConexaoFileModel() { Tier = 3 };
+        public ConexaoFileModel Conexao3Camadas
+        {
+            get => conexao3Camadas;
+            set
+            { conexao3Camadas = value; OnPropertyChanged(); }
+        }
 
         private SqlServerConnectionModel localSQLServerConnection;
         public SqlServerConnectionModel LocalSQLServerConnection

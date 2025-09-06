@@ -30,6 +30,8 @@ namespace TrocaBaseGUI.Services
 
         public string ExeFile { get; set; }
         public string ConexaoFile { get; set; }
+        public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
+        public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
         public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel();
         public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel();
         public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "local" };
@@ -100,7 +102,9 @@ namespace TrocaBaseGUI.Services
                 LocalOracleConnection = vm.LocalOracleConnection,
                 ServerOracleConnection = vm.ServerOracleConnection,
                 LocalParams = vm.appState.LocalParams ?? new AppParams(),
-                ServerParams = vm.appState.ServerParams ?? new AppParams()
+                ServerParams = vm.appState.ServerParams ?? new AppParams(),
+                Conexao2Camadas = vm.Conexao2Camadas,
+                Conexao3Camadas = vm.Conexao3Camadas
             };
 
             string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
@@ -122,6 +126,9 @@ namespace TrocaBaseGUI.Services
                     vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
                     MainViewModel.exeFile = state.ExeFile;
                     vm.conexaoFile = state.ConexaoFile;
+
+                    vm.Conexao2Camadas = state.Conexao2Camadas ?? new ConexaoFileModel() { Tier = 2 };
+                    vm.Conexao3Camadas = state.Conexao3Camadas ?? new ConexaoFileModel() { Tier = 3 };
 
                     vm.LocalSQLServerConnection = state.LocalSQLServerConnection;
                     vm.ServerSQLServerConnection = state.ServerSQLServerConnection;

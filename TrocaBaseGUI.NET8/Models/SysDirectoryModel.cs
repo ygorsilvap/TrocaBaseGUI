@@ -23,7 +23,7 @@ namespace TrocaBaseGUI.Models
             { path = value; OnPropertyChanged(); }
         }
 
-        private int tier;
+        //private int tier;
         //public int Tier
         //{
         //    get => tier;

@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Text.Json;
+using System.Windows;
+using System.Windows.Forms;
 using Microsoft.IdentityModel.Tokens;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
+using MessageBox = System.Windows.MessageBox;
 
 namespace TrocaBaseGUI.ViewModels
 {
@@ -22,6 +25,22 @@ namespace TrocaBaseGUI.ViewModels
             get => conexaoFileService.ConexaoFile;
             set => conexaoFileService.ConexaoFile = value;
         }
+        public string conexaoServidorFile
+        {
+            get => conexaoFileService.ConexaoServidorFile;
+            set => conexaoFileService.ConexaoServidorFile = value;
+        }
+        public string conexaoRedirecionadorFile
+        {
+            get => conexaoFileService.ConexaoRedirecionadorFile;
+            set => conexaoFileService.ConexaoRedirecionadorFile = value;
+        }
+        public string conexaoClienteFile
+        {
+            get => conexaoFileService.ConexaoClienteFile;
+            set => conexaoFileService.ConexaoClienteFile = value;
+        }
+
         public static string exeFile;
 
         public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
@@ -148,6 +167,11 @@ namespace TrocaBaseGUI.ViewModels
             var conexaoService = conexaoFileService;
             int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
+            if (tier == 3 && !conexaoService.is3CSettingsValid(Conexao3Camadas))
+            {
+                return;
+            }
+
             //Rever a necessidade disso
             string cnxPath = conexaoFileService.ConexaoFilePath;
             string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
@@ -156,18 +180,20 @@ namespace TrocaBaseGUI.ViewModels
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
 
-
-            string conexaoSettings = tier > 2
-                ? conexaoService.CreateConnectionFileSettings(Conexao3Camadas, appState.ServerParams)
-                : conexaoService.CreateConnectionFileSettings(Conexao2Camadas, appState.LocalParams);
-
             string newConn = dbs[id].DbType.ToLower().StartsWith("s")
                ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
                : $"{OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name)}\n\n";
 
-            File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoSettings));
+            if(tier > 2)
+            {
+                File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
+                File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas , appState.ServerParams)));
+            } else
+            {
+                File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoService.Create2CConnectionFileSettings(Conexao2Camadas, appState.LocalParams)));
+            }
 
-            DatabaseModel.SetSelection(dbs, dbs[id].Id);
+                DatabaseModel.SetSelection(dbs, dbs[id].Id);
             SysDirectoryModel.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
             SelDatabase = dbs[id];
         }

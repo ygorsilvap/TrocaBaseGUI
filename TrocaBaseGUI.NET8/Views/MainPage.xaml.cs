@@ -48,8 +48,10 @@ namespace TrocaBaseGUI.Views
             tabSelected = TabControl.SelectedIndex;
             dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
 
-            OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
-            OpenExeButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            //Fazer Binding com esses campos de exe
+            OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            OpenExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(dbList);
 
@@ -119,7 +121,7 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-            OpenSysButton.Content = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
             GetFilter(dbList);
         }
@@ -149,6 +151,7 @@ namespace TrocaBaseGUI.Views
             GetFilter(dbList);
         }
 
+        //Refatorar
         private void SelecionarExecutavel_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new CommonOpenFileDialog
@@ -212,7 +215,7 @@ namespace TrocaBaseGUI.Views
             var selectedItem = comboBox.SelectedItem as string;
 
             exeSelected = selectedItem;
-            OpenExeButton.Content = $"Iniciar \n{exeSelected}";
+            OpenExeButtonText.Text = $"Iniciar \n{exeSelected}";
 
             Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
         }
@@ -342,7 +345,7 @@ namespace TrocaBaseGUI.Views
             //Debug.WriteLine($"\nUseWebMenu: {viewModel.Conexao2Camadas.UseWebMenu}\n\n");
             //Debug.WriteLine($"\n\nUseRedirect: {viewModel.Conexao3Camadas.UseRedirect}\n\n");
             //Debug.WriteLine($"\n\nRedirectPort: {viewModel.Conexao3Camadas.RedirectPort}\n\n");
-            viewModel.conexaoFileService.CreateConnectionFileSettings(viewModel.Conexao3Camadas, viewModel.appState.ServerParams);
+            //viewModel.conexaoFileService.Create3CConnectionClientFileSettings(viewModel.Conexao3Camadas, viewModel.appState.ServerParams);
             //viewModel.conexaoFileService.CreatePortsSettings(viewModel.Conexao3Camadas);
         }
     }
