@@ -23,6 +23,14 @@ namespace TrocaBaseGUI.Models
             { path = value; OnPropertyChanged(); }
         }
 
+        private int tier;
+        //public int Tier
+        //{
+        //    get => tier;
+        //    set
+        //    { tier = value; OnPropertyChanged(); }
+        //}
+
         private string mainExeFile;
         public string MainExeFile
         {

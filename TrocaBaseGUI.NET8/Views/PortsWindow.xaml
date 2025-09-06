@@ -1,20 +1,20 @@
-﻿<Window x:Class="TrocaBaseGUI.Views.ServerPortsWindow"
+﻿<Window x:Class="TrocaBaseGUI.Views.PortsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrocaBaseGUI.Views"
         mc:Ignorable="d"
-        Title="ServerPortsWindow" Height="450" Width="400"
+        Title="PortsWindow" Height="450" Width="400"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize"
-        x:Name="serverPortsWindow">
+        x:Name="portsWindow">
     <Border Background="#101e24" CornerRadius="10" BorderBrush="#2a353a" BorderThickness="1" Padding="6" Height="450" VerticalAlignment="Top">
         <Grid>
-            <!--<Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="#101e24"/>-->
+            <Frame x:Name="MainFrame" MouseDown="Border_MouseDown" NavigationUIVisibility="Hidden" Background="#101e24"/>
             <ListBox x:Name="AppList"
                  Margin="29,69,29,45"
                  ItemsSource="{Binding appList}"

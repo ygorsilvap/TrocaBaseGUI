@@ -38,7 +38,7 @@ namespace TrocaBaseGUI.Views
         }
         private void loginPadrao_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _viewModel.Conexao2Camadas.DefaultLogin = loginPadrao.Text;
+            _viewModel.Conexao3Camadas.DefaultLogin = loginPadrao.Text;
         }
 
         private void senhaCheckbox_Checked(object sender, RoutedEventArgs e)
@@ -77,15 +77,16 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        private void updateFolder_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.UpdateFolder = updateFolder.Text;
-        }
         private void updateFolderCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             _viewModel.appState.ServerParams.DirUpdateCheckbox = (bool)updateFolderCheckbox.IsChecked;
             updateFolder.IsEnabled = _viewModel.appState.ServerParams.DirUpdateCheckbox;
         }
+        private void updateFolder_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _viewModel.Conexao3Camadas.UpdateFolder = updateFolder.Text;
+        }
+
         private void SelectUpdateFolderPath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new CommonOpenFileDialog
@@ -109,9 +110,15 @@ namespace TrocaBaseGUI.Views
             _viewModel.Conexao3Camadas.UseWebMenu = (bool)ultMenuWebCheckbox.IsChecked;
         }
 
-        private void ultRedirecionadorCheckbox_Checked(object sender, RoutedEventArgs e)
+        private void useRedirectCheckbox_Checked(object sender, RoutedEventArgs e)
         {
-            _viewModel.Conexao3Camadas.UseRedirect = (bool)ultRedirecionadorCheckbox.IsChecked;
+            _viewModel.Conexao3Camadas.UseRedirect = (bool)useRedirectCheckbox.IsChecked;
+            redirectPort.IsEnabled = _viewModel.Conexao3Camadas.UseRedirect;
+        }
+
+        private void redirectPort_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _viewModel.Conexao3Camadas.RedirectPort = redirectPort.Text;
         }
 
         private void SetParams()
@@ -130,14 +137,16 @@ namespace TrocaBaseGUI.Views
             updateFolder.IsEnabled = (bool)updateFolderCheckbox.IsChecked;
 
             ultMenuWebCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseWebMenu;
-            ultRedirecionadorCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseRedirect;
+
+            useRedirectCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseRedirect || !string.IsNullOrEmpty(_viewModel.Conexao3Camadas.RedirectPort);
+            redirectPort.IsEnabled = (bool)useRedirectCheckbox.IsChecked;
         }
 
-        private void ServerPortEditButton_Click(object sender, RoutedEventArgs e)
+        private void SetPortsButton_Click(object sender, RoutedEventArgs e)
         {
             var owner = Window.GetWindow(this) ?? Application.Current.MainWindow;
 
-            var dlg = new ServerPortsWindow(_viewModel.Conexao3Camadas.ServerPorts)
+            var dlg = new PortsWindow(_viewModel.Conexao3Camadas.Ports)
             {
                 Owner = owner,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
@@ -146,20 +155,14 @@ namespace TrocaBaseGUI.Views
             dlg.ShowDialog();
         }
 
-        private void ClientPortEditButton_Click(object sender, RoutedEventArgs e)
+        private void updateConnFiles_Click(object sender, RoutedEventArgs e)
         {
-            var owner = Window.GetWindow(this) ?? Application.Current.MainWindow;
-
-            var dlg = new ServerPortsWindow(_viewModel.Conexao3Camadas.ClientPorts)
-            {
-                Owner = owner,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-
-            dlg.ShowDialog();
+            //sobscrever todos arquivos de conexao 3 camadas
         }
 
+        private void verifierPort_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
-
+        }
     }
 }

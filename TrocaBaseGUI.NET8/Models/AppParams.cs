@@ -43,21 +43,21 @@ namespace TrocaBaseGUI.Models
             { dirUpdateCheckbox = value; OnPropertyChanged(); }
         }
 
-        private bool useWebMenuCheckbox;
-        public bool UseWebMenuCheckbox
-        {
-            get => useWebMenuCheckbox;
-            set
-            { useWebMenuCheckbox = value; OnPropertyChanged(); }
-        }
+        //private bool useWebMenuCheckbox;
+        //public bool UseWebMenuCheckbox
+        //{
+        //    get => useWebMenuCheckbox;
+        //    set
+        //    { useWebMenuCheckbox = value; OnPropertyChanged(); }
+        //}
 
-        private bool useRedirectCheckbox;
-        public bool UseRedirectCheckbox
-        {
-            get => useRedirectCheckbox;
-            set
-            { useRedirectCheckbox = value; OnPropertyChanged(); }
-        }
+        //private bool useRedirectCheckbox;
+        //public bool UseRedirectCheckbox
+        //{
+        //    get => useRedirectCheckbox;
+        //    set
+        //    { useRedirectCheckbox = value; OnPropertyChanged(); }
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)

@@ -17,11 +17,11 @@ using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
 {
-    public partial class ServerPortsWindow : Window
+    public partial class PortsWindow : Window
     {
         public MainViewModel _viewModel;
 
-        public ServerPortsWindow(ObservableCollection<AppConn> appList)
+        public PortsWindow(ObservableCollection<AppConn> appList)
         {
             InitializeComponent();
 
@@ -31,6 +31,12 @@ namespace TrocaBaseGUI.Views
             this.DataContext = this;
 
             AppList.ItemsSource = appList;
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
 
         private void VoltarButton_Click(object sender, RoutedEventArgs e)

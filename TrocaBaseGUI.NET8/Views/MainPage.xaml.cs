@@ -163,6 +163,7 @@ namespace TrocaBaseGUI.Views
                 string folder = $"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}";
                 string path = System.IO.Path.GetDirectoryName(dialog.FileName);
                 string exeName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+
                 ObservableCollection<string> exeList = new ObservableCollection<string>(Directory.GetFiles(path, "*.exe").Select(f => System.IO.Path.GetFileNameWithoutExtension(f)).ToList());
 
                 viewModel.AddDirectory(folder, path, exeName, exeList);
@@ -341,7 +342,8 @@ namespace TrocaBaseGUI.Views
             //Debug.WriteLine($"\nUseWebMenu: {viewModel.Conexao2Camadas.UseWebMenu}\n\n");
             //Debug.WriteLine($"\n\nUseRedirect: {viewModel.Conexao3Camadas.UseRedirect}\n\n");
             //Debug.WriteLine($"\n\nRedirectPort: {viewModel.Conexao3Camadas.RedirectPort}\n\n");
-            viewModel.conexaoFileService.CreateConnectionFileSettings(viewModel.Conexao2Camadas, viewModel.appState.LocalParams);
+            viewModel.conexaoFileService.CreateConnectionFileSettings(viewModel.Conexao3Camadas, viewModel.appState.ServerParams);
+            //viewModel.conexaoFileService.CreatePortsSettings(viewModel.Conexao3Camadas);
         }
     }
 }

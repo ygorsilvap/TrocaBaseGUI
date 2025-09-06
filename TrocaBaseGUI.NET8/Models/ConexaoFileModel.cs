@@ -11,8 +11,7 @@ namespace TrocaBaseGUI.Models
         {
             if(Tier == 3)
             {
-                ServerPorts = CreateDefaultAppConn();
-                ClientPorts = CreateDefaultAppConn();
+                ports = CreateDefaultAppConn();
             }
         }
 
@@ -78,13 +77,13 @@ namespace TrocaBaseGUI.Models
             "Fabrica", "Fabrica Ford", "Fabrica GM", "Fabrica MBB", "Fabrica VW",
             "Fabrica HD", "Fabrica Fiat", "Frente Caixa", "Gerencial",
             "Nota Fiscal Eletronica", "Relatorios Apollo", "Sped Contabil",
-            "Central Agendamentos", "Verificador"
+            "Central Agendamentos"
         };
 
         private static readonly string[] AppDefaultPorts = new[]
         { 
             "211", "213", "214", "215", "216", "217", "218", "219", "220", 
-            "221", "222", "223", "224", "225", "226", "227", "228", "229", "210"
+            "221", "222", "223", "224", "225", "226", "227", "228", "229"
         };
 
         private static ObservableCollection<AppConn> CreateDefaultAppConnNames()
@@ -105,13 +104,13 @@ namespace TrocaBaseGUI.Models
             return list;
         }
 
-        private string path;
-        public string Path
-        {
-            get => path;
-            set
-            { path = value; OnPropertyChanged(); }
-        }
+        //private string path;
+        //public string Path
+        //{
+        //    get => path;
+        //    set
+        //    { path = value; OnPropertyChanged(); }
+        //}
 
         private int tier;
         public int Tier
@@ -177,28 +176,21 @@ namespace TrocaBaseGUI.Models
             { redirectPort = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<AppConn> serverPorts = CreateDefaultAppConn();
-        public ObservableCollection<AppConn> ServerPorts
+        private string verifierPort = "210";
+        public string VerifierPort
         {
-            get => serverPorts;
-            set { serverPorts = value; OnPropertyChanged(); }
+            get => verifierPort;
+            set
+            { verifierPort = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<AppConn> clientPorts = CreateDefaultAppConn();
-        public ObservableCollection<AppConn> ClientPorts
+        private ObservableCollection<AppConn> ports = CreateDefaultAppConn();
+        public ObservableCollection<AppConn> Ports
         {
-            get => clientPorts;
-            set { clientPorts = value; OnPropertyChanged(); }
+            get => ports;
+            set { ports = value; OnPropertyChanged(); }
         }
 
-
-        //Verificar o funcionamento das portas do redirecionador para definir a função
-        private ObservableCollection<AppConn> redirectPorts = CreateDefaultAppConnNames();
-        public ObservableCollection<AppConn> RedirectPorts
-        {
-            get => redirectPorts;
-            set { redirectPorts = value; OnPropertyChanged(); }
-        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

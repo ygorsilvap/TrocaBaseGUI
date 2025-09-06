@@ -58,6 +58,22 @@ namespace TrocaBaseGUI.Services
             }
         }
 
+        public int GetTier(string path)
+        {
+            if (File.Exists(Path.Combine(path, "ConexaoServidor.dat")))
+            {
+                return 3;
+            }
+            else if(File.Exists(Path.Combine(path, "conexao.dat")))
+            {
+                return 2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public void SetConexaoAddress(string path)
         {
             if (String.IsNullOrEmpty(path)) return;
@@ -73,7 +89,19 @@ namespace TrocaBaseGUI.Services
                 Console.WriteLine("caminho inválido");
             }
 
-            Debug.WriteLine($"Caminho do arquivo de conexão: {ConexaoFile}");
+            //Debug.WriteLine($"Caminho do arquivo de conexão: {ConexaoFile}");
+        }
+
+        public string CreatePortsSettings(ConexaoFileModel conexao)
+        {
+            string settings = string.Empty;
+
+            foreach(var appPorts in conexao.Ports)
+            {
+                settings += $"[PORTA]={appPorts.App.ToUpper().Replace(" ", "")}:{appPorts.Port}\n";
+            }
+            //Debug.WriteLine($"\n\n'{settings}'\n\n");
+            return settings;
         }
 
         public string CreateConnectionFileSettings(ConexaoFileModel conexao, AppParams appParams)
@@ -83,17 +111,31 @@ namespace TrocaBaseGUI.Services
                 string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
                 string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
                 string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
-                string diretorioAtualizacao = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
+                string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
                 string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
-                string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, diretorioAtualizacao, useWebMenu);
+                string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
 
-                //Debug.WriteLine($"\n\n'{settings}'\n\n");
+                Debug.WriteLine($"\n\n'2: {settings}'\n\n");
 
                 return settings;
             }
             else
             {
-                return "";
+                string ports = CreatePortsSettings(conexao);
+                string verifierPort = string.IsNullOrEmpty(conexao.VerifierPort) ? string.Empty : $"[PORTA_VERIFICADOR]={conexao.VerifierPort}\n";
+
+                string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
+                string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
+                string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
+                string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
+                string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
+
+
+                string settings = string.Concat(ports, verifierPort, loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
+
+                Debug.WriteLine($"\n\n'3: {settings}'\n\n");
+
+                return settings;
             }
 
         }

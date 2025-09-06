@@ -146,6 +146,7 @@ namespace TrocaBaseGUI.ViewModels
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
         {
             var conexaoService = conexaoFileService;
+            int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
             //Rever a necessidade disso
             string cnxPath = conexaoFileService.ConexaoFilePath;
@@ -155,7 +156,10 @@ namespace TrocaBaseGUI.ViewModels
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
 
-            string conexaoSettings = conexaoService.CreateConnectionFileSettings(Conexao2Camadas, appState.LocalParams);
+
+            string conexaoSettings = tier > 2
+                ? conexaoService.CreateConnectionFileSettings(Conexao3Camadas, appState.ServerParams)
+                : conexaoService.CreateConnectionFileSettings(Conexao2Camadas, appState.LocalParams);
 
             string newConn = dbs[id].DbType.ToLower().StartsWith("s")
                ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
