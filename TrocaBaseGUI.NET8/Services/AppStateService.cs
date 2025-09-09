@@ -104,7 +104,8 @@ namespace TrocaBaseGUI.Services
                 LocalParams = vm.appState.LocalParams ?? new AppParams(),
                 ServerParams = vm.appState.ServerParams ?? new AppParams(),
                 Conexao2Camadas = vm.Conexao2Camadas,
-                Conexao3Camadas = vm.Conexao3Camadas
+                Conexao3Camadas = vm.Conexao3Camadas,
+                SelectedFolder  = vm.appState.SelectedFolder
             };
 
             string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
@@ -137,6 +138,7 @@ namespace TrocaBaseGUI.Services
 
                     vm.appState.LocalParams = state.LocalParams ?? new AppParams();
                     vm.appState.ServerParams = state.ServerParams ?? new AppParams();
+                    vm.appState.SelectedFolder = state.SelectedFolder;
 
                     //appState = state;
                 }

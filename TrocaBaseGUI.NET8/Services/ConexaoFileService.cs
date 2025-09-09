@@ -114,11 +114,15 @@ namespace TrocaBaseGUI.Services
                     ConexaoRedirecionadorFile = Path.Combine(path, "ConexaoRedireciona.dat");
                     ConexaoServidorFile = Path.Combine(path, "ConexaoServidor.dat");
                     ConexaoFilePath = path;
+
+                    //Paliativa
+                    ConexaoFile = ConexaoClienteFile;
                 }
                 else { 
 
                     //ConexaoFile = Path.Combine(path, GetConexaoType(path));
                     ConexaoFile = Path.Combine(path, "conexao.dat");
+                    ConexaoFilePath = path;
                 }
 
             }
@@ -180,8 +184,8 @@ namespace TrocaBaseGUI.Services
         {
             string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
             string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
-            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
-            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
+            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[EDITOR]={conexao.TextEditorPath}\n";
+            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.UpdateFolder}\n";
             string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
             string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
 
@@ -210,8 +214,8 @@ namespace TrocaBaseGUI.Services
             string redirector = conexao.UseRedirect ? $"[REDIRECIONADOR]=S\n\n" : $"[REDIRECIONADOR]=N\n\n";
             string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
             string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
-            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.TextEditorPath}\n";
-            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[EDITOR]={conexao.UpdateFolder}\n";
+            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[EDITOR]={conexao.TextEditorPath}\n";
+            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.UpdateFolder}\n";
             string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
 
 

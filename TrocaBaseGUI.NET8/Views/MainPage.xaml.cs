@@ -46,7 +46,7 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-            dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
+            //dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
 
             //Fazer Binding com esses campos de exe
             OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
@@ -173,6 +173,8 @@ namespace TrocaBaseGUI.Views
 
                 viewModel.conexaoFileService.SetConexaoAddress(path);
 
+                viewModel.appState.SelectedFolder = folder;
+
                 dirSys.SelectedItem = viewModel.History.FirstOrDefault();
 
                 Refresh();
@@ -184,8 +186,15 @@ namespace TrocaBaseGUI.Views
         {
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectoryModel;
+            if (selectedItem != null) 
+            { 
+                viewModel.appState.SelectedFolder = selectedItem.Folder;
+            } else
+            {
+                viewModel.appState.SelectedFolder = hist.LastOrDefault().Folder;
+            }
 
-            string selectedDir = comboBox.SelectedValue as string;
+                string selectedDir = comboBox.SelectedValue as string;
 
             if (string.IsNullOrEmpty(selectedDir)) return;
 
@@ -207,6 +216,7 @@ namespace TrocaBaseGUI.Views
             }
 
             Refresh();
+            Debug.Write($"\nviewModel.conexaoFile: {viewModel.conexaoFile}\n");
         }
 
         private void exeSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -234,14 +244,13 @@ namespace TrocaBaseGUI.Views
         }
 
         private void OpenMainExeButton_Click(object sender, RoutedEventArgs e)
-        {   
+        {
             Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{MainViewModel.exeFile}.exe");
         }
 
         private void OpenSecondaryExeButton_Click(object sender, RoutedEventArgs e)
         {
             Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{exeSelected}.exe");
-            Debug.WriteLine($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{exeSelected}.exe");
         }
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)

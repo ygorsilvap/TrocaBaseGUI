@@ -459,6 +459,7 @@
 
         <ComboBox x:Name="dirSys"
           ItemsSource="{Binding History}"
+          SelectedValue="{Binding appState.SelectedFolder}"
           SelectedValuePath="Folder"
           DisplayMemberPath="Folder"
           SelectionChanged="dirSys_SelectionChanged"
@@ -656,6 +657,6 @@
         <TextBlock x:Name="IsThereSysDirectory" Foreground="#f5f4f3" HorizontalAlignment="Center" Margin="0,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Height="16"/>
         <Image Source="/Assets/database.png" HorizontalAlignment="Left" Height="60" Margin="20,17,0,0" VerticalAlignment="Top" Width="55"/>
         <TextBlock HorizontalAlignment="Left" Foreground="#f5f4f3" FontSize="30" FontWeight="Medium" Margin="75,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="45"><Run Language="pt-br" Text="Troca Base"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="20,341,0,0" VerticalAlignment="Top"/>
+        <!--<Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="20,341,0,0" VerticalAlignment="Top"/>-->
     </Grid>
 </Page>

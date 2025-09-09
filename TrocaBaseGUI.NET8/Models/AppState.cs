@@ -109,6 +109,15 @@ namespace TrocaBaseGUI.Models
             { serverParams = value; OnPropertyChanged(); }
         }
 
+        private string selectedFolder;
+        public string SelectedFolder
+        {
+            get => selectedFolder;
+            set
+            { selectedFolder = value; OnPropertyChanged(); }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
