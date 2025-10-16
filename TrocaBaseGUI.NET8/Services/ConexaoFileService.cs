@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -61,7 +62,7 @@ namespace TrocaBaseGUI.Services
         public Boolean ValidateSystemPath(string path)
         {
             //Tratar do case das strings para ignorar case
-            return File.Exists(path + "\\conexao.dat") || 
+            return File.Exists(path + "\\conexao.dat") ||
                    File.Exists(path + "\\ConexaoServidor.dat") &&
                    File.Exists(path + "\\ConexaoRedireciona.dat") &&
                    File.Exists(path + "\\ConexaoCliente.dat");
@@ -90,7 +91,7 @@ namespace TrocaBaseGUI.Services
             {
                 return 3;
             }
-            else if(File.Exists(Path.Combine(path, "conexao.dat")))
+            else if (File.Exists(Path.Combine(path, "conexao.dat")))
             {
                 return 2;
             }
@@ -107,7 +108,7 @@ namespace TrocaBaseGUI.Services
             if (ValidateSystemPath(path))
             {
                 int tier = GetTier(path);
-                if (tier > 2) 
+                if (tier > 2)
                 {
                     //ConexaoFile = Path.Combine(path, GetConexaoType(path));
                     ConexaoClienteFile = Path.Combine(path, "ConexaoCliente.dat");
@@ -118,7 +119,7 @@ namespace TrocaBaseGUI.Services
                     //Paliativa
                     ConexaoFile = ConexaoClienteFile;
                 }
-                else { 
+                else {
 
                     //ConexaoFile = Path.Combine(path, GetConexaoType(path));
                     ConexaoFile = Path.Combine(path, "conexao.dat");
@@ -130,7 +131,7 @@ namespace TrocaBaseGUI.Services
             {
                 Console.WriteLine("caminho inválido");
             }
-    
+
             //Debug.WriteLine($"Caminho do arquivo de conexão: {ConexaoFile}");
         }
 
@@ -238,8 +239,8 @@ namespace TrocaBaseGUI.Services
         public bool isVerifierPortSet(ConexaoFileModel conexao)
         {
             return !string.IsNullOrEmpty(conexao.VerifierPort);
-        }            
-        public bool istRedirectorPortSet(ConexaoFileModel conexao) 
+        }
+        public bool istRedirectorPortSet(ConexaoFileModel conexao)
         {
             return !string.IsNullOrEmpty(conexao.RedirectPort);
         }
@@ -263,7 +264,7 @@ namespace TrocaBaseGUI.Services
             Debug.WriteLine($"\n\nports: {isPortsSet(conexao)}\n\n");
             if (!isPortsSet(conexao))
             {
-                if(conexao.Ports.Any(p => string.IsNullOrEmpty(p.Port)))
+                if (conexao.Ports.Any(p => string.IsNullOrEmpty(p.Port)))
                 {
                     int appsWithNoPortCount = conexao.Ports.Count(p => string.IsNullOrEmpty(p.Port));
                     string appsWithNoPort = string.Join(", ", conexao.Ports.Where(p => string.IsNullOrEmpty(p.Port)).Select(p => p.App));
@@ -279,6 +280,19 @@ namespace TrocaBaseGUI.Services
                 return false;
             }
             return true;
+        }
+
+        public void CopyT2Params(ConexaoFileModel Target, ConexaoFileModel Source, AppState appState)
+        {
+            Target.DefaultLogin = Source.DefaultLogin;
+            Target.DefaultPassword = Source.DefaultPassword;
+            Target.TextEditorPath = Source.TextEditorPath;
+            Target.UpdateFolder = Source.UpdateFolder;
+            Target.UseWebMenu = Source.UseWebMenu;
+            appState.ServerParams.DefaultLoginCheckbox = appState.LocalParams.DefaultLoginCheckbox;
+            appState.ServerParams.DefaultPasswordCheckbox = appState.LocalParams.DefaultPasswordCheckbox;
+            appState.ServerParams.EditorCheckbox = appState.LocalParams.EditorCheckbox;
+            appState.ServerParams.DirUpdateCheckbox = appState.LocalParams.DirUpdateCheckbox;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

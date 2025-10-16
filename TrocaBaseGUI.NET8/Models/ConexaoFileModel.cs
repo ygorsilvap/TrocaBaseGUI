@@ -7,7 +7,7 @@ namespace TrocaBaseGUI.Models
     public class ConexaoFileModel : INotifyPropertyChanged
 
     {
-        public ConexaoFileModel() 
+        public ConexaoFileModel(ConexaoFileModel threeT) 
         {
             if(Tier == 3)
             {
@@ -15,61 +15,13 @@ namespace TrocaBaseGUI.Models
             }
         }
 
-        ////Construtor 2Camadas
-        //public ConexaoFileModel(string path, int tier, string defaultLogin = null, string defaultPassword = null,
-        //    string textEditorPath = null, string updateFolder = null, string useWebMenu = null)
-        //{
-        //    Path = path;
-        //    Tier = tier;
-        //    DefaultLogin = defaultLogin;
-        //    DefaultPassword = defaultPassword;
-        //    TextEditorPath = textEditorPath;
-        //    UpdateFolder = updateFolder;
-        //    UseWebMenu = useWebMenu;
-        //    UseRedirect = null;
-        //    RedirectPort = null;
-        //    ServerPorts = null;
-        //    ClientPorts = null;
-        //    RedirectPorts = null;
-        //}
-
-        ////Construtor 3Camadas Portas Padrões
-        //public ConexaoFileModel(string path, int tier, string defaultLogin = null, string defaultPassword = null,
-        //    string textEditorPath = null, string updateFolder = null, string useWebMenu = null, string useRedirect = null, string redirectPort = null)
-        //{
-        //    Path = path;
-        //    Tier = tier;
-        //    DefaultLogin = defaultLogin;
-        //    DefaultPassword = defaultPassword;
-        //    TextEditorPath = textEditorPath;
-        //    UpdateFolder = updateFolder;
-        //    UseWebMenu = useWebMenu;
-        //    UseRedirect = useRedirect;
-        //    RedirectPort = redirectPort;
-        //    ServerPorts = CreateDefaultAppConn();
-        //    ClientPorts = CreateDefaultAppConn();
-        //    RedirectPorts = CreateDefaultAppConnNames();
-        //}
-
-        ////Construtor 3Camadas Portas Customizadas
-        //public ConexaoFileModel(string path, int tier, string redirectPort,
-        //    ObservableCollection<AppConn> serverPorts, ObservableCollection<AppConn> clientPorts,
-        //    ObservableCollection<AppConn> redirectPorts, string defaultLogin = null, string defaultPassword = null,
-        //    string textEditorPath = null, string updateFolder = null, string useWebMenu = null, string useRedirect = null)
-        //{
-        //    Path = path;
-        //    Tier = tier;
-        //    DefaultLogin = defaultLogin;
-        //    DefaultPassword = defaultPassword;
-        //    TextEditorPath = textEditorPath;
-        //    UpdateFolder = updateFolder;
-        //    UseWebMenu = useWebMenu;
-        //    UseRedirect = useRedirect;
-        //    RedirectPort = redirectPort;
-        //    ServerPorts = serverPorts ?? CreateDefaultAppConn();
-        //    ClientPorts = clientPorts ?? CreateDefaultAppConn();
-        //    RedirectPorts = redirectPorts ?? CreateDefaultAppConnNames();
-        //}
+        public ConexaoFileModel()
+        {
+            if (Tier == 3)
+            {
+                ports = CreateDefaultAppConn();
+            }
+        }
 
         private static readonly string[] AppNames = new[]
         {

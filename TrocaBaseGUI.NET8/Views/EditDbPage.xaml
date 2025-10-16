@@ -6,16 +6,23 @@
 
     <Grid Background="#101e24" >
         <Rectangle Margin="80,80,80,122" Stroke="#2a353a" RadiusX="5" RadiusY="5"/>
-        <TextBlock Foreground="#f5f4f3" FontSize="16" FontWeight="SemiBold" Margin="215,95,215,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38"><Run Language="pt-br" Text="Renomear base"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Nome da base"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <!--<TextBox x:Name = "RenameInput" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Width="120"/>-->
-        <TextBox x:Name = "renameInput" HorizontalAlignment="Left" Margin="100,176,0,306" TextWrapping="Wrap" Width="120"/>
-        <TextBlock x:Name="dbType" Text="{Binding DbType}" Foreground="#f5f4f3" HorizontalAlignment="Left" FontSize="16" FontWeight="Light" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="38"><Run Language="pt-br" /></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,176,0,306" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="[user db]"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Conexão"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="330,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="[conn info]"/></TextBlock>
-        <Button Content="Salvar" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="215,330,215,0" VerticalAlignment="Top" Click="SaveName_Click">
+
+        <TextBlock HorizontalAlignment="Left" Foreground="#f5f4f3" FontSize="30" FontWeight="Medium" Margin="90,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="45"><Run Language="pt-br" Text="Edição"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <Image Source="/Assets/edit.png" HorizontalAlignment="Left" Height="60" Margin="20,17,0,0" VerticalAlignment="Top" Width="55"/>
+
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Height="15"><Run Text="Nome(Apenas Visualização"/><Run Language="pt-br" Text=")"/><LineBreak/><Run Text=")"/></TextBlock>
+        <TextBox x:Name = "nameInput" TextChanged="nameInput_TextChanged" HorizontalAlignment="Left" Margin="100,130,0,352" TextWrapping="Wrap" Width="120"/>
+        
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Server"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name = "serverInput" TextChanged="serverInput_TextChanged" HorizontalAlignment="Left" Margin="100,205,0,277" TextWrapping="Wrap" Width="120"/>
+
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
+        <TextBox x:Name = "userInput" IsEnabled="False" TextChanged="userInput_TextChanged" HorizontalAlignment="Left" Margin="100,267,0,215" TextWrapping="Wrap" Width="120"/>
+
+        <TextBlock x:Name = "instDbNameInputTXT" Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="303,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130"><Run Text="Instância"/><Run Language="pt-br" Text="/Nome da Base"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBox x:Name = "instDbNameInput" TextChanged="instDbNameInput_TextChanged" HorizontalAlignment="Left" Margin="303,267,0,215" TextWrapping="Wrap" Width="120"/>
+
+        <Button Content="Salvar" Foreground="#f5f4f3"  BorderBrush="#2a353a"  Background="#101e24" Margin="215,410,215,0" VerticalAlignment="Top" Click="SaveName_Click" Height="30">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -37,6 +44,53 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="323,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="15"><Run Language="pt-br" Text="SQL/Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="257,130,97,348">
+            <StackPanel.Resources>
+                <Style TargetType="RadioButton">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <BulletDecorator Background="Transparent">
+                                    <!-- Círculo do RadioButton -->
+                                    <BulletDecorator.Bullet>
+                                        <Border x:Name="OuterCircle"
+                                        Width="14" Height="14"
+                                        CornerRadius="7"
+                                        BorderThickness="2"
+                                        BorderBrush="Gray"
+                                        Background="#101e24">
+                                            <Ellipse x:Name="InnerCircle"
+                                             Fill="Transparent"
+                                             Margin="3"/>
+                                        </Border>
+                                    </BulletDecorator.Bullet>
+                                    <ContentPresenter VerticalAlignment="Center"
+                                              Margin="4,0,0,0"/>
+                                </BulletDecorator>
 
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#0ad6f9"/>
+                                        <Setter TargetName="InnerCircle" Property="Fill" Value="#101e24"/>
+                                    </Trigger>
+
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#056D80"/>
+                                    </Trigger>
+
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="LightGray"/>
+                                        <Setter TargetName="InnerCircle" Property="Fill" Value="LightGray"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+            <RadioButton x:Name="rbOracle" Content="Oracle" Checked="rb_Checked" Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top" />
+            <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="rb_Checked" HorizontalAlignment="Left" Foreground="#f5f4f3" Margin="25,0,0,0" VerticalAlignment="Top"/>
+        </StackPanel>
     </Grid>
 </Page>

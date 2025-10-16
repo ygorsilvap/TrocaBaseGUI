@@ -263,6 +263,12 @@ namespace TrocaBaseGUI.Views
             Window.GetWindow(this)?.Close();
         }
 
+
+        private void AddDb_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new EditDbPage(viewModel));
+        }
+
         private void EditarBase_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuItem;

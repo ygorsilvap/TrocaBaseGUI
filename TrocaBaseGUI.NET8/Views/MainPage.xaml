@@ -654,6 +654,35 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+
+        <Button Click="AddDb_Click" HorizontalAlignment="Left" Margin="496,155,0,315" Width="30" Background="#101e24">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderBrush="#0ad6f9"
+                    BorderThickness="1.5">
+                        <TextBlock x:Name="textBlock"
+                           Text="➕"
+                           FontSize="22"
+                           Foreground="#788d91"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Height="40" Margin="0,-2,0,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#94ADB3"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="textBlock" Property="TextElement.FontSize" Value="21"/>
+                            <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#7F9599"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <TextBlock x:Name="IsThereSysDirectory" Foreground="#f5f4f3" HorizontalAlignment="Center" Margin="0,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Height="16"/>
         <Image Source="/Assets/database.png" HorizontalAlignment="Left" Height="60" Margin="20,17,0,0" VerticalAlignment="Top" Width="55"/>
         <TextBlock HorizontalAlignment="Left" Foreground="#f5f4f3" FontSize="30" FontWeight="Medium" Margin="75,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="45"><Run Language="pt-br" Text="Troca Base"/><LineBreak/><Run Language="pt-br"/></TextBlock>

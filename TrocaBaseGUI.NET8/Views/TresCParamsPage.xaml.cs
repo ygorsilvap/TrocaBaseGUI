@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using TrocaBaseGUI.Models;
 using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
@@ -174,5 +175,61 @@ namespace TrocaBaseGUI.Views
         }
 
 
+        //Refatorar após terminar
+        //private void copyT2Params_Click(object sender, RoutedEventArgs e)
+        //{
+        //    _viewModel.appState.Copy2TParams = (bool)copyT2Params.IsChecked;
+
+        //    if(_viewModel.appState.Copy2TParams)
+        //    {
+        //        _viewModel.conexaoFileService.CopyT2Params(_viewModel.Conexao3Camadas, _viewModel.Conexao2Camadas, _viewModel.appState);
+
+        //        loginCheckbox.IsChecked = _viewModel.appState.LocalParams.DefaultLoginCheckbox;
+        //        loginCheckbox.IsEnabled = !_viewModel.appState.Copy2TParams;
+        //        loginPadrao.IsEnabled = !_viewModel.appState.Copy2TParams;
+
+        //        senhaCheckbox.IsChecked = _viewModel.appState.LocalParams.DefaultPasswordCheckbox;
+        //        senhaCheckbox.IsEnabled = !_viewModel.appState.Copy2TParams;
+        //        senhaPadrao.IsEnabled = !_viewModel.appState.Copy2TParams;
+
+        //        editorCheckbox.IsChecked = _viewModel.appState.LocalParams.EditorCheckbox;
+        //        editorCheckbox.IsEnabled = !_viewModel.appState.Copy2TParams;
+        //        editorTexto.IsEnabled = !_viewModel.appState.Copy2TParams;
+
+        //        txtEditorPathBtn.IsEnabled = !_viewModel.appState.Copy2TParams;
+
+        //        updateFolderCheckbox.IsChecked = _viewModel.appState.LocalParams.DirUpdateCheckbox;
+        //        updateFolderCheckbox.IsEnabled = !_viewModel.appState.Copy2TParams;
+        //        updateFolder.IsEnabled = !_viewModel.appState.Copy2TParams;
+                
+        //        updateFolderPathBtn.IsEnabled = !_viewModel.appState.Copy2TParams;
+
+        //        ultMenuWebCheckbox.IsChecked = _viewModel.Conexao2Camadas.UseWebMenu;
+        //        ultMenuWebCheckbox.IsEnabled = !_viewModel.appState.Copy2TParams;
+
+        //    } else
+        //    {
+        //        //loginCheckbox.IsChecked = _viewModel.appState.ServerParams.DefaultLoginCheckbox;
+        //        loginPadrao.IsEnabled = _viewModel.appState.ServerParams.DefaultLoginCheckbox;
+        //        loginCheckbox.IsEnabled = true;
+
+        //        //senhaCheckbox.IsChecked = _viewModel.appState.ServerParams.DefaultPasswordCheckbox;
+        //        senhaPadrao.IsEnabled = _viewModel.appState.ServerParams.DefaultPasswordCheckbox;
+        //        senhaCheckbox.IsEnabled = true;
+
+        //        //editorCheckbox.IsChecked = _viewModel.appState.ServerParams.EditorCheckbox;
+        //        editorTexto.IsEnabled = _viewModel.appState.ServerParams.EditorCheckbox;
+        //        editorCheckbox.IsEnabled = true;
+        //        txtEditorPathBtn.IsEnabled = true;
+
+        //        //updateFolderCheckbox.IsChecked = _viewModel.appState.ServerParams.DirUpdateCheckbox;
+        //        updateFolder.IsEnabled = _viewModel.appState.ServerParams.DirUpdateCheckbox;
+        //        updateFolderCheckbox.IsEnabled = true;
+        //        updateFolderPathBtn.IsEnabled = true;
+
+        //        //ultMenuWebCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseWebMenu;
+        //        ultMenuWebCheckbox.IsEnabled = true;
+        //    }
+        //}
     }
 }
