@@ -124,7 +124,7 @@ namespace TrocaBaseGUI.Services
                 if (state != null)
                 {
                     vm.History = new ObservableCollection<SysDirectoryModel>(state.History);
-                    vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
+                    //vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
                     MainViewModel.exeFile = state.ExeFile;
                     vm.conexaoFile = state.ConexaoFile;
 

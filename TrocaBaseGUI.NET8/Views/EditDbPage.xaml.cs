@@ -36,6 +36,7 @@ namespace TrocaBaseGUI.Views
             {
                 _viewModelDbs.Databases.Add(_db);
             }
+            MessageBox.Show("Base duplicada ou inválida.\nRevise os dados inseridos.");
             //DatabaseModel.SetDisplayName(_db, nameInput.Text);
             NavigationService.GoBack();
             //var mainWindow = (MainWindow)Application.Current.MainWindow;
@@ -55,12 +56,19 @@ namespace TrocaBaseGUI.Views
 
         private void userInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _db.Name = userInput.Text;
+            if(_db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase))
+                _db.Name = userInput.Text;
         }
 
         private void instDbNameInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _db.Instance = instDbNameInput.Text;
+            if (!string.IsNullOrEmpty(_db.DbType) && _db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase))
+            {
+                _db.Instance = instDbNameInput.Text;
+                return;
+            }
+            
+            _db.Name = instDbNameInput.Text;
         }
 
         private void rb_Checked(object sender, RoutedEventArgs e)
@@ -82,8 +90,11 @@ namespace TrocaBaseGUI.Views
 
         public bool isDbValid() 
         {   
-            if (String.IsNullOrEmpty(_db.DisplayName) || String.IsNullOrEmpty(_db.DbType) || String.IsNullOrEmpty(_db.Server) || String.IsNullOrEmpty(_db.Instance))
+            if (String.IsNullOrEmpty(_db.DisplayName) || String.IsNullOrEmpty(_db.DbType) || String.IsNullOrEmpty(_db.Server) || String.IsNullOrEmpty(_db.Name))
             {
+                if((!String.IsNullOrEmpty(_db.DbType) && _db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase)) && String.IsNullOrEmpty(_db.Instance))
+                    return false;
+
                 return false;
             }
             return true;

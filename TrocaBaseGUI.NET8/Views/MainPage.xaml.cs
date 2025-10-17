@@ -55,11 +55,10 @@ namespace TrocaBaseGUI.Views
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(dbList);
 
-            //foreach (var item in listaBancos)
-            //{
-
-            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            //}
+            foreach (var item in viewModel.Databases)
+            {
+                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            }
             //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
         }
 
@@ -325,8 +324,10 @@ namespace TrocaBaseGUI.Views
         private void dbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             string environment = tabSelected == 0 ? "local" : "server";
-            lstTodosBancos.ItemsSource = dbList.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
-            && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
+
+            if(lstTodosBancos.Items.Count > 0)
+                lstTodosBancos.ItemsSource = dbList.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
+                && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
         }
 
         //WIP
