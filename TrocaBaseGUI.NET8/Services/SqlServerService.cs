@@ -33,7 +33,7 @@ namespace TrocaBaseGUI.Services
                             DECLARE @sql NVARCHAR(MAX) = N'';
 
                             SELECT @sql = @sql + '
-                            IF EXISTS (SELECT 1 FROM [' + name + '].sys.tables WHERE name = ''fat_movimento_capa'')
+                            IF EXISTS (SELECT 1 FROM [' + name  + '].sys.tables WHERE name = ''fat_movimento_capa'')
                             BEGIN
                                 INSERT INTO #Bancos(DatabaseName)
                                 VALUES (''' + name + ''');

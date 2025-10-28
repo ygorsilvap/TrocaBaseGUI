@@ -27,6 +27,7 @@ namespace TrocaBaseGUI.Views
         public string rbSelected;
         public string sysSelected;
         public string exeSelected;
+        //public string dbSearch;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,30 +50,35 @@ namespace TrocaBaseGUI.Views
             //dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
 
             //Fazer Binding com esses campos de exe
-            OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
-            OpenExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            OpenExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(dbList);
 
-            foreach (var item in viewModel.Databases)
-            {
-                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            }
+            //foreach (var item in viewModel.Databases)
+            //{
+            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            //}
             //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
+            //Debug.WriteLine($"\n\n{viewModel.Databases.LastOrDefault()}\n\n");
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             searchPlaceholder();
-            //Local
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
+            if(viewModel.Databases == null || viewModel.Databases.Count == 0)
+            {
+                //Local
+                await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
+                await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
 
-            //Server
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
+                //Server
+                await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
+                await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
+            }
 
+            viewModel.DbService.SortDatabases(viewModel.Databases);
             dbList.Clear();
 
             foreach (var db in viewModel.Databases)
@@ -80,7 +86,6 @@ namespace TrocaBaseGUI.Views
                 DatabaseModel.SetDisplayName(db, db.DisplayName);
                 dbList.Add(db);
             }
-
             GetFilter(dbList);
         }
 
@@ -113,16 +118,24 @@ namespace TrocaBaseGUI.Views
 
         public void Refresh()
         {
-            IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
+            //IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
 
-            dbList = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
-            lstTodosBancos.ItemsSource = dbList;
+            //dbList = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
 
-            RadioButton_Checked(rbTodos, null);
-            tabSelected = TabControl.SelectedIndex;
-            OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            ////Arrumar essa gambiarra sem vergonha
+            //if(String.IsNullOrEmpty(dbSearch.Text))
+            //{
+            //    dbSearch.Text = dbSearch.Text;
+            //} else
+            //{
+            //    lstTodosBancos.ItemsSource = dbList;
+            //}
 
-            GetFilter(dbList);
+            //RadioButton_Checked(rbTodos, null);
+            //tabSelected = TabControl.SelectedIndex;
+            //OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+
+            //GetFilter(dbList);
         }
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -328,12 +341,13 @@ namespace TrocaBaseGUI.Views
             if(lstTodosBancos.Items.Count > 0)
                 lstTodosBancos.ItemsSource = dbList.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
                 && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
+            Debug.WriteLine($"\n\nSearch Text: {dbSearch.Text}\n\n");
         }
 
         //WIP
         private void Db_LostFocus(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine($"\n\nLost Focus\n\n");
+            //Debug.WriteLine($"\n\nLost Focus\n\n");
 
             //var ctx = (ListBox)sender;
 
@@ -363,6 +377,17 @@ namespace TrocaBaseGUI.Views
             //Debug.WriteLine($"\n\nRedirectPort: {viewModel.Conexao3Camadas.RedirectPort}\n\n");
             //viewModel.conexaoFileService.Create3CConnectionClientFileSettings(viewModel.Conexao3Camadas, viewModel.appState.ServerParams);
             //viewModel.conexaoFileService.CreatePortsSettings(viewModel.Conexao3Camadas);
+        }
+
+        private async void RefreshDbList_Click(object sender, RoutedEventArgs e)
+        {
+            //Local
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
+
+            //Server
+            await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
+            await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
         }
     }
 }

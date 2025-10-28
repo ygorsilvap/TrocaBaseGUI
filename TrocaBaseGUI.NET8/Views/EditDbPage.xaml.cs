@@ -35,6 +35,8 @@ namespace TrocaBaseGUI.Views
             if (!_viewModelDbs.Databases.Contains(_db) && isDbValid())
             {
                 _viewModelDbs.Databases.Add(_db);
+                _viewModelDbs.Databases[_viewModelDbs.Databases.Count - 1].Id = _viewModelDbs.Databases.Count - 1;
+                return;
             }
             MessageBox.Show("Base duplicada ou inválida.\nRevise os dados inseridos.");
             //DatabaseModel.SetDisplayName(_db, nameInput.Text);

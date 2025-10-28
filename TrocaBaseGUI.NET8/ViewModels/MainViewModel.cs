@@ -52,7 +52,13 @@ namespace TrocaBaseGUI.ViewModels
         public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "server" };
         public OracleService OracleService;
         public SqlServerService SqlService;
-        public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
+        //public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
+        public DatabaseService DbService { get; set; } = new DatabaseService();
+        public ObservableCollection<DatabaseModel> Databases
+        {
+            get => DbService.Databases;
+            set => DbService.Databases = value;
+        }
         public DatabaseModel SelDatabase { get; set; } = new DatabaseModel();
 
         private const int MaxHistory = 10;
@@ -94,10 +100,13 @@ namespace TrocaBaseGUI.ViewModels
                 databases.ForEach(db => {
                     if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
                     d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
-                    {
                         return;
-                    }
+
                     Databases.Add(db);
+
+                    //Validar essa solução antes de usar
+                    //Databases[Databases.Count - 1].Id = Databases.Any(db => db.Id.Equals((Databases.Count - 1))) ? Databases[Databases.Count - 1].Id : Databases.Count - 1;
+
                     Databases[Databases.Count - 1].Id = Databases.Count - 1;
                 });
                 Console.WriteLine("\n[Conexão com SQL Server estabelecida]\n");
@@ -117,6 +126,7 @@ namespace TrocaBaseGUI.ViewModels
                         Databases.Remove(item);
                     }
                 }
+                
                 Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
             }
         }
@@ -133,8 +143,8 @@ namespace TrocaBaseGUI.ViewModels
             {
                 if (await OracleService.ValidateConnection(oracleConnection, instance))
                 {
-                    List<DatabaseModel> dbs = await oracleService.GetDatabases(oracleConnection, instance);
-                    dbs.ForEach(db =>
+                    var databases = await oracleService.GetDatabases(oracleConnection, instance);
+                    databases.ForEach(db =>
                     {
                         if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
                                           d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
