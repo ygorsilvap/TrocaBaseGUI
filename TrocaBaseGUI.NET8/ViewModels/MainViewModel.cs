@@ -174,6 +174,10 @@ namespace TrocaBaseGUI.ViewModels
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
         {
+            foreach (var item in Databases)
+            {
+                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            }
             var conexaoService = conexaoFileService;
             int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
@@ -190,11 +194,17 @@ namespace TrocaBaseGUI.ViewModels
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
 
-            string newConn = dbs[id].DbType.ToLower().StartsWith("s")
-               ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
-               : $"{OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name)}\n\n";
+            //string newConn = dbs[id].DbType.ToLower().StartsWith("s")
+            //   ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
+            //   : $"{OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name)}\n\n";
 
-            if(tier > 2)
+            var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
+
+            string newConn = selectedDb.DbType.ToLower().StartsWith("s")
+               ? $"{SqlService.CreateSQLServerConnectionString(selectedDb.Environment, selectedDb.Name, selectedDb.Server)}\n\n"
+               : $"{OracleService.CreateOracleConnectionString(selectedDb.Environment, selectedDb.Server, selectedDb.Instance, selectedDb.Name)}\n\n";
+
+            if (tier > 2)
             {
                 File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
                 File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas , appState.ServerParams)));
@@ -203,9 +213,9 @@ namespace TrocaBaseGUI.ViewModels
                 File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoService.Create2CConnectionFileSettings(Conexao2Camadas, appState.LocalParams)));
             }
 
-                DatabaseModel.SetSelection(dbs, dbs[id].Id);
-            SysDirectoryModel.GetDir(History, dirSys).SelectedBase = dbs[id].Id;
-            SelDatabase = dbs[id];
+                DatabaseModel.SetSelection(dbs, selectedDb.Id);
+            SysDirectoryModel.GetDir(History, dirSys).SelectedBase = selectedDb.Id;
+            SelDatabase = selectedDb;
         }
 
         public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)

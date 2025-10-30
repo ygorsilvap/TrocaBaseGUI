@@ -110,13 +110,15 @@ public class DatabaseModel : INotifyPropertyChanged
 
     public static void SetSelection(ObservableCollection<DatabaseModel> dbs, int id)
     {
+        var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
+
         if (id < 0)
             return;
 
         if (dbs.Any(b => b.IsSelected == true))
             dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
 
-        dbs[id].IsSelected = true;
+        selectedDb.IsSelected = true;
     }
 
     public static int GetSelection(ObservableCollection<DatabaseModel> dbs)
