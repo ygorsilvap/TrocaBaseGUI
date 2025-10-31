@@ -14,10 +14,37 @@
         ResizeMode="NoResize">
 
 
-    <Border Background="#101e24" CornerRadius="20" BorderBrush="#2a353a" BorderThickness="1" Padding="6">
+    <Border Background="#f5f4f3" CornerRadius="15" BorderBrush="#2a353a"  BorderThickness="2" Padding="6">
         <Grid>
-            <Frame x:Name="MainFrame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden" Background="#101e24" MouseDown="Border_MouseDown"/>
-            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,24,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="122*"/>
+                <RowDefinition Height="121*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="23*"/>
+                <ColumnDefinition Width="111*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border BorderThickness="0" BorderBrush="#411e5a"  Background="#411e5a" CornerRadius="14, 0, 0, 14" HorizontalAlignment="Left" Width="51" Margin="-6,-6,0,-6" Grid.RowSpan="2">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="0"
+                          ShadowDepth="5"
+                          BlurRadius="15"
+                          Opacity="0.5"/>
+                </Border.Effect>
+            </Border>
+
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="#f5f4f3" MouseDown="Border_MouseDown" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+
+            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,24,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Column="1">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="-25"
+                          ShadowDepth="1"
+                          BlurRadius="5"
+                          Opacity="0.3"/>
+                </Button.Effect>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -34,17 +61,24 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#37194D"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#1C0D26"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,75,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24">
+            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,75,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Column="1">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="-25"
+                          ShadowDepth="1"
+                          BlurRadius="5"
+                          Opacity="0.3"/>
+                </Button.Effect>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -61,11 +95,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#37194D"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#1C0D26"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
