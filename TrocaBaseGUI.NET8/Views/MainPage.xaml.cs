@@ -56,10 +56,10 @@ namespace TrocaBaseGUI.Views
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(dbList);
 
-            //foreach (var item in viewModel.Databases)
-            //{
-            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            //}
+            foreach (var item in viewModel.Databases)
+            {
+                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}, Date: {item.ImportDate}\n");
+            }
             //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
             //Debug.WriteLine($"\n\n{viewModel.Databases.LastOrDefault()}\n\n");
         }
@@ -93,8 +93,8 @@ namespace TrocaBaseGUI.Views
         {
             if (!(DataContext is MainViewModel vm)) return;
 
-
             string environment = tabSelected == 0 ? "local" : "server";
+
             string type = null;
 
             if (rbOracle.IsChecked == true)
@@ -311,7 +311,7 @@ namespace TrocaBaseGUI.Views
             if (string.IsNullOrWhiteSpace(dbSearch.Text) || dbSearch.Text.Equals("Pesquisar Bases...", StringComparison.CurrentCultureIgnoreCase))
             {
                 dbSearch.Text = string.Empty;
-                dbSearch.Foreground = (Brush)new BrushConverter().ConvertFromString("#f5f4f3");
+                dbSearch.Foreground = (Brush)new BrushConverter().ConvertFromString("#37194D");
             }
         }
 

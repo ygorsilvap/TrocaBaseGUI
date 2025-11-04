@@ -84,6 +84,13 @@ public class DatabaseModel : INotifyPropertyChanged
         }
     }
 
+    private string importDate;
+    public string ImportDate
+    {
+        get => importDate;
+        set { importDate = value; OnPropertyChanged(); }
+    }
+
     private bool isSelected = false;
     public bool IsSelected
     {

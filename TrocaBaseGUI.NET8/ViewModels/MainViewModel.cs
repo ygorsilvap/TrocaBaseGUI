@@ -99,7 +99,8 @@ namespace TrocaBaseGUI.ViewModels
 
                 databases.ForEach(db => {
                     if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                    d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
+                    d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+                    d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
                         return;
 
                     Databases.Add(db);
@@ -147,7 +148,8 @@ namespace TrocaBaseGUI.ViewModels
                     databases.ForEach(db =>
                     {
                         if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                                          d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase)))
+                                          d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+                                          d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
                             return;
 
                         Databases.Add(db);

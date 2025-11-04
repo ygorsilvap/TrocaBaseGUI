@@ -47,35 +47,64 @@ namespace TrocaBaseGUI.Services
             using (var conn = new OracleConnection(connectionString))
             {
                 await conn.OpenAsync();
+
+                //Eram 2 querys separadas e foi utilizada IA para unifica-las
                 var cmd = new OracleCommand(@"
-                    SELECT username, SYS_CONTEXT('USERENV', 'INSTANCE_NAME') as instance
-                    FROM dba_users
-                    WHERE account_status = 'OPEN' 
-                    AND default_tablespace NOT IN ('SYSTEM', 'SYSAUX') 
-                    AND username NOT IN (" + exception + @")
-                    ORDER BY username", conn);
+                    SELECT 
+                        u.username,
+                        SYS_CONTEXT('USERENV', 'INSTANCE_NAME') AS instance,
+                        MIN(o.created) AS data_hora_importacao
+                    FROM dba_users u
+                    LEFT JOIN dba_objects o 
+                        ON o.owner = u.username
+                    WHERE 
+                        u.account_status = 'OPEN' 
+                        AND u.default_tablespace NOT IN ('SYSTEM', 'SYSAUX') 
+                        AND u.username NOT IN (" + exception + @")
+                    GROUP BY 
+                        u.username
+                    ORDER BY 
+                        u.username", conn);
                 var reader = await cmd.ExecuteReaderAsync();
+
                 while (await reader.ReadAsync())
                 {
+                    string username = reader.GetString(0);
+                    string importDate = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                    Debug.WriteLine($"\n\ndata: {importDate}\n\n");
+
                     if (connectionString.Contains("DBA"))
                     {
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "local", Instance = instance, Server = oracleConnection.Server });
+                        databases.Add(new DatabaseModel 
+                        { 
+                            Name = username, 
+                            DbType = "Oracle", 
+                            Environment = "local", 
+                            Instance = instance, 
+                            Server = oracleConnection.Server, 
+                            ImportDate = importDate
+                        });
                     }
                     else
                     {
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "Oracle", Environment = "server", Instance = instance, Server = oracleConnection.Server });
+                        databases.Add(new DatabaseModel
+                        {
+                            Name = username,
+                            DbType = "Oracle",
+                            Environment = "server",
+                            Instance = instance,
+                            Server = oracleConnection.Server, 
+                            ImportDate = importDate });
                     }
                 }
             }
             return databases;
         }
-
+ 
         public async Task<bool> ValidateConnection(OracleConnectionModel oracleConnection, string instance, double timeoutSeconds = 3000)
         {
             string connectionString = _connection.GetConnectionString(oracleConnection, instance);
             using var conn = new OracleConnection(connectionString);
-
-            //Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
 
             var openTask = conn.OpenAsync();
 

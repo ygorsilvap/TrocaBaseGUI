@@ -23,46 +23,68 @@ namespace TrocaBaseGUI.Services
 
         public async Task<List<DatabaseModel>> GetDatabases(SqlServerConnectionModel sqlServerConnection)
         {
-            List<DatabaseModel> databases = new List<DatabaseModel>();
-            using (var conn = new SqlConnection(_connection.GetConnectionString(sqlServerConnection)))
-            {
-                await conn.OpenAsync();
+                List<DatabaseModel> databases = new List<DatabaseModel>();
+                using (var conn = new SqlConnection(_connection.GetConnectionString(sqlServerConnection)))
+                {
+                    await conn.OpenAsync();
                 var cmd = new SqlCommand(@"
-                            CREATE TABLE #Bancos (DatabaseName NVARCHAR(128));
+                        CREATE TABLE #Bancos (DatabaseName NVARCHAR(128));
 
-                            DECLARE @sql NVARCHAR(MAX) = N'';
+                        DECLARE @sql NVARCHAR(MAX) = N'';
 
-                            SELECT @sql = @sql + '
-                            IF EXISTS (SELECT 1 FROM [' + name  + '].sys.tables WHERE name = ''fat_movimento_capa'')
-                            BEGIN
-                                INSERT INTO #Bancos(DatabaseName)
-                                VALUES (''' + name + ''');
-                            END
-                            '
-                            FROM sys.databases
-                            WHERE database_id > 4;
+                        SELECT @sql = @sql + '
+                        IF EXISTS (SELECT 1 FROM [' + name  + '].sys.tables WHERE name = ''fat_movimento_capa'')
+                        BEGIN
+                            INSERT INTO #Bancos(DatabaseName)
+                            VALUES (''' + name + ''');
+                        END
+                        '
+                        FROM sys.databases
+                        WHERE database_id > 4;
 
-                            EXEC sp_executesql @sql;
+                        EXEC sp_executesql @sql;
 
-                            -- Retorna todos os bancos ordenados
-                            SELECT DatabaseName FROM #Bancos ORDER BY DatabaseName;
+                        -- Retorna todos os bancos ordenados
+                        SELECT DatabaseName FROM #Bancos ORDER BY DatabaseName;
 
-                            DROP TABLE #Bancos;
-                    ", conn);
+                        DROP TABLE #Bancos;
+                ", conn);
+                //var cmd = new SqlCommand(@"
+                //            DECLARE @sql NVARCHAR(MAX);
+                //            SET @sql = N'';
+                //            SELECT @sql = @sql + '
+                //            IF EXISTS (SELECT 1 FROM [' + name + '].sys.tables WHERE name = ''fat_movimento_capa'')
+                //            BEGIN
+                //                SELECT 
+                //                    ''' + name + ''' AS DatabaseName,
+                //                    (SELECT create_date FROM sys.databases WHERE name = ''' + name + ''') AS CreateDate;
+                //            END;
+                //            '
+                //            FROM sys.databases
+                //            WHERE database_id > 4;
+                //            EXEC sp_executesql @sql;
+                //        ", conn);
                 var reader = await cmd.ExecuteReaderAsync();
 
-                while (await reader.ReadAsync())
-                {
-                    if (String.IsNullOrWhiteSpace(sqlServerConnection.Password)) 
-                    { 
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local", Server = sqlServerConnection.Server });
-                    } else
+                    while (await reader.ReadAsync())
                     {
-                        databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "server", Server = sqlServerConnection.Server });
+                    string date = "teste";//reader.GetDateTime(1).ToString("dd/MM/yyyy");
+
+                        Debug.WriteLine($"\n\ndate: {date}\n\n");
+
+                        if (String.IsNullOrWhiteSpace(sqlServerConnection.Password))
+                        {
+                            databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local", Server = sqlServerConnection.Server, ImportDate = date });
+                        }
+                        else
+                        {
+                            databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "server", Server = sqlServerConnection.Server, ImportDate = date });
+                            Debug.WriteLine($"\nDatabase: {reader.GetString(0)}, Type: {"SQLServer"}, Environment: {"server"}, Server: {sqlServerConnection.Server}, Date: {date}\n");
+
+                        }
                     }
                 }
-            }
-            return databases;
+                return databases;
         }
 
 
