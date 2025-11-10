@@ -56,10 +56,10 @@ namespace TrocaBaseGUI.Views
             IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
             GetFilter(dbList);
 
-            foreach (var item in viewModel.Databases)
-            {
-                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}, Date: {item.ImportDate}\n");
-            }
+            //foreach (var item in viewModel.Databases)
+            //{
+            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}, Date: {item.ImportDate}\n");
+            //}
             //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
             //Debug.WriteLine($"\n\n{viewModel.Databases.LastOrDefault()}\n\n");
         }
@@ -69,16 +69,19 @@ namespace TrocaBaseGUI.Views
             searchPlaceholder();
             if(viewModel.Databases == null || viewModel.Databases.Count == 0)
             {
-                //Local
-                await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
-                await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
+                var tasks = new List<Task>
+                {
+                    //Local
+                    viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection),
+                    viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection),
+                    //Server
+                    viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection),
+                    viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection)
+                };
 
-                //Server
-                await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
-                await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
+                await Task.WhenAll(tasks);
             }
 
-            viewModel.DbService.SortDatabases(viewModel.Databases);
             dbList.Clear();
 
             foreach (var db in viewModel.Databases)
@@ -86,12 +89,16 @@ namespace TrocaBaseGUI.Views
                 DatabaseModel.SetDisplayName(db, db.DisplayName);
                 dbList.Add(db);
             }
+
+            viewModel.DbService.SortDatabases(dbList);
+
             GetFilter(dbList);
         }
 
         private void GetFilter(ObservableCollection<DatabaseModel> db)
         {
             if (!(DataContext is MainViewModel vm)) return;
+
 
             string environment = tabSelected == 0 ? "local" : "server";
 
@@ -106,7 +113,7 @@ namespace TrocaBaseGUI.Views
                 type = "SQLServer";
             }
             else
-            {
+            {;
                 lstTodosBancos.ItemsSource = vm.EnvironmentFilter(environment, db);
                 return;
             }

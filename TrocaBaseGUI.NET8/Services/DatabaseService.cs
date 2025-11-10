@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,18 +23,16 @@ namespace TrocaBaseGUI.Services
             //gerenciar IDs
             int lastIdSet = Databases.LastOrDefault().Id;
 
-
-
             Databases.Add(database);
         }
 
         public void SortDatabases(ObservableCollection<DatabaseModel> databases)
         {
-            var sortedDatabases = Databases.OrderBy(db => db.DisplayName).ToList();
-            Databases.Clear();
+            var sortedDatabases = databases.OrderBy(db => db.DisplayName).ToList();
+            databases.Clear();
             foreach (var db in sortedDatabases)
             {
-                Databases.Add(db);
+                databases.Add(db);
             }
         }
     }

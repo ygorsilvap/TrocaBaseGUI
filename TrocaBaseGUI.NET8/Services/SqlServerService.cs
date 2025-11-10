@@ -21,56 +21,45 @@ namespace TrocaBaseGUI.Services
             _connection = connection;
         }
 
-        public async Task<List<DatabaseModel>> GetDatabases(SqlServerConnectionModel sqlServerConnection)
+        public async Task<List<DatabaseModel>> GetSqlServerDatabases(SqlServerConnectionModel sqlServerConnection)
         {
                 List<DatabaseModel> databases = new List<DatabaseModel>();
                 using (var conn = new SqlConnection(_connection.GetConnectionString(sqlServerConnection)))
                 {
                     await conn.OpenAsync();
-                var cmd = new SqlCommand(@"
-                        CREATE TABLE #Bancos (DatabaseName NVARCHAR(128));
+                    var cmd = new SqlCommand(@"
+                            CREATE TABLE #Bancos (DatabaseName NVARCHAR(128), CreateDate DATETIME);
 
-                        DECLARE @sql NVARCHAR(MAX) = N'';
+                            DECLARE @sql NVARCHAR(MAX) = N'';
 
-                        SELECT @sql = @sql + '
-                        IF EXISTS (SELECT 1 FROM [' + name  + '].sys.tables WHERE name = ''fat_movimento_capa'')
-                        BEGIN
-                            INSERT INTO #Bancos(DatabaseName)
-                            VALUES (''' + name + ''');
-                        END
-                        '
-                        FROM sys.databases
-                        WHERE database_id > 4;
+                            SELECT @sql = @sql + '
+                            IF EXISTS (SELECT 1 FROM [' + name + '].sys.tables WHERE name = ''fat_movimento_capa'')
+                            BEGIN
+                                INSERT INTO #Bancos (DatabaseName, CreateDate)
+                                SELECT ''' + name + ''', create_date
+                                FROM sys.databases
+                                WHERE name = ''' + name + ''';
+                            END
+                            '
+                            FROM sys.databases
+                            WHERE database_id > 4; -- ignora bancos de sistema
 
-                        EXEC sp_executesql @sql;
+                            EXEC sp_executesql @sql;
 
-                        -- Retorna todos os bancos ordenados
-                        SELECT DatabaseName FROM #Bancos ORDER BY DatabaseName;
+                            -- Retorna todos os bancos com data de criação
+                            SELECT DatabaseName, CreateDate
+                            FROM #Bancos
+                            ORDER BY DatabaseName;
 
-                        DROP TABLE #Bancos;
-                ", conn);
-                //var cmd = new SqlCommand(@"
-                //            DECLARE @sql NVARCHAR(MAX);
-                //            SET @sql = N'';
-                //            SELECT @sql = @sql + '
-                //            IF EXISTS (SELECT 1 FROM [' + name + '].sys.tables WHERE name = ''fat_movimento_capa'')
-                //            BEGIN
-                //                SELECT 
-                //                    ''' + name + ''' AS DatabaseName,
-                //                    (SELECT create_date FROM sys.databases WHERE name = ''' + name + ''') AS CreateDate;
-                //            END;
-                //            '
-                //            FROM sys.databases
-                //            WHERE database_id > 4;
-                //            EXEC sp_executesql @sql;
-                //        ", conn);
-                var reader = await cmd.ExecuteReaderAsync();
+                            DROP TABLE #Bancos;
+                        ", conn);
+                    var reader = await cmd.ExecuteReaderAsync();
 
                     while (await reader.ReadAsync())
                     {
-                    string date = "teste";//reader.GetDateTime(1).ToString("dd/MM/yyyy");
+                    string date = reader.GetDateTime(1).ToString("dd/MM/yy");//reader.GetDateTime(1).ToString("dd/MM/yyyy");
 
-                        Debug.WriteLine($"\n\ndate: {date}\n\n");
+                        //Debug.WriteLine($"\n\nsqls date: {date}\n\n");
 
                         if (String.IsNullOrWhiteSpace(sqlServerConnection.Password))
                         {

@@ -30,7 +30,7 @@ namespace TrocaBaseGUI.Services
                 .ToList();
         }
 
-        public async Task<List<DatabaseModel>> GetDatabases(OracleConnectionModel oracleConnection, string instance)
+        public async Task<List<DatabaseModel>> GetOracleDatabases(OracleConnectionModel oracleConnection, string instance)
         {
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
                 "'OJVMSYS', 'ORACLE_OCM', 'ORDDATA', 'ORDPLUGINS', 'ORDSYS', 'XDB', 'XS$NULL', 'MDSYS', 'WMSYS', 'LBACSYS', 'ANONYMOUS', 'SI_INFORMTN_SCHEMA', 'OLAPSYS', 'DVF', 'DVSYS'";
@@ -58,20 +58,23 @@ namespace TrocaBaseGUI.Services
                     LEFT JOIN dba_objects o 
                         ON o.owner = u.username
                     WHERE 
-                        u.account_status = 'OPEN' 
-                        AND u.default_tablespace NOT IN ('SYSTEM', 'SYSAUX') 
+                        u.account_status = 'OPEN'
+                        AND u.default_tablespace NOT IN ('SYSTEM', 'SYSAUX')
                         AND u.username NOT IN (" + exception + @")
                     GROUP BY 
                         u.username
+                    HAVING 
+                        COUNT(o.object_name) > 0
                     ORDER BY 
-                        u.username", conn);
+                        u.username
+                    ", conn);
                 var reader = await cmd.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
                 {
                     string username = reader.GetString(0);
                     string importDate = reader.IsDBNull(2) ? "" : reader.GetString(2);
-                    Debug.WriteLine($"\n\ndata: {importDate}\n\n");
+                    //Debug.WriteLine($"\n\ndata: {importDate}\n\n");
 
                     if (connectionString.Contains("DBA"))
                     {

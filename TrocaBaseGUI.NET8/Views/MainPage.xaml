@@ -226,8 +226,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        
-        <Button Click="ToSettings_Click" Content="📁" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,280,0,0" VerticalAlignment="Top" Height="30" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
+
+        <Button Click="SelecionarExecutavel_Click" Content="📁" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,280,0,0" VerticalAlignment="Top" Height="30" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"

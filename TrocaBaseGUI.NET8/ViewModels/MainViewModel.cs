@@ -95,7 +95,7 @@ namespace TrocaBaseGUI.ViewModels
 
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
-                var databases = await sqlservice.GetDatabases(sqlServerConnection);
+                var databases = await sqlservice.GetSqlServerDatabases(sqlServerConnection);
 
                 databases.ForEach(db => {
                     if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
@@ -127,7 +127,8 @@ namespace TrocaBaseGUI.ViewModels
                         Databases.Remove(item);
                     }
                 }
-                
+                //DbService.SortDatabases(Databases);
+
                 Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
             }
         }
@@ -144,7 +145,7 @@ namespace TrocaBaseGUI.ViewModels
             {
                 if (await OracleService.ValidateConnection(oracleConnection, instance))
                 {
-                    var databases = await oracleService.GetDatabases(oracleConnection, instance);
+                    var databases = await oracleService.GetOracleDatabases(oracleConnection, instance);
                     databases.ForEach(db =>
                     {
                         if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
@@ -155,6 +156,7 @@ namespace TrocaBaseGUI.ViewModels
                         Databases.Add(db);
                         Databases[Databases.Count - 1].Id = Databases.Count - 1;
                     });
+                    //DbService.SortDatabases(Databases);
                     return;
                 }
 
@@ -170,6 +172,7 @@ namespace TrocaBaseGUI.ViewModels
                         Debug.WriteLine($"\nRemovendo {db.Name} - {db.Environment}\n");
                         Databases.Remove(db);
                     });
+                    //DbService.SortDatabases(Databases);
                 }
             }
         }
