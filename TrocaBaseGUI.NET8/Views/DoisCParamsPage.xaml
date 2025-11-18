@@ -10,35 +10,36 @@
       VerticalAlignment="Center"
       Height="500" Width="550">
 
-    <Grid Background="#101e24">
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="427"/>
+            <RowDefinition Height="7.2"/>
+            <RowDefinition Height="419.8"/>
         </Grid.RowDefinitions>
         <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,22,60,70" CornerRadius="0, 0, 5, 5" Grid.Row="1"/>-->
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
         <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
 
-        <CheckBox x:Name="loginCheckbox" IsChecked="{Binding appState.LocalParams.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,66,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="17" Grid.Row="1"><Run Text="Login Padrão"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="loginPadrao" TextChanged="loginPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultLogin}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,66,205,343" Grid.Row="1">
+        <CheckBox x:Name="loginCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,59,0,0" Grid.Row="2" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="17" Grid.Row="2"><Run Text="Login Padrão"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="loginPadrao" TextChanged="loginPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultLogin}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,59,205,343" Grid.Row="2">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TextBox">
                                 <Border x:Name="Border"
-                                    Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                    Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                   Margin="0" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
-                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -48,26 +49,26 @@
             </TextBox.Style>
         </TextBox>
 
-        <CheckBox x:Name="senhaCheckbox" IsChecked="{Binding appState.LocalParams.DefaultPasswordCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="senhaCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,96,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><Run Text=" Padrão"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="senhaPadrao" TextChanged="senhaPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultPassword}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,96,205,313" Grid.Row="1">
+        <CheckBox x:Name="senhaCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DefaultPasswordCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="senhaCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,89,0,0" Grid.Row="2" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="2"><Run Language="pt-br" Text="Senha"/><Run Text=" Padrão"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="senhaPadrao" TextChanged="senhaPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultPassword}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,89,205,313" Grid.Row="2">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TextBox}">
                                 <Border x:Name="Border"
-                                    Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                    Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                   Margin="0" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
-                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -77,26 +78,26 @@
             </TextBox.Style>
         </TextBox>
 
-        <CheckBox x:Name="editorCheckbox" IsChecked="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="editorCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,136,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Editor de Texto:"/></TextBlock>
-        <TextBox x:Name="editorTexto" TextChanged="editorTexto_TextChanged" Text="{Binding Conexao2Camadas.TextEditorPath}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,136,205,273" Grid.Row="1">
+        <CheckBox x:Name="editorCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="editorCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,129,0,0" Grid.Row="2" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,128,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="2"><Run Language="pt-br" Text="Editor de Texto:"/></TextBlock>
+        <TextBox x:Name="editorTexto" TextChanged="editorTexto_TextChanged" Text="{Binding Conexao2Camadas.TextEditorPath}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,129,205,273" Grid.Row="2">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TextBox}">
                                 <Border x:Name="Border"
-                                    Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                    Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                   Margin="0" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
-                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -106,26 +107,26 @@
             </TextBox.Style>
         </TextBox>
 
-        <CheckBox x:Name="updateFolderCheckbox" IsChecked="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="updateFolderCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,166,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Dir. Atualização:"/></TextBlock>
-        <TextBox x:Name="updateFolder" TextChanged="updateFolder_TextChanged" Text="{Binding Conexao2Camadas.UpdateFolder}" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="195,166,205,243" Grid.Row="1">
+        <CheckBox x:Name="updateFolderCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="updateFolderCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,159,0,0" Grid.Row="2" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,158,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="2"><Run Language="pt-br" Text="Dir. Atualização:"/></TextBlock>
+        <TextBox x:Name="updateFolder" TextChanged="updateFolder_TextChanged" Text="{Binding Conexao2Camadas.UpdateFolder}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,159,205,243" Grid.Row="2">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TextBox}">
                                 <Border x:Name="Border"
-                                    Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                    Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                   Margin="0" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="#18262b"/>
-                                        <Setter TargetName="Border" Property="Background" Value="#152226"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -135,9 +136,10 @@
             </TextBox.Style>
         </TextBox>
 
-        <CheckBox x:Name="ultMenuWebCheckbox" Click="ultMenuWebCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,206,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Height="16" Grid.Row="1" Text="Utiliza Menu Web"/>
-        <Button x:Name="txtEditorPathBtn" Click="SelectTextEditorPath_Click" IsEnabled="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="#788d91" FontSize="16" HorizontalAlignment="Left" Margin="348,133,0,0" VerticalAlignment="Top" Height="18" Width="20" BorderBrush="#2a353a"  Background="#101e24" RenderTransformOrigin="0.511,0.257" Grid.Row="1">
+        <CheckBox x:Name="ultMenuWebCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" Click="ultMenuWebCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,199,0,0" Grid.Row="2" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Height="16" Grid.Row="2" Text="Utiliza Menu Web"/>
+
+        <Button x:Name="txtEditorPathBtn" Click="SelectTextEditorPath_Click" IsEnabled="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalAlignment="Left" Margin="348,126,0,0" VerticalAlignment="Top" Height="18" Width="20" Background="#f5f4f3" RenderTransformOrigin="0.511,0.257" Grid.Row="2">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -163,13 +165,13 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Button.Template>
-            <Button Content="📁" Foreground="#788d91" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Height="18" Width="20" BorderBrush="#2a353a"  Background="#101e24">
+            <Button Content="📁" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Width="23" Height="22">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="Border"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="5"
-                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="#f5f4f3"
+                            CornerRadius="0"
+                            BorderBrush="#f5f4f3"
                             BorderThickness="0">
                             <ContentPresenter x:Name="contentPresenter"
                                 HorizontalAlignment="Center"
@@ -180,21 +182,21 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#94ADB3"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7737A6"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="15"/>
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7F9599"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#411e5a"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#BFBEBD"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
         </Button>
-        <Button x:Name="updateFolderPathBtn" Click="SelectUpdateFolderPath_Click" IsEnabled="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="#788d91" FontSize="16" HorizontalAlignment="Left" Margin="348,163,0,0" VerticalAlignment="Top" Height="18" Width="20" BorderBrush="#2a353a"  Background="#101e24" RenderTransformOrigin="0.511,0.257" Grid.Row="1">
+        <Button x:Name="updateFolderPathBtn" Click="SelectUpdateFolderPath_Click" IsEnabled="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalAlignment="Left" Margin="348,156,0,0" VerticalAlignment="Top" Height="18" Width="20" Background="#f5f4f3" RenderTransformOrigin="0.511,0.257" Grid.Row="2">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -220,13 +222,13 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Button.Template>
-            <Button Content="📁" Foreground="#788d91" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Height="18" Width="20" BorderBrush="#2a353a"  Background="#101e24">
+            <Button Content="📁" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Width="22" Height="22">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="Border"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="5"
-                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="#f5f4f3"
+                            CornerRadius="0"
+                            BorderBrush="#f5f4f3"
                             BorderThickness="0">
                             <ContentPresenter x:Name="contentPresenter"
                                 HorizontalAlignment="Center"
@@ -237,14 +239,14 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#94ADB3"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7737A6"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="15"/>
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7F9599"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#411e5a"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#BFBEBD"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

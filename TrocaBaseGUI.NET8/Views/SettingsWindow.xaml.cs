@@ -49,15 +49,15 @@ namespace TrocaBaseGUI.Views
             SystemCommands.MinimizeWindow(Application.Current.MainWindow);
         }
 
-        private void VoltarButton_Click(object sender, RoutedEventArgs e)
-        {
-            var main = new MainWindow();
+        //private void VoltarButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var main = new MainWindow();
 
-            Application.Current.MainWindow = main;
-            main.Show();
+        //    Application.Current.MainWindow = main;
+        //    main.Show();
 
-            Window.GetWindow(this)?.Close();
-        }
+        //    Window.GetWindow(this)?.Close();
+        //}
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

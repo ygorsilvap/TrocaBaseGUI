@@ -110,7 +110,7 @@ namespace TrocaBaseGUI.Views
             }
             else if (rbSqlServer.IsChecked == true)
             {
-                type = "SQLServer";
+                type = "SQL Server";
             }
             else
             {;
@@ -149,6 +149,7 @@ namespace TrocaBaseGUI.Views
         {
             if (DataContext is MainViewModel vm && !String.IsNullOrEmpty(MainViewModel.exeFile))
             {
+                Debug.WriteLine($"\n\nIDSelDb: {viewModel.SelDatabase.Id}\n\n");
                 vm.SelectBase(vm.Databases, viewModel.SelDatabase.Id, dirSys.SelectedValue.ToString());
             } else
             {

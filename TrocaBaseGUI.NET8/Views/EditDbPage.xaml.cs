@@ -34,6 +34,8 @@ namespace TrocaBaseGUI.Views
         {
             if (!_viewModelDbs.Databases.Contains(_db) && isDbValid())
             {
+                //Debug.WriteLine($"\n Id: {_db.Id}, Database: {_db.Name}, Type: {_db.DbType}, Environment: {_db.Environment}, Server: {_db.Server}, Date: {_db.ImportDate}\n");
+
                 _viewModelDbs.Databases.Add(_db);
                 _viewModelDbs.Databases[_viewModelDbs.Databases.Count - 1].Id = _viewModelDbs.Databases.Count - 1;
                 return;

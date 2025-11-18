@@ -6,17 +6,17 @@
       VerticalAlignment="Center"
       Height="500" Width="550">
 
-    <Grid Background="#101e24">
-       <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,95,60,70" CornerRadius="0, 0, 5, 5"/>-->
-        <TextBox x:Name="sqlServerServer" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="100,175,300,307" Text="{Binding ServerSQLServerConnection.Server}">
+    <Grid Background="Transparent">
+        <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,95,60,70" CornerRadius="0, 0, 5, 5"/>-->
+        <TextBox x:Name="sqlServerServer" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,175,300,307" Text="{Binding ServerSQLServerConnection.Server}">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TextBox">
-                                <Border Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                <Border Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                   Margin="0" />
@@ -28,15 +28,15 @@
             </TextBox.Style>
         </TextBox>
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="oracleServer" Foreground="#f5f4f3" FontSize="11" Margin="300,175,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
+        <TextBox x:Name="oracleServer" Foreground="black" FontSize="11" Margin="300,175,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TextBox">
-                                <Border Background="#19262c"  
-                                    BorderBrush="#2a353a"  
-                                    BorderThickness="1"  
+                                <Border Background="#f5f4f3"  
+                                    BorderBrush="#411e5a"  
+                                    BorderThickness="1.5"  
                                     CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                 Margin="0" />
@@ -48,15 +48,15 @@
             </TextBox.Style>
         </TextBox>
         <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
-        <PasswordBox x:Name="OraclePassword" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="300,235,100,247">
+        <PasswordBox x:Name="OraclePassword" Foreground="black" FontSize="11" Margin="300,235,100,247">
             <PasswordBox.Style>
                 <Style TargetType="PasswordBox">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="PasswordBox">
-                                <Border Background="#19262c"  
-                                    BorderBrush="#2a353a"  
-                                    BorderThickness="1"  
+                                <Border Background="#f5f4f3"  
+                                    BorderBrush="#411e5a"  
+                                    BorderThickness="1.5"  
                                     CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                                 Margin="0" />
@@ -70,12 +70,12 @@
 
         <!--<TextBox x:Name="oraclePort" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="390,400,100,83" TextWrapping="Wrap" MaxLength="5" Text="{Binding ServerOracleConnection.Port}"/>-->
 
-        <Border Background="#19262c" BorderBrush="#2a353a" BorderThickness="1" CornerRadius="5" 
-        Margin="390,400,100,83" Grid.Row="1">
-            <TextBox x:Name="oraclePort"
+        <Border Background="#f5f4f3" BorderBrush="#37194D" BorderThickness="2" CornerRadius="5" 
+        Margin="390,400,100,83" Grid.Row="2">
+            <TextBox x:Name="oraclePort" 
              TextAlignment="Center"
              Background="Transparent" 
-             Foreground="#f5f4f3" 
+             Foreground="black" 
              FontSize="11" 
              TextWrapping="Wrap" 
              MaxLength="5" 
@@ -83,7 +83,7 @@
              BorderThickness="0"/>
         </Border>
 
-        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="120,337,310,135">
+        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="120,337,310,135">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -105,7 +105,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="Testar Conexão" Click="OracleTestConn_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="310,337,120,135">
+        <Button Content="Testar Conexão" Click="OracleTestConn_Click" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="310,337,120,135">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -127,44 +127,46 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <!--<TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>-->
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,352" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
-        <TextBlock Foreground="#f5f4f3" FontSize="18" FontWeight="Bold" Margin="343,110,147,352" TextWrapping="Wrap"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <Button Content="Salvar" Click="SalvarButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="230,389,230,83">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,352" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
+        <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,110,147,352" TextWrapping="Wrap"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+
+        <Button Content="🡨" Click="VoltarButton_Click" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Margin="13,78,0,393" Width="22" BorderBrush="Transparent"  Background="Transparent">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
                         Background="{TemplateBinding Background}"
                         CornerRadius="5"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+                        BorderThickness="{TemplateBinding BorderThickness}" Margin="0,1,-3,-3">
                         <ContentPresenter HorizontalAlignment="Center"
                                         VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                            <Setter TargetName="Border" Property="TextElement.FontSize" Value="21"/>
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="390,378,0,106" TextWrapping="Wrap"><Run Language="pt-br" Text="Porta"/></TextBlock>
-        <PasswordBox x:Name="SqlServerPassword" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="100,235,300,247">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="390,378,0,106" TextWrapping="Wrap"><Run Language="pt-br" Text="Porta"/></TextBlock>
+        <PasswordBox x:Name="SqlServerPassword" Foreground="black" FontSize="11" Margin="100,235,300,247">
             <PasswordBox.Style>
                 <Style TargetType="{x:Type PasswordBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type PasswordBox}">
-                                <Border Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                <Border Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                             Margin="0" />
@@ -175,16 +177,16 @@
                 </Style>
             </PasswordBox.Style>
         </PasswordBox>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name="oracleInstance"  Foreground="#f5f4f3" FontSize="11" Margin="300,300,100,182" Text="{Binding ServerOracleConnection.Instance}" Width="150">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBox x:Name="oracleInstance"  Foreground="black" FontSize="11" Margin="300,300,100,182" Text="{Binding ServerOracleConnection.Instance}" Width="150">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TextBox}">
-                                <Border Background="#19262c"  
-                                        BorderBrush="#2a353a"  
-                                        BorderThickness="1"  
+                                <Border Background="#f5f4f3"  
+                                        BorderBrush="#411e5a"  
+                                        BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                             Margin="0" />
@@ -195,16 +197,16 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="300,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Instância"/></TextBlock>
-        <TextBox x:Name="sqlServerUser" BorderThickness="1" Foreground="#f5f4f3" FontSize="11" Padding="1, 0" Margin="100,300,300,182" Text="{Binding ServerSQLServerConnection.Username}">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Instância"/></TextBlock>
+        <TextBox x:Name="sqlServerUser" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,300,300,182" Text="{Binding ServerSQLServerConnection.Username}">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TextBox}">
-                                <Border Background="#19262c"  
-                                    BorderBrush="#2a353a"  
-                                    BorderThickness="1"  
+                                <Border Background="#f5f4f3"  
+                                    BorderBrush="#411e5a"  
+                                    BorderThickness="1.5"  
                                     CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
                                         Margin="0" />
@@ -215,6 +217,6 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock Foreground="#f5f4f3" HorizontalAlignment="Left" Margin="100,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="14"><Run Language="pt-br" Text="Usuário"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="14"><Run Language="pt-br" Text="Usuário"/><LineBreak/><Run Language="pt-br"/></TextBlock>
     </Grid>
 </Page>

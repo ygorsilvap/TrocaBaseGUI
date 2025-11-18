@@ -125,10 +125,23 @@ namespace TrocaBaseGUI.Views
             _viewModel.LocalOracleConnection.Port = port;
         }
 
-        private void SalvarButton_Click(object sender, RoutedEventArgs e)
+        //private void SalvarButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SetSqlServerSettings(sqlServerServer.Text);
+        //    SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
+        //}
+
+        private void VoltarButton_Click(object sender, RoutedEventArgs e)
         {
+            var main = new MainWindow();
+
             SetSqlServerSettings(sqlServerServer.Text);
             SetOracleSettings(OracleServer.Text, OraclePassword.Password, OracleInstance.Text, OraclePort.Text);
+
+            Application.Current.MainWindow = main;
+            main.Show();
+
+            Window.GetWindow(this)?.Close();
         }
     }
 }

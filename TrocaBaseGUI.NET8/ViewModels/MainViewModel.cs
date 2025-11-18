@@ -179,10 +179,10 @@ namespace TrocaBaseGUI.ViewModels
 
         public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
         {
-            foreach (var item in Databases)
-            {
-                Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            }
+            //foreach (var item in Databases)
+            //{
+            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
+            //}
             var conexaoService = conexaoFileService;
             int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
@@ -198,10 +198,6 @@ namespace TrocaBaseGUI.ViewModels
 
             if (string.IsNullOrEmpty(selectedCnx))
                 return;
-
-            //string newConn = dbs[id].DbType.ToLower().StartsWith("s")
-            //   ? $"{SqlService.CreateSQLServerConnectionString(dbs[id].Environment, dbs[id].Name, dbs[id].Server)}\n\n"
-            //   : $"{OracleService.CreateOracleConnectionString(dbs[id].Environment, dbs[id].Server, dbs[id].Instance, dbs[id].Name)}\n\n";
 
             var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
 

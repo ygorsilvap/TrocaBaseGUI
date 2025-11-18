@@ -63,12 +63,12 @@ namespace TrocaBaseGUI.Services
 
                         if (String.IsNullOrWhiteSpace(sqlServerConnection.Password))
                         {
-                            databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "local", Server = sqlServerConnection.Server, ImportDate = date });
+                            databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQL Server", Environment = "local", Server = sqlServerConnection.Server, ImportDate = date });
                         }
                         else
                         {
-                            databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQLServer", Environment = "server", Server = sqlServerConnection.Server, ImportDate = date });
-                            Debug.WriteLine($"\nDatabase: {reader.GetString(0)}, Type: {"SQLServer"}, Environment: {"server"}, Server: {sqlServerConnection.Server}, Date: {date}\n");
+                            databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQL Server", Environment = "server", Server = sqlServerConnection.Server, ImportDate = date });
+                            //Debug.WriteLine($"\nDatabase: {reader.GetString(0)}, Type: {"SQL Server"}, Environment: {"server"}, Server: {sqlServerConnection.Server}, Date: {date}\n");
 
                         }
                     }

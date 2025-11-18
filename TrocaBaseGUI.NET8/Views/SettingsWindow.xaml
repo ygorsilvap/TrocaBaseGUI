@@ -14,18 +14,45 @@
         Background="Transparent"
         ResizeMode="NoResize">
 
-    <Border Background="#101e24" CornerRadius="20" BorderBrush="#2a353a" BorderThickness="1" Padding="6">
+    <Border Background="#f5f4f3" BorderBrush="#2a353a" CornerRadius="5" BorderThickness="2" Padding="6">
 
-        <Grid Background="#101e24">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="57*"/>
                 <RowDefinition Height="427"/>
             </Grid.RowDefinitions>
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="Transparent" MouseDown="Border_MouseDown" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Image Source="/Assets/settings80.png" IsHitTestVisible="False" HorizontalAlignment="Left" Height="50" Margin="15,13,0,0" VerticalAlignment="Top" Width="45" Grid.RowSpan="2" Grid.Row="1"/>
-            <TextBlock HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#f5f4f3" FontSize="26" FontWeight="Medium" Margin="75,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="40" Grid.RowSpan="2" Grid.Row="1"><Run Language="pt-br" Text="Configurações"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,13,24,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24" Grid.Row="1">
+
+            <Border BorderThickness="0" BorderBrush="#411e5a"  Background="#411e5a" CornerRadius="3, 0, 0, 3" Grid.RowSpan="3" Margin="-6,-6,492,-6">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="0"
+                          ShadowDepth="5"
+                          BlurRadius="15"
+                          Opacity="0.5"/>
+                </Border.Effect>
+            </Border>
+
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="Transparent" MouseDown="Border_MouseDown" Grid.RowSpan="3" />
+            
+            <!--<Image Source="/Assets/settings80.png" IsHitTestVisible="False" HorizontalAlignment="Left" Height="50" Margin="15,13,0,0" VerticalAlignment="Top" Width="45" Grid.RowSpan="2" Grid.Row="1"/>-->
+            <TextBlock HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#411e5a" FontSize="26" FontWeight="Medium" Margin="75,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="40" Grid.RowSpan="2" Grid.Row="1"><Run Language="pt-br" Text="Configurações"/><LineBreak/><Run Language="pt-br"/>
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="-25"
+                          ShadowDepth="1"
+                          BlurRadius="5"
+                          Opacity="0.3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,13,24,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="-25"
+                          ShadowDepth="1"
+                          BlurRadius="5"
+                          Opacity="0.3"/>
+                </Button.Effect>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -42,17 +69,24 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#37194D"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#1C0D26"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,13,75,0" BorderThickness="0" Foreground="#30444D"  Background="#101e24" Grid.Row="1">
+            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,13,75,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black"
+                          Direction="-25"
+                          ShadowDepth="1"
+                          BlurRadius="5"
+                          Opacity="0.3"/>
+                </Button.Effect>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -69,17 +103,17 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#2a353a"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#37194D"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
-                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#252E33"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#1C0D26"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Border BorderThickness="1" BorderBrush="#2a353a" Margin="0,35,0,60" CornerRadius="0, 0, 5, 5" Grid.Row="2" HorizontalAlignment="Center" Width="416"/>
+            <Border BorderThickness="1" BorderBrush="#411e5a" Margin="0,35,0,60" CornerRadius="0, 0, 5, 5" Grid.Row="2" HorizontalAlignment="Center" Width="416"/>
             <TabControl Margin="60,9,60,392" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Background="#101e24" Grid.Row="2">
                 <TabControl.Resources>
                     <Style TargetType="TabItem">
@@ -88,8 +122,8 @@
                                 <ControlTemplate TargetType="TabItem">
                                     <Border
                                 Name="Border"
-                                Background="#121f24"
-                                BorderBrush="#2a353a"
+                                Background="#411e5a"
+                                BorderBrush="#411e5a"
                                 BorderThickness="1"
                                 CornerRadius="5,5,0,0"
                                 Padding="8,4">
@@ -100,12 +134,12 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="#18262c"/>
-                                            <Setter TargetName="Border" Property="BorderBrush" Value="#2a353a"/>
-                                            <Setter Property="Foreground" Value="#f5f4f3"/>
+                                            <Setter TargetName="Border" Property="Background" Value="#7737A6"/>
+                                            <Setter TargetName="Border" Property="BorderBrush" Value="#37194D"/>
+                                            <Setter Property="FontSize" Value="12"/>
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                                            <Setter TargetName="Border" Property="Background" Value="#5C2A80"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -118,7 +152,7 @@
                 <TabItem Header="Opc. 2 Camadas" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
                 <TabItem Header="Opc. 3 Camadas" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
             </TabControl>
-            <Button Content="Voltar" Click="VoltarButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="220,382,220,10" Grid.Row="2">
+            <!--<Button Content="🡨" Click="VoltarButton_Click" FontWeight="Bold" FontSize="22" Foreground="#f5f4f3" BorderBrush="Transparent" Background="Transparent" Margin="3,12,505,385" Grid.Row="2">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -131,15 +165,16 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                                <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                                <Setter TargetName="Border" Property="TextElement.FontSize" Value="21"/>
+                                <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
-            </Button>
+            </Button>-->
         </Grid>
     </Border>
 </Window>
