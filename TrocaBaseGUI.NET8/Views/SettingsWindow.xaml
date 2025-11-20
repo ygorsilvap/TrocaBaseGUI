@@ -15,15 +15,15 @@
         ResizeMode="NoResize">
 
     <Border Background="#f5f4f3" BorderBrush="#2a353a" CornerRadius="5" BorderThickness="2" Padding="6">
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="57*"/>
-                <RowDefinition Height="427"/>
+                <RowDefinition Height="117.267"/>
+                <RowDefinition Height="309.733"/>
             </Grid.RowDefinitions>
 
-            <Border BorderThickness="0" BorderBrush="#411e5a"  Background="#411e5a" CornerRadius="3, 0, 0, 3" Grid.RowSpan="3" Margin="-6,-6,492,-6">
+            <Border BorderThickness="0" BorderBrush="#411e5a"  Background="#411e5a" CornerRadius="3, 0, 0, 3" Grid.RowSpan="4" Margin="-6,-6,491.5,-6">
                 <Border.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="0"
@@ -33,8 +33,8 @@
                 </Border.Effect>
             </Border>
 
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="Transparent" MouseDown="Border_MouseDown" Grid.RowSpan="3" />
-            
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="Transparent" MouseDown="Border_MouseDown" Grid.RowSpan="4" />
+
             <!--<Image Source="/Assets/settings80.png" IsHitTestVisible="False" HorizontalAlignment="Left" Height="50" Margin="15,13,0,0" VerticalAlignment="Top" Width="45" Grid.RowSpan="2" Grid.Row="1"/>-->
             <TextBlock HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#411e5a" FontSize="26" FontWeight="Medium" Margin="75,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="40" Grid.RowSpan="2" Grid.Row="1"><Run Language="pt-br" Text="Configurações"/><LineBreak/><Run Language="pt-br"/>
                 <TextBlock.Effect>
@@ -45,7 +45,7 @@
                           Opacity="0.3"/>
                 </TextBlock.Effect>
             </TextBlock>
-            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,13,24,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
+            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="480,0,0,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
                 <Button.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -79,7 +79,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,13,75,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
+            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="429,0,0,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
                 <Button.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -113,8 +113,8 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Border BorderThickness="1" BorderBrush="#411e5a" Margin="0,35,0,60" CornerRadius="0, 0, 5, 5" Grid.Row="2" HorizontalAlignment="Center" Width="416"/>
-            <TabControl Margin="60,9,60,392" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Background="#101e24" Grid.Row="2">
+            <Border BorderThickness="1" BorderBrush="#411e5a" Margin="0,35,0,60" CornerRadius="0, 0, 5, 5" Grid.Row="2" HorizontalAlignment="Center" Width="416" Grid.RowSpan="2"/>
+            <TabControl Margin="60,9,60,82" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Background="#101e24" Grid.Row="2">
                 <TabControl.Resources>
                     <Style TargetType="TabItem">
                         <Setter Property="Template">
@@ -152,14 +152,14 @@
                 <TabItem Header="Opc. 2 Camadas" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
                 <TabItem Header="Opc. 3 Camadas" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
             </TabControl>
-            <!--<Button Content="🡨" Click="VoltarButton_Click" FontWeight="Bold" FontSize="22" Foreground="#f5f4f3" BorderBrush="Transparent" Background="Transparent" Margin="3,12,505,385" Grid.Row="2">
+            <Button Content="🡨" Click="SalvarVoltar_Click" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Margin="4,13,0,0" Grid.Row="2" VerticalAlignment="Top" Width="24">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
                         Background="{TemplateBinding Background}"
                         CornerRadius="5"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+                        BorderThickness="{TemplateBinding BorderThickness}" Margin="0,1,-3,-3">
                             <ContentPresenter HorizontalAlignment="Center"
                                         VerticalAlignment="Center"/>
                         </Border>
@@ -174,7 +174,7 @@
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
-            </Button>-->
+            </Button>
         </Grid>
     </Border>
 </Window>

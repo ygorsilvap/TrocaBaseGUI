@@ -32,6 +32,12 @@ namespace TrocaBaseGUI.Views
 
         private void SaveName_Click(object sender, RoutedEventArgs e)
         {
+            if (isDbEmpty())
+            {
+                NavigationService.GoBack();
+                return;
+            }
+
             if (!_viewModelDbs.Databases.Contains(_db) && isDbValid())
             {
                 //Debug.WriteLine($"\n Id: {_db.Id}, Database: {_db.Name}, Type: {_db.DbType}, Environment: {_db.Environment}, Server: {_db.Server}, Date: {_db.ImportDate}\n");
@@ -60,7 +66,7 @@ namespace TrocaBaseGUI.Views
 
         private void userInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(_db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase))
+            if (_db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase))
                 _db.Name = userInput.Text;
         }
 
@@ -71,7 +77,7 @@ namespace TrocaBaseGUI.Views
                 _db.Instance = instDbNameInput.Text;
                 return;
             }
-            
+
             _db.Name = instDbNameInput.Text;
         }
 
@@ -84,7 +90,8 @@ namespace TrocaBaseGUI.Views
                 userInput.IsEnabled = true;
                 instDbNameInputTXT.Text = "Instância";
                 _db.DbType = "Oracle";
-            } else
+            }
+            else
             {
                 userInput.IsEnabled = false;
                 instDbNameInputTXT.Text = "Nome da base";
@@ -92,16 +99,24 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        public bool isDbValid() 
-        {   
+        public bool isDbValid()
+        {
             if (String.IsNullOrEmpty(_db.DisplayName) || String.IsNullOrEmpty(_db.DbType) || String.IsNullOrEmpty(_db.Server) || String.IsNullOrEmpty(_db.Name))
             {
-                if((!String.IsNullOrEmpty(_db.DbType) && _db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase)) && String.IsNullOrEmpty(_db.Instance))
+                if ((!String.IsNullOrEmpty(_db.DbType) && _db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase)) && String.IsNullOrEmpty(_db.Instance))
                     return false;
 
                 return false;
             }
             return true;
+        }
+
+        public bool isDbEmpty()
+        {
+            if (String.IsNullOrEmpty(_db.DisplayName) && String.IsNullOrEmpty(_db.DbType) && String.IsNullOrEmpty(_db.Server) &&
+                String.IsNullOrEmpty(_db.Name) && String.IsNullOrEmpty(_db.Instance))
+                return true;
+            return false;
         }
     }
 }

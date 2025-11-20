@@ -117,15 +117,6 @@ namespace TrocaBaseGUI.Models
             { selectedFolder = value; OnPropertyChanged(); }
         }
 
-        private bool copy2TParams;
-        public bool Copy2TParams
-        {
-            get => copy2TParams;
-            set
-            { copy2TParams = value; OnPropertyChanged(); }
-        }
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

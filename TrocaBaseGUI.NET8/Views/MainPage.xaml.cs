@@ -40,11 +40,6 @@ namespace TrocaBaseGUI.Views
 
             hist = new ObservableCollection<SysDirectoryModel>(viewModel.History);
 
-            //dbList = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
-            //lstTodosBancos.ItemsSource = dbList;
-            //foreach (var item in dbList) DatabaseModel.SetDisplayName(item, item.DisplayName);
-
-
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             //dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
@@ -99,7 +94,6 @@ namespace TrocaBaseGUI.Views
         {
             if (!(DataContext is MainViewModel vm)) return;
 
-
             string environment = tabSelected == 0 ? "local" : "server";
 
             string type = null;
@@ -113,7 +107,7 @@ namespace TrocaBaseGUI.Views
                 type = "SQL Server";
             }
             else
-            {;
+            {
                 lstTodosBancos.ItemsSource = vm.EnvironmentFilter(environment, db);
                 return;
             }
@@ -214,7 +208,7 @@ namespace TrocaBaseGUI.Views
                 viewModel.appState.SelectedFolder = hist.LastOrDefault().Folder;
             }
 
-                string selectedDir = comboBox.SelectedValue as string;
+            string selectedDir = comboBox.SelectedValue as string;
 
             if (string.IsNullOrEmpty(selectedDir)) return;
 

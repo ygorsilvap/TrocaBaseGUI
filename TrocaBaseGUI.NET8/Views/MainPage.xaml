@@ -485,31 +485,31 @@
                 </Style>
             </StackPanel.Resources>
             <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" Foreground="#411e5a" Margin="0,0,0,0" VerticalAlignment="Top">
-                <RadioButton.Effect>
+                <!--<RadioButton.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
                           ShadowDepth="1"
                           BlurRadius="5"
                           Opacity="0.3"/>
-                </RadioButton.Effect>
+                </RadioButton.Effect>-->
             </RadioButton>
             <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" Foreground="#411e5a" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top">
-                <RadioButton.Effect>
+                <!--<RadioButton.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
                           ShadowDepth="1"
                           BlurRadius="5"
                           Opacity="0.3"/>
-                </RadioButton.Effect>
+                </RadioButton.Effect>-->
             </RadioButton>
             <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top">
-                <RadioButton.Effect>
+                <!--<RadioButton.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
                           ShadowDepth="1"
                           BlurRadius="5"
                           Opacity="0.2"/>
-                </RadioButton.Effect>
+                </RadioButton.Effect>-->
             </RadioButton>
         </StackPanel>
 

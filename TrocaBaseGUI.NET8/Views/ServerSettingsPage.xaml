@@ -7,8 +7,7 @@
       Height="500" Width="550">
 
     <Grid Background="Transparent">
-        <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,95,60,70" CornerRadius="0, 0, 5, 5"/>-->
-        <TextBox x:Name="sqlServerServer" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,175,300,307" Text="{Binding ServerSQLServerConnection.Server}">
+        <TextBox x:Name="SqlServerServer" TextChanged="SqlServerServer_TextChanged" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,175,300,307" Text="{Binding ServerSQLServerConnection.Server}">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -27,8 +26,8 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="oracleServer" Foreground="black" FontSize="11" Margin="300,175,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
+
+        <TextBox x:Name="OracleServer" TextChanged="OracleServer_TextChanged" Foreground="black" FontSize="11" Margin="300,175,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -47,8 +46,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
-        <PasswordBox x:Name="OraclePassword" Foreground="black" FontSize="11" Margin="300,235,100,247">
+        <PasswordBox x:Name="OraclePassword" PasswordChanged="OraclePassword_PasswordChanged" Foreground="black" FontSize="11" Margin="300,235,100,247">
             <PasswordBox.Style>
                 <Style TargetType="PasswordBox">
                     <Setter Property="Template">
@@ -68,11 +66,10 @@
             </PasswordBox.Style>
         </PasswordBox>
 
-        <!--<TextBox x:Name="oraclePort" Background="#19262c" BorderThickness="1" BorderBrush="#2a353a" Foreground="#f5f4f3" FontSize="11" Margin="390,400,100,83" TextWrapping="Wrap" MaxLength="5" Text="{Binding ServerOracleConnection.Port}"/>-->
-
         <Border Background="#f5f4f3" BorderBrush="#37194D" BorderThickness="2" CornerRadius="5" 
-        Margin="390,400,100,83" Grid.Row="2">
-            <TextBox x:Name="oraclePort" 
+                Margin="390,400,100,83" Grid.Row="2">
+            <TextBox x:Name="OraclePort" 
+             TextChanged="OraclePort_TextChanged"
              TextAlignment="Center"
              Background="Transparent" 
              Foreground="black" 
@@ -96,10 +93,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                            <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#5C2A80"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                            <Setter TargetName="Border" Property="Background" Value="#D9D8D7"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -118,10 +116,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                            <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#5C2A80"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                            <Setter TargetName="Border" Property="Background" Value="#D9D8D7"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -130,35 +129,12 @@
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <!--<TextBlock HorizontalAlignment="Left" Margin="100,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="16"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>-->
+
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,352" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,110,147,352" TextWrapping="Wrap"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 
-        <Button Content="🡨" Click="VoltarButton_Click" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Margin="13,78,0,393" Width="22" BorderBrush="Transparent"  Background="Transparent">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="5"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}" Margin="0,1,-3,-3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="TextElement.FontSize" Value="21"/>
-                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="390,378,0,106" TextWrapping="Wrap"><Run Language="pt-br" Text="Porta"/></TextBlock>
-        <PasswordBox x:Name="SqlServerPassword" Foreground="black" FontSize="11" Margin="100,235,300,247">
+        <PasswordBox x:Name="SqlServerPassword" PasswordChanged="SqlServerPassword_PasswordChanged" Foreground="black" FontSize="11" Margin="100,235,300,247">
             <PasswordBox.Style>
                 <Style TargetType="{x:Type PasswordBox}">
                     <Setter Property="Template">
@@ -178,7 +154,7 @@
             </PasswordBox.Style>
         </PasswordBox>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name="oracleInstance"  Foreground="black" FontSize="11" Margin="300,300,100,182" Text="{Binding ServerOracleConnection.Instance}" Width="150">
+        <TextBox x:Name="OracleInstance" TextChanged="OracleInstance_TextChanged" Foreground="black" FontSize="11" Margin="300,300,100,182" Text="{Binding ServerOracleConnection.Instance}" Width="150">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -198,7 +174,7 @@
             </TextBox.Style>
         </TextBox>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Instância"/></TextBlock>
-        <TextBox x:Name="sqlServerUser" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,300,300,182" Text="{Binding ServerSQLServerConnection.Username}">
+        <TextBox x:Name="SqlServerUser" TextChanged="SqlServerUser_TextChanged" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,300,300,182" Text="{Binding ServerSQLServerConnection.Username}">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">

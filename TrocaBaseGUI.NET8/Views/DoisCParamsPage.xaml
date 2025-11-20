@@ -139,7 +139,7 @@
         <CheckBox x:Name="ultMenuWebCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" Click="ultMenuWebCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,199,0,0" Grid.Row="2" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Height="16" Grid.Row="2" Text="Utiliza Menu Web"/>
 
-        <Button x:Name="txtEditorPathBtn" Click="SelectTextEditorPath_Click" IsEnabled="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalAlignment="Left" Margin="348,126,0,0" VerticalAlignment="Top" Height="18" Width="20" Background="#f5f4f3" RenderTransformOrigin="0.511,0.257" Grid.Row="2">
+        <Button x:Name="txtEditorPathBtn" Click="SelectTextEditorPath_Click" IsEnabled="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalAlignment="Left" Margin="348,126,0,0" VerticalAlignment="Top" Height="19" Width="20" Background="Transparent" RenderTransformOrigin="0.511,0.257" Grid.Row="2">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -165,14 +165,14 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Button.Template>
-            <Button Content="📁" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Width="23" Height="22">
+            <Button Content="📁" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Width="23" Height="23">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="Border"
-                            Background="#f5f4f3"
+                            Background="Transparent"
                             CornerRadius="0"
                             BorderBrush="#f5f4f3"
-                            BorderThickness="0">
+                            BorderThickness="0" Margin="0,0,0,1">
                             <ContentPresenter x:Name="contentPresenter"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -196,7 +196,7 @@
                 </Button.Template>
             </Button>
         </Button>
-        <Button x:Name="updateFolderPathBtn" Click="SelectUpdateFolderPath_Click" IsEnabled="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalAlignment="Left" Margin="348,156,0,0" VerticalAlignment="Top" Height="18" Width="20" Background="#f5f4f3" RenderTransformOrigin="0.511,0.257" Grid.Row="2">
+        <Button x:Name="updateFolderPathBtn" Click="SelectUpdateFolderPath_Click" IsEnabled="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" HorizontalAlignment="Left" Margin="348,156,0,0" VerticalAlignment="Top" Height="19" Width="20" Background="Transparent" RenderTransformOrigin="0.511,0.257" Grid.Row="2">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -222,11 +222,11 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Button.Template>
-            <Button Content="📁" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Width="22" Height="22">
+            <Button Content="📁" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="21" Height="22">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="Border"
-                            Background="#f5f4f3"
+                            Background="Transparent"
                             CornerRadius="0"
                             BorderBrush="#f5f4f3"
                             BorderThickness="0">

@@ -49,16 +49,6 @@ namespace TrocaBaseGUI.Views
             SystemCommands.MinimizeWindow(Application.Current.MainWindow);
         }
 
-        //private void VoltarButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var main = new MainWindow();
-
-        //    Application.Current.MainWindow = main;
-        //    main.Show();
-
-        //    Window.GetWindow(this)?.Close();
-        //}
-
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl tabControl)
@@ -80,6 +70,16 @@ namespace TrocaBaseGUI.Views
                     ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new TresCParamsPage());
                     break;
             }
+        }
+
+        private void SalvarVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            var main = new MainWindow();
+
+            Application.Current.MainWindow = main;
+            main.Show();
+
+            Window.GetWindow(this)?.Close();
         }
     }
 }

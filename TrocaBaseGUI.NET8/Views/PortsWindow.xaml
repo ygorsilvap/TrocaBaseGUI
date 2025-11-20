@@ -12,16 +12,15 @@
         Background="Transparent"
         ResizeMode="NoResize"
         x:Name="portsWindow">
-    <Border Background="#101e24" CornerRadius="10" BorderBrush="#2a353a" BorderThickness="1" Padding="6" Height="450" VerticalAlignment="Top">
+    <Border Background="#f5f4f3" CornerRadius="10" BorderBrush="#2a353a" BorderThickness="1" Padding="6" Height="450" VerticalAlignment="Top">
         <Grid>
-            <Frame x:Name="MainFrame" MouseDown="Border_MouseDown" NavigationUIVisibility="Hidden" Background="#101e24"/>
+            <Frame x:Name="MainFrame" MouseDown="Border_MouseDown" NavigationUIVisibility="Hidden" Background="#f5f4f3"/>
             <ListBox x:Name="AppList"
                  Margin="29,69,29,45"
                  ItemsSource="{Binding appList}"
                  BorderThickness="1"
-                 BorderBrush="#28343a"
-                 Background="#101e24"
-                 Foreground="#f5f4f3"
+                 Background="#f5f4f3"
+                 Foreground="#411e5a"
                  Focusable="True" RenderTransformOrigin="0.5,0.5" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListBox.RenderTransform>
                     <TransformGroup>
@@ -34,7 +33,7 @@
                 <ListBox.Template>
                     <ControlTemplate TargetType="ListBox">
                         <Border Background="{TemplateBinding Background}"
-                            BorderBrush="#28343a"
+                            BorderBrush="#411e5a"
                             BorderThickness="1"
                             CornerRadius="5, 5, 5, 5"
                             SnapsToDevicePixels="True"
@@ -52,14 +51,12 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <!-- conteúdo -->
                                 <RowDefinition Height="1"/>
-                                <!-- linha separadora -->
                             </Grid.RowDefinitions>
                             
                             <Grid>
                                 <TextBlock Text="{Binding App}" FontSize="12" Padding="5,5,0,5" Margin="0,0,182,0"/>
-                                <Border Background="#19262c" BorderBrush="#2a353a" BorderThickness="1" CornerRadius="5" 
+                                <Border Background="#f5f4f3" BorderBrush="#411e5a" BorderThickness="2" CornerRadius="5" 
                                         Margin="138,5,128,5">
                                     <TextBox x:Name="serverPort" 
                                          Padding="0,-1,0,1"
@@ -75,7 +72,7 @@
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"/>
                                 </Border>
-                                <Border Background="#19262c" BorderBrush="#2a353a" BorderThickness="1" CornerRadius="5" 
+                                <Border Background="#f5f4f3" BorderBrush="#411e5a" BorderThickness="2" CornerRadius="5" 
                                         Margin="205,5,61,5">
                                     <TextBox x:Name="serverPort2" 
                                          Padding="0,-1,0,1"
@@ -92,7 +89,7 @@
                                          VerticalAlignment="Center"/>
                                 </Border>
                             </Grid>
-                            <Border Height="1" Background="#252E33" Grid.Row="1" Margin="3,2,17,-2"/>
+                            <Border Height="1" Background="#411e5a" Grid.Row="1" Margin="3,2,17,-2"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -109,16 +106,6 @@
                                     Width="320">
                                         <ContentPresenter />
                                     </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#101e24"/>
-                                            <Setter TargetName="border" Property="BorderBrush" Value="#2a353a"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#101e24"/>
-                                            <Setter TargetName="border" Property="BorderBrush" Value="#2a353a"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -130,7 +117,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
 
-            <Button Content="Voltar" Click="VoltarButton_Click" Foreground="#f5f4f3" BorderBrush="#2a353a" Background="#101e24" Margin="115,401,115,10" RenderTransformOrigin="0.5,0.5">
+            <Button Content="Voltar" Click="VoltarButton_Click" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="115,401,115,10" RenderTransformOrigin="0.5,0.5">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1"/>
@@ -151,10 +138,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#18262b"/>
+                                <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#5C2A80"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#2a353a"/>
+                                <Setter TargetName="Border" Property="Background" Value="#D9D8D7"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
