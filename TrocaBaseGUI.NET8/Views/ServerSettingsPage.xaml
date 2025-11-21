@@ -7,7 +7,7 @@
       Height="500" Width="550">
 
     <Grid Background="Transparent">
-        <TextBox x:Name="SqlServerServer" TextChanged="SqlServerServer_TextChanged" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,175,300,307" Text="{Binding ServerSQLServerConnection.Server}">
+        <TextBox x:Name="SqlServerServer" TextChanged="SqlServerServer_TextChanged" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,174,300,307" Text="{Binding ServerSQLServerConnection.Server}">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -27,7 +27,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBox x:Name="OracleServer" TextChanged="OracleServer_TextChanged" Foreground="black" FontSize="11" Margin="300,175,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
+        <TextBox x:Name="OracleServer" TextChanged="OracleServer_TextChanged" Foreground="black" FontSize="11" Margin="300,174,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -46,7 +46,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <PasswordBox x:Name="OraclePassword" PasswordChanged="OraclePassword_PasswordChanged" Foreground="black" FontSize="11" Margin="300,235,100,247">
+        <PasswordBox x:Name="OraclePassword" PasswordChanged="OraclePassword_PasswordChanged" Foreground="black" FontSize="11" Margin="300,234,100,247">
             <PasswordBox.Style>
                 <Style TargetType="PasswordBox">
                     <Setter Property="Template">
@@ -130,7 +130,7 @@
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,352" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,366" TextWrapping="Wrap" Width="100"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,110,147,352" TextWrapping="Wrap"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="390,378,0,106" TextWrapping="Wrap"><Run Language="pt-br" Text="Porta"/></TextBlock>
@@ -193,6 +193,6 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="14"><Run Language="pt-br" Text="Usuário"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,277,0,209" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Usuário"/><LineBreak/><Run Language="pt-br"/></TextBlock>
     </Grid>
 </Page>

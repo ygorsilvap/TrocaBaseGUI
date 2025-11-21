@@ -15,7 +15,7 @@
             <RowDefinition/>
             <RowDefinition Height="427"/>
         </Grid.RowDefinitions>
-       <CheckBox x:Name="loginCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.ServerParams.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,66,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <CheckBox x:Name="loginCheckbox" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.ServerParams.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Right" Margin="0,66,460,0" Grid.Row="1" VerticalAlignment="Top" Width="15" Height="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="17" Grid.Row="1"><Run Text="Login Padrão"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
         <TextBox x:Name="loginPadrao" TextChanged="loginPadrao_TextChanged" Text="{Binding Conexao3Camadas.DefaultLogin}" Foreground="Black" FontSize="11" Padding="1, 0" Margin="195,66,205,343" Grid.Row="1">
             <TextBox.Style>

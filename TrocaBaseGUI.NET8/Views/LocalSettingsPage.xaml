@@ -12,7 +12,7 @@
             <RowDefinition Height="200"/>
             <RowDefinition Height="228"/>
         </Grid.RowDefinitions>
-        
+
         <TextBox x:Name="SqlServerServer" TextChanged="SqlServerServer_TextChanged" Foreground="Black" FontSize="11" Padding="1, 0" Margin="100,102,300,79" Text="{Binding LocalSQLServerConnection.Server}" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="TextBox">
@@ -130,13 +130,13 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/></TextBlock>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,137,0,38" TextWrapping="Wrap" Width="120" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="15" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,138,0,44" TextWrapping="Wrap" Width="50" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,37,0,124" TextWrapping="Wrap" Width="120" Grid.Row="1"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
-        <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,37,147,124" TextWrapping="Wrap" Grid.Row="1"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,38,0,138" TextWrapping="Wrap" Width="100" Grid.Row="1"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
+        <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,38,147,136" TextWrapping="Wrap" Grid.Row="1"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="390,106,0,106" TextWrapping="Wrap" Grid.Row="2"><Run Language="pt-br" Text="Porta"/></TextBlock>
         <PasswordBox x:Name="SqlServerPassword" PasswordChanged="SqlServerPassword_PasswordChanged" Background="#19262c" BorderBrush="#2a353a" Foreground="black" FontSize="11" Margin="100,28,300,182" Grid.Row="2">
             <PasswordBox.Style>
@@ -157,7 +157,7 @@
                 </Style>
             </PasswordBox.Style>
         </PasswordBox>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,5,0,199" TextWrapping="Wrap" Width="120" Grid.Row="2"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,205" TextWrapping="Wrap" Width="120" Grid.Row="2" Height="18" VerticalAlignment="Bottom"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <TextBlock Foreground="#999897" HorizontalAlignment="Left" Margin="134,5,0,0" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2"><Run Language="pt-br" Text="(Opcional)"/></TextBlock>
 
         <TextBox x:Name="OracleInstance" TextChanged="OracleInstance_TextChanged" Foreground="black" FontSize="11" Margin="300,28,100,182" TextWrapping="Wrap" Text="{Binding LocalOracleConnection.Instance}" Width="150" Grid.Row="2">
