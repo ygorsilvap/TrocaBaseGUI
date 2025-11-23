@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Oracle.ManagedDataAccess.Client;
+using TrocaBaseGUI.Properties.Constants;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace TrocaBaseGUI.Services
@@ -144,58 +145,16 @@ namespace TrocaBaseGUI.Services
             }
         }
 
-        //public async Task<bool> ValidateConnection(string server, string password, string port, string instance, string environment, double timeoutSeconds = 3000)
-        //{
-        //    string connectionString = _connection.GetConnectionString(server, password, port, instance, environment);
-        //    using var conn = new OracleConnection(connectionString);
-
-        //    //Debug.WriteLine($"[Oracle] Conectando com: {connectionString}");
-
-        //    var openTask = conn.OpenAsync();
-
-        //    if (await Task.WhenAny(openTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds))) == openTask)
-        //    {
-        //        try
-        //        {
-        //            await openTask;
-        //            await conn.CloseAsync();
-        //            return true;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            if (conn.State == System.Data.ConnectionState.Open)
-        //            {
-        //                conn.Close();
-        //            }
-        //            if (connectionString.Contains("DBA"))
-        //            {
-        //                Debug.WriteLine($"[Validate-Oracle-Local] Falha: {ex.GetType().Name} - {ex.Message}");
-        //                return false;
-        //            }
-        //            else
-        //            {
-        //                Debug.WriteLine($"[Validate-Oracle-Server] Falha: {ex.GetType().Name} - {ex.Message}");
-
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
         public string CreateOracleConnectionString(string environment, string server, string instance, string db)
         {
             //CRIAR A DIFERENÇA DE CONN STRING DE LOCAL PARA SERVER. TROCAR O SERVER DO LOCAL PARA DNS.GETHOSTNAME
             if (environment.ToLower() == "local")
             {
-                return $"[BANCODADOS]=ORACLE\n[DATABASE]={Dns.GetHostEntry(string.Empty).HostName}/{instance}\n[USUARIO_ORACLE]={db.ToUpper()}";
+                return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={Dns.GetHostEntry(string.Empty).HostName}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
             }
             else
             {
-                return $"[BANCODADOS]=ORACLE\n[DATABASE]={server}/{instance}\n[USUARIO_ORACLE]={db.ToUpper()}";
+                return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={server}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
             }
         }
     }

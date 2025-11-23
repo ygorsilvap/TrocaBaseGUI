@@ -33,7 +33,7 @@
                 </Border.Effect>
             </Border>
 
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="Transparent" MouseDown="Border_MouseDown" Grid.RowSpan="4" />
+            <Frame x:Name="MainFrame" IsTabStop="False" NavigationUIVisibility="Hidden" Background="Transparent" MouseDown="Border_MouseDown" Grid.RowSpan="4" />
 
             <!--<Image Source="/Assets/settings80.png" IsHitTestVisible="False" HorizontalAlignment="Left" Height="50" Margin="15,13,0,0" VerticalAlignment="Top" Width="45" Grid.RowSpan="2" Grid.Row="1"/>-->
             <TextBlock HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#411e5a" FontSize="26" FontWeight="Medium" Margin="75,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="40" Grid.RowSpan="2" Grid.Row="1"><Run Language="pt-br" Text="Configurações"/><LineBreak/><Run Language="pt-br"/>
@@ -45,7 +45,7 @@
                           Opacity="0.3"/>
                 </TextBlock.Effect>
             </TextBlock>
-            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="480,0,0,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
+            <Button Click="CloseApp_Click" IsTabStop="False" Content="✖" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="480,0,0,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
                 <Button.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -79,7 +79,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="429,0,0,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
+            <Button Click="MinApp_Click" IsTabStop="False" Content="➖" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="429,0,0,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Row="1">
                 <Button.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -147,12 +147,12 @@
                         </Setter>
                     </Style>
                 </TabControl.Resources>
-                <TabItem Header="Conexão Local" Foreground="#f5f4f3" Margin="-2,0,2,0" />
-                <TabItem Header="Conexão Server" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
-                <TabItem Header="Opc. 2 Camadas" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
-                <TabItem Header="Opc. 3 Camadas" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
+                <TabItem Header="Conexão Local" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0" />
+                <TabItem Header="Conexão Server" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
+                <TabItem Header="Opc. 2 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
+                <TabItem Header="Opc. 3 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
             </TabControl>
-            <Button Content="🡨" Click="SalvarVoltar_Click" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Margin="4,13,0,0" Grid.Row="2" VerticalAlignment="Top" Width="24">
+            <Button Content="🡨" Click="SalvarVoltar_Click" IsTabStop="False" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Margin="4,13,0,0" Grid.Row="2" VerticalAlignment="Top" Width="24">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"

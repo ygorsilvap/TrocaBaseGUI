@@ -165,34 +165,17 @@ namespace TrocaBaseGUI.Views
             GetFilter(dbList);
         }
 
-        //Refatorar
-        private void SelecionarExecutavel_Click(object sender, RoutedEventArgs e)
+        private void MenuDiretorios_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog
+            var owner = Window.GetWindow(this) ?? Application.Current.MainWindow;
+
+            var dlg = new SysDirectorySelectionWindow()
             {
-                Title = "Selecione o executável do sistema.",
-                InitialDirectory = @"C:\",
-                Filters = { new CommonFileDialogFilter("Executáveis", "*.exe") }
+                Owner = owner,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
 
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok && File.Exists(dialog.FileName))
-            {
-                string folder = $"\\{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(dialog.FileName))}";
-                string path = System.IO.Path.GetDirectoryName(dialog.FileName);
-                string exeName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
-
-                ObservableCollection<string> exeList = new ObservableCollection<string>(Directory.GetFiles(path, "*.exe").Select(f => System.IO.Path.GetFileNameWithoutExtension(f)).ToList());
-
-                viewModel.AddDirectory(folder, path, exeName, exeList);
-
-                viewModel.conexaoFileService.SetConexaoAddress(path);
-
-                viewModel.appState.SelectedFolder = folder;
-
-                dirSys.SelectedItem = viewModel.History.FirstOrDefault();
-
-                Refresh();
-            }
+            dlg.ShowDialog();
         }
 
         //Refatorar
@@ -212,10 +195,10 @@ namespace TrocaBaseGUI.Views
 
             if (string.IsNullOrEmpty(selectedDir)) return;
 
-            viewModel.ExeFilesList = SysDirectoryModel.GetDir(viewModel.History, selectedDir)?.ExeList;
+            viewModel.ExeFilesList = viewModel.sysDirectoryService.GetDir(viewModel.History, selectedDir)?.ExeList;
             exeSys.ItemsSource = viewModel.ExeFilesList;
 
-            int selectedBaseDir = SysDirectoryModel.GetDir(viewModel.History, selectedDir).SelectedBase;
+            int selectedBaseDir = viewModel.sysDirectoryService.GetDir(viewModel.History, selectedDir).SelectedBase;
 
             if (selectedItem != null)
             {
@@ -230,7 +213,7 @@ namespace TrocaBaseGUI.Views
             }
 
             Refresh();
-            Debug.Write($"\nviewModel.conexaoFile: {viewModel.conexaoFile}\n");
+            //Debug.Write($"\nviewModel.conexaoFile: {viewModel.conexaoFile}\n");
         }
 
         private void exeSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -241,7 +224,7 @@ namespace TrocaBaseGUI.Views
             exeSelected = selectedItem;
             OpenExeButtonText.Text = $"Iniciar \n{exeSelected}";
 
-            Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
+            //Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
@@ -300,11 +283,6 @@ namespace TrocaBaseGUI.Views
                 : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelDatabase.Environment, viewModel.SelDatabase.Server, viewModel.SelDatabase.Instance, viewModel.SelDatabase.Name);
 
             Clipboard.SetText(connString);
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         //criar função de resetar o placeholder para quando trocar de tab o campo resetar
@@ -367,20 +345,6 @@ namespace TrocaBaseGUI.Views
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //Debug.WriteLine($"\n\nTier: {viewModel.Conexao2Camadas.Tier}");
-            //Debug.WriteLine($"\nDefaultLogin: {viewModel.Conexao2Camadas.DefaultLogin}");
-            //Debug.WriteLine($"\nDefaultPassword: {viewModel.Conexao2Camadas.DefaultPassword}");
-            //Debug.WriteLine($"\nTextEditorPath: {viewModel.Conexao2Camadas.TextEditorPath}");
-            //Debug.WriteLine($"\nUpdateFolder: {viewModel.Conexao2Camadas.UpdateFolder}");
-            //Debug.WriteLine($"\nUseWebMenu: {viewModel.Conexao2Camadas.UseWebMenu}\n\n");
-            //Debug.WriteLine($"\n\nUseRedirect: {viewModel.Conexao3Camadas.UseRedirect}\n\n");
-            //Debug.WriteLine($"\n\nRedirectPort: {viewModel.Conexao3Camadas.RedirectPort}\n\n");
-            //viewModel.conexaoFileService.Create3CConnectionClientFileSettings(viewModel.Conexao3Camadas, viewModel.appState.ServerParams);
-            //viewModel.conexaoFileService.CreatePortsSettings(viewModel.Conexao3Camadas);
-        }
-
         private async void RefreshDbList_Click(object sender, RoutedEventArgs e)
         {
             //Local
@@ -390,6 +354,11 @@ namespace TrocaBaseGUI.Views
             //Server
             await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
             await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

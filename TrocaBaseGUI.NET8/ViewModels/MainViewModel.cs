@@ -63,6 +63,7 @@ namespace TrocaBaseGUI.ViewModels
 
         private const int MaxHistory = 10;
         public ObservableCollection<SysDirectoryModel> History { get; set; } = new ObservableCollection<SysDirectoryModel>();
+        public SysDirectoryService sysDirectoryService { get; set; } = new SysDirectoryService();
         public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
         public AppState appState { get; set; } = new AppState();
         public AppStateService appStateService { get; set; } = new AppStateService();
@@ -215,7 +216,7 @@ namespace TrocaBaseGUI.ViewModels
             }
 
                 DatabaseModel.SetSelection(dbs, selectedDb.Id);
-            SysDirectoryModel.GetDir(History, dirSys).SelectedBase = selectedDb.Id;
+            sysDirectoryService.GetDir(History, dirSys).SelectedBase = selectedDb.Id;
             SelDatabase = selectedDb;
         }
 

@@ -7,6 +7,25 @@ namespace TrocaBaseGUI.Models
     [Serializable]
     public class SysDirectoryModel : INotifyPropertyChanged
     {
+        public SysDirectoryModel() { }
+
+        public SysDirectoryModel(string address, string fullPathAddress, string exeFile, ObservableCollection<string> exeList, int selectedBase = -1)
+        {
+            Folder = address;
+            Path = fullPathAddress;
+            MainExeFile = exeFile;
+            ExeList = exeList;
+            SelectedBase = selectedBase;
+        }
+
+        private int id;
+        public int Id
+        {
+            get => id;
+            set
+            { id = value; OnPropertyChanged(); }
+        }
+
         private string folder;
         public string Folder
         {
@@ -55,24 +74,13 @@ namespace TrocaBaseGUI.Models
             { selectedBase = value; OnPropertyChanged(); }
         }
 
-        public SysDirectoryModel() { }
+        //public static SysDirectoryModel GetDir(ObservableCollection<SysDirectoryModel> hist, string addr)
+        //{
+        //    if (string.IsNullOrEmpty(addr) || hist.Count < 1)
+        //        return null;
 
-        public SysDirectoryModel(string address, string fullPathAddress, string exeFile, ObservableCollection<string> exeList, int selectedBase = -1)
-        {
-            Folder = address;
-            Path = fullPathAddress;
-            MainExeFile = exeFile;
-            ExeList = exeList;
-            SelectedBase = selectedBase;
-        }
-
-        public static SysDirectoryModel GetDir(ObservableCollection<SysDirectoryModel> hist, string addr)
-        {
-            if (string.IsNullOrEmpty(addr) || hist.Count < 1)
-                return null;
-
-            return hist.FirstOrDefault(d => d.Path.EndsWith(addr));
-        }
+        //    return hist.FirstOrDefault(d => d.Path.EndsWith(addr));
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 

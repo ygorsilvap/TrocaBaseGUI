@@ -24,7 +24,7 @@
             </Border.Effect>
         </Border>
 
-        <Button x:Name="OpenExeButton" Click="OpenSecondaryExeButton_Click" Foreground="#411e5a"  BorderBrush="#411e5a" BorderThickness="2" Background="Transparent" Margin="90,420,310,40">
+        <Button x:Name="OpenExeButton" Click="OpenSecondaryExeButton_Click" IsTabStop="False" Foreground="#411e5a"  BorderBrush="#411e5a" BorderThickness="2" Background="Transparent" Margin="90,420,310,40">
             <Button.Content>
                 <TextBlock x:Name="OpenExeButtonText"
                    Text="Abrir Executável"
@@ -32,7 +32,7 @@
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Center">
                     <TextBlock.Effect>
-                        <DropShadowEffect Color="Gray" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
+                        <DropShadowEffect Color="#B3B3B3" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
                     </TextBlock.Effect>
                 </TextBlock>
             </Button.Content>
@@ -64,6 +64,7 @@
           FontSize="11"
           Margin="240,420,290,0"
           VerticalAlignment="Top"
+          IsTabStop="False"
           Height="40">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
@@ -193,7 +194,7 @@
             </ComboBox.Style>
         </ComboBox>
 
-        <Button x:Name="OpenSysButton" Click="OpenMainExeButton_Click" Foreground="#411e5a" BorderBrush="#411e5a" BorderThickness="2" Height="40" Background="Transparent" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
+        <Button x:Name="OpenSysButton" Click="OpenMainExeButton_Click" IsTabStop="False" Foreground="#411e5a" BorderBrush="#411e5a" BorderThickness="2" Height="40" Background="Transparent" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
             <Button.Content>
                 <TextBlock x:Name="OpenSysButtonText"
                    Text="Abrir Executável"
@@ -201,7 +202,7 @@
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Center">
                     <TextBlock.Effect>
-                        <DropShadowEffect Color="Gray" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
+                        <DropShadowEffect Color="#B3B3B3" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
                     </TextBlock.Effect>
                 </TextBlock>
             </Button.Content>
@@ -227,7 +228,7 @@
             </Button.Template>
         </Button>
 
-        <Button Click="SelecionarExecutavel_Click" Content="📁" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,280,0,0" VerticalAlignment="Top" Height="30" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
+        <Button Click="MenuDiretorios_Click" IsTabStop="False" Content="📁" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,280,0,0" VerticalAlignment="Top" Height="30" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -271,7 +272,7 @@
                                 BorderThickness="1"
                                 CornerRadius="5,5,0,0"
                                 Padding="8,4">
-                                    
+
                                     <TextBlock Text="{TemplateBinding Header}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -294,12 +295,11 @@
                 </Style>
             </TabControl.Resources>
 
-            <TabItem Header="Local" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
-            <TabItem Header="Server" Foreground="#f5f4f3" Margin="-2,0,0,0" HorizontalAlignment="Left" Width="51"/>
+            <TabItem Header="Local" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
+            <TabItem Header="Server" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,0,0" HorizontalAlignment="Left" Width="51"/>
         </TabControl>
 
-
-        <TextBox x:Name="dbSearch" TextChanged="dbSearch_TextChanged" PreviewMouseLeftButtonDown="dbSearchPlaceholder_MouseDown" LostFocus="dbSearch_LostFocus" BorderThickness="1" Foreground="#37194D" FontSize="11" Padding="1, 0" Margin="203,132,217,350">
+        <TextBox x:Name="dbSearch" AcceptsTab="False" IsTabStop="False" TextChanged="dbSearch_TextChanged" PreviewMouseLeftButtonDown="dbSearchPlaceholder_MouseDown" LostFocus="dbSearch_LostFocus" BorderThickness="1" Foreground="#37194D" FontSize="11" Padding="1, 0" Margin="203,132,217,350">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -420,7 +420,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding DisplayName}" VerticalAlignment="Center">
                             <TextBlock.Effect>
-                                <DropShadowEffect Color="Gray" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
+                                <DropShadowEffect Color="#B3B3B3" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
                             </TextBlock.Effect>
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -484,7 +484,7 @@
                     </Setter>
                 </Style>
             </StackPanel.Resources>
-            <RadioButton x:Name="rbTodos" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" Foreground="#411e5a" Margin="0,0,0,0" VerticalAlignment="Top">
+            <RadioButton x:Name="rbTodos" IsTabStop="False" Content="Todos" Checked="RadioButton_Checked" IsChecked="True" Foreground="#411e5a" Margin="0,0,0,0" VerticalAlignment="Top">
                 <!--<RadioButton.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -493,7 +493,7 @@
                           Opacity="0.3"/>
                 </RadioButton.Effect>-->
             </RadioButton>
-            <RadioButton x:Name="rbOracle" Content="Oracle" Checked="RadioButton_Checked" Foreground="#411e5a" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top">
+            <RadioButton x:Name="rbOracle" IsTabStop="False" Content="Oracle" Checked="RadioButton_Checked" Foreground="#411e5a" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top">
                 <!--<RadioButton.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -502,7 +502,7 @@
                           Opacity="0.3"/>
                 </RadioButton.Effect>-->
             </RadioButton>
-            <RadioButton x:Name="rbSqlServer" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top">
+            <RadioButton x:Name="rbSqlServer" IsTabStop="False" Content="SQL Server" Checked="RadioButton_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top">
                 <!--<RadioButton.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -522,6 +522,7 @@
           FontSize="11"
           Margin="357,120,80,0"
           VerticalAlignment="Top"
+          IsTabStop="False"
           Height="20">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
@@ -654,7 +655,7 @@
         </ComboBox>
 
         <!--<TextBlock x:Name="conexaoCheck" Foreground="#f5f4f3" HorizontalAlignment="Center" Height="29" Margin="0,118,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="104"/>-->
-        <Button Click="ToSettings_Click" Content="⚙️" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,85,0,385" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
+        <Button Click="ToSettings_Click" IsTabStop="False" Content="⚙️" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,85,0,385" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -682,7 +683,7 @@
             </Button.Template>
         </Button>
 
-        <Button Click="ClearAll_Click" HorizontalAlignment="Left" Margin="7,455,0,15" Width="30" Background="Transparent">
+        <Button Click="ClearAll_Click" IsTabStop="False" HorizontalAlignment="Left" Margin="7,455,0,15" Width="30" Background="Transparent">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -710,7 +711,7 @@
             </Button.Template>
         </Button>
 
-        <Button Click="AddDb_Click" HorizontalAlignment="Left" Margin="8,149,0,321" Width="30" Background="Transparent">
+        <Button Click="AddDb_Click" IsTabStop="False" HorizontalAlignment="Left" Margin="8,149,0,321" Width="30" Background="Transparent">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -741,14 +742,15 @@
         <TextBlock x:Name="IsThereSysDirectory" Foreground="#f5f4f3" HorizontalAlignment="Center" Margin="0,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Height="16"/>
         <TextBlock HorizontalAlignment="Left" Foreground="#411e5a" FontSize="30" FontWeight="Medium" Margin="80,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="45"><Run Language="pt-br" Text="Troca Base"/><LineBreak/><Run Language="pt-br"/>
             <TextBlock.Effect>
-                <DropShadowEffect Color="Black"
+                <DropShadowEffect Color="#B3B3B3"
                           Direction="-25"
                           ShadowDepth="1"
                           BlurRadius="5"
                           Opacity="0.3"/>
             </TextBlock.Effect>
         </TextBlock>
-        <Button Click="RefreshDbList_Click" HorizontalAlignment="Left" Margin="7,216,0,254" Width="30" Background="Transparent">
+
+        <Button Click="RefreshDbList_Click" IsTabStop="False" HorizontalAlignment="Left" Margin="7,216,0,254" Width="30" Background="Transparent">
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="Border"

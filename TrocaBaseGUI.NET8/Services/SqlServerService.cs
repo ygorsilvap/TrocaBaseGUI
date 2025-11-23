@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using System.Net;
+using TrocaBaseGUI.Properties.Constants;
 
 namespace TrocaBaseGUI.Services
 {
@@ -115,15 +116,14 @@ namespace TrocaBaseGUI.Services
 
         public string CreateSQLServerConnectionString(string environment, string db, string server = null)
         {
-            //CRIAR A DIFERENÇA DE CONN STRING DE LOCAL PARA SERVER. TROCAR O SERVER DO LOCAL PARA DNS.GETHOSTNAME
             if(environment.ToLower() == "local" && 
                 (server.ToLower().Contains(Dns.GetHostEntry(string.Empty).HostName) || Dns.GetHostEntry(string.Empty).HostName.ToLower().Contains(server.ToLower())))
             {
-                return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={Dns.GetHostEntry(string.Empty).HostName}:{db.ToUpper()}";
+                return $"{GlobalStrings.BancoDadosTag}=SQLSERVER\n{GlobalStrings.DatabaseTag}={Dns.GetHostEntry(string.Empty).HostName}:{db.ToUpper()}";
             }
             else
             {
-                return $"[BANCODADOS]=SQLSERVER\n[DATABASE]={server}:{db.ToUpper()}";
+                return $"{GlobalStrings.BancoDadosTag}=SQLSERVER\n{GlobalStrings.DatabaseTag}={server}:{db.ToUpper()}";
             }
         }
     }

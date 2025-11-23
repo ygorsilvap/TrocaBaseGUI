@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using TrocaBaseGUI.Models;
+using TrocaBaseGUI.Properties.Constants;
 
 namespace TrocaBaseGUI.Services
 {
@@ -59,14 +60,13 @@ namespace TrocaBaseGUI.Services
             }
         }
 
-        public Boolean ValidateSystemPath(string path)
-        {
-            //Tratar do case das strings para ignorar case
-            return File.Exists(path + "\\conexao.dat") ||
-                   File.Exists(path + "\\ConexaoServidor.dat") &&
-                   File.Exists(path + "\\ConexaoRedireciona.dat") &&
-                   File.Exists(path + "\\ConexaoCliente.dat");
-        }
+        //public static Boolean IsSystemPathValid(string path)
+        //{
+        //    return File.Exists(path + $"\\{GlobalStrings.ConexaoDat}") ||
+        //           File.Exists(path + $"\\{GlobalStrings.ConexaoServidorDat}") &&
+        //           File.Exists(path + $"\\{GlobalStrings.ConexaoRedirecionadorDat}") &&
+        //           File.Exists(path + $"\\{GlobalStrings.ConexaoClienteDat}");
+        //}
 
         //Refatorar 
         //public string GetConexaoType(string path)
@@ -87,11 +87,11 @@ namespace TrocaBaseGUI.Services
 
         public int GetTier(string path)
         {
-            if (File.Exists(Path.Combine(path, "ConexaoServidor.dat")))
+            if (File.Exists(Path.Combine(path, GlobalStrings.ConexaoServidorDat)))
             {
                 return 3;
             }
-            else if (File.Exists(Path.Combine(path, "conexao.dat")))
+            else if (File.Exists(Path.Combine(path, GlobalStrings.ConexaoDat)))
             {
                 return 2;
             }
@@ -105,15 +105,15 @@ namespace TrocaBaseGUI.Services
         {
             if (String.IsNullOrEmpty(path)) return;
 
-            if (ValidateSystemPath(path))
+            if (SysDirectoryService.IsDirectoryConexaoFilesValid(path))
             {
                 int tier = GetTier(path);
                 if (tier > 2)
                 {
                     //ConexaoFile = Path.Combine(path, GetConexaoType(path));
-                    ConexaoClienteFile = Path.Combine(path, "ConexaoCliente.dat");
-                    ConexaoRedirecionadorFile = Path.Combine(path, "ConexaoRedireciona.dat");
-                    ConexaoServidorFile = Path.Combine(path, "ConexaoServidor.dat");
+                    ConexaoClienteFile = Path.Combine(path, GlobalStrings.ConexaoClienteDat);
+                    ConexaoRedirecionadorFile = Path.Combine(path, GlobalStrings.ConexaoRedirecionaDat );
+                    ConexaoServidorFile = Path.Combine(path, GlobalStrings.ConexaoServidorDat);
                     ConexaoFilePath = path;
 
                     //Paliativa
@@ -122,7 +122,7 @@ namespace TrocaBaseGUI.Services
                 else {
 
                     //ConexaoFile = Path.Combine(path, GetConexaoType(path));
-                    ConexaoFile = Path.Combine(path, "conexao.dat");
+                    ConexaoFile = Path.Combine(path, GlobalStrings.ConexaoDat);
                     ConexaoFilePath = path;
                 }
 
@@ -141,7 +141,7 @@ namespace TrocaBaseGUI.Services
 
             foreach (var appPorts in conexao.Ports)
             {
-                settings += $"[PORTA]={appPorts.App.ToUpper().Replace(" ", "")}:{appPorts.Port}\n";
+                settings += $"{GlobalStrings.PortaTag}={appPorts.App.ToUpper().Replace(" ", "")}:{appPorts.Port}\n";
             }
             //Debug.WriteLine($"\n\n'{settings}'\n\n");
             return settings;
@@ -155,7 +155,7 @@ namespace TrocaBaseGUI.Services
             {
                 foreach (var appPorts in conexao.Ports)
                 {
-                    settings += $"[DATABASE]={appPorts.App.ToUpper().Replace(" ", "")}:{conexao.DbServer}:{conexao.RedirectPort}\n";
+                    settings += $"{GlobalStrings.DatabaseTag}={appPorts.App.ToUpper().Replace(" ", "")}:{conexao.DbServer}:{conexao.RedirectPort}\n";
                 }
                 //Debug.WriteLine($"\n\n'{settings}'\n\n");
                 return settings;
@@ -163,7 +163,7 @@ namespace TrocaBaseGUI.Services
 
             foreach (var appPorts in conexao.Ports)
             {
-                settings += $"[DATABASE]={appPorts.App.ToUpper().Replace(" ", "")}:{conexao.DbServer}:{appPorts.Port}\n";
+                settings += $"{GlobalStrings.DatabaseTag}={appPorts.App.ToUpper().Replace(" ", "")}:{conexao.DbServer}:{appPorts.Port}\n";
             }
             //Debug.WriteLine($"\n\n'{settings}'\n\n");
             return settings;
@@ -175,7 +175,7 @@ namespace TrocaBaseGUI.Services
 
             foreach (var appPorts in conexao.Ports)
             {
-                settings += $"[DATABASE]={appPorts.App.ToUpper().Replace(" ", "")}:{conexao.DbServer}:{appPorts.Port}\n";
+                settings += $"{GlobalStrings.DatabaseTag}={appPorts.App.ToUpper().Replace(" ", "")}:{conexao.DbServer}:{appPorts.Port}\n";
             }
             //Debug.WriteLine($"\n\n'{settings}'\n\n");
             return settings;
@@ -183,11 +183,11 @@ namespace TrocaBaseGUI.Services
 
         public string Create2CConnectionFileSettings(ConexaoFileModel conexao, AppParams appParams)
         {
-            string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
-            string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
-            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[EDITOR]={conexao.TextEditorPath}\n";
-            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.UpdateFolder}\n";
-            string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
+            string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"{GlobalStrings.LoginPadraotag}={conexao.DefaultLogin}\n";
+            string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"{GlobalStrings.SenhaPadraotag}={conexao.DefaultPassword}\n";
+            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"{GlobalStrings.EditorTag}={conexao.TextEditorPath}\n";
+            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"{GlobalStrings.DirAtualizacaoTag}={conexao.UpdateFolder}\n";
+            string useWebMenu = conexao.UseWebMenu ? $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=S" : $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=N";
             string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
 
             //Debug.WriteLine($"\n\n'2: {settings}'\n\n");
@@ -198,7 +198,7 @@ namespace TrocaBaseGUI.Services
         public string Create3CConnectionServerFileSettings(ConexaoFileModel conexao, AppParams appParams)
         {
             string ports = CreateServerPortsSettings(conexao);
-            string verifierPort = string.IsNullOrEmpty(conexao.VerifierPort) ? string.Empty : $"[PORTA_VERIFICADOR]={conexao.VerifierPort}\n";
+            string verifierPort = string.IsNullOrEmpty(conexao.VerifierPort) ? string.Empty : $"{GlobalStrings.PortaVerificadorTag}={conexao.VerifierPort}\n";
 
             string settings = string.Concat(ports, verifierPort);
 
@@ -211,13 +211,13 @@ namespace TrocaBaseGUI.Services
         {
 
             string ports = CreateClientPortsSettings(conexao);
-            string defaultSettings = "[VERSAOEXE]=1.0.0.0\n[BANCODADOS]=DATASNAP\n\n";
-            string redirector = conexao.UseRedirect ? $"[REDIRECIONADOR]=S\n\n" : $"[REDIRECIONADOR]=N\n\n";
-            string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"[LOGINPADRAO]={conexao.DefaultLogin}\n";
-            string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"[SENHAPADRAO]={conexao.DefaultPassword}\n";
-            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"[EDITOR]={conexao.TextEditorPath}\n";
-            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"[DIRATUALIZACAO]={conexao.UpdateFolder}\n";
-            string useWebMenu = conexao.UseWebMenu ? $"[ABRIR_MENUSWEB_NODESKTOP]=S" : $"[ABRIR_MENUSWEB_NODESKTOP]=N";
+            string defaultSettings = $"[VERSAOEXE]=1.0.0.0\n{GlobalStrings.BancoDadosTag}=DATASNAP\n\n";
+            string redirector = conexao.UseRedirect ? $"{GlobalStrings.RedirecionadorTag}=S\n\n" : $"{GlobalStrings.RedirecionadorTag}=N\n\n";
+            string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"{GlobalStrings.LoginPadraotag}={conexao.DefaultLogin}\n";
+            string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"{GlobalStrings.SenhaPadraotag}={conexao.DefaultPassword}\n";
+            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"{GlobalStrings.EditorTag}={conexao.TextEditorPath}\n";
+            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"{GlobalStrings.DirAtualizacaoTag}={conexao.UpdateFolder}\n";
+            string useWebMenu = conexao.UseWebMenu ? $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=S" : $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=N";
 
 
             string settings = string.Concat(defaultSettings, ports, redirector, loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
@@ -229,7 +229,7 @@ namespace TrocaBaseGUI.Services
 
         public void UpdateRedirectorFile(string redirect, ConexaoFileModel conexao)
         {
-            string redirectorPort = $"[PORTA_REDIRECIONADOR]={conexao.RedirectPort}\n\n";
+            string redirectorPort = $"{GlobalStrings.PortaRedirecionadorTag}={conexao.RedirectPort}\n\n";
             string redirecionaSettings = string.Concat(redirectorPort, CreateRedirectPortsSettings(conexao));
 
             File.WriteAllText(redirect, redirecionaSettings);
@@ -280,19 +280,6 @@ namespace TrocaBaseGUI.Services
                 return false;
             }
             return true;
-        }
-
-        public void CopyT2Params(ConexaoFileModel Target, ConexaoFileModel Source, AppState appState)
-        {
-            Target.DefaultLogin = Source.DefaultLogin;
-            Target.DefaultPassword = Source.DefaultPassword;
-            Target.TextEditorPath = Source.TextEditorPath;
-            Target.UpdateFolder = Source.UpdateFolder;
-            Target.UseWebMenu = Source.UseWebMenu;
-            appState.ServerParams.DefaultLoginCheckbox = appState.LocalParams.DefaultLoginCheckbox;
-            appState.ServerParams.DefaultPasswordCheckbox = appState.LocalParams.DefaultPasswordCheckbox;
-            appState.ServerParams.EditorCheckbox = appState.LocalParams.EditorCheckbox;
-            appState.ServerParams.DirUpdateCheckbox = appState.LocalParams.DirUpdateCheckbox;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

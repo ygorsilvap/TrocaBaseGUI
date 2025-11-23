@@ -39,7 +39,7 @@
 
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" BorderThickness="0" Background="Transparent" MouseDown="Border_MouseDown" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="-5,-5,-5,-5"/>
 
-            <Button Click="CloseApp_Click" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,24,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Column="3">
+            <Button Click="CloseApp_Click" IsTabStop="False" Content="✖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,24,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Column="3">
                 <Button.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
@@ -73,7 +73,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Click="MinApp_Click" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,75,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Column="3">
+            <Button Click="MinApp_Click" IsTabStop="False" Content="➖" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,75,0" BorderThickness="0" Foreground="#411e5a"  Background="Transparent" Grid.Column="3">
                 <Button.Effect>
                     <DropShadowEffect Color="Black"
                           Direction="-25"
