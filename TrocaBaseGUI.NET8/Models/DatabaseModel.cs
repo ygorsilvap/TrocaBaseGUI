@@ -109,32 +109,37 @@ public class DatabaseModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 
-    public static void SetDisplayName(DatabaseModel db, string newDisplayName = "")
-    {
-        db.DisplayName = String.IsNullOrEmpty(db.DisplayName) || String.IsNullOrEmpty(newDisplayName) ? 
-            StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
-    }
+    //public static void SetDisplayName(DatabaseModel db, string newDisplayName = "")
+    //{
+    //    db.DisplayName = String.IsNullOrEmpty(db.DisplayName) || String.IsNullOrEmpty(newDisplayName) ? 
+    //        StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
+    //}
 
-    public static void SetSelection(ObservableCollection<DatabaseModel> dbs, int id)
-    {
-        var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
+    //public static void SetSelection(ObservableCollection<DatabaseModel> dbs, int id)
+    //{
+    //    var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
 
-        if (id < 0)
-            return;
+    //    if (id < 0)
+    //        return;
 
-        if (dbs.Any(b => b.IsSelected == true))
-            dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+    //    if (dbs.Any(b => b.IsSelected == true))
+    //        dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
 
-        selectedDb.IsSelected = true;
-    }
+    //    selectedDb.IsSelected = true;
+    //}
 
-    public static int GetSelection(ObservableCollection<DatabaseModel> dbs)
-    {
-        return dbs.FirstOrDefault(b => b.IsSelected == true).Id;
-    }
+    //public static int GetSelection(ObservableCollection<DatabaseModel> dbs)
+    //{
+    //    return dbs.Any(b => b.IsSelected == true) ? dbs.FirstOrDefault(b => b.IsSelected == true).Id : -1;
+    //}
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    //public DatabaseModel GetDatabaseById(ObservableCollection<DatabaseModel> dbs, int id)
+    //{
+    //    return dbs.FirstOrDefault(b => b.Id.Equals(id));
+    //}
+
+    //public override string ToString()
+    //{
+    //    return Name;
+    //}
 }

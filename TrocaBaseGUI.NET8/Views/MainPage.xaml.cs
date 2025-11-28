@@ -20,13 +20,17 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page, INotifyPropertyChanged
     {
-        public ObservableCollection<DatabaseModel> dbList { get; set; } = new ObservableCollection<DatabaseModel>();
-        public ObservableCollection<SysDirectoryModel> hist { get; set; }
+        public ObservableCollection<DatabaseModel> databaseList { get; set; } = new ObservableCollection<DatabaseModel>();
+        //public ObservableCollection<SysDirectoryModel> sysDirectoryList { get; set; }
         private MainViewModel viewModel;
         public int tabSelected;
         public string rbSelected;
         public string sysSelected;
-        public string exeSelected;
+        public string mainExe;
+        public string secondaryExe;
+        public int selectedDatabaseId;
+        public SysDirectoryModel selectedSysDirectory;
+        public ObservableCollection<string> exesList { get; set; } = new ObservableCollection<string>();
         //public string dbSearch;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -38,18 +42,18 @@ namespace TrocaBaseGUI.Views
             viewModel = vm;
             this.DataContext = viewModel;
 
-            hist = new ObservableCollection<SysDirectoryModel>(viewModel.History);
+            //sysDirectoryList = new ObservableCollection<SysDirectoryModel>(viewModel.SysDirectoryList);
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
             //dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
 
             //Fazer Binding com esses campos de exe
-            OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
-            OpenExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
+            //OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(mainExe)}";
+            //OpenSecondaryExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
 
-            IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
-            GetFilter(dbList);
+            IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um diretório." : "";
+            GetFilter(databaseList);
 
             //foreach (var item in viewModel.Databases)
             //{
@@ -62,7 +66,12 @@ namespace TrocaBaseGUI.Views
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             searchPlaceholder();
-            if(viewModel.Databases == null || viewModel.Databases.Count == 0)
+
+            SetExesSelection();
+
+            SetSelectedDatabase(selectedDatabaseId);
+
+            if (viewModel.Databases == null || viewModel.Databases.Count == 0)
             {
                 var tasks = new List<Task>
                 {
@@ -77,17 +86,17 @@ namespace TrocaBaseGUI.Views
                 await Task.WhenAll(tasks);
             }
 
-            dbList.Clear();
+            databaseList.Clear();
 
             foreach (var db in viewModel.Databases)
             {
-                DatabaseModel.SetDisplayName(db, db.DisplayName);
-                dbList.Add(db);
+                DatabaseService.SetDisplayName(db, db.DisplayName);
+                databaseList.Add(db);
             }
 
-            viewModel.DbService.SortDatabases(dbList);
+            viewModel.DbService.SortDatabases(databaseList);
 
-            GetFilter(dbList);
+            GetFilter(databaseList);
         }
 
         private void GetFilter(ObservableCollection<DatabaseModel> db)
@@ -139,22 +148,42 @@ namespace TrocaBaseGUI.Views
             //GetFilter(dbList);
         }
 
+        public void SetExesSelection()
+        {
+            string secondaryExe = exesList.FirstOrDefault(exe => exe.ToLower().Contains("frentecaixa"));
+            //secondaryExe = string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client") ? secondaryExe.Replace("client", "") : secondaryExe;
+
+            string mainExecutable = mainExe.EndsWith("client") ? mainExe.Replace("client", "") : mainExe;
+
+            OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(mainExecutable) ?
+                "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(mainExecutable)}";
+
+            OpenSecondaryExeButtonText.Text = exesList.Count <= 0 || string.IsNullOrEmpty(secondaryExe) ?
+                "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(secondaryExe)}";
+        }
+
+        public void SetSelectedDatabase(int database)
+        {
+            viewModel.SelectedDatabase = database > -1 ?
+                viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : new DatabaseModel();
+        }
+
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (DataContext is MainViewModel vm && !String.IsNullOrEmpty(MainViewModel.exeFile))
+            if (!String.IsNullOrEmpty(MainViewModel.exeFile))
             {
-                Debug.WriteLine($"\n\nIDSelDb: {viewModel.SelDatabase.Id}\n\n");
-                vm.SelectBase(vm.Databases, viewModel.SelDatabase.Id, dirSys.SelectedValue.ToString());
-            } else
+                Debug.WriteLine($"\n\nIDSelDb: {viewModel.SelectedDatabase.Id}\n\n");
+                //viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, SysDirectory.SelectedValue.ToString());
+                viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+            }
+            else
             {
                 MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            Refresh();
         }
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            GetFilter(dbList);
+            GetFilter(databaseList);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -162,7 +191,7 @@ namespace TrocaBaseGUI.Views
             if (e.Source is TabControl tabControl)
                 tabSelected = tabControl.SelectedIndex;
 
-            GetFilter(dbList);
+            GetFilter(databaseList);
         }
 
         private void MenuDiretorios_Click(object sender, RoutedEventArgs e)
@@ -179,41 +208,32 @@ namespace TrocaBaseGUI.Views
         }
 
         //Refatorar
-        private void dirSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SysDirectory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectoryModel;
-            if (selectedItem != null) 
-            { 
-                viewModel.appState.SelectedFolder = selectedItem.Folder;
-            } else
-            {
-                viewModel.appState.SelectedFolder = hist.LastOrDefault().Folder;
+
+            viewModel.appState.SelectedFolder = selectedItem == null ? viewModel.SysDirectoryList.LastOrDefault().Folder : selectedItem.Folder;
+
+            if(selectedItem == null) {
+                mainExe = string.Empty;
+                ExesList.ItemsSource = new ObservableCollection<string>();
+                selectedDatabaseId = -1;
+                return;
             }
+            exesList = viewModel.sysDirectoryService.GetExeList(selectedItem.Path);
+            ExesList.ItemsSource = exesList;
 
-            string selectedDir = comboBox.SelectedValue as string;
+            mainExe = selectedItem.MainExeFile;
+            SetExesSelection();  
 
-            if (string.IsNullOrEmpty(selectedDir)) return;
+            selectedSysDirectory = selectedItem;
 
-            viewModel.ExeFilesList = viewModel.sysDirectoryService.GetDir(viewModel.History, selectedDir)?.ExeList;
-            exeSys.ItemsSource = viewModel.ExeFilesList;
+            SetSelectedDatabase(selectedItem.SysDatabase);
+            DatabaseService.SetSelection(viewModel.Databases, selectedItem.SysDatabase);
 
-            int selectedBaseDir = viewModel.sysDirectoryService.GetDir(viewModel.History, selectedDir).SelectedBase;
-
-            if (selectedItem != null)
-            {
-                viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
-                MainViewModel.exeFile = selectedItem.MainExeFile;
-
-                if (dbList.Count() > 0 && viewModel.History.Any(i => i.SelectedBase >= 0) && selectedBaseDir > 0)
-                {
-                    DatabaseModel.SetSelection(dbList, selectedBaseDir);
-                    viewModel.SelDatabase = dbList[selectedBaseDir];
-                }
-            }
-
-            Refresh();
-            //Debug.Write($"\nviewModel.conexaoFile: {viewModel.conexaoFile}\n");
+            //Revisar a necessidade de um serviço para conexaoaddress. Utilizando assim apenas como paliativa.
+            viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
         }
 
         private void exeSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -221,33 +241,33 @@ namespace TrocaBaseGUI.Views
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as string;
 
-            exeSelected = selectedItem;
-            OpenExeButtonText.Text = $"Iniciar \n{exeSelected}";
+            //mainExe = selectedItem;
+            OpenSecondaryExeButtonText.Text = $"Iniciar \n{selectedItem}";
+            secondaryExe = selectedItem;
 
             //Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
         }
 
-        private void ClearAll_Click(object sender, RoutedEventArgs e)
-        {
-            var del = MessageBox.Show("Isso fará com que todos os dados da aplicação sejam deletados.\n\nDesejar continuar?", "Hard Reset",
-                MessageBoxButton.YesNo, MessageBoxImage.Warning)
-                .ToString().ToLower();
-
-            if (del.Equals("yes"))
-            {
-                viewModel.ClearApp();
-                Refresh();
-            }
-        }
-
         private void OpenMainExeButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{MainViewModel.exeFile}.exe");
+            string exe = $@"{selectedSysDirectory.Path}\{mainExe}";
+            if (string.IsNullOrEmpty(mainExe) && !File.Exists(exe))
+            {
+                MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            Process.Start(exe);
         }
 
         private void OpenSecondaryExeButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start($@"{System.IO.Path.GetDirectoryName(viewModel.conexaoFile)}\{exeSelected}.exe");
+            string exe = $@"{selectedSysDirectory.Path}\{secondaryExe}";
+            if (string.IsNullOrEmpty(secondaryExe) && !File.Exists(exe))
+            {
+                MessageBox.Show("Nenhum executável selecionado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            Process.Start(exe);
         }
 
         private void ToSettings_Click(object sender, RoutedEventArgs e)
@@ -278,9 +298,9 @@ namespace TrocaBaseGUI.Views
 
         private void CopyStringClick_Click(object sender, RoutedEventArgs e)
         {
-            string connString = viewModel.SelDatabase.DbType.ToLower().StartsWith("s")
-                ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.SelDatabase.Environment, viewModel.SelDatabase.Name, viewModel.SelDatabase.Server)
-                : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelDatabase.Environment, viewModel.SelDatabase.Server, viewModel.SelDatabase.Instance, viewModel.SelDatabase.Name);
+            string connString = viewModel.SelectedDatabase.DbType.ToLower().StartsWith("s")
+                ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Name, viewModel.SelectedDatabase.Server)
+                : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Server, viewModel.SelectedDatabase.Instance, viewModel.SelectedDatabase.Name);
 
             Clipboard.SetText(connString);
         }
@@ -319,9 +339,10 @@ namespace TrocaBaseGUI.Views
             string environment = tabSelected == 0 ? "local" : "server";
 
             if(lstTodosBancos.Items.Count > 0)
-                lstTodosBancos.ItemsSource = dbList.Where(db => db.Name.ToLower().Contains(dbSearch.Text.ToLower()) 
-                && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
-            Debug.WriteLine($"\n\nSearch Text: {dbSearch.Text}\n\n");
+                lstTodosBancos.ItemsSource = !string.IsNullOrEmpty(dbSearch.Text) ? databaseList.Where(db => db.Name.Contains(dbSearch.Text, StringComparison.OrdinalIgnoreCase) 
+                && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase)) : databaseList;
+
+            //Debug.WriteLine($"\n\nSearch Text: {dbSearch.Text}\n\n");
         }
 
         //WIP

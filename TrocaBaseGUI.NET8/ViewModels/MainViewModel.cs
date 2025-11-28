@@ -59,12 +59,14 @@ namespace TrocaBaseGUI.ViewModels
             get => DbService.Databases;
             set => DbService.Databases = value;
         }
-        public DatabaseModel SelDatabase { get; set; } = new DatabaseModel();
 
-        private const int MaxHistory = 10;
-        public ObservableCollection<SysDirectoryModel> History { get; set; } = new ObservableCollection<SysDirectoryModel>();
+        //Refatorar a tratativa de base selecionada para retirar essa variavel da vm[1]
+        public DatabaseModel SelectedDatabase { get; set; } = new DatabaseModel();
+
+        private const int MaxSysDirectorySize = 10;
+        public ObservableCollection<SysDirectoryModel> SysDirectoryList { get; set; } = new ObservableCollection<SysDirectoryModel>();
         public SysDirectoryService sysDirectoryService { get; set; } = new SysDirectoryService();
-        public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
+        //public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
         public AppState appState { get; set; } = new AppState();
         public AppStateService appStateService { get; set; } = new AppStateService();
 
@@ -178,26 +180,26 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, string dirSys)
+        public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, SysDirectoryModel sysDirectory)
         {
             //foreach (var item in Databases)
             //{
             //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
             //}
             var conexaoService = conexaoFileService;
-            int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
+            //int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
-            if (tier == 3 && !conexaoService.is3CSettingsValid(Conexao3Camadas))
+            if (sysDirectory.Tier == 3 && !conexaoService.is3CSettingsValid(Conexao3Camadas))
             {
                 return;
             }
 
             //Rever a necessidade disso
-            string cnxPath = conexaoFileService.ConexaoFilePath;
-            string selectedCnx = History.Any(d => d.Path.Equals(cnxPath)) ?
-                History.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
+            //string cnxPath = conexaoFileService.ConexaoFilePath;
+            //string selectedCnx = SysDirectoryList.Any(d => d.Path.Equals(cnxPath)) ?
+            //    SysDirectoryList.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
 
-            if (string.IsNullOrEmpty(selectedCnx))
+            if (string.IsNullOrEmpty(sysDirectory.Path))
                 return;
 
             var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
@@ -206,18 +208,20 @@ namespace TrocaBaseGUI.ViewModels
                ? $"{SqlService.CreateSQLServerConnectionString(selectedDb.Environment, selectedDb.Name, selectedDb.Server)}\n\n"
                : $"{OracleService.CreateOracleConnectionString(selectedDb.Environment, selectedDb.Server, selectedDb.Instance, selectedDb.Name)}\n\n";
 
-            if (tier > 2)
+            if (sysDirectory.Tier == 3)
             {
+                //File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
+                //File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas , appState.ServerParams)));
                 File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
-                File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas , appState.ServerParams)));
+                File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas, appState.ServerParams)));
             } else
             {
                 File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoService.Create2CConnectionFileSettings(Conexao2Camadas, appState.LocalParams)));
             }
 
-                DatabaseModel.SetSelection(dbs, selectedDb.Id);
-            sysDirectoryService.GetDir(History, dirSys).SelectedBase = selectedDb.Id;
-            SelDatabase = selectedDb;
+            DatabaseService.SetSelection(dbs, selectedDb.Id);
+            sysDirectoryService.GetDir(SysDirectoryList, sysDirectory.Path).SysDatabase = selectedDb.Id;
+            SelectedDatabase = selectedDb;
         }
 
         public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)
@@ -232,18 +236,18 @@ namespace TrocaBaseGUI.ViewModels
 
         public void AddDirectory(string folder, string path, string exe, ObservableCollection<string> exeList)
         {
-            var existente = History.FirstOrDefault(d => d.Folder == folder);
+            var existente = SysDirectoryList.FirstOrDefault(d => d.Folder == folder);
             if (existente != null)
             {
-                History.Remove(existente);
+                SysDirectoryList.Remove(existente);
             }
 
-            History.Insert(0, new SysDirectoryModel(folder, path, exe, exeList));
+            SysDirectoryList.Insert(0, new SysDirectoryModel(folder, path, exe, exeList));
             exeFile = exe;
 
-            while (History.Count > MaxHistory)
+            while (SysDirectoryList.Count > MaxSysDirectorySize)
             {
-                History.RemoveAt(History.Count - 1);
+                SysDirectoryList.RemoveAt(SysDirectoryList.Count - 1);
             }
         }
 
@@ -257,7 +261,7 @@ namespace TrocaBaseGUI.ViewModels
             LocalOracleConnection.Port = "1521";
             Databases = new ObservableCollection<DatabaseModel>();
 
-            History.Clear();
+            SysDirectoryList.Clear();
             //Properties.Settings.Default.HistoricoMem = "";
             Properties.Settings.Default.Save();
         }

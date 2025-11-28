@@ -175,6 +175,34 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+
+            <Button Click="ClearAll_Click" IsTabStop="False" HorizontalAlignment="Left" Width="30" Background="Transparent" Margin="3,273,0,20" Grid.Row="3">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="5"
+                    BorderThickness="{TemplateBinding BorderThickness}" Margin="0,0,0,-5">
+                            <TextBlock x:Name="textBlock"
+                           Text="⟲"
+                           FontSize="26"
+                           Foreground="#f5f4f3"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Height="40"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#dc9710"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="textBlock" Property="TextElement.FontSize" Value="25"/>
+                                <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#dc9710"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Border>
 </Window>

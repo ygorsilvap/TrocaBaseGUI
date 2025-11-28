@@ -81,5 +81,17 @@ namespace TrocaBaseGUI.Views
 
             Window.GetWindow(this)?.Close();
         }
+
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            var del = MessageBox.Show("Isso fará com que todos os dados da aplicação sejam deletados.\n\nDesejar continuar?", "Hard Reset",
+                MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                .ToString().ToLower();
+
+            if (del.Equals("yes"))
+            {
+                viewModel.ClearApp();
+            }
+        }
     }
 }

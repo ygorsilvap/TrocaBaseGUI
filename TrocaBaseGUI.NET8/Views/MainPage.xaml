@@ -24,9 +24,9 @@
             </Border.Effect>
         </Border>
 
-        <Button x:Name="OpenExeButton" Click="OpenSecondaryExeButton_Click" IsTabStop="False" Foreground="#411e5a"  BorderBrush="#411e5a" BorderThickness="2" Background="Transparent" Margin="90,420,310,40">
+        <Button x:Name="OpenSecondaryExeButton" Click="OpenSecondaryExeButton_Click" IsTabStop="False" Foreground="#411e5a"  BorderBrush="#411e5a" BorderThickness="2" Background="Transparent" Margin="90,420,310,40">
             <Button.Content>
-                <TextBlock x:Name="OpenExeButtonText"
+                <TextBlock x:Name="OpenSecondaryExeButtonText"
                    Text="Abrir Executável"
                    TextAlignment="Center"
                    HorizontalAlignment="Stretch"
@@ -58,8 +58,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <ComboBox x:Name="exeSys"
-          ItemsSource="{Binding ExeFilesList}"
+        <ComboBox x:Name="ExesList"
           SelectionChanged="exeSys_SelectionChanged"
           FontSize="11"
           Margin="240,420,290,0"
@@ -91,10 +90,10 @@
                                     </Trigger>
                                     <Trigger Property="IsHighlighted" Value="True">
                                         <Setter TargetName="Bd" Property="Background" Value="#7737A6" />
-                                        <Setter Property="Foreground" Value="#f5f4f3" />
+                                        <Setter Property="Foreground" Value="#411e5a" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Foreground" Value="#f5f4f3" />
+                                        <Setter Property="Foreground" Value="#411e5a" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -194,9 +193,9 @@
             </ComboBox.Style>
         </ComboBox>
 
-        <Button x:Name="OpenSysButton" Click="OpenMainExeButton_Click" IsTabStop="False" Foreground="#411e5a" BorderBrush="#411e5a" BorderThickness="2" Height="40" Background="Transparent" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
+        <Button x:Name="OpenMainExeButton" Click="OpenMainExeButton_Click" IsTabStop="False" Foreground="#411e5a" BorderBrush="#411e5a" BorderThickness="2" Height="40" Background="Transparent" Margin="290,420,90,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top">
             <Button.Content>
-                <TextBlock x:Name="OpenSysButtonText"
+                <TextBlock x:Name="OpenMainExeButtonText"
                    Text="Abrir Executável"
                    TextAlignment="Center"
                    HorizontalAlignment="Stretch"
@@ -322,7 +321,7 @@
         <ListBox x:Name="lstTodosBancos"
                  Margin="80,155,80,112"
                  ItemsSource="{Binding Databases}"
-                 SelectedItem="{Binding SelDatabase}"
+                 SelectedItem="{Binding SelectedDatabase}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
                  BorderThickness="1"
                  Background="Transparent"
@@ -513,12 +512,12 @@
             </RadioButton>
         </StackPanel>
 
-        <ComboBox x:Name="dirSys"
-          ItemsSource="{Binding History}"
+        <ComboBox x:Name="SysDirectory"
+          ItemsSource="{Binding SysDirectoryList}"
           SelectedValue="{Binding appState.SelectedFolder}"
           SelectedValuePath="Folder"
           DisplayMemberPath="Folder"
-          SelectionChanged="dirSys_SelectionChanged"
+          SelectionChanged="SysDirectory_SelectionChanged"
           FontSize="11"
           Margin="357,120,80,0"
           VerticalAlignment="Top"
@@ -677,34 +676,6 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
                             <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#dc9710"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-
-        <Button Click="ClearAll_Click" IsTabStop="False" HorizontalAlignment="Left" Margin="7,455,0,15" Width="30" Background="Transparent">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="5"
-                    BorderThickness="{TemplateBinding BorderThickness}">
-                        <TextBlock x:Name="textBlock"
-                           Text="⟲"
-                           FontSize="26"
-                           Foreground="#f5f4f3"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Height="40"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#dc9710"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="textBlock" Property="TextElement.FontSize" Value="25"/>
-                            <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#dc9710"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

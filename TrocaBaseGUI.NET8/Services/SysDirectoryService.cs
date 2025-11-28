@@ -42,6 +42,16 @@ namespace TrocaBaseGUI.Services
             return conexao2C || conexao3C;
         }
 
+        public int GetTier(string path) 
+        {
+            bool conexao2C = File.Exists(Path.Combine(path, GlobalStrings.ConexaoDat));
+            bool conexao3C = File.Exists(Path.Combine(path, GlobalStrings.ConexaoServidorDat)) &&
+                             File.Exists(Path.Combine(path, GlobalStrings.ConexaoRedirecionaDat)) &&
+                             File.Exists(Path.Combine(path, GlobalStrings.ConexaoClienteDat));
+
+            return conexao2C ? 2 : conexao3C ? 3 : 0;
+        }
+
         public SysDirectoryModel GetDir(ObservableCollection<SysDirectoryModel> directoryList, string path)
         {
             if (string.IsNullOrEmpty(path) || directoryList.Count < 1)
@@ -59,7 +69,7 @@ namespace TrocaBaseGUI.Services
                          File.Exists(Path.Combine(directory, GlobalStrings.LinxDMS2C)) ? GlobalStrings.LinxDMS2C :
                          File.Exists(Path.Combine(directory, GlobalStrings.LinxDMS3C)) ? GlobalStrings.LinxDMS3C :
                          File.Exists(Path.Combine(directory, GlobalStrings.Autoshop)) ? GlobalStrings.Autoshop : string.Empty;
-            return string.IsNullOrEmpty(erp) ? string.Empty : $"{directory}\\{erp}";
+            return string.IsNullOrEmpty(erp) ? string.Empty : $"{Path.GetFileNameWithoutExtension(erp)}";
         }
 
         public ObservableCollection<string> GetExeList(string directory)
@@ -87,6 +97,7 @@ namespace TrocaBaseGUI.Services
                 Path = directory,
                 MainExeFile = SysExeFile,
                 ExeList = exeList,
+                Tier = GetTier(directory)
             };
 
             bool exists = GetDir(directoryList, dir.Path) != null;
@@ -108,6 +119,7 @@ namespace TrocaBaseGUI.Services
                 dir.Path = directory;
                 dir.MainExeFile = GetSysExeFile(directory);
                 dir.ExeList = GetExeList(directory);
+                dir.Tier = GetTier(directory);
             }
         }
 

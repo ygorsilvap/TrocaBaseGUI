@@ -93,7 +93,7 @@ namespace TrocaBaseGUI.Services
         {
             var state = new AppState
             {
-                History = vm.History.ToList(),
+                History = vm.SysDirectoryList.ToList(),
                 Databases = vm.Databases.ToList(),
                 ExeFile = MainViewModel.exeFile,
                 ConexaoFile = vm.conexaoFile,
@@ -123,7 +123,7 @@ namespace TrocaBaseGUI.Services
 
                 if (state != null)
                 {
-                    vm.History = new ObservableCollection<SysDirectoryModel>(state.History);
+                    vm.SysDirectoryList = new ObservableCollection<SysDirectoryModel>(state.History);
                     vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
                     MainViewModel.exeFile = state.ExeFile;
                     vm.conexaoFile = state.ConexaoFile;

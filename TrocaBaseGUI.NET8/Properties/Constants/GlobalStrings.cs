@@ -10,8 +10,8 @@ namespace TrocaBaseGUI.Properties.Constants
     {
         public const string Bravos2C = "bravos.exe";
         public const string Bravos3C = "bravosclient.exe";
-        public const string LinxDMS2C = "linxdms.exe";
-        public const string LinxDMS3C = "linxdmsclient.exe";
+        public const string LinxDMS2C = "apollo.exe";
+        public const string LinxDMS3C = "apolloclient.exe";
         public const string Autoshop = "linxautoshop.exe";
         public const string LinxListener = "linxlistener.exe";
 

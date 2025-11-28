@@ -29,8 +29,8 @@ namespace TrocaBaseGUI.Views
             InitializeComponent();
             viewModel = MainViewModel.Instance;
 
-            MainBorder.Height = 150 + (viewModel?.History.Count * 27 ?? 0);
-            sysDirectorySelectionWindow.Top -= (viewModel?.History.Count * 15 ?? 0);
+            MainBorder.Height = 150 + (viewModel?.SysDirectoryList.Count * 27 ?? 0);
+            sysDirectorySelectionWindow.Top -= (viewModel?.SysDirectoryList.Count * 15 ?? 0);
 
             DataContext = viewModel;
         }
@@ -57,7 +57,7 @@ namespace TrocaBaseGUI.Views
                     MessageBox.Show("A pasta selecionada não é uma pasta válida de sistema Linx.\n\nPor favor, selecione uma pasta que contenha os arquivos de conexão e executáveis do sistema.", "Pasta Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                else if (viewModel.History.Any(d => d.Path.Equals(path)))
+                else if (viewModel.SysDirectoryList.Any(d => d.Path.Equals(path)))
                 {
                     MessageBox.Show("A pasta selecionada já existe na lista.", "Pasta Duplicada", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -79,7 +79,7 @@ namespace TrocaBaseGUI.Views
             {
                 //Debug.WriteLine($"\n\n\nPath para deletar: {item.Id} - {item.Path}\n\n\n");
 
-                viewModel.sysDirectoryService.DeleteDirectory(viewModel.History, item.Id);
+                viewModel.sysDirectoryService.DeleteDirectory(viewModel.SysDirectoryList, item.Id);
 
                 MainBorder.Height -= 27;
                 sysDirectorySelectionWindow.Top += 15;
@@ -90,7 +90,7 @@ namespace TrocaBaseGUI.Views
 
         private void AddDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if(viewModel.History.Count >= 10 && !string.IsNullOrEmpty(SysDirectoryTextBox.Text))
+            if(viewModel.SysDirectoryList.Count >= 10 && !string.IsNullOrEmpty(SysDirectoryTextBox.Text))
             {
                 if(!(DirectoryCount.Foreground == Brushes.Red))
                 {
@@ -125,11 +125,11 @@ namespace TrocaBaseGUI.Views
 
             if (!string.IsNullOrEmpty(SysDirectoryTextBox.Text))
             {
-                int sysDirectoryCount = viewModel.History.Count();
+                int sysDirectoryCount = viewModel.SysDirectoryList.Count();
 
-                viewModel.sysDirectoryService.AddDirectory(viewModel.History, SysDirectoryTextBox.Text);
+                viewModel.sysDirectoryService.AddDirectory(viewModel.SysDirectoryList, SysDirectoryTextBox.Text);
 
-                if(viewModel.History.Count > 1 && viewModel.History.Count > sysDirectoryCount)
+                if(viewModel.SysDirectoryList.Count > 1 && viewModel.SysDirectoryList.Count > sysDirectoryCount)
                 {
                     MainBorder.Height += 27;
                     sysDirectorySelectionWindow.Top -= 15;
@@ -160,7 +160,7 @@ namespace TrocaBaseGUI.Views
                 {
                     MessageBox.Show("A pasta selecionada não é uma pasta válida de sistema Linx.\n\nPor favor, selecione uma pasta que contenha os arquivos de conexão e executáveis do sistema.", "Pasta Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
-                } else if(viewModel.History.Any(d => d.Path.Equals(path)))
+                } else if(viewModel.SysDirectoryList.Any(d => d.Path.Equals(path)))
                 {
                     MessageBox.Show("A pasta selecionada já existe na lista.", "Pasta Duplicada", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -173,7 +173,7 @@ namespace TrocaBaseGUI.Views
                 if (del.Equals("yes"))
                 {
                     item.Path = path;
-                    viewModel.sysDirectoryService.EditDirectory(viewModel.History, item.Id, item.Path);
+                    viewModel.sysDirectoryService.EditDirectory(viewModel.SysDirectoryList, item.Id, item.Path);
                 }
 
             }

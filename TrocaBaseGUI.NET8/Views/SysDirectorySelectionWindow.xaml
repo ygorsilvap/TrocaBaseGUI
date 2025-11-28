@@ -41,7 +41,7 @@
                     </Button.Template>
                 </Button>
                 <!--<Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Background="#f5f4f3" Navigated="MainFrame_Navigated"/>-->
-                <TextBlock x:Name="DirectoryCount" Text="{Binding History.Count}" TextAlignment="Right" VerticalAlignment="Top" Foreground="#411e5a" Margin="15,-1,347,0"/>
+                <TextBlock x:Name="DirectoryCount" Text="{Binding SysDirectoryList.Count}" TextAlignment="Right" VerticalAlignment="Top" Foreground="#411e5a" Margin="15,-1,347,0"/>
                 <TextBlock x:Name="DirectoryMaxCount" Text="/10" Foreground="#411e5a" VerticalAlignment="Top" Margin="30,-1,326,0"/>
 
 
@@ -125,7 +125,7 @@
                     </Button.Template>
                 </Button>
 
-                <ItemsControl x:Name="DirectoryList" ItemsSource="{Binding History}" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="20,45,20,50">
+                <ItemsControl x:Name="DirectoryList" ItemsSource="{Binding SysDirectoryList}" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="20,45,20,50">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Height="30">

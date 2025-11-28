@@ -57,37 +57,37 @@ namespace TrocaBaseGUI.Views
 
         private void SqlServerServer_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(SqlServerServer.Text))
+            //if (!String.IsNullOrWhiteSpace(SqlServerServer.Text))
                 _viewModel.LocalSQLServerConnection.Server = SqlServerServer.Text;
         }
 
         private void SqlServerPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(SqlServerPassword.Password))
+            //if (!String.IsNullOrWhiteSpace(SqlServerPassword.Password))
                 _viewModel.LocalSQLServerConnection.Password = SqlServerPassword.Password;
         }
 
         private void OracleServer_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(OracleServer.Text))
+            //if (!String.IsNullOrWhiteSpace(OracleServer.Text))
                 _viewModel.LocalOracleConnection.Server = OracleServer.Text;
         }
 
         private void OraclePassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(OraclePassword.Password))
+            //if (!String.IsNullOrWhiteSpace(OraclePassword.Password))
                 _viewModel.LocalOracleConnection.Password = OraclePassword.Password;
         }
 
         private void OracleInstance_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(OracleInstance.Text))
+            //if (!String.IsNullOrWhiteSpace(OracleInstance.Text))
                 _viewModel.LocalOracleConnection.Instance = OracleInstance.Text;
         }
 
         private void OraclePort_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(OraclePort.Text))
+            //if (!String.IsNullOrWhiteSpace(OraclePort.Text))
                 _viewModel.LocalOracleConnection.Port = OraclePort.Text;
         }
 

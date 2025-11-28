@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TrocaBaseGUI.Utils;
 
 namespace TrocaBaseGUI.Services
 {
@@ -34,6 +35,36 @@ namespace TrocaBaseGUI.Services
             {
                 databases.Add(db);
             }
+        }
+
+        public static void SetDisplayName(DatabaseModel db, string newDisplayName = "")
+        {
+            db.DisplayName = String.IsNullOrEmpty(db.DisplayName) || String.IsNullOrEmpty(newDisplayName) ?
+                StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
+        }
+
+        public static void SetSelection(ObservableCollection<DatabaseModel> dbs, int id)
+        {
+            var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
+
+            if (id < 0)
+                return;
+
+            if (dbs.Any(b => b.IsSelected == true))
+                dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+
+            selectedDb.IsSelected = true;
+        }
+
+        public static int GetSelection(ObservableCollection<DatabaseModel> dbs)
+        {
+            //return dbs.Any(b => b.IsSelected == true) ? dbs.FirstOrDefault(b => b.IsSelected == true).Id : -1;
+            return dbs.FirstOrDefault(b => b.IsSelected)?.Id ?? -1;
+        }
+
+        public DatabaseModel GetDatabaseById(ObservableCollection<DatabaseModel> dbs, int id)
+        {
+            return dbs.FirstOrDefault(b => b.Id.Equals(id));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace TrocaBaseGUI.Models
             Path = fullPathAddress;
             MainExeFile = exeFile;
             ExeList = exeList;
-            SelectedBase = selectedBase;
+            SysDatabase = selectedBase;
         }
 
         private int id;
@@ -42,13 +42,13 @@ namespace TrocaBaseGUI.Models
             { path = value; OnPropertyChanged(); }
         }
 
-        //private int tier;
-        //public int Tier
-        //{
-        //    get => tier;
-        //    set
-        //    { tier = value; OnPropertyChanged(); }
-        //}
+        private int tier;
+        public int Tier
+        {
+            get => tier;
+            set
+            { tier = value; OnPropertyChanged(); }
+        }
 
         private string mainExeFile;
         public string MainExeFile
@@ -66,21 +66,13 @@ namespace TrocaBaseGUI.Models
             { exeList = value; OnPropertyChanged(); }
         }
 
-        private int selectedBase = -1;
-        public int SelectedBase
+        private int sysDatabase = -1;
+        public int SysDatabase
         {
-            get => selectedBase;
+            get => sysDatabase;
             set
-            { selectedBase = value; OnPropertyChanged(); }
+            { sysDatabase = value; OnPropertyChanged(); }
         }
-
-        //public static SysDirectoryModel GetDir(ObservableCollection<SysDirectoryModel> hist, string addr)
-        //{
-        //    if (string.IsNullOrEmpty(addr) || hist.Count < 1)
-        //        return null;
-
-        //    return hist.FirstOrDefault(d => d.Path.EndsWith(addr));
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 
