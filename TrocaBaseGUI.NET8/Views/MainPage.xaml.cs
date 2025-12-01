@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
@@ -152,7 +153,8 @@ namespace TrocaBaseGUI.Views
 
         public void SetExesSelection()
         {
-            string secondaryExe = exesList.FirstOrDefault(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)).ToLower();
+            string secondaryExe = exesList.IsNullOrEmpty() ? string.Empty :
+                exesList.FirstOrDefault(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)).ToLower();
 
             secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ? 
                 secondaryExe.Replace("client", "") : secondaryExe;
@@ -217,10 +219,10 @@ namespace TrocaBaseGUI.Views
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as SysDirectoryModel;
 
-            viewModel.appState.SelectedFolder = selectedItem == null ? 
+            viewModel.appState.SelectedFolder = selectedItem == null ?
                 viewModel.SysDirectoryList.LastOrDefault() : selectedItem;
 
-            if(selectedItem == null) {
+            if (selectedItem == null) {
                 mainExe = string.Empty;
                 ExesList.ItemsSource = new ObservableCollection<string>();
                 selectedDatabaseId = -1;

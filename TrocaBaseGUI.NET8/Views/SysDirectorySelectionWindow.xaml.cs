@@ -44,7 +44,7 @@ namespace TrocaBaseGUI.Views
             var dialog = new CommonOpenFileDialog
             {
                 Title = "Selecione a pasta do sistema.",
-                InitialDirectory = @"C:\Users\ygor\Desktop\TrocaBaseTestes",
+                InitialDirectory = @"C:\",
                 IsFolderPicker = true
             };
 
