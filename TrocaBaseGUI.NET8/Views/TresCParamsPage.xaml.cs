@@ -164,16 +164,19 @@ namespace TrocaBaseGUI.Views
             dlg.ShowDialog();
         }
 
-        private void updateRedirectorFile_Click(object sender, RoutedEventArgs e)
+        private void UpdateRedirectorFile_Click(object sender, RoutedEventArgs e)
         {
-            
-
-            if(string.IsNullOrEmpty(_viewModel.Conexao3Camadas.RedirectPort))
+            var selectedDirectory = _viewModel.appState.SelectedFolder;
+            if (string.IsNullOrEmpty(_viewModel.Conexao3Camadas.RedirectPort))
             {
                 MessageBox.Show("O campo 'Porta Redirecionador' não pode ficar vazio.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            } else if (!_viewModel.appState.SelectedFolder.Tier.Equals(3))
+            {
+                MessageBox.Show("A pasta selecionada não contém um sistema 3 Camadas.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            _viewModel.conexaoFileService.UpdateRedirectorFile(_viewModel.conexaoRedirecionadorFile, _viewModel.Conexao3Camadas);
+                _viewModel.conexaoFileService.UpdateRedirectorFile(_viewModel.conexaoRedirecionadorFile, _viewModel.Conexao3Camadas);
         }
     }
 }

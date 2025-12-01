@@ -91,6 +91,17 @@ public class DatabaseModel : INotifyPropertyChanged
         set { importDate = value; OnPropertyChanged(); }
     }
 
+    private bool isManualAdded = false;
+    public bool IsManualAdded
+    {
+        get => isManualAdded;
+        set
+        {
+            isManualAdded = value;
+            OnPropertyChanged();
+        }
+    }
+
     private bool isSelected = false;
     public bool IsSelected
     {

@@ -59,7 +59,7 @@
             </Button.Template>
         </Button>
         <ComboBox x:Name="ExesList"
-          SelectionChanged="exeSys_SelectionChanged"
+          SelectionChanged="ExeSys_SelectionChanged"
           FontSize="11"
           Margin="240,420,290,0"
           VerticalAlignment="Top"
@@ -173,7 +173,9 @@
                                             BorderBrush="Gray"
                                             BorderThickness="1"
                                             CornerRadius="2">
-                                            <ScrollViewer>
+                                            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                          CanContentScroll="False"
+                                                          PanningMode="None">
                                                 <ItemsPresenter/>
                                             </ScrollViewer>
                                         </Border>
@@ -388,7 +390,7 @@
                                                     <Border x:Name="Border"
                                                         Background="{TemplateBinding Background}"
                                                         BorderBrush="#411e5a"
-                                                        BorderThickness="2"
+                                                        BorderThickness="1"
                                                         CornerRadius="0"
                                                         Padding="5">
                                                         <ContentPresenter ContentSource="Header"/>
@@ -399,7 +401,10 @@
                                                         </Trigger>
                                                         <Trigger Property="IsHighlighted" Value="True">
                                                             <Setter TargetName="Border" Property="Background" Value="#7737A6" />
-                                                            <Setter TargetName="Border" Property="BorderBrush" Value="#411e5a" />
+                                                            <!--<Setter TargetName="Border" Property="BorderBrush" Value="#411e5a" />-->
+                                                        </Trigger>
+                                                        <Trigger Property="IsEnabled" Value="False">
+                                                            <Setter TargetName="Border" Property="Background" Value="#251133" />
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
@@ -409,8 +414,9 @@
                                         <Setter Property="Foreground" Value="#f5f4f3"/>
                                     </Style>
                                 </ContextMenu.Resources>
-                                <MenuItem Header="Renomear" Click="EditarBase_Click" Background="#411e5a" Foreground="#f5f4f3" Margin="-2,0,0,0" />
-                                <MenuItem Header="Copiar Dados de Conexão" Click="CopyStringClick_Click" Background="#411e5a" Foreground="#f5f4f3" Margin="-2,0,0,0" />
+                                <MenuItem Header="Renomear" Click="EditarBase_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
+                                <MenuItem Header="Copiar Dados de Conexão" Click="CopyStringClick_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
+                                <MenuItem Header="Excluir Base" Click="DeleteDatabase_Click" IsEnabled="{Binding IsManualAdded}" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
                             </ContextMenu>
                         </Grid.ContextMenu>
                         <Grid.ColumnDefinitions>
@@ -629,8 +635,8 @@
                                         PopupAnimation="Fade"
                                            Width="113">
                                         <Border x:Name="PopupBorder" 
-                                            Background="#2b3a40"
-                                            BorderBrush="Gray"
+                                            Background="#5C2A80"
+                                            BorderBrush="#5C2A80"
                                             BorderThickness="1"
                                             CornerRadius="5">
                                             <ScrollViewer>
@@ -710,7 +716,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBlock x:Name="IsThereSysDirectory" Foreground="#f5f4f3" HorizontalAlignment="Center" Margin="0,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Height="16"/>
+        <!--<TextBlock x:Name="IsThereSysDirectory" Foreground="#f5f4f3" HorizontalAlignment="Center" Margin="0,267,0,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" Height="16"/>-->
         <TextBlock HorizontalAlignment="Left" Foreground="#411e5a" FontSize="30" FontWeight="Medium" Margin="80,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="45"><Run Language="pt-br" Text="Troca Base"/><LineBreak/><Run Language="pt-br"/>
             <TextBlock.Effect>
                 <DropShadowEffect Color="#B3B3B3"

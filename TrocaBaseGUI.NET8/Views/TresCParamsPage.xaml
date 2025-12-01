@@ -249,7 +249,7 @@
             </TextBox.Style>
         </TextBox>
         <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#411e5a" Margin="222,218,0,183" Grid.Row="1" TextWrapping="Wrap" Text="       Porta Redirecionador" Width="67"/>
-        <Button Content="Atualizar Redirecionador" IsTabStop="False" Click="updateRedirectorFile_Click" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="310,317,100,80" Grid.Row="1">
+        <Button Content="Atualizar Redirecionador" IsTabStop="False" Click="UpdateRedirectorFile_Click" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="310,317,100,80" Grid.Row="1">
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="Border"

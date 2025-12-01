@@ -17,7 +17,8 @@ namespace TrocaBaseGUI.Views
         {
             InitializeComponent();
             _db = db;
-            nameInput.Text = _db.DisplayName;
+            EditDbPage_Loaded();
+
             //dbType.Text = _db.DbType;
             _viewModelDbs = viewModelDbs;
         }
@@ -26,8 +27,39 @@ namespace TrocaBaseGUI.Views
         {
             InitializeComponent();
             _viewModelDbs = viewModelDbs;
-            _db = new DatabaseModel() { Environment = "local" };
+            _db = new DatabaseModel() { Environment = "local", IsManualAdded = true };
         }
+
+        public void EditDbPage_Loaded()
+        {
+            nameInput.Text = _db.DisplayName;
+            serverInput.Text = _db.Server;
+            serverInput.IsEnabled = false;
+
+            if (!string.IsNullOrEmpty(_db.DbType) && _db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase))
+            {
+                rbOracle.IsChecked = true;
+                rbOracle.IsHitTestVisible = false;
+
+                rbSqlServer.IsHitTestVisible = false;
+
+                userInput.IsEnabled = false;
+                instDbNameInputTXT.Text = "Instância";
+                userInput.Text = _db.Name;
+                instDbNameInput.Text = _db.Instance;
+                instDbNameInput.IsEnabled = false;
+            }
+            else
+            {
+                rbSqlServer.IsChecked = true;
+                rbOracle.IsHitTestVisible = false;
+                rbSqlServer.IsHitTestVisible = false;
+                userInput.IsEnabled = false;
+                instDbNameInputTXT.Text = "Nome da base";
+                instDbNameInput.Text = _db.Name;
+                instDbNameInput.IsEnabled = false;
+            }
+        }   
 
 
         private void SaveName_Click(object sender, RoutedEventArgs e)
@@ -44,6 +76,7 @@ namespace TrocaBaseGUI.Views
 
                 _viewModelDbs.Databases.Add(_db);
                 _viewModelDbs.Databases[_viewModelDbs.Databases.Count - 1].Id = _viewModelDbs.Databases.Count - 1;
+                NavigationService.GoBack();
                 return;
             }
             MessageBox.Show("Base duplicada ou inválida.\nRevise os dados inseridos.");

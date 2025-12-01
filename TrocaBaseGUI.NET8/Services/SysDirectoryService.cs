@@ -60,6 +60,14 @@ namespace TrocaBaseGUI.Services
             return directoryList.FirstOrDefault(d => d.Path.EndsWith(path));
         }
 
+        //public SysDirectoryModel GetDirByFolder(ObservableCollection<SysDirectoryModel> directoryList, string folder)
+        //{
+        //    if (string.IsNullOrEmpty(folder) || directoryList.Count < 1)
+        //        return null;
+
+        //    return directoryList.FirstOrDefault(d => d.Folder.EndsWith(folder));
+        //}
+
         public string GetSysExeFile(string directory)
         {
             if (string.IsNullOrEmpty(directory))
@@ -127,6 +135,20 @@ namespace TrocaBaseGUI.Services
         {
             if(directoryList.Any(directoryList => directoryList.Id == id))
                 directoryList.Remove(directoryList.FirstOrDefault(d => d.Id == id));
+        }
+
+        //public void ClearDirectories(ObservableCollection<SysDirectoryModel> directoryList)
+        //{
+        //    directoryList.Clear();
+        //}
+
+        public void UpdateSysDirectoriesFiles(ObservableCollection<SysDirectoryModel> directoryList)
+        {
+            foreach (var dir in directoryList)
+            {
+                dir.MainExeFile = GetSysExeFile(dir.Path);
+                dir.ExeList = GetExeList(dir.Path);
+            }
         }
     }
 }

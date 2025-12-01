@@ -45,7 +45,7 @@
                 <TextBlock x:Name="DirectoryMaxCount" Text="/10" Foreground="#411e5a" VerticalAlignment="Top" Margin="30,-1,326,0"/>
 
 
-                <TextBox x:Name="SysDirectoryTextBox" IsReadOnly="True" Height="18" Margin="20,20,66,0" VerticalAlignment="Top">
+                <TextBox x:Name="SysDirectoryTextBox" IsReadOnly="True" Height="18" Margin="20,30,66,0" VerticalAlignment="Top">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="Template">
@@ -64,7 +64,7 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <Button Content="📁" x:Name="SysDirectorySelectionBtn" Click="SysDirectorySelectionBtn_Click" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="315,18,0,0">
+                <Button Content="📁" x:Name="SysDirectorySelectionBtn" Click="SysDirectorySelectionBtn_Click" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="315,28,0,0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border x:Name="Border"
@@ -94,7 +94,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Content="➕" Click="AddDirectory_Click" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,18,20,0">
+                <Button Content="➕" Click="AddDirectory_Click" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,28,20,0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border x:Name="Border"
@@ -124,8 +124,38 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+                <Button Content="⟲" Click="UpdateSysDirectoriesFiles_Click" Foreground="#411e5a" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Top" Height="24" Margin="317,-7,43,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="Border"
+                            Background="Transparent"
+                            CornerRadius="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="0">
+                                <ContentPresenter x:Name="contentPresenter"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True"
+                                TextElement.Foreground="{TemplateBinding Foreground}"
+                                TextElement.FontSize="{TemplateBinding FontSize}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7737A6"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="17"/>
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#411e5a"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#BFBEBD"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-                <ItemsControl x:Name="DirectoryList" ItemsSource="{Binding SysDirectoryList}" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="20,45,20,50">
+                <ItemsControl x:Name="DirectoryList" ItemsSource="{Binding SysDirectoryList}" d:ItemsSource="{d:SampleData ItemCount=8}" Margin="20,55,20,40">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Height="30">
@@ -213,6 +243,36 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <Button Content="🗑️" Click="DeleteAllSysDirectoryList_Click" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,-3,20,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="Border"
+                                Background="Transparent"
+                                CornerRadius="5"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0">
+                                <ContentPresenter x:Name="contentPresenter"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"
+                                    TextElement.Foreground="{TemplateBinding Foreground}"
+                                    TextElement.FontSize="{TemplateBinding FontSize}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7737A6"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="12"/>
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#411e5a"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#BFBEBD"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Grid>
         </Border>
     </Grid>

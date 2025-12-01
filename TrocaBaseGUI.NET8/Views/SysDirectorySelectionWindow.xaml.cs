@@ -178,5 +178,26 @@ namespace TrocaBaseGUI.Views
 
             }
         }
+
+        private void DeleteAllSysDirectoryList_Click(object sender, RoutedEventArgs e)
+        {
+            if(viewModel.SysDirectoryList.Count > 1)
+            {
+                var del = MessageBox.Show("Deseja mesmo excluir todas as pastas?", "Excluir Todas as Pastas",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                    .ToString().ToLower();
+                if (del.Equals("yes"))
+                {
+                    MainBorder.Height = 150;
+                    sysDirectorySelectionWindow.Top += (viewModel?.SysDirectoryList.Count * 15 ?? 0);
+                    viewModel.SysDirectoryList.Clear();
+                }
+            }
+        }
+
+        private void UpdateSysDirectoriesFiles_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.sysDirectoryService.UpdateSysDirectoriesFiles(viewModel.SysDirectoryList);
+        }
     }
 }

@@ -55,6 +55,12 @@
                                     <ScrollViewer x:Name="PART_ContentHost"
                                           Margin="0" />
                                 </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -105,6 +111,12 @@
                                     <ScrollViewer x:Name="PART_ContentHost"
                                           Margin="0" />
                                 </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -147,8 +159,8 @@
                                     </Trigger>
 
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="LightGray"/>
-                                        <Setter TargetName="InnerCircle" Property="Fill" Value="LightGray"/>
+                                        <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#A6A5A4"/>
+                                        <Setter TargetName="InnerCircle" Property="Fill" Value="#A6A5A4"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -157,7 +169,6 @@
                 </Style>
             </StackPanel.Resources>
             <RadioButton x:Name="rbOracle" Content="Oracle" IsTabStop="False" Checked="rb_Checked" Foreground="#411e5a" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top"/>
-
             <RadioButton x:Name="rbSqlServer" Content="SQL Server" IsTabStop="False" Checked="rb_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top"/>
 
         </StackPanel>

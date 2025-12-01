@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Microsoft.IdentityModel.Tokens;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Properties.Constants;
 
@@ -171,6 +172,12 @@ namespace TrocaBaseGUI.Services
 
         public string CreateRedirectPortsSettings(ConexaoFileModel conexao)
         {
+            if (string.IsNullOrEmpty(conexao.DbServer) || conexao.Ports.IsNullOrEmpty())
+            {
+                MessageBox.Show("Preencha o campo 'Server Redirecionador' e verifique se todas as portas estão definidas em 'Editar Portas'.", "Campos obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return string.Empty;
+            }
+
             string settings = string.Empty;
 
             foreach (var appPorts in conexao.Ports)
@@ -229,10 +236,15 @@ namespace TrocaBaseGUI.Services
 
         public void UpdateRedirectorFile(string redirect, ConexaoFileModel conexao)
         {
+            if(string.IsNullOrWhiteSpace(CreateRedirectPortsSettings(conexao)))
+                return;
+
             string redirectorPort = $"{GlobalStrings.PortaRedirecionadorTag}={conexao.RedirectPort}\n\n";
             string redirecionaSettings = string.Concat(redirectorPort, CreateRedirectPortsSettings(conexao));
 
             File.WriteAllText(redirect, redirecionaSettings);
+
+            MessageBox.Show("Redirecionador atualizado.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Information);
             //Debug.WriteLine($"\n\n'{redirecionaSettings}'\n\n");
         }
 
