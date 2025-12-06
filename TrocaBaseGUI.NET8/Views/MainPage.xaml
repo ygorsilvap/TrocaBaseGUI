@@ -320,15 +320,16 @@
             </TextBox.Style>
         </TextBox>
 
-        <ListBox x:Name="lstTodosBancos"
+        <ListBox x:Name="DatabaseList"
                  Margin="80,155,80,112"
                  ItemsSource="{Binding Databases}"
                  SelectedItem="{Binding SelectedDatabase}"
+                 d:ItemsSource="{d:SampleData ItemCount=15}"
                  MouseDoubleClick="TrocarBase_MouseDoubleClick"
                  BorderThickness="1"
                  Background="Transparent"
                  Foreground="#411e5a"
-                 Focusable="True" LostFocus="Db_LostFocus">
+                 Focusable="True">
             <ListBox.Template>
                 <ControlTemplate TargetType="ListBox">
                     <Border Background="{TemplateBinding Background}"
@@ -337,12 +338,44 @@
                     CornerRadius="0, 5, 5, 5"
                     SnapsToDevicePixels="True"
                     Padding="{TemplateBinding Padding}">
-                        <ScrollViewer Focusable="false" Padding="0"
-                              HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Auto">
-                            <ItemsPresenter />
-                        </ScrollViewer>
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Background="Transparent"
+                                Margin="-1"
+                                HorizontalAlignment="Stretch">
+                                <Border x:Name="NameSort" Width="154" BorderThickness="1" BorderBrush="#411e5a" Background="#E6E4E3" Cursor="Hand" MouseLeftButtonDown="SortName_Header">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,2">
+                                        <TextBlock Text="Nome" FontWeight="Bold" Foreground="#411e5a"/>
+                                        <!--<TextBlock x:Name="NameSortText" Text="" Margin="6,0,0,0" Foreground="#411e5a" Width="15"/>-->
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="DateSort" Width="236" BorderThickness="1" BorderBrush="#411e5a" CornerRadius="0,5,0,0" Background="#E6E4E3" Cursor="Hand" MouseLeftButtonDown="SortDate_Header">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,9,0">
+                                        <TextBlock Text="Data" FontWeight="Bold" Foreground="#411e5a"/>
+                                        <!--<TextBlock x:Name="DateSort" Margin="6,0,0,0" Foreground="#411e5a"/>-->
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                            <ScrollViewer Focusable="false" Padding="0"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                          Margin="0,1,0,0">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </DockPanel>
                     </Border>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger SourceName="NameSort" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="NameSort" Property="Background" Value="#D9D8D7"/>
+                        </Trigger>
+
+                        <Trigger SourceName="DateSort" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="DateSort" Property="Background" Value="#D9D8D7"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </ListBox.Template>
             <ListBox.ItemContainerStyle>
@@ -360,10 +393,6 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="border" Property="Background" Value="#7737A6"/>
-                                        <Setter Property="Foreground" Value="#f5f4f3"/>
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="border" Property="Background" Value="#411e5a"/>
                                         <Setter Property="Foreground" Value="#f5f4f3"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -416,6 +445,8 @@
                                 </ContextMenu.Resources>
                                 <MenuItem Header="Renomear" Click="EditarBase_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
                                 <MenuItem Header="Copiar Dados de Conexão" Click="CopyStringClick_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
+                                <MenuItem Header="Exportar Dados de Conexão" IsEnabled="false" Click="ExportConnectionData_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
+
                                 <MenuItem Header="Excluir Base" Click="DeleteDatabase_Click" IsEnabled="{Binding IsManualAdded}" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
                             </ContextMenu>
                         </Grid.ContextMenu>
@@ -655,6 +686,13 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    <Setter Property="Validation.ErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border BorderThickness="0"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ComboBox.Style>
         </ComboBox>
@@ -754,6 +792,6 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <!--<Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="20,341,0,0" VerticalAlignment="Top"/>-->
+        <!--<Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="326,65,0,0" VerticalAlignment="Top"/>-->
     </Grid>
 </Page>

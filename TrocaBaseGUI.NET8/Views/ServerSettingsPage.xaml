@@ -2,13 +2,14 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="FormularioPage"
-            HorizontalAlignment="Center"
+      HorizontalAlignment="Center"
       VerticalAlignment="Center"
+      Loaded="ServerPage_Loaded"
       Height="500" Width="550">
 
     <Grid Background="Transparent">
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="15"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name="SqlServerServer" TextChanged="SqlServerServer_TextChanged" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,174,300,307" Text="{Binding ServerSQLServerConnection.Server}">
+        <TextBox x:Name="SqlServerServer" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,174,300,307" Text="{Binding ServerSQLServerConnection.Server, Mode=TwoWay}">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -29,28 +30,28 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <PasswordBox x:Name="SqlServerPassword" PasswordChanged="SqlServerPassword_PasswordChanged" Foreground="black" FontSize="11" Margin="100,235,300,247">
-            <PasswordBox.Style>
-                <Style TargetType="{x:Type PasswordBox}">
+        <TextBox x:Name="SqlServerPassword" TextChanged="SqlServerPassword_TextChanged" Foreground="Black" FontSize="14" FontWeight="ExtraBold" Padding="1, -2" Margin="100,235,300,247" Text="{Binding ServerSQLServerConnection.Password}" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type PasswordBox}">
+                            <ControlTemplate TargetType="TextBox">
                                 <Border Background="#f5f4f3"  
-                                        BorderBrush="#411e5a"  
+                                        BorderBrush="#411e5a"   
                                         BorderThickness="1.5"  
                                         CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
-                                            Margin="0" />
+                                                  Margin="0" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </PasswordBox.Style>
-        </PasswordBox>
+            </TextBox.Style>
+        </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,277,0,209" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Usuário"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name="SqlServerUser" TextChanged="SqlServerUser_TextChanged" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,300,300,182" Text="{Binding ServerSQLServerConnection.Username}">
+        <TextBox x:Name="SqlServerUser" Foreground="black" FontSize="11" Padding="1, 0" Margin="100,300,300,182" Text="{Binding ServerSQLServerConnection.Username, Mode=TwoWay}">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -71,7 +72,7 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
-        <TextBox x:Name="OracleServer" TextChanged="OracleServer_TextChanged" Foreground="black" FontSize="11" Margin="300,174,100,307" Text="{Binding ServerOracleConnection.Server}" Width="150">
+        <TextBox x:Name="OracleServer" Foreground="black" FontSize="11" Margin="300,174,100,307" Text="{Binding ServerOracleConnection.Server, Mode=TwoWay}" Width="150">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -92,28 +93,28 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <PasswordBox x:Name="OraclePassword" PasswordChanged="OraclePassword_PasswordChanged" Foreground="black" FontSize="11" Margin="300,234,100,247">
-            <PasswordBox.Style>
-                <Style TargetType="PasswordBox">
+        <TextBox x:Name="OraclePassword" TextChanged="OraclePassword_TextChanged" Foreground="Black" FontSize="14" FontWeight="ExtraBold" Padding="1, -2" Margin="300,234,100,247" Text="{Binding ServerOracleConnection.Password}" Grid.Row="1">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="PasswordBox">
+                            <ControlTemplate TargetType="{x:Type TextBox}">
                                 <Border Background="#f5f4f3"  
-                                    BorderBrush="#411e5a"  
+                                    BorderBrush="#411e5a"   
                                     BorderThickness="1.5"  
                                     CornerRadius="4">
                                     <ScrollViewer x:Name="PART_ContentHost"
-                                                Margin="0" />
+                                        Margin="0" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </PasswordBox.Style>
-        </PasswordBox>
+            </TextBox.Style>
+        </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Instância"/></TextBlock>
-        <TextBox x:Name="OracleInstance" TextChanged="OracleInstance_TextChanged" Foreground="black" FontSize="11" Margin="300,300,100,182" Text="{Binding ServerOracleConnection.Instance}" Width="150">
+        <TextBox x:Name="OracleInstance" Foreground="black" FontSize="11" Margin="300,300,100,182" Text="{Binding ServerOracleConnection.Instance, Mode=TwoWay}" Width="150">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -137,14 +138,13 @@
         <Border Background="#f5f4f3" BorderBrush="#37194D" BorderThickness="2" CornerRadius="5" 
                 Margin="390,400,100,83" Grid.Row="2">
             <TextBox x:Name="OraclePort" 
-             TextChanged="OraclePort_TextChanged"
              TextAlignment="Center"
              Background="Transparent" 
              Foreground="black" 
              FontSize="11" 
              TextWrapping="Wrap" 
              MaxLength="5" 
-             Text="{Binding LocalOracleConnection.Port}" 
+             Text="{Binding LocalOracleConnection.Port, Mode=TwoWay}" 
              BorderThickness="0"/>
         </Border>
 

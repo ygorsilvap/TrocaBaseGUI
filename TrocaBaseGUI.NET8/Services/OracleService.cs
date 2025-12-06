@@ -74,6 +74,7 @@ namespace TrocaBaseGUI.Services
                 while (await reader.ReadAsync())
                 {
                     string username = reader.GetString(0);
+                    //string importDate = reader.IsDBNull(2) ? "" : reader.GetString(2);
                     string importDate = reader.IsDBNull(2) ? "" : reader.GetString(2);
                     //Debug.WriteLine($"\n\ndata: {importDate}\n\n");
 

@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="SettingsWindow" 
         Height="500" Width="550"
-        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
+        Loaded="SettingsWindow_Loaded"
         ResizeMode="NoResize">
 
     <Border Background="#f5f4f3" BorderBrush="#2a353a" CornerRadius="5" BorderThickness="2" Padding="6">
@@ -38,7 +38,7 @@
             <!--<Image Source="/Assets/settings80.png" IsHitTestVisible="False" HorizontalAlignment="Left" Height="50" Margin="15,13,0,0" VerticalAlignment="Top" Width="45" Grid.RowSpan="2" Grid.Row="1"/>-->
             <TextBlock HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#411e5a" FontSize="26" FontWeight="Medium" Margin="75,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="40" Grid.RowSpan="2" Grid.Row="1"><Run Language="pt-br" Text="Configurações"/><LineBreak/><Run Language="pt-br"/>
                 <TextBlock.Effect>
-                    <DropShadowEffect Color="Black"
+                    <DropShadowEffect Color="#B3B3B3"
                           Direction="-25"
                           ShadowDepth="1"
                           BlurRadius="5"

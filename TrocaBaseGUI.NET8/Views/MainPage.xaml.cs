@@ -5,11 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using MessagePack;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using TrocaBaseGUI.Models;
@@ -21,8 +24,7 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainPage : Page, INotifyPropertyChanged
     {
-        public ObservableCollection<DatabaseModel> databaseList { get; set; } = new ObservableCollection<DatabaseModel>();
-        //public ObservableCollection<SysDirectoryModel> sysDirectoryList { get; set; }
+        public ObservableCollection<DatabaseModel> databasesCopy { get; set; } = new ObservableCollection<DatabaseModel>();
         private MainViewModel viewModel;
         public int tabSelected;
         public string rbSelected;
@@ -32,7 +34,8 @@ namespace TrocaBaseGUI.Views
         public int selectedDatabaseId;
         public SysDirectoryModel selectedSysDirectory;
         public ObservableCollection<string> exesList { get; set; } = new ObservableCollection<string>();
-        //public string dbSearch;
+
+        public string orderBy = "aa";
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -41,32 +44,15 @@ namespace TrocaBaseGUI.Views
             InitializeComponent();
 
             viewModel = vm;
-            this.DataContext = viewModel;
-
-            //sysDirectoryList = new ObservableCollection<SysDirectoryModel>(viewModel.SysDirectoryList);
+            DataContext = viewModel;
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-            //dirSys.SelectedValue = hist.Count > 0 ? hist.First().Folder : "";
-
-            //Fazer Binding com esses campos de exe
-            //OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(mainExe)}";
-            //OpenSecondaryExeButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
-
-            //IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um diretório." : "";
-            GetFilter(databaseList);
-
-            //foreach (var item in viewModel.Databases)
-            //{
-            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}, Date: {item.ImportDate}\n");
-            //}
-            //Debug.WriteLine($"\n\nMPGloginPadrao: {viewModel.appState.LocalParams.DefaultLoginCheckbox}\n\n");
-            //Debug.WriteLine($"\n\n{viewModel.Databases.LastOrDefault()}\n\n");
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            searchPlaceholder();
+            SetSearchPlaceholder();
 
             viewModel.sysDirectoryService.UpdateSysDirectoriesFiles(viewModel.SysDirectoryList);
 
@@ -89,22 +75,22 @@ namespace TrocaBaseGUI.Views
                 await Task.WhenAll(tasks);
             }
 
-            databaseList.Clear();
+            databasesCopy.Clear();
 
             foreach (var db in viewModel.Databases)
             {
                 DatabaseService.SetDisplayName(db, db.DisplayName);
-                databaseList.Add(db);
+                databasesCopy.Add(db);
             }
 
-            viewModel.DbService.SortDatabases(databaseList);
+            viewModel.DbService.SortDatabasesByName(databasesCopy);
 
-            GetFilter(databaseList);
+            SetDatabaseListFilter(databasesCopy);
         }
 
-        private void GetFilter(ObservableCollection<DatabaseModel> db)
+        private void SetDatabaseListFilter(ObservableCollection<DatabaseModel> db)
         {
-            if (!(DataContext is MainViewModel vm)) return;
+            //if (!(DataContext is MainViewModel vm)) return;
 
             string environment = tabSelected == 0 ? "local" : "server";
 
@@ -120,13 +106,14 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
-                lstTodosBancos.ItemsSource = vm.EnvironmentFilter(environment, db);
+                DatabaseList.ItemsSource = viewModel.EnvironmentFilter(environment, db);
+                viewModel.DbService.SortDatabasesByName(db);
                 return;
             }
 
-            ObservableCollection<DatabaseModel> bases = vm.EnvironmentFilter(environment, db);
-
-            lstTodosBancos.ItemsSource = vm.DbTypeFilter(type, bases);
+            ObservableCollection<DatabaseModel> bases = viewModel.EnvironmentFilter(environment, db);
+            viewModel.DbService.SortDatabasesByName(bases);
+            DatabaseList.ItemsSource = viewModel.DbTypeFilter(type, bases);
         }
 
         public void Refresh()
@@ -153,10 +140,10 @@ namespace TrocaBaseGUI.Views
 
         public void SetExesSelection()
         {
-            string secondaryExe = exesList.IsNullOrEmpty() ? string.Empty :
+            secondaryExe = exesList.IsNullOrEmpty() ? string.Empty :
                 exesList.FirstOrDefault(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)).ToLower();
 
-            secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ? 
+            secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ?
                 secondaryExe.Replace("client", "") : secondaryExe;
 
             string mainExecutable = !string.IsNullOrEmpty(mainExe) && mainExe.EndsWith("client", StringComparison.OrdinalIgnoreCase) ? mainExe.Replace("client", "") : mainExe;
@@ -176,7 +163,7 @@ namespace TrocaBaseGUI.Views
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (!String.IsNullOrEmpty(MainViewModel.exeFile))
+            if (!String.IsNullOrEmpty(mainExe))
             {
                 Debug.WriteLine($"\n\nIDSelDb: {viewModel.SelectedDatabase.Id}\n\n");
                 //viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, SysDirectory.SelectedValue.ToString());
@@ -189,7 +176,10 @@ namespace TrocaBaseGUI.Views
         }
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            GetFilter(databaseList);
+            var rb = sender as RadioButton;
+
+            if(rb.IsLoaded)
+                SetDatabaseListFilter(databasesCopy);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -197,7 +187,8 @@ namespace TrocaBaseGUI.Views
             if (e.Source is TabControl tabControl)
                 tabSelected = tabControl.SelectedIndex;
 
-            GetFilter(databaseList);
+            SetDatabaseListFilter(databasesCopy);
+            SetSearchPlaceholder();
         }
 
         private void MenuDiretorios_Click(object sender, RoutedEventArgs e)
@@ -313,7 +304,7 @@ namespace TrocaBaseGUI.Views
                 if (result == MessageBoxResult.Yes)
                 {
                     viewModel.Databases.Remove(db);
-                    GetFilter(viewModel.Databases);
+                    SetDatabaseListFilter(viewModel.Databases);
                 }
             }
         }
@@ -327,7 +318,6 @@ namespace TrocaBaseGUI.Views
             Clipboard.SetText(connString);
         }
 
-        //criar função de resetar o placeholder para quando trocar de tab o campo resetar
         private void dbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(dbSearch.Text) || dbSearch.Text.Equals("Pesquisar Bases...", StringComparison.CurrentCultureIgnoreCase))
@@ -341,11 +331,11 @@ namespace TrocaBaseGUI.Views
         {
             if (string.IsNullOrWhiteSpace(dbSearch.Text))
             {
-                searchPlaceholder();
+                SetSearchPlaceholder();
             }
         }
 
-        public void searchPlaceholder()
+        public void SetSearchPlaceholder()
         {
             dbSearch.Text = "Pesquisar Bases...";
             dbSearch.Foreground = (Brush)new BrushConverter().ConvertFromString("#999897");
@@ -358,33 +348,13 @@ namespace TrocaBaseGUI.Views
 
         private void dbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (dbSearch.Text.Equals("Pesquisar Bases...")) return;
+
             string environment = tabSelected == 0 ? "local" : "server";
 
-            if(lstTodosBancos.Items.Count > 0)
-                lstTodosBancos.ItemsSource = !string.IsNullOrEmpty(dbSearch.Text) ? databaseList.Where(db => db.Name.Contains(dbSearch.Text, StringComparison.OrdinalIgnoreCase) 
-                && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase)) : databaseList;
-
-            //Debug.WriteLine($"\n\nSearch Text: {dbSearch.Text}\n\n");
-        }
-
-        //WIP
-        private void Db_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //Debug.WriteLine($"\n\nLost Focus\n\n");
-
-            //var ctx = (ListBox)sender;
-
-
-
-            //foreach (var item in ctx.Items)
-            //{
-            //    if (item is MenuItem mi)
-            //    {
-            //        var border = mi.Template.FindName("Border", mi) as Border;
-            //        border.Background = (Brush)new BrushConverter().ConvertFromString("Red");
-            //        border.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#2a353a");
-            //    }
-            //}
+            if (viewModel.Databases.Count > 0)
+                DatabaseList.ItemsSource = databasesCopy.Where(db => db.Name.StartsWith(dbSearch.Text, StringComparison.OrdinalIgnoreCase)
+                                                && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
 
         }
 
@@ -404,5 +374,64 @@ namespace TrocaBaseGUI.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void SortName_Header(object sender, MouseButtonEventArgs e)
+        {
+            orderBy = orderBy.StartsWith("a") ? orderBy : string.Empty;
+
+            if (string.IsNullOrEmpty(orderBy) || orderBy.Equals("ad"))
+            {
+                viewModel.DbService.SortDatabasesByName(databasesCopy);
+                orderBy = "aa";
+            } else if(orderBy.Equals("aa"))
+            {
+                viewModel.DbService.SortDatabasesByNameDesc(databasesCopy);
+                orderBy = "ad";
+            }
+
+            SetDatabaseListFilter(databasesCopy);
+            Debug.WriteLine($"\n\n{orderBy}\n\n");
+        }
+
+        private void SortDate_Header(object sender, MouseButtonEventArgs e)
+        {
+            orderBy = orderBy.StartsWith("d") ? orderBy : string.Empty;
+
+            if (string.IsNullOrEmpty(orderBy) || orderBy.Equals("dd"))
+            {
+                viewModel.DbService.SortDatabasesByDate(databasesCopy);
+                orderBy = "da";
+            }
+            else if (orderBy.Equals("da"))
+            {
+                viewModel.DbService.SortDatabasesByDateDesc(databasesCopy);
+                orderBy = "dd";
+            }
+
+            SetDatabaseListFilter(databasesCopy);
+            Debug.WriteLine($"\n\n{orderBy}\n\n");
+        }
+
+        private void ExportConnectionData_Click(object sender, RoutedEventArgs e)
+        {
+            //var menuItem = sender as MenuItem;
+            //if (menuItem?.DataContext is DatabaseModel db)
+            //{
+            //    string json = JsonSerializer.Serialize(db);
+
+            //    var options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
+            //    byte[] data = MessagePackSerializer.Serialize(json, options);
+            //    string code = Convert.ToBase64String(data);
+
+            //    Debug.WriteLine($"m\n\nn: {code}\n\n");
+                
+            //}
+        }
+
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //DateTime date = new("dd/mm/yyyy");
+        //    DateTime date = Convert.ToDateTime("01/03/2024");
+        //    Debug.WriteLine(date);
+        //}
     }
 }

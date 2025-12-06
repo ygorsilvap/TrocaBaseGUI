@@ -37,29 +37,17 @@ namespace TrocaBaseGUI.Views
             _viewModel.appState.ServerParams.DefaultLoginCheckbox = (bool)loginCheckbox.IsChecked;
             loginPadrao.IsEnabled = _viewModel.appState.ServerParams.DefaultLoginCheckbox;
         }
-        private void loginPadrao_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.DefaultLogin = loginPadrao.Text;
-        }
 
         private void senhaCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             _viewModel.appState.ServerParams.DefaultPasswordCheckbox = (bool)senhaCheckbox.IsChecked;
             senhaPadrao.IsEnabled = _viewModel.appState.ServerParams.DefaultPasswordCheckbox;
         }
-        private void senhaPadrao_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.DefaultPassword = senhaPadrao.Text;
-        }
 
         private void editorCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             _viewModel.appState.ServerParams.EditorCheckbox = (bool)editorCheckbox.IsChecked;
             editorTexto.IsEnabled = _viewModel.appState.ServerParams.EditorCheckbox;
-        }
-        private void editorTexto_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.TextEditorPath = editorTexto.Text;
         }
         private void SelectTextEditorPath_Click(object sender, RoutedEventArgs e)
         {
@@ -74,7 +62,7 @@ namespace TrocaBaseGUI.Views
             {
                 string textEditorPath = Path.GetFullPath(dialog.FileName);
 
-                editorTexto.Text = textEditorPath;
+                _viewModel.Conexao3Camadas.UpdateFolder = textEditorPath;
             }
         }
 
@@ -82,10 +70,6 @@ namespace TrocaBaseGUI.Views
         {
             _viewModel.appState.ServerParams.DirUpdateCheckbox = (bool)updateFolderCheckbox.IsChecked;
             updateFolder.IsEnabled = _viewModel.appState.ServerParams.DirUpdateCheckbox;
-        }
-        private void updateFolder_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.UpdateFolder = updateFolder.Text;
         }
 
         private void SelectUpdateFolderPath_Click(object sender, RoutedEventArgs e)
@@ -102,33 +86,8 @@ namespace TrocaBaseGUI.Views
             {
                 string updateFolderPath = dialog.FileName;
 
-                updateFolder.Text = updateFolderPath;
+                _viewModel.Conexao3Camadas.UpdateFolder = updateFolderPath;
             }
-        }
-
-        private void ultMenuWebCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.UseWebMenu = (bool)ultMenuWebCheckbox.IsChecked;
-        }
-
-        private void useRedirectCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.UseRedirect = (bool)useRedirectCheckbox.IsChecked;
-        }
-
-        private void redirectPort_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.RedirectPort = redirectPort.Text;
-        }
-
-        private void verifierPort_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.VerifierPort = verifierPort.Text;
-        }
-
-        private void dbServer_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _viewModel.Conexao3Camadas.DbServer = dbServer.Text;
         }
 
         private void SetParams()

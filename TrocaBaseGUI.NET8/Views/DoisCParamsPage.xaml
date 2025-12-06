@@ -18,12 +18,12 @@
         <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,22,60,70" CornerRadius="0, 0, 5, 5" Grid.Row="1"/>-->
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
         <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
-        <CheckBox x:Name="ultMenuWebCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" Click="ultMenuWebCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="15"/>
+        <CheckBox x:Name="ultMenuWebCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding Conexao2Camadas.UseWebMenu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="102" Height="16" Grid.Row="1" Text="Utiliza Menu Web"/>
 
         <CheckBox x:Name="loginCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Right" Margin="0,66,460,0" Grid.Row="1" VerticalAlignment="Top" Width="15" Height="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="17" Grid.Row="1"><Run Text="Login Padrão"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="loginPadrao" TextChanged="loginPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultLogin}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,66,205,343" Grid.Row="1">
+        <TextBox x:Name="loginPadrao" Text="{Binding Conexao2Camadas.DefaultLogin, Mode=TwoWay}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,66,205,343" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -52,7 +52,7 @@
 
         <CheckBox x:Name="senhaCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DefaultPasswordCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="senhaCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,96,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><Run Text=" Padrão"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="senhaPadrao" TextChanged="senhaPadrao_TextChanged" Text="{Binding Conexao2Camadas.DefaultPassword}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,96,205,313" Grid.Row="1">
+        <TextBox x:Name="senhaPadrao" Text="{Binding Conexao2Camadas.DefaultPassword, Mode=TwoWay}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,96,205,313" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -81,7 +81,7 @@
 
         <CheckBox x:Name="editorCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="editorCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,136,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Editor de Texto:"/></TextBlock>
-        <TextBox x:Name="editorTexto" TextChanged="editorTexto_TextChanged" Text="{Binding Conexao2Camadas.TextEditorPath}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,136,205,273" Grid.Row="1">
+        <TextBox x:Name="editorTexto" Text="{Binding Conexao2Camadas.TextEditorPath, Mode=TwoWay}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,136,205,273" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -110,7 +110,7 @@
 
         <CheckBox x:Name="updateFolderCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DirUpdateCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="updateFolderCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Left" Margin="75,166,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" Height="17" Grid.Row="1"><Run Language="pt-br" Text="Dir. Atualização:"/></TextBlock>
-        <TextBox x:Name="updateFolder" TextChanged="updateFolder_TextChanged" Text="{Binding Conexao2Camadas.UpdateFolder}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,166,205,243" Grid.Row="1">
+        <TextBox x:Name="updateFolder" Text="{Binding Conexao2Camadas.UpdateFolder, Mode=TwoWay}" BorderThickness="1" Foreground="black" FontSize="11" Padding="1, 0" Margin="195,166,205,243" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">

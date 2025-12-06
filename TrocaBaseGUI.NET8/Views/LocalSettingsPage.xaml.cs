@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.ViewModels;
 
@@ -21,11 +22,14 @@ namespace TrocaBaseGUI.Views
 
             var mainWindow = (SettingsWindow)Application.Current.MainWindow;
             _viewModel = mainWindow.viewModel;
-            this.DataContext = _viewModel;
+            DataContext = _viewModel;
+        }
 
-            OraclePassword.Password = _viewModel.LocalOracleConnection.Password;
-            SqlServerPassword.Password = _viewModel.LocalSQLServerConnection.Password;
-
+        private void LocalPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            //OraclePassword.Password = _viewModel.LocalOracleConnection.Password;
+            //SqlServerPassword.Password = _viewModel.LocalSQLServerConnection.Password;
+            //Debug.WriteLine($"\n\npassword: {_viewModel.LocalSQLServerConnection.Password}\n\n");
         }
 
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
@@ -55,41 +59,20 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        private void SqlServerServer_TextChanged(object sender, TextChangedEventArgs e)
+        private void SqlServerPassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            //if (!String.IsNullOrWhiteSpace(SqlServerServer.Text))
-                _viewModel.LocalSQLServerConnection.Server = SqlServerServer.Text;
+            _viewModel.LocalSQLServerConnection.Password = SqlServerPassword.Text;
+            int pwdLength = SqlServerPassword.Text.Length;
+            SqlServerPassword.Text = new string('•', pwdLength);
+            SqlServerPassword.CaretIndex = SqlServerPassword.Text.Length;
         }
 
-        private void SqlServerPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        private void OraclePassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            //if (!String.IsNullOrWhiteSpace(SqlServerPassword.Password))
-                _viewModel.LocalSQLServerConnection.Password = SqlServerPassword.Password;
+            _viewModel.LocalOracleConnection.Password = OraclePassword.Text;
+            int pwdLength = OraclePassword.Text.Length;
+            OraclePassword.Text = new string('•', pwdLength);
+            OraclePassword.CaretIndex = OraclePassword.Text.Length;
         }
-
-        private void OracleServer_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OracleServer.Text))
-                _viewModel.LocalOracleConnection.Server = OracleServer.Text;
-        }
-
-        private void OraclePassword_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OraclePassword.Password))
-                _viewModel.LocalOracleConnection.Password = OraclePassword.Password;
-        }
-
-        private void OracleInstance_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OracleInstance.Text))
-                _viewModel.LocalOracleConnection.Instance = OracleInstance.Text;
-        }
-
-        private void OraclePort_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OraclePort.Text))
-                _viewModel.LocalOracleConnection.Port = OraclePort.Text;
-        }
-
     }
 }

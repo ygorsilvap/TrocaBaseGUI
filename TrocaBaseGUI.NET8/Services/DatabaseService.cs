@@ -27,9 +27,39 @@ namespace TrocaBaseGUI.Services
             Databases.Add(database);
         }
 
-        public void SortDatabases(ObservableCollection<DatabaseModel> databases)
+        public void SortDatabasesByName(ObservableCollection<DatabaseModel> databases)
         {
             var sortedDatabases = databases.OrderBy(db => db.DisplayName).ToList();
+            databases.Clear();
+            foreach (var db in sortedDatabases)
+            {
+                databases.Add(db);
+            }
+        }
+
+        public void SortDatabasesByNameDesc(ObservableCollection<DatabaseModel> databases)
+        {
+            var sortedDatabases = databases.OrderByDescending(db => db.DisplayName).ToList();
+            databases.Clear();
+            foreach (var db in sortedDatabases)
+            {
+                databases.Add(db);
+            }
+        }
+
+        public void SortDatabasesByDate(ObservableCollection<DatabaseModel> databases)
+        {
+            var sortedDatabases = databases.OrderBy(db => Convert.ToDateTime(db.ImportDate)).ToList();
+            databases.Clear();
+            foreach (var db in sortedDatabases)
+            {
+                databases.Add(db);
+            }
+        }
+
+        public void SortDatabasesByDateDesc(ObservableCollection<DatabaseModel> databases)
+        {
+            var sortedDatabases = databases.OrderByDescending(db => Convert.ToDateTime(db.ImportDate)).ToList();
             databases.Clear();
             foreach (var db in sortedDatabases)
             {

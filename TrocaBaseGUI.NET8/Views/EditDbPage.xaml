@@ -5,16 +5,16 @@
       Height="500" Width="550" >
 
     <Grid Background="Transparent" >
-        <Rectangle Margin="80,80,80,122" Stroke="#411e5a" RadiusX="5" RadiusY="5"/>
+        <Rectangle Margin="80,80,80,75" Stroke="#411e5a" RadiusX="5" RadiusY="5"/>
 
         <!--<Image Source="/Assets/edit.png" HorizontalAlignment="Left" Height="60" Margin="20,17,0,0" VerticalAlignment="Top" Width="55"/>-->
         <TextBlock HorizontalAlignment="Left" Foreground="#411e5a" FontSize="30" FontWeight="Medium" Margin="90,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="45"><Run Language="pt-br" Text="Edição"/><LineBreak/><Run Language="pt-br"/>
             <TextBlock.Effect>
-                <DropShadowEffect Color="Black"
-                              Direction="-25"
-                              ShadowDepth="1"
-                              BlurRadius="5"
-                              Opacity="0.3"/>
+                <DropShadowEffect Color="#B3B3B3"
+                          Direction="-25"
+                          ShadowDepth="1"
+                          BlurRadius="5"
+                          Opacity="0.3"/>
             </TextBlock.Effect>
         </TextBlock>
 
@@ -172,7 +172,7 @@
             <RadioButton x:Name="rbSqlServer" Content="SQL Server" IsTabStop="False" Checked="rb_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top"/>
 
         </StackPanel>
-        <Button Content="🡨" Click="SaveName_Click" IsTabStop="False" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" BorderBrush="Transparent" Background="Transparent" Margin="9,77,517,0" VerticalAlignment="Top" Height="27">
+        <Button Content="🡨" Click="SaveAndReturn_Click" IsTabStop="False" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" BorderBrush="Transparent" Background="Transparent" Margin="9,77,517,0" VerticalAlignment="Top" Height="27">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"

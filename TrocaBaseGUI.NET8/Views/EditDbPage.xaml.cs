@@ -8,6 +8,8 @@ using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
 {
+
+    //Classe, funcionalidade e tela feito as pressas. REFAZER TODA A CLASSE. TWO WAY BINDING.
     public partial class EditDbPage : Page
     {
         public DatabaseModel _db;
@@ -62,9 +64,10 @@ namespace TrocaBaseGUI.Views
         }   
 
 
-        private void SaveName_Click(object sender, RoutedEventArgs e)
+        private void SaveAndReturn_Click(object sender, RoutedEventArgs e)
         {
-            if (isDbEmpty())
+
+            if (isDbEmpty() || _viewModelDbs.Databases.Contains(_db))
             {
                 NavigationService.GoBack();
                 return;
@@ -80,11 +83,8 @@ namespace TrocaBaseGUI.Views
                 return;
             }
             MessageBox.Show("Base duplicada ou inválida.\nRevise os dados inseridos.");
-            //DatabaseModel.SetDisplayName(_db, nameInput.Text);
-            NavigationService.GoBack();
-            //var mainWindow = (MainWindow)Application.Current.MainWindow;
 
-            //mainWindow.MainFramePublic.Navigate(new MainPage(_viewModelDbs));
+            NavigationService.GoBack();
         }
 
         private void nameInput_TextChanged(object sender, TextChangedEventArgs e)

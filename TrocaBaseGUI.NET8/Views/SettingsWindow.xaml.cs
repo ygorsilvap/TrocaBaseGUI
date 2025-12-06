@@ -23,8 +23,17 @@ namespace TrocaBaseGUI.Views
         public SettingsWindow()
         {
             InitializeComponent();
+
             viewModel = MainViewModel.Instance;
             DataContext = viewModel;
+        }
+
+        private void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            WindowStartupLocation = WindowStartupLocation.Manual;
+
+            Left = Properties.Settings.Default.WindowLeft;
+            Top = Properties.Settings.Default.WindowTop;
         }
 
         private void CloseApp_Click(object sender, RoutedEventArgs e)
@@ -36,12 +45,18 @@ namespace TrocaBaseGUI.Views
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             viewModel.appStateService.SaveState(viewModel);
+            Properties.Settings.Default.Save();
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+            {
+                DragMove();
+                Properties.Settings.Default.WindowLeft = Left;
+                Properties.Settings.Default.WindowTop = Top;
+                //Properties.Settings.Default.Save();
+            }
         }
 
         private void MinApp_Click(object sender, RoutedEventArgs e)

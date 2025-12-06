@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:TrocaBaseGUI"
         mc:Ignorable="d"
         Title="TrocaBase" Height="500" Width="550"
-        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
+        Loaded="MainWindow_Loaded"
         ResizeMode="NoResize">
 
 

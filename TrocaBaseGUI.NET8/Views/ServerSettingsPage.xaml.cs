@@ -21,10 +21,13 @@ namespace TrocaBaseGUI.Views
 
             var mainWindow = (SettingsWindow)Application.Current.MainWindow;
             _viewModel = mainWindow.viewModel;
-            this.DataContext = _viewModel;
+            DataContext = _viewModel;
+        }
 
-            SqlServerPassword.Password = _viewModel.ServerSQLServerConnection.Password;
-            OraclePassword.Password = _viewModel.ServerOracleConnection.Password;
+        private void ServerPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            //SqlServerPassword.Password = _viewModel.ServerSQLServerConnection.Password;
+            //OraclePassword.Password = _viewModel.ServerOracleConnection.Password;
         }
 
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
@@ -43,7 +46,7 @@ namespace TrocaBaseGUI.Views
         private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
             if (_viewModel.OracleService.GetRunningInstances().Count > 0 &&
-                    await _viewModel.OracleService.ValidateConnection(_viewModel.ServerOracleConnection, _viewModel.OracleService.GetRunningInstances()[0]))
+                    await _viewModel.OracleService.ValidateConnection(_viewModel.ServerOracleConnection, _viewModel.ServerOracleConnection.Instance))
             {
                 await _viewModel.openOracleConn(_viewModel.OracleService, _viewModel.ServerOracleConnection);
                 MessageBox.Show("Conexão do servidor com o Oracle estabelecida.");
@@ -53,47 +56,21 @@ namespace TrocaBaseGUI.Views
                 MessageBox.Show("Falha ao conectar ao Oracle. Verifique a string informada.");
             }
         }
-
-        private void SqlServerServer_TextChanged(object sender, TextChangedEventArgs e)
+        private void SqlServerPassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            //if (!String.IsNullOrWhiteSpace(SqlServerServer.Text))
-                _viewModel.ServerSQLServerConnection.Server = SqlServerServer.Text;
+            _viewModel.ServerSQLServerConnection.Password = SqlServerPassword.Text;
+            int pwdLength = SqlServerPassword.Text.Length;
+            SqlServerPassword.Text = new string('•', pwdLength);
+            SqlServerPassword.CaretIndex = SqlServerPassword.Text.Length;
         }
 
-        private void SqlServerPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        private void OraclePassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            //if (!String.IsNullOrWhiteSpace(SqlServerPassword.Password))
-                _viewModel.ServerSQLServerConnection.Password = SqlServerPassword.Password;
-        }
+            _viewModel.ServerOracleConnection.Password = OraclePassword.Text;
+            int pwdLength = OraclePassword.Text.Length;
+            OraclePassword.Text = new string('•', pwdLength);
+            OraclePassword.CaretIndex = OraclePassword.Text.Length;
 
-        private void SqlServerUser_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(SqlServerUser.Text))
-                _viewModel.ServerSQLServerConnection.Username = SqlServerUser.Text;
-        }
-
-        private void OracleServer_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OracleServer.Text))
-                _viewModel.ServerOracleConnection.Server = OracleServer.Text;
-        }
-
-        private void OraclePassword_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OraclePassword.Password))
-                _viewModel.ServerOracleConnection.Password = OraclePassword.Password;
-        }
-
-        private void OracleInstance_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OracleInstance.Text))
-                _viewModel.ServerOracleConnection.Instance = OracleInstance.Text;
-        }
-
-        private void OraclePort_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (!String.IsNullOrWhiteSpace(OraclePort.Text))
-                _viewModel.ServerOracleConnection.Port = OraclePort.Text;
         }
     }
 }
