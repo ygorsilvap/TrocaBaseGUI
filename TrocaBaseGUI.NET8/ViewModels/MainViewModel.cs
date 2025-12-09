@@ -13,12 +13,13 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace TrocaBaseGUI.ViewModels
 {
-
-    //REFATORAR TODO O TRATAMENTO DE EXEFILE E SYSDIRECTORY//TALVEZ ADD INDEX NO SYSDIRECTORY
     public class MainViewModel
     {
+        //Não me recordo o motivo dessas 2 declarações da MVM, provavelmente coisa do chatgpt. REMOVER.
         private static MainViewModel _instance;
         public static MainViewModel Instance => _instance ??= new MainViewModel();
+
+        public bool firstBoot = true;
         public ConexaoFileService conexaoFileService { get; set; }
         public string conexaoFile
         {
@@ -41,7 +42,7 @@ namespace TrocaBaseGUI.ViewModels
             set => conexaoFileService.ConexaoClienteFile = value;
         }
 
-        public static string exeFile;
+        //public static string exeFile;
 
         public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
         public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
@@ -234,35 +235,39 @@ namespace TrocaBaseGUI.ViewModels
             return new ObservableCollection<DatabaseModel>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
         }
 
-        public void AddDirectory(string folder, string path, string exe, ObservableCollection<string> exeList)
-        {
-            var existente = SysDirectoryList.FirstOrDefault(d => d.Folder == folder);
-            if (existente != null)
-            {
-                SysDirectoryList.Remove(existente);
-            }
+        //public void AddDirectory(string folder, string path, string exe, ObservableCollection<string> exeList)
+        //{
+        //    var existente = SysDirectoryList.FirstOrDefault(d => d.Folder == folder);
+        //    if (existente != null)
+        //    {
+        //        SysDirectoryList.Remove(existente);
+        //    }
 
-            SysDirectoryList.Insert(0, new SysDirectoryModel(folder, path, exe, exeList));
-            exeFile = exe;
+        //    SysDirectoryList.Insert(0, new SysDirectoryModel(folder, path, exe, exeList));
+        //    exeFile = exe;
 
-            while (SysDirectoryList.Count > MaxSysDirectorySize)
-            {
-                SysDirectoryList.RemoveAt(SysDirectoryList.Count - 1);
-            }
-        }
+        //    while (SysDirectoryList.Count > MaxSysDirectorySize)
+        //    {
+        //        SysDirectoryList.RemoveAt(SysDirectoryList.Count - 1);
+        //    }
+        //}
 
         //Refazer
         public void ClearApp()
         {
-            exeFile = "";
-            LocalSQLServerConnection.Server = "";
-            LocalOracleConnection.Server = "";
-            LocalOracleConnection.Password = "";
-            LocalOracleConnection.Port = "1521";
-            Databases = new ObservableCollection<DatabaseModel>();
+            //exeFile = "";
+
+            LocalSQLServerConnection = new SqlServerConnectionModel();
+            ServerSQLServerConnection = new SqlServerConnectionModel();
+
+            LocalOracleConnection = new OracleConnectionModel() { Environment = "local" };
+            ServerOracleConnection = new OracleConnectionModel() { Environment = "server" };
+
+            appState = new AppState();
 
             SysDirectoryList.Clear();
-            //Properties.Settings.Default.HistoricoMem = "";
+            Databases.Clear();
+
             Properties.Settings.Default.Save();
         }
 

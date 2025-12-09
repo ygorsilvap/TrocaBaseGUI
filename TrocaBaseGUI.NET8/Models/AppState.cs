@@ -109,7 +109,7 @@ namespace TrocaBaseGUI.Models
             { serverParams = value; OnPropertyChanged(); }
         }
 
-        private SysDirectoryModel selectedFolder;
+        private SysDirectoryModel selectedFolder = new SysDirectoryModel();
         public SysDirectoryModel SelectedFolder
         {
             get => selectedFolder;

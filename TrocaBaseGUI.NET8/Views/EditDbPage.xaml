@@ -172,7 +172,7 @@
             <RadioButton x:Name="rbSqlServer" Content="SQL Server" IsTabStop="False" Checked="rb_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top"/>
 
         </StackPanel>
-        <Button Content="🡨" Click="SaveAndReturn_Click" IsTabStop="False" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" BorderBrush="Transparent" Background="Transparent" Margin="9,77,517,0" VerticalAlignment="Top" Height="27">
+        <Button Content="🡨" Click="SaveAndReturn_Click" IsTabStop="False" ToolTip="Voltar" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" BorderBrush="Transparent" Background="Transparent" Margin="9,77,517,0" VerticalAlignment="Top" Height="27">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"

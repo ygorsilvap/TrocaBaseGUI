@@ -32,7 +32,7 @@ namespace TrocaBaseGUI.Views
         public string mainExe;
         public string secondaryExe;
         public int selectedDatabaseId;
-        public SysDirectoryModel selectedSysDirectory;
+        public SysDirectoryModel selectedSysDirectory = new SysDirectoryModel();
         public ObservableCollection<string> exesList { get; set; } = new ObservableCollection<string>();
 
         public string orderBy = "aa";
@@ -261,6 +261,7 @@ namespace TrocaBaseGUI.Views
 
         private void OpenSecondaryExeButton_Click(object sender, RoutedEventArgs e)
         {
+            //if (string.IsNullOrEmpty(selectedSysDirectory.Path) || string.IsNullOrEmpty(secondaryExe)) return;
             string exe = $@"{selectedSysDirectory.Path}\{secondaryExe}";
             if (string.IsNullOrEmpty(secondaryExe) && !File.Exists(exe))
             {

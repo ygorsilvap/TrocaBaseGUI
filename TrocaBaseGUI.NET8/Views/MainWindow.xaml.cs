@@ -11,7 +11,6 @@ namespace TrocaBaseGUI.Views
 {
     public partial class MainWindow : Window
     {
-        //public MainViewModel MainVM { get; private set; }
         public MainViewModel viewModel;
         public Frame MainFramePublic => MainFrame;
         public MainWindow()
@@ -26,8 +25,10 @@ namespace TrocaBaseGUI.Views
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (WindowStartupLocation.Equals(WindowStartupLocation.CenterScreen))
+            if (viewModel.firstBoot)
             {
+                viewModel.firstBoot = false;
+
                 Properties.Settings.Default.WindowLeft = Left;
                 Properties.Settings.Default.WindowTop = Top;
                 //Properties.Settings.Default.Save();
@@ -37,6 +38,8 @@ namespace TrocaBaseGUI.Views
             {
                 Left = Properties.Settings.Default.WindowLeft;
                 Top = Properties.Settings.Default.WindowTop;
+
+                //WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
         }
 

@@ -40,54 +40,6 @@ namespace TrocaBaseGUI.Services
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        //public void SaveState(AppState appState)
-        //{
-        //    var state = new AppState
-        //    {
-        //        History = appState.History.ToList(),
-        //        Databases = appState.Databases.ToList(),
-        //        ExeFile = appState.ExeFile,
-        //        ConexaoFile = appState.ConexaoFile,
-        //        LocalSQLServerConnection = appState.LocalSQLServerConnection,
-        //        ServerSQLServerConnection = appState.ServerSQLServerConnection,
-        //        LocalOracleConnection = appState.LocalOracleConnection,
-        //        ServerOracleConnection = appState.ServerOracleConnection,
-        //        LocalParams = appState.LocalParams ?? new AppParams(),
-        //        ServerParams = appState.ServerParams ?? new AppParams()
-        //    };
-
-        //    string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
-        //    Properties.Settings.Default.AppStateJson = json;
-        //    Properties.Settings.Default.Save();
-        //}
-
-        //public void LoadState(AppState appState)
-        //{
-        //    string json = Properties.Settings.Default.AppStateJson;
-
-        //    if (!string.IsNullOrEmpty(json))
-        //    {
-        //        var state = JsonSerializer.Deserialize<AppState>(json);
-
-        //        if (state != null)
-        //        {
-        //            appState.History = new ObservableCollection<SysDirectoryModel>(state.History).ToList();
-        //            appState.Databases = new ObservableCollection<DatabaseModel>(state.Databases).ToList();
-        //            appState.ExeFile = state.ExeFile;
-        //            appState.ConexaoFile = state.ConexaoFile;
-
-        //            appState.LocalSQLServerConnection = state.LocalSQLServerConnection;
-        //            appState.ServerSQLServerConnection = state.ServerSQLServerConnection;
-        //            appState.LocalOracleConnection = state.LocalOracleConnection;
-        //            appState.ServerOracleConnection = state.ServerOracleConnection;
-
-        //            appState.LocalParams = state.LocalParams ?? new AppParams();
-        //            appState.ServerParams = state.ServerParams ?? new AppParams();
-
-        //            //appState = state;
-        //        }
-        //    }
-        //}
 
         public void SaveState(MainViewModel vm)
         {
@@ -95,7 +47,7 @@ namespace TrocaBaseGUI.Services
             {
                 History = vm.SysDirectoryList.ToList(),
                 Databases = vm.Databases.ToList(),
-                ExeFile = MainViewModel.exeFile,
+                //ExeFile = MainViewModel.exeFile,
                 ConexaoFile = vm.conexaoFile,
                 LocalSQLServerConnection = vm.LocalSQLServerConnection,
                 ServerSQLServerConnection = vm.ServerSQLServerConnection,
@@ -125,7 +77,7 @@ namespace TrocaBaseGUI.Services
                 {
                     vm.SysDirectoryList = new ObservableCollection<SysDirectoryModel>(state.History);
                     vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
-                    MainViewModel.exeFile = state.ExeFile;
+                    //MainViewModel.exeFile = state.ExeFile;
                     vm.conexaoFile = state.ConexaoFile;
 
                     vm.Conexao2Camadas = state.Conexao2Camadas ?? new ConexaoFileModel() { Tier = 2 };
