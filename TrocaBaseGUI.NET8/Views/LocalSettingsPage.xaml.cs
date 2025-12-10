@@ -15,6 +15,14 @@ namespace TrocaBaseGUI.Views
     {
 
         public MainViewModel _viewModel;
+        string unmaskedSqlPassword;
+        string unmaskedOraclePassword;
+
+        //ChatGPT
+        private string realSqlPassword = "";
+        private bool ignoreSql = false;
+        private string realOraclePassword = "";
+        private bool ignoreOracle = false;
 
         public LocalSettingsPage()
         {
@@ -27,9 +35,14 @@ namespace TrocaBaseGUI.Views
 
         private void LocalPage_Loaded(object sender, RoutedEventArgs e)
         {
-            //OraclePassword.Password = _viewModel.LocalOracleConnection.Password;
-            //SqlServerPassword.Password = _viewModel.LocalSQLServerConnection.Password;
-            //Debug.WriteLine($"\n\npassword: {_viewModel.LocalSQLServerConnection.Password}\n\n");
+            //OraclePasswordMask.Text = string.IsNullOrEmpty(_viewModel.LocalOracleConnection.Password) ?
+            //    new string('•', _viewModel.LocalOracleConnection.Password.Length) : string.Empty;
+
+            OraclePasswordMask.Text = new string('•', _viewModel.LocalOracleConnection.Password.Length);
+
+            //SqlPasswordMask.Text = string.IsNullOrEmpty(_viewModel.LocalSQLServerConnection.Password) ?
+            //    new string('•', _viewModel.LocalSQLServerConnection.Password.Length) : string.Empty;
+            SqlPasswordMask.Text = new string('•', _viewModel.LocalSQLServerConnection.Password.Length);
         }
 
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
@@ -47,8 +60,11 @@ namespace TrocaBaseGUI.Views
 
         private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
+            string instance = !string.IsNullOrEmpty(_viewModel.LocalOracleConnection.Instance) ? 
+                _viewModel.LocalOracleConnection.Instance : _viewModel.OracleService.GetRunningInstances()[0];
+
             if (_viewModel.OracleService.GetRunningInstances().Count > 0 &&
-                    await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection, _viewModel.OracleService.GetRunningInstances()[0]))
+                    await _viewModel.OracleService.ValidateConnection(_viewModel.LocalOracleConnection, instance))
             {
                 await _viewModel.openOracleConn(_viewModel.OracleService, _viewModel.LocalOracleConnection);
                 MessageBox.Show("Conexão local com o Oracle estabelecida.");
@@ -62,17 +78,21 @@ namespace TrocaBaseGUI.Views
         private void SqlServerPassword_TextChanged(object sender, RoutedEventArgs e)
         {
             _viewModel.LocalSQLServerConnection.Password = SqlServerPassword.Text;
-            int pwdLength = SqlServerPassword.Text.Length;
-            SqlServerPassword.Text = new string('•', pwdLength);
-            SqlServerPassword.CaretIndex = SqlServerPassword.Text.Length;
+
+            int pwdLength = SqlPasswordMask.Text.Length;
+            SqlPasswordMask.Text = new string('•', pwdLength);
+
+            Debug.WriteLine($"\n\nsqlpwd: {_viewModel.LocalSQLServerConnection.Password}\n\n");
         }
 
         private void OraclePassword_TextChanged(object sender, RoutedEventArgs e)
         {
             _viewModel.LocalOracleConnection.Password = OraclePassword.Text;
+
             int pwdLength = OraclePassword.Text.Length;
-            OraclePassword.Text = new string('•', pwdLength);
-            OraclePassword.CaretIndex = OraclePassword.Text.Length;
+            OraclePasswordMask.Text = new string('•', pwdLength);
+
+            Debug.WriteLine($"\n\nsqlpwd: {_viewModel.LocalOracleConnection.Password}\n\n");
         }
     }
 }

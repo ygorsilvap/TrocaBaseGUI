@@ -130,12 +130,13 @@ namespace TrocaBaseGUI.Services
                     if (connectionString.Contains("DBA"))
                     {
                         Debug.WriteLine($"[Validate-Oracle-Local] Falha: {ex.GetType().Name} - {ex.Message}");
+                        MessageBox.Show($"Falha: {ex.Message}");
                         return false;
                     }
                     else
                     {
                         Debug.WriteLine($"[Validate-Oracle-Server] Falha: {ex.GetType().Name} - {ex.Message}");
-
+                        MessageBox.Show($"Falha: {ex.Message}");
                         return false;
                     }
                 }

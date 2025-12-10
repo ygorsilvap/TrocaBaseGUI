@@ -30,7 +30,7 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name="SqlServerPassword" TextChanged="SqlServerPassword_TextChanged" Foreground="Black" FontSize="14" FontWeight="ExtraBold" Padding="1, -2" Margin="100,235,300,247" Text="{Binding ServerSQLServerConnection.Password}" Grid.Row="1">
+        <TextBox x:Name="SqlServerPassword" TextChanged="SqlServerPassword_TextChanged" Foreground="#f5f4f3" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="1, 0" Margin="100,235,300,247" Text="{Binding ServerSQLServerConnection.Password, Mode=TwoWay}" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -72,7 +72,7 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Servidor"/></TextBlock>
-        <TextBox x:Name="OracleServer" Foreground="black" FontSize="11" Margin="300,174,100,307" Text="{Binding ServerOracleConnection.Server, Mode=TwoWay}" Width="150">
+        <TextBox x:Name="OracleServer" Foreground="black" TextWrapping="NoWrap" FontSize="11" Margin="300,174,100,307" Padding="1, 0" Text="{Binding ServerOracleConnection.Server, Mode=TwoWay}">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -93,7 +93,7 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,210,0,266" TextWrapping="Wrap" Width="120"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name="OraclePassword" TextChanged="OraclePassword_TextChanged" Foreground="Black" FontSize="14" FontWeight="ExtraBold" Padding="1, -2" Margin="300,234,100,247" Text="{Binding ServerOracleConnection.Password}" Grid.Row="1">
+        <TextBox x:Name="OraclePassword" TextChanged="OraclePassword_TextChanged" Foreground="#f5f4f3" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="1, 0" Margin="300,234,100,247" Text="{Binding ServerOracleConnection.Password, Mode=TwoWay}" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -196,6 +196,8 @@
         </Button>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,366" TextWrapping="Wrap" Width="100"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,110,147,352" TextWrapping="Wrap"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock x:Name="OraclePasswordMask" IsHitTestVisible="False" HorizontalAlignment="Left" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="4,0" TextWrapping="Wrap" Width="150" Margin="300,234,0,249"/>
+        <TextBlock x:Name="SqlPasswordMask" IsHitTestVisible="False" HorizontalAlignment="Left" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="4,0" TextWrapping="Wrap" Width="150" Margin="100,235,0,248"/>
 
     </Grid>
 </Page>

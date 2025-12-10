@@ -33,7 +33,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBox x:Name="SqlServerPassword" TextChanged="SqlServerPassword_TextChanged" Foreground="Black" FontSize="14" FontWeight="ExtraBold" Padding="1, -2" Margin="100,162,300,19" Text="{Binding LocalSQLServerConnection.Password}" Grid.Row="1">
+        <TextBox x:Name="SqlServerPassword" TextChanged="SqlServerPassword_TextChanged" Foreground="#f5f4f3" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="1, 0" Margin="100,162,300,19" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -53,7 +53,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBox x:Name="OracleServer" Foreground="black" FontSize="11" Margin="300,102,100,79" TextWrapping="Wrap" Text="{Binding LocalOracleConnection.Server, Mode=TwoWay}" Width="150" Padding="1, 0" Grid.Row="1">
+        <TextBox x:Name="OracleServer" Foreground="black" FontSize="11" Margin="300,102,100,79" TextWrapping="NoWrap" Text="{Binding LocalOracleConnection.Server, Mode=TwoWay}" Width="150" Padding="1, 0" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -73,7 +73,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBox x:Name="OraclePassword" TextChanged="OraclePassword_TextChanged" Foreground="Black" FontSize="14" FontWeight="ExtraBold" Padding="1, -2" Margin="300,162,100,19" Text="{Binding LocalOracleConnection.Password}" Grid.Row="1">
+        <TextBox x:Name="OraclePassword" TextChanged="OraclePassword_TextChanged" Foreground="#f5f4f3" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="1, 0" Text="{Binding LocalOracleConnection.Password, Mode=TwoWay}" Margin="300,162,100,19" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Template">
@@ -184,6 +184,9 @@
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2"><Run Language="pt-br" Text="Instância"/></TextBlock>
         <TextBlock Foreground="#999897" HorizontalAlignment="Left" Margin="348,5,0,0" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2"><Run Language="pt-br" Text="(Opcional)"/></TextBlock>
+        <TextBlock x:Name="OraclePasswordMask" IsHitTestVisible="False" HorizontalAlignment="Left" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Grid.Row="1" Padding="4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="300,162,0,0" Height="17"/>
+        <TextBlock x:Name="SqlPasswordMask" IsHitTestVisible="False" HorizontalAlignment="Left" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Grid.Row="1" Padding="4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="100,162,300,19" Height="17"/>
+
     </Grid>
 </Page>
 
