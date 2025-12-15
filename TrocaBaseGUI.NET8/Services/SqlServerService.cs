@@ -22,10 +22,22 @@ namespace TrocaBaseGUI.Services
             _connection = connection;
         }
 
+        public string GetConnectionString(SqlServerConnectionModel sqlServerConnection)
+        {
+            if (String.IsNullOrEmpty(sqlServerConnection.Password))
+            {
+                return $"Server={sqlServerConnection.Server};Integrated Security=True;TrustServerCertificate=True;";
+            }
+            else
+            {
+                return $"Server={sqlServerConnection.Server};User Id={sqlServerConnection.Username};Password={sqlServerConnection.Password};TrustServerCertificate=True;";
+            }
+        }
+
         public async Task<List<DatabaseModel>> GetSqlServerDatabases(SqlServerConnectionModel sqlServerConnection)
         {
                 List<DatabaseModel> databases = new List<DatabaseModel>();
-                using (var conn = new SqlConnection(_connection.GetConnectionString(sqlServerConnection)))
+                using (var conn = new SqlConnection(GetConnectionString(sqlServerConnection)))
                 {
                     await conn.OpenAsync();
                     var cmd = new SqlCommand(@"
@@ -86,7 +98,7 @@ namespace TrocaBaseGUI.Services
 
             try
             {
-                var connectionString = _connection.GetConnectionString(sqlServerConnection);
+                var connectionString = GetConnectionString(sqlServerConnection);
 
                 if (!connectionString.ToLower().Contains("connect timeout"))
                     connectionString += ";Connect Timeout=" + timeoutSeconds;
@@ -100,15 +112,14 @@ namespace TrocaBaseGUI.Services
             }
             catch (Exception ex)
             {
-
-                if (_connection.GetConnectionString(sqlServerConnection).Contains("Password"))
+                if (sqlServerConnection.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
                 {
-                    Debug.WriteLine($"[ValidateConnection-SQLServer-Server] Falha: {ex.GetType().Name} - {ex.Message}");
+                    //MessageBox.Show($"{ex.GetType().Name} - {ex.Message}", "Falha na conexão do servidor com SQL Server", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
                 else
                 {
-                    Debug.WriteLine($"[ValidateConnection-SQLServer-Local] Falha: {ex.GetType().Name} - {ex.Message}");
+                    //MessageBox.Show($"{ex.GetType().Name} - {ex.Message}", "Falha na conexão local com SQL Server", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }

@@ -47,8 +47,8 @@ namespace TrocaBaseGUI.ViewModels
         public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
         public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
 
-        public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel();
-        public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel();
+        public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel() { Environment = "local" };
+        public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel() { Environment = "server" };
         public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "local" };
         public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "server" };
         public OracleService OracleService;
@@ -90,38 +90,54 @@ namespace TrocaBaseGUI.ViewModels
 
         }
 
+        public void SetDatabases(List<DatabaseModel> databases)
+        {
+            databases.ForEach(db =>
+            {
+                if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
+                                  d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+                                  d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
+                    return;
+
+                Databases.Add(db);
+                Databases[Databases.Count - 1].Id = Databases.Count - 1;
+            });
+
+            foreach (var db in Databases)
+            {
+                if (!databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
+                                  d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+                                  d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
+                    Databases.Remove(db);
+            }
+        }
+
         //Refatorar
-        public async Task openSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection)
+        public async Task OpenSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection, bool removeDb = false, bool showResult = true)
         {
             //Revisar lógica
-            if (sqlServerConnection.IsValid())
-                return;
+            //if (sqlServerConnection.IsValid())
+            //    return;
 
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
                 var databases = await sqlservice.GetSqlServerDatabases(sqlServerConnection);
+                SetDatabases(databases);
 
-                databases.ForEach(db => {
-                    if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                    d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
-                    d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
-                        return;
-
-                    Databases.Add(db);
-
-                    //Validar essa solução antes de usar
-                    //Databases[Databases.Count - 1].Id = Databases.Any(db => db.Id.Equals((Databases.Count - 1))) ? Databases[Databases.Count - 1].Id : Databases.Count - 1;
-
-                    Databases[Databases.Count - 1].Id = Databases.Count - 1;
-                });
-                Console.WriteLine("\n[Conexão com SQL Server estabelecida]\n");
+                if(showResult)
+                {
+                    if (sqlServerConnection.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
+                        MessageBox.Show("Conexão do servidor com SQL Server estabelecida.", "Conexão do servidor com SQL Server", MessageBoxButton.OK, MessageBoxImage.Information);
+                    else
+                        MessageBox.Show("Conexão local com SQL Server estabelecida.", "Conexão local com SQL Server", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             else
             {
-                if (Databases.Count() > 0)
+                if (removeDb)
                 {
                     //Refatorar
-                    var environment = string.IsNullOrEmpty(sqlServerConnection.Password) ? "local" : "server";
+                    var environment = sqlServerConnection.Environment;
                     var removable = Databases
                         .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s") && item.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase))
                         .ToList();
@@ -129,42 +145,55 @@ namespace TrocaBaseGUI.ViewModels
                     foreach (var item in removable)
                     {
                         Databases.Remove(item);
+                        if(SysDirectoryList.Any(d => d.SysDatabase == item.Id))
+                        {
+                            SysDirectoryList.First(d => d.SysDatabase == item.Id).SysDatabase = -1;
+                        }
+                        Debug.WriteLine($"\n\ncount: {Databases.Count}\n\n");
                     }
+                    if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith("s", StringComparison.OrdinalIgnoreCase))
+                        SelectedDatabase = null;
+
                 }
                 //DbService.SortDatabases(Databases);
 
-                Console.WriteLine("\n[Conexão com SQL Server inválida]\n");
+                if(showResult)
+                {
+                    if (sqlServerConnection.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
+                        MessageBox.Show("Falha na conexão do servidor com SQL Server", "Conexão do servidor com SQL Server", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    else
+                        MessageBox.Show("Falha na conexão local com SQL Server", "Conexão local com SQL Server", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
-        public async Task openOracleConn(OracleService oracleService, OracleConnectionModel oracleConnection)
+        public async Task OpenOracleConn(OracleService oracleService, OracleConnectionModel oracleConnection, bool removeDb = false, bool showResult = true)
         {
             //Revisar lógica
-            if (oracleConnection.IsValid())
-                return;
+            //if (oracleConnection.IsValid())
+            //    return;
 
             List<String> instances = string.IsNullOrEmpty(oracleConnection.Instance) ?
                 oracleService.GetRunningInstances() : new List<string> { oracleConnection.Instance };
 
             foreach (string instance in instances)
             {
-                if (await OracleService.ValidateConnection(oracleConnection, instance))
+                if (await OracleService.ValidateConnection(oracleConnection, instance, showResult))
                 {
                     var databases = await oracleService.GetOracleDatabases(oracleConnection, instance);
-                    databases.ForEach(db =>
-                    {
-                        if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                                          d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
-                                          d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
-                            return;
+                    SetDatabases(databases);
 
-                        Databases.Add(db);
-                        Databases[Databases.Count - 1].Id = Databases.Count - 1;
-                    });
-                    //DbService.SortDatabases(Databases);
+                    if(showResult)
+                    {
+                        if (oracleConnection.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
+                            MessageBox.Show("Conexão do servidor com Oracle estabelecida.", "Conexão do servidor com Oracle", MessageBoxButton.OK, MessageBoxImage.Information);
+                        else
+                            MessageBox.Show("Conexão local com Oracle estabelecida.", "Conexão local com Oracle", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
                     return;
                 }
 
-                if (Databases.Count() > 0)
+                if (Databases.Count() > 0 || removeDb)
                 {
                     var removable = Databases
                         .Where(db => db.DbType != null &&
@@ -172,10 +201,23 @@ namespace TrocaBaseGUI.ViewModels
                             db.Environment.Equals(oracleConnection.Environment, StringComparison.OrdinalIgnoreCase))
                         .ToList();
 
-                    removable.ForEach(db => {
-                        Debug.WriteLine($"\nRemovendo {db.Name} - {db.Environment}\n");
-                        Databases.Remove(db);
-                    });
+
+                    foreach (var item in removable)
+                    {
+                        Databases.Remove(item);
+                        if (SysDirectoryList.Any(d => d.SysDatabase == item.Id))
+                        {
+                            SysDirectoryList.First(d => d.SysDatabase == item.Id).SysDatabase = -1;
+                        }
+                    }
+                    //removable.ForEach(db => {
+                    //    Debug.WriteLine($"\nRemovendo {db.Name} - {db.Environment}\n");
+                    //    Databases.Remove(db);
+                    //});
+
+                    if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith("o", StringComparison.OrdinalIgnoreCase))
+                        SelectedDatabase = null;
+
                     //DbService.SortDatabases(Databases);
                 }
             }

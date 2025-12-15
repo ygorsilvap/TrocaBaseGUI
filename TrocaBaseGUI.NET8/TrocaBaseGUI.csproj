@@ -28,6 +28,7 @@
     <None Remove="Assets\settings.png" />
     <None Remove="Assets\settings80.png" />
     <None Remove="Assets\settings90.png" />
+    <None Remove="Assets\spinner.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,9 @@
 
   <ItemGroup>
     <Resource Include="Assets\database.png" />
+    <Resource Include="Assets\spinner.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="MessagePack" Version="3.1.4" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Core" Version="1.1.5" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />

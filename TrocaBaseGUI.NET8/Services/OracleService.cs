@@ -106,7 +106,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
  
-        public async Task<bool> ValidateConnection(OracleConnectionModel oracleConnection, string instance, double timeoutSeconds = 3000)
+        public async Task<bool> ValidateConnection(OracleConnectionModel oracleConnection, string instance, bool showResult = true, double timeoutSeconds = 3000)
         {
             string connectionString = _connection.GetConnectionString(oracleConnection, instance);
             using var conn = new OracleConnection(connectionString);
@@ -124,21 +124,22 @@ namespace TrocaBaseGUI.Services
                 catch (Exception ex)
                 {
                     if (conn.State == System.Data.ConnectionState.Open)
-                    {
                         conn.Close();
-                    }
-                    if (connectionString.Contains("DBA"))
+
+                    if (showResult)
                     {
-                        Debug.WriteLine($"[Validate-Oracle-Local] Falha: {ex.GetType().Name} - {ex.Message}");
-                        MessageBox.Show($"Falha: {ex.Message}");
-                        return false;
+                        if (oracleConnection.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
+                        {
+                            MessageBox.Show($"{ex.GetType().Name} - {ex.Message}", "Falha na conexão do servidor com Oracle", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return false;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"{ex.GetType().Name} - {ex.Message}", "Falha na conexão local com Oracle", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return false;
+                        }
                     }
-                    else
-                    {
-                        Debug.WriteLine($"[Validate-Oracle-Server] Falha: {ex.GetType().Name} - {ex.Message}");
-                        MessageBox.Show($"Falha: {ex.Message}");
-                        return false;
-                    }
+                    return false;
                 }
             }
             else

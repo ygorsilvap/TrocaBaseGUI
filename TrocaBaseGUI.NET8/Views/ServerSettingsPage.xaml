@@ -148,7 +148,7 @@
              BorderThickness="0"/>
         </Border>
 
-        <Button Content="Testar Conexão" Click="SqlServerTestConn_Click" IsTabStop="False" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="120,337,310,135">
+        <Button x:Name="SqlServerConnectionTestButton" Content="Testar Conexão" Click="SqlServerTestConn_Click" IsTabStop="False" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="120,337,310,135">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -171,7 +171,40 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="Testar Conexão" Click="OracleTestConn_Click" IsTabStop="False" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="310,337,120,135">
+
+        <Ellipse
+            x:Name="SqlServerLoadingCircle"
+            Visibility="Hidden"
+            Width="20"
+            Height="20"
+            Stroke="#411e5a"
+            StrokeThickness="3"
+            StrokeDashArray="5 4"
+            StrokeDashCap="Round"
+            RenderTransformOrigin="0.5,0.5" Margin="170,341,360,139"
+            IsHitTestVisible="False">
+
+            <Ellipse.RenderTransform>
+                <RotateTransform x:Name="SqlRotateTransform"/>
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="SqlRotateTransform"
+                                Storyboard.TargetProperty="Angle"
+                                From="0"
+                                To="360"
+                                Duration="0:0:1.5"
+                                RepeatBehavior="Forever"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+        <Button x:Name="OracleConnectionTestButton" Content="Testar Conexão" Click="OracleTestConn_Click" IsTabStop="False" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="310,337,120,135">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -194,6 +227,38 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+
+        <Ellipse
+            x:Name="OracleLoadingCircle"
+            Visibility="Hidden"
+            Width="20"
+            Height="20"
+            Stroke="#411e5a"
+            StrokeThickness="3"
+            StrokeDashArray="5 4"
+            StrokeDashCap="Round"
+            RenderTransformOrigin="0.5,0.5" Margin="360,341,170,139">
+
+            <Ellipse.RenderTransform>
+                <RotateTransform x:Name="OraRotateTransform"/>
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="OraRotateTransform"
+                                Storyboard.TargetProperty="Angle"
+                                From="0"
+                                To="360"
+                                Duration="0:0:1.5"
+                                RepeatBehavior="Forever"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,110,0,366" TextWrapping="Wrap" Width="100"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,110,147,352" TextWrapping="Wrap"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
         <TextBlock x:Name="OraclePasswordMask" IsHitTestVisible="False" HorizontalAlignment="Left" FontFamily="Consolas" FontSize="14" FontWeight="ExtraBold" Padding="4,0" TextWrapping="Wrap" Width="150" Margin="300,234,0,249"/>

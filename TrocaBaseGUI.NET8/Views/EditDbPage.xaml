@@ -18,8 +18,8 @@
             </TextBlock.Effect>
         </TextBlock>
 
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Height="15"><Run Text="Nome(Apenas Visualização"/><Run Language="pt-br" Text=")"/><LineBreak/><Run Text=")"/></TextBlock>
-        <TextBox x:Name = "nameInput" TextChanged="nameInput_TextChanged" HorizontalAlignment="Left" Margin="100,130,0,352" TextWrapping="Wrap" Width="120">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="110,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Height="15"><Run Text="Nome(Apenas Visualização"/><Run Language="pt-br" Text=")"/><LineBreak/><Run Text=")"/></TextBlock>
+        <TextBox x:Name = "nameInput" TextChanged="nameInput_TextChanged" HorizontalAlignment="Left" Margin="110,130,0,352" TextWrapping="Wrap" Width="120">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -40,8 +40,8 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"><Run Language="pt-br" Text="Server"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name = "serverInput" TextChanged="serverInput_TextChanged" HorizontalAlignment="Left" Margin="100,205,0,277" TextWrapping="Wrap" Width="120">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="110,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Height="26"><Run Language="pt-br" Text="Server"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name = "serverInput" TextChanged="serverInput_TextChanged" HorizontalAlignment="Left" Margin="110,205,0,277" TextWrapping="Wrap" Width="120">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -68,8 +68,8 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário"/></TextBlock>
-        <TextBox x:Name = "userInput" IsEnabled="False" TextChanged="userInput_TextChanged" HorizontalAlignment="Left" Margin="100,267,0,215" TextWrapping="Wrap" Width="120">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="110,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"><Run Language="pt-br" Text="Usuário Oracle"/></TextBlock>
+        <TextBox x:Name = "userInput" IsEnabled="False" TextChanged="userInput_TextChanged" HorizontalAlignment="Left" Margin="110,267,0,215" TextWrapping="Wrap" Width="120">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -96,8 +96,8 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBlock x:Name = "instDbNameInputTXT" Foreground="#411e5a" HorizontalAlignment="Left" Margin="303,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Height="17"><Run Text="Instância"/><Run Language="pt-br" Text="/Nome da Base"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBox x:Name = "instDbNameInput" TextChanged="instDbNameInput_TextChanged" HorizontalAlignment="Left" Margin="303,267,0,215" TextWrapping="Wrap" Width="120">
+        <TextBlock x:Name = "instDbNameInputTXT" Text="Instância/Nome da Base" Foreground="#411e5a" HorizontalAlignment="Left" Margin="320,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167" Height="17"></TextBlock>
+        <TextBox x:Name = "instDbNameInput" TextChanged="instDbNameInput_TextChanged" Margin="320,267,110,215" TextWrapping="Wrap">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">
@@ -123,8 +123,8 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="323,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="15"><Run Language="pt-br" Text="SQL/Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <StackPanel Orientation="Horizontal" Margin="257,130,97,348">
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="310,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="15"><Run Language="pt-br" Text="SQL/Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="284,130,70,348">
             <StackPanel.Resources>
                 <Style TargetType="RadioButton">
                     <Setter Property="Template">
@@ -172,7 +172,7 @@
             <RadioButton x:Name="rbSqlServer" Content="SQL Server" IsTabStop="False" Checked="rb_Checked" HorizontalAlignment="Left" Foreground="#411e5a" Margin="25,0,0,0" VerticalAlignment="Top"/>
 
         </StackPanel>
-        <Button Content="🡨" Click="SaveAndReturn_Click" IsTabStop="False" ToolTip="Voltar" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" BorderBrush="Transparent" Background="Transparent" Margin="9,77,517,0" VerticalAlignment="Top" Height="27">
+        <Button Content="🡨" Click="Return_Click" IsTabStop="False" ToolTip="Voltar" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" BorderBrush="Transparent" Background="Transparent" Margin="9,77,517,0" VerticalAlignment="Top" Height="27">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -190,6 +190,54 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Border" Property="TextElement.FontSize" Value="21"/>
                             <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button x:Name="SaveDatabaseButton" Content="Salvar" Click="SaveDatabaseButton_Click" IsTabStop="False" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="110,357,320,115">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="5"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#5C2A80"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#D9D8D7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button x:Name="ClearButton" Content="Limpar" Click="ClearButton_Click" IsTabStop="False" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="320,357,110,115">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="5"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#EBE9E8"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#5C2A80"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#D9D8D7"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -14,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MessagePack;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.Utils;
@@ -50,7 +49,7 @@ namespace TrocaBaseGUI.Views
             tabSelected = TabControl.SelectedIndex;
         }
 
-        private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             SetSearchPlaceholder();
 
@@ -60,21 +59,38 @@ namespace TrocaBaseGUI.Views
 
             SetSelectedDatabase(selectedDatabaseId);
 
-            if (viewModel.Databases == null || viewModel.Databases.Count == 0)
-            {
-                var tasks = new List<Task>
-                {
-                    //Local
-                    viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection),
-                    viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection),
-                    //Server
-                    viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection),
-                    viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection)
-                };
+            SetDabaseCopyDbs();
 
-                await Task.WhenAll(tasks);
-            }
+            //if (viewModel.Databases == null || viewModel.Databases.Count == 0)
+            //{
+            //    var tasks = new List<Task>
+            //    {
+            //        //Local
+            //        viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection),
+            //        viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection),
+            //        //Server
+            //        viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection),
+            //        viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection)
+            //    };
 
+            //    await Task.WhenAll(tasks);
+            //}
+
+            //databasesCopy.Clear();
+
+            //foreach (var db in viewModel.Databases)
+            //{
+            //    DatabaseService.SetDisplayName(db, db.DisplayName);
+            //    databasesCopy.Add(db);
+            //}
+
+            //viewModel.DbService.SortDatabasesByName(databasesCopy);
+
+            //SetDatabaseListFiltered(databasesCopy);
+        }
+
+        private void SetDabaseCopyDbs()
+        {
             databasesCopy.Clear();
 
             foreach (var db in viewModel.Databases)
@@ -85,13 +101,11 @@ namespace TrocaBaseGUI.Views
 
             viewModel.DbService.SortDatabasesByName(databasesCopy);
 
-            SetDatabaseListFilter(databasesCopy);
+            SetDatabaseListFiltered(databasesCopy);
         }
 
-        private void SetDatabaseListFilter(ObservableCollection<DatabaseModel> db)
+        private void SetDatabaseListFiltered(ObservableCollection<DatabaseModel> db)
         {
-            //if (!(DataContext is MainViewModel vm)) return;
-
             string environment = tabSelected == 0 ? "local" : "server";
 
             string type = string.Empty;
@@ -179,7 +193,7 @@ namespace TrocaBaseGUI.Views
             var rb = sender as RadioButton;
 
             if(rb.IsLoaded)
-                SetDatabaseListFilter(databasesCopy);
+                SetDatabaseListFiltered(databasesCopy);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -187,7 +201,7 @@ namespace TrocaBaseGUI.Views
             if (e.Source is TabControl tabControl)
                 tabSelected = tabControl.SelectedIndex;
 
-            SetDatabaseListFilter(databasesCopy);
+            SetDatabaseListFiltered(databasesCopy);
             SetSearchPlaceholder();
         }
 
@@ -229,8 +243,11 @@ namespace TrocaBaseGUI.Views
             //Revisar necessidade dessa variável
             selectedSysDirectory = selectedItem;
 
-            SetSelectedDatabase(selectedItem.SysDatabase);
-            DatabaseService.SetSelection(viewModel.Databases, selectedItem.SysDatabase);
+            if (viewModel.Databases.Any(db => db.Id == selectedItem.SysDatabase))
+            {
+                SetSelectedDatabase(selectedItem.SysDatabase);
+                DatabaseService.SetSelection(viewModel.Databases, selectedItem.SysDatabase);
+            }
 
             //Revisar a necessidade de um serviço para conexaoaddress. Utilizando assim apenas como paliativa.
             viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
@@ -246,6 +263,16 @@ namespace TrocaBaseGUI.Views
             secondaryExe = selectedItem;
 
             //Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
+        }
+
+        private void MainExesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            var selectedItem = comboBox.SelectedItem as string;
+
+            //mainExe = selectedItem;
+            //OpenSecondaryExeButtonText.Text = $"Iniciar \n{selectedItem}";
+            //secondaryExe = selectedItem;
         }
 
         private void OpenMainExeButton_Click(object sender, RoutedEventArgs e)
@@ -305,7 +332,7 @@ namespace TrocaBaseGUI.Views
                 if (result == MessageBoxResult.Yes)
                 {
                     viewModel.Databases.Remove(db);
-                    SetDatabaseListFilter(viewModel.Databases);
+                    SetDatabaseListFiltered(viewModel.Databases);
                 }
             }
         }
@@ -359,15 +386,32 @@ namespace TrocaBaseGUI.Views
 
         }
 
-        private async void RefreshDbList_Click(object sender, RoutedEventArgs e)
+        private async void RefreshDbListButton_Click(object sender, RoutedEventArgs e)
         {
-            //Local
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection);
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection);
+            DatabaseList.ItemsSource = "";
+            LoadingCircle.Visibility = Visibility.Visible;
+            RefreshDbListButton.IsEnabled = false;
 
-            //Server
-            await viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection);
-            await viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection);
+            Debug.WriteLine(viewModel.ServerSQLServerConnection);
+
+            var tasks = new List<Task>
+                {
+                    //Local
+                    viewModel.OpenSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection, true, false),
+                    viewModel.OpenOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection, true, false),
+                    //Server
+                    viewModel.OpenSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection, true, false),
+                    viewModel.OpenOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection, true, false)
+                };
+
+            await Task.WhenAll(tasks);
+
+            //DatabaseList.ItemsSource = viewModel.Databases;
+            SetDabaseCopyDbs();
+            LoadingCircle.Visibility = Visibility.Hidden;
+            RefreshDbListButton.IsEnabled = true;
+
+            //MessageBox.Show("Atualização Finalizada.");
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -389,7 +433,7 @@ namespace TrocaBaseGUI.Views
                 orderBy = "ad";
             }
 
-            SetDatabaseListFilter(databasesCopy);
+            SetDatabaseListFiltered(databasesCopy);
             Debug.WriteLine($"\n\n{orderBy}\n\n");
         }
 
@@ -408,7 +452,7 @@ namespace TrocaBaseGUI.Views
                 orderBy = "dd";
             }
 
-            SetDatabaseListFilter(databasesCopy);
+            SetDatabaseListFiltered(databasesCopy);
             Debug.WriteLine($"\n\n{orderBy}\n\n");
         }
 

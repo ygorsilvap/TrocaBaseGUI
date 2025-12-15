@@ -32,6 +32,13 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
         set { password = value; OnPropertyChanged(); }
     }
 
+    private string environment;
+    public string Environment
+    {
+        get => environment;
+        set { environment = value; OnPropertyChanged(); }
+    }
+
     private bool useIntegratedSecurity = true;
     public bool UseIntegratedSecurity
     {
@@ -41,17 +48,6 @@ public class SqlServerConnectionModel : INotifyPropertyChanged
     public bool IsValid()
     {
         return string.IsNullOrEmpty(Server);// || string.IsNullOrEmpty(Password);
-    }
-    public string GetConnectionString(SqlServerConnectionModel sqlServerConnection)
-    {
-        if (String.IsNullOrEmpty(sqlServerConnection.Password))
-        {
-            return $"Server={sqlServerConnection.Server};Integrated Security=True;TrustServerCertificate=True;";
-        }
-        else
-        {
-            return $"Server={sqlServerConnection.Server};User Id={sqlServerConnection.Username};Password={sqlServerConnection.Password};TrustServerCertificate=True;";
-        }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
