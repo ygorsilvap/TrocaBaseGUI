@@ -8,12 +8,12 @@ namespace TrocaBaseGUI.Properties.Constants
 {
     public static class GlobalStrings
     {
-        public const string Bravos2C = "bravos.exe";
-        public const string Bravos3C = "bravosclient.exe";
-        public const string LinxDMS2C = "apollo.exe";
-        public const string LinxDMS3C = "apolloclient.exe";
-        public const string Autoshop = "linxautoshop.exe";
-        public const string LinxListener = "linxlistener.exe";
+        public const string Bravos2C = "Bravos.exe";
+        public const string Bravos3C = "BravosClient.exe";
+        public const string LinxDMS2C = "Apollo.exe";
+        public const string LinxDMS3C = "ApolloClient.exe";
+        public const string Autoshop = "LinxAutoshop.exe";
+        public const string LinxListener = "LinxListener.exe";
 
         public const string ConexaoDat = "conexao.dat";
         public const string ConexaoServidorDat = "conexaoservidor.dat";

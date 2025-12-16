@@ -232,7 +232,7 @@ namespace TrocaBaseGUI.ViewModels
             var conexaoService = conexaoFileService;
             //int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
-            if (sysDirectory.Tier == 3 && !conexaoService.is3CSettingsValid(Conexao3Camadas))
+            if (sysDirectory.Tier == 3 && !conexaoService.Is3CSettingsValid(Conexao3Camadas))
             {
                 return;
             }

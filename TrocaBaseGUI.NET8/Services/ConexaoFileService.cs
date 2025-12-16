@@ -248,33 +248,33 @@ namespace TrocaBaseGUI.Services
             //Debug.WriteLine($"\n\n'{redirecionaSettings}'\n\n");
         }
 
-        public bool isVerifierPortSet(ConexaoFileModel conexao)
+        public bool IsVerifierPortSet(ConexaoFileModel conexao)
         {
             return !string.IsNullOrEmpty(conexao.VerifierPort);
         }
-        public bool istRedirectorPortSet(ConexaoFileModel conexao)
+        public bool IstRedirectorPortSet(ConexaoFileModel conexao)
         {
             return !string.IsNullOrEmpty(conexao.RedirectPort);
         }
-        public bool isPortsSet(ConexaoFileModel conexao)
+        public bool IsPortsSet(ConexaoFileModel conexao)
         {
             return conexao.Ports.Count(p => string.IsNullOrEmpty(p.Port)) == 0 && !conexao.Ports.Any(p => string.IsNullOrEmpty(p.Port));
         }
 
-        public bool is3CSettingsValid(ConexaoFileModel conexao)
+        public bool Is3CSettingsValid(ConexaoFileModel conexao)
         {
-            if (!isVerifierPortSet(conexao))
+            if (!IsVerifierPortSet(conexao))
             {
                 MessageBox.Show("Preencha o campo 'Porta Verificador'.", "Campo obrigatório", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //return false;
             }
-            if (!istRedirectorPortSet(conexao))
+            if (!IstRedirectorPortSet(conexao))
             {
                 MessageBox.Show("Preencha o campo 'Porta Redirecionador'.", "Campo obrigatório", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //return false;
             }
-            Debug.WriteLine($"\n\nports: {isPortsSet(conexao)}\n\n");
-            if (!isPortsSet(conexao))
+            Debug.WriteLine($"\n\nports: {IsPortsSet(conexao)}\n\n");
+            if (!IsPortsSet(conexao))
             {
                 if (conexao.Ports.Any(p => string.IsNullOrEmpty(p.Port)))
                 {

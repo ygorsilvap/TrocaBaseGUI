@@ -9,12 +9,12 @@ namespace TrocaBaseGUI.Models
     {
         public SysDirectoryModel() { }
 
-        public SysDirectoryModel(string address, string fullPathAddress, string exeFile, ObservableCollection<string> exeList, int selectedBase = -1)
+        public SysDirectoryModel(string address, string fullPathAddress, List<string> mainExeFiles, ObservableCollection<string> exeFiles, int selectedBase = -1)
         {
             Folder = address;
             Path = fullPathAddress;
-            MainExeFile = exeFile;
-            ExeList = exeList;
+            MainExeFiles = mainExeFiles;
+            ExeFiles = exeFiles;
             SysDatabase = selectedBase;
         }
 
@@ -50,20 +50,28 @@ namespace TrocaBaseGUI.Models
             { tier = value; OnPropertyChanged(); }
         }
 
-        private string mainExeFile;
-        public string MainExeFile
+        //private string mainExeFile;
+        //public string MainExeFile
+        //{
+        //    get => mainExeFile;
+        //    set
+        //    { mainExeFile = value; OnPropertyChanged(); }
+        //}
+
+        private List<string> mainExeFiles;
+        public List<string> MainExeFiles
         {
-            get => mainExeFile;
+            get => mainExeFiles;
             set
-            { mainExeFile = value; OnPropertyChanged(); }
+            { mainExeFiles = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<string> exeList;
-        public ObservableCollection<string> ExeList
+        private ObservableCollection<string> exeFiles;
+        public ObservableCollection<string> ExeFiles
         {
-            get => exeList;
+            get => exeFiles;
             set
-            { exeList = value; OnPropertyChanged(); }
+            { exeFiles = value; OnPropertyChanged(); }
         }
 
         private int sysDatabase = -1;

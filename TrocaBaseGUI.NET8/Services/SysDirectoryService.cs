@@ -91,10 +91,34 @@ namespace TrocaBaseGUI.Services
             return exeList;
         }
 
+        public List<string> GetSysFound(string path)
+        {
+            var systemsFound = new List<string>();
+
+            bool bravos2c = File.Exists($"{path}\\{GlobalStrings.Bravos2C}");
+            bool bravos3c = File.Exists($"{path}\\{GlobalStrings.Bravos3C}");
+            bool apollo2c = File.Exists($"{path}\\{GlobalStrings.LinxDMS2C}");
+            bool apollo3c = File.Exists($"{path}\\{GlobalStrings.LinxDMS3C}");
+            bool autoshop = File.Exists($"{path}\\{GlobalStrings.Autoshop}");
+
+            if (bravos2c)
+                systemsFound.Add(GlobalStrings.Bravos2C.Remove(GlobalStrings.Bravos2C.Length-4));
+            if(bravos3c)
+                systemsFound.Add(GlobalStrings.Bravos3C.Remove(GlobalStrings.Bravos3C.Length - 4));
+            if (apollo2c)
+                systemsFound.Add(GlobalStrings.LinxDMS2C.Remove(GlobalStrings.LinxDMS2C.Length - 4));
+            if (apollo3c)
+                systemsFound.Add(GlobalStrings.LinxDMS3C.Remove(GlobalStrings.LinxDMS3C.Length - 4));
+            if (autoshop)
+                systemsFound.Add(GlobalStrings.Autoshop.Remove(GlobalStrings.Autoshop.Length - 4));
+
+            return systemsFound;
+        }
+
         public void AddDirectory(ObservableCollection<SysDirectoryModel> directoryList, string directory)
         {
             string sysFolder = $"{Path.GetFileName(directory)}";
-            string SysExeFile = GetSysExeFile(directory);
+            var mainExeFiles = GetSysFound(directory);
             ObservableCollection<string> exeList = GetExeList(directory);
             int id = directoryList.Count < 1 ? 0 : directoryList.Count;
 
@@ -103,8 +127,8 @@ namespace TrocaBaseGUI.Services
                 Id = id,
                 Folder = sysFolder,
                 Path = directory,
-                MainExeFile = SysExeFile,
-                ExeList = exeList,
+                MainExeFiles = mainExeFiles,
+                ExeFiles = exeList,
                 Tier = GetTier(directory)
             };
 
@@ -125,8 +149,8 @@ namespace TrocaBaseGUI.Services
                 dir.Id = id;
                 dir.Folder = $"{Path.GetFileName(directory)}";
                 dir.Path = directory;
-                dir.MainExeFile = GetSysExeFile(directory);
-                dir.ExeList = GetExeList(directory);
+                dir.MainExeFiles = GetSysFound(directory);
+                dir.ExeFiles = GetExeList(directory);
                 dir.Tier = GetTier(directory);
             }
         }
@@ -146,9 +170,10 @@ namespace TrocaBaseGUI.Services
         {
             foreach (var dir in directoryList)
             {
-                dir.MainExeFile = GetSysExeFile(dir.Path);
-                dir.ExeList = GetExeList(dir.Path);
+                dir.MainExeFiles = GetSysFound(dir.Path);
+                dir.ExeFiles = GetExeList(dir.Path);
             }
+
         }
     }
 }

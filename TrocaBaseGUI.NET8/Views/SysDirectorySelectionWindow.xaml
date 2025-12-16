@@ -64,7 +64,7 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <Button Content="📁" x:Name="SysDirectorySelectionBtn" Click="SysDirectorySelectionBtn_Click" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="315,28,0,0">
+                <Button Content="📁" x:Name="SysDirectorySelectionBtn" Click="SysDirectorySelectionBtn_Click" ToolTip="Selecionar Diretório" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="315,28,0,0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border x:Name="Border"
@@ -94,7 +94,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Content="➕" Click="AddDirectory_Click" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,28,20,0">
+                <Button Content="➕" Click="AddDirectory_Click" ToolTip="Adicionar Diretório" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,28,20,0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border x:Name="Border"
@@ -124,7 +124,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Content="⟲" Click="UpdateSysDirectoriesFiles_Click" Foreground="#411e5a" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Top" Height="24" Margin="317,-7,43,0">
+                <Button Content="⟲" Click="UpdateSysDirectoriesFiles_Click" ToolTip="Atualizar todos os diretórios" Foreground="#411e5a" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Top" Height="24" Margin="317,-7,43,0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border x:Name="Border"
@@ -179,7 +179,7 @@
                                         </Style>
                                     </TextBox.Style>
                                 </TextBox>
-                                <Button Content="📁" x:Name="SysDirectoryEditBtn" Click="SysDirectoryEditBtn_Click" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="5,3,0,0">
+                                <Button Content="📁" x:Name="SysDirectoryEditBtn" Click="SysDirectoryEditBtn_Click" ToolTip="Selecionar Diretório" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="5,3,0,0">
                                     <Button.Template>
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border x:Name="Border"
@@ -209,7 +209,7 @@
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Content="🗑️" Click="DeleteDirectory_Click" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="5,3,0,0" Width="16">
+                                <Button Content="🗑️" Click="DeleteDirectory_Click" ToolTip="Excluir Diretório" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="5,3,0,0" Width="16">
                                     <Button.Template>
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border x:Name="Border"
@@ -243,7 +243,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Button Content="🗑️" Click="DeleteAllSysDirectoryList_Click" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,-3,20,0">
+                <Button Content="🗑️" Click="DeleteAllSysDirectoryList_Click" ToolTip="Excluir todos os diretórios" Foreground="#411e5a" FontSize="13" VerticalAlignment="Top" Height="22" Margin="340,-3,20,0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border x:Name="Border"

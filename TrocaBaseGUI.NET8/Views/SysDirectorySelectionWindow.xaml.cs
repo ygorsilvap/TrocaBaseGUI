@@ -77,7 +77,8 @@ namespace TrocaBaseGUI.Views
 
             if (del.Equals("yes"))
             {
-                //Debug.WriteLine($"\n\n\nPath para deletar: {item.Id} - {item.Path}\n\n\n");
+                if(item.Id == viewModel.appState.SelectedFolder.Id)
+                    viewModel.appState.SelectedFolder = null;
 
                 viewModel.sysDirectoryService.DeleteDirectory(viewModel.SysDirectoryList, item.Id);
 
@@ -129,7 +130,9 @@ namespace TrocaBaseGUI.Views
 
                 viewModel.sysDirectoryService.AddDirectory(viewModel.SysDirectoryList, SysDirectoryTextBox.Text);
 
-                if(viewModel.SysDirectoryList.Count > 1 && viewModel.SysDirectoryList.Count > sysDirectoryCount)
+                viewModel.appState.SelectedFolder = viewModel.SysDirectoryList.LastOrDefault();
+
+                if (viewModel.SysDirectoryList.Count > 1 && viewModel.SysDirectoryList.Count > sysDirectoryCount)
                 {
                     MainBorder.Height += 27;
                     sysDirectorySelectionWindow.Top -= 15;

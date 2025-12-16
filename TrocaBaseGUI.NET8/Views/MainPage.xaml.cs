@@ -60,33 +60,6 @@ namespace TrocaBaseGUI.Views
             SetSelectedDatabase(selectedDatabaseId);
 
             SetDabaseCopyDbs();
-
-            //if (viewModel.Databases == null || viewModel.Databases.Count == 0)
-            //{
-            //    var tasks = new List<Task>
-            //    {
-            //        //Local
-            //        viewModel.openSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection),
-            //        viewModel.openOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection),
-            //        //Server
-            //        viewModel.openSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection),
-            //        viewModel.openOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection)
-            //    };
-
-            //    await Task.WhenAll(tasks);
-            //}
-
-            //databasesCopy.Clear();
-
-            //foreach (var db in viewModel.Databases)
-            //{
-            //    DatabaseService.SetDisplayName(db, db.DisplayName);
-            //    databasesCopy.Add(db);
-            //}
-
-            //viewModel.DbService.SortDatabasesByName(databasesCopy);
-
-            //SetDatabaseListFiltered(databasesCopy);
         }
 
         private void SetDabaseCopyDbs()
@@ -154,7 +127,8 @@ namespace TrocaBaseGUI.Views
 
         public void SetExesSelection()
         {
-            secondaryExe = exesList.IsNullOrEmpty() ? string.Empty :
+            secondaryExe = exesList.IsNullOrEmpty() || !exesList.Any(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)) ? 
+                string.Empty :
                 exesList.FirstOrDefault(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)).ToLower();
 
             secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ?
@@ -188,6 +162,7 @@ namespace TrocaBaseGUI.Views
                 MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             var rb = sender as RadioButton;
@@ -229,15 +204,33 @@ namespace TrocaBaseGUI.Views
 
             if (selectedItem == null) {
                 mainExe = string.Empty;
+                MainExesList.ItemsSource = new List<string>();
                 ExesList.ItemsSource = new ObservableCollection<string>();
                 selectedDatabaseId = -1;
+                SetExesSelection();
+                MainExesList.Visibility = Visibility.Hidden;
                 return;
             }
 
-            exesList = selectedItem.ExeList;
+            exesList = selectedItem.ExeFiles;
             ExesList.ItemsSource = exesList;
 
-            mainExe = selectedItem.MainExeFile;
+
+            if(selectedItem.MainExeFiles.Count > 1)
+            {
+                MainExesList.Visibility = Visibility.Visible;
+                OpenMainExeButtonText.Margin = new Thickness(0,0,10,0);
+                MainExesList.ItemsSource = selectedItem.MainExeFiles;
+
+                mainExe = selectedItem.MainExeFiles[0];
+            }
+            else
+            {
+                MainExesList.Visibility = Visibility.Hidden;
+                OpenMainExeButtonText.Margin = new Thickness(0, 0, 0, 0);
+                mainExe = selectedItem.MainExeFiles[0];
+            }
+
             SetExesSelection();  
 
             //Revisar necessidade dessa variável
@@ -265,14 +258,13 @@ namespace TrocaBaseGUI.Views
             //Debug.WriteLine($"\nExeListSelected: {selectedItem}\n");
         }
 
-        private void MainExesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MainExeFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
             var selectedItem = comboBox.SelectedItem as string;
 
-            //mainExe = selectedItem;
-            //OpenSecondaryExeButtonText.Text = $"Iniciar \n{selectedItem}";
-            //secondaryExe = selectedItem;
+            OpenMainExeButtonText.Text = $"Iniciar \n{selectedItem}";
+            mainExe = selectedItem;
         }
 
         private void OpenMainExeButton_Click(object sender, RoutedEventArgs e)
@@ -346,7 +338,7 @@ namespace TrocaBaseGUI.Views
             Clipboard.SetText(connString);
         }
 
-        private void dbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)
+        private void DbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(dbSearch.Text) || dbSearch.Text.Equals("Pesquisar Bases...", StringComparison.CurrentCultureIgnoreCase))
             {
@@ -355,7 +347,7 @@ namespace TrocaBaseGUI.Views
             }
         }
 
-        private void dbSearch_LostFocus(object sender, RoutedEventArgs e)
+        private void DbSearch_LostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(dbSearch.Text))
             {
@@ -374,7 +366,7 @@ namespace TrocaBaseGUI.Views
             Grid.Focus();
         }
 
-        private void dbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void DbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (dbSearch.Text.Equals("Pesquisar Bases...")) return;
 

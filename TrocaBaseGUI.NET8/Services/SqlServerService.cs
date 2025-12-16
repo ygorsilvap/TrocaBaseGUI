@@ -74,7 +74,7 @@ namespace TrocaBaseGUI.Services
 
                         //Debug.WriteLine($"\n\nsqls date: {date}\n\n");
 
-                        if (String.IsNullOrWhiteSpace(sqlServerConnection.Password))
+                        if (sqlServerConnection.Environment.Equals("local", StringComparison.OrdinalIgnoreCase))
                         {
                             databases.Add(new DatabaseModel { Name = reader.GetString(0), DbType = "SQL Server", Environment = "local", Server = sqlServerConnection.Server, ImportDate = date });
                         }
