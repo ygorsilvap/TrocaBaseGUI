@@ -35,7 +35,7 @@ namespace TrocaBaseGUI.Views
             DataContext = viewModel;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

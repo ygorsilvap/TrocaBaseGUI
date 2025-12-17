@@ -17,7 +17,7 @@
     <Grid Background="Transparent" >
         <Border x:Name="MainBorder" Background="#f5f4f3" CornerRadius="3" BorderBrush="#2a353a" BorderThickness="1" Padding="6" Width="390" VerticalAlignment="Center" Margin="8,0,2,0">
             <Grid x:Name="MainGrid" Background="Transparent" Margin="0,0,0,3">
-                <Button Click="Button_Click" Content="Voltar" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="150,10" >
+                <Button Click="ReturnButton_Click" Content="Voltar" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="150,10" >
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="Border"

@@ -75,22 +75,22 @@ namespace TrocaBaseGUI.Services
 
                 if (state != null)
                 {
-                    vm.SysDirectoryList = new ObservableCollection<SysDirectoryModel>(state.History);
-                    vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
-                    //MainViewModel.exeFile = state.ExeFile;
-                    vm.conexaoFile = state.ConexaoFile;
+                    //vm.SysDirectoryList = new ObservableCollection<SysDirectoryModel>(state.History);
+                    //vm.Databases = new ObservableCollection<DatabaseModel>(state.Databases);
+                    ////MainViewModel.exeFile = state.ExeFile;
+                    //vm.conexaoFile = state.ConexaoFile;
 
-                    vm.Conexao2Camadas = state.Conexao2Camadas ?? new ConexaoFileModel() { Tier = 2 };
-                    vm.Conexao3Camadas = state.Conexao3Camadas ?? new ConexaoFileModel() { Tier = 3 };
+                    //vm.Conexao2Camadas = state.Conexao2Camadas ?? new ConexaoFileModel() { Tier = 2 };
+                    //vm.Conexao3Camadas = state.Conexao3Camadas ?? new ConexaoFileModel() { Tier = 3 };
 
-                    vm.LocalSQLServerConnection = state.LocalSQLServerConnection;
-                    vm.ServerSQLServerConnection = state.ServerSQLServerConnection;
-                    vm.LocalOracleConnection = state.LocalOracleConnection;
-                    vm.ServerOracleConnection = state.ServerOracleConnection;
+                    //vm.LocalSQLServerConnection = state.LocalSQLServerConnection;
+                    //vm.ServerSQLServerConnection = state.ServerSQLServerConnection;
+                    //vm.LocalOracleConnection = state.LocalOracleConnection;
+                    //vm.ServerOracleConnection = state.ServerOracleConnection;
 
-                    vm.appState.LocalParams = state.LocalParams ?? new AppParams();
-                    vm.appState.ServerParams = state.ServerParams ?? new AppParams();
-                    vm.appState.SelectedFolder = state.SelectedFolder;
+                    //vm.appState.LocalParams = state.LocalParams ?? new AppParams();
+                    //vm.appState.ServerParams = state.ServerParams ?? new AppParams();
+                    //vm.appState.SelectedFolder = state.SelectedFolder;
 
                     //appState = state;
                 }
