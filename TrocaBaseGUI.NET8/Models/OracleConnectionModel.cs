@@ -45,7 +45,7 @@ public class OracleConnectionModel : INotifyPropertyChanged
 
     public bool IsValid()
     {
-        return string.IsNullOrEmpty(Server) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Port);
+        return !string.IsNullOrEmpty(Server); //|| string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Port);
     }
 
     public string GetConnectionString(OracleConnectionModel oracleConnection, string instance)

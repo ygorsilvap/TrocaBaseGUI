@@ -103,7 +103,7 @@ namespace TrocaBaseGUI.ViewModels
                 Databases[Databases.Count - 1].Id = Databases.Count - 1;
             });
 
-            foreach (var db in Databases)
+            foreach (var db in Databases.ToList())
             {
                 if (!databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
                                   d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
@@ -116,8 +116,8 @@ namespace TrocaBaseGUI.ViewModels
         public async Task OpenSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection, bool removeDb = false, bool showResult = true)
         {
             //Revisar lógica
-            //if (sqlServerConnection.IsValid())
-            //    return;
+            if (!sqlServerConnection.IsValid())
+                return;
 
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
@@ -134,9 +134,9 @@ namespace TrocaBaseGUI.ViewModels
             }
             else
             {
+                //Refatorar
                 if (removeDb)
                 {
-                    //Refatorar
                     var environment = sqlServerConnection.Environment;
                     var removable = Databases
                         .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s") && item.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase))
@@ -169,8 +169,8 @@ namespace TrocaBaseGUI.ViewModels
         public async Task OpenOracleConn(OracleService oracleService, OracleConnectionModel oracleConnection, bool removeDb = false, bool showResult = true)
         {
             //Revisar lógica
-            //if (oracleConnection.IsValid())
-            //    return;
+            if (!oracleConnection.IsValid())
+                return;
 
             List<String> instances = string.IsNullOrEmpty(oracleConnection.Instance) ?
                 oracleService.GetRunningInstances() : new List<string> { oracleConnection.Instance };

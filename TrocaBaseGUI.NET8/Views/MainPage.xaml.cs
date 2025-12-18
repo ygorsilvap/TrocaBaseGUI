@@ -153,13 +153,19 @@ namespace TrocaBaseGUI.Views
         {
             if (!String.IsNullOrEmpty(mainExe))
             {
-                Debug.WriteLine($"\n\nIDSelDb: {viewModel.SelectedDatabase.Id}\n\n");
-                //viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, SysDirectory.SelectedValue.ToString());
-                viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+                if(selectedSysDirectory.SysDatabase < 0)
+                {
+                    var del = MessageBox.Show("Ao selecionar uma base pela primeira vez em cada diretório, o conteúdo do arquivo de conexão será substituído pelo conteúdo gerado no programa.\n\nVocê deseja continuar?", "Selecionar base",
+                                MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                                .ToString().ToLower();
+
+                    if (del.Equals("yes"))
+                        viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+                }
             }
             else
             {
-                MessageBox.Show("Nenhum executável encontrado.\nSelecione um executável.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nenhum diretório selecionado.\nSelecione um diretório.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -384,8 +390,6 @@ namespace TrocaBaseGUI.Views
             LoadingCircle.Visibility = Visibility.Visible;
             RefreshDbListButton.IsEnabled = false;
 
-            Debug.WriteLine(viewModel.ServerSQLServerConnection);
-
             var tasks = new List<Task>
                 {
                     //Local
@@ -398,10 +402,14 @@ namespace TrocaBaseGUI.Views
 
             await Task.WhenAll(tasks);
 
-            //DatabaseList.ItemsSource = viewModel.Databases;
+            foreach (var item in viewModel.Databases)
+                Debug.WriteLine($"\n\ndb: {item.Id}\n\n");
+
             SetDabaseCopyDbs();
             LoadingCircle.Visibility = Visibility.Hidden;
             RefreshDbListButton.IsEnabled = true;
+
+
 
             //MessageBox.Show("Atualização Finalizada.");
         }
