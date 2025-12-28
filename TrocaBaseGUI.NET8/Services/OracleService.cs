@@ -31,6 +31,7 @@ namespace TrocaBaseGUI.Services
                 .ToList();
         }
 
+        //Colocar a função ValidateConnection dentro dessa função
         public async Task<List<DatabaseModel>> GetOracleDatabases(OracleConnectionModel oracleConnection, string instance)
         {
             string exception = "'SYS', 'SYSTEM', 'OUTLN', 'DBSNMP', 'APPQOSSYS', 'AUDSYS', 'CTXSYS', 'DBSFWUSER', 'GGSYS', 'GSMADMIN_INTERNAL', " +
@@ -106,7 +107,7 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
  
-        public async Task<bool> ValidateConnection(OracleConnectionModel oracleConnection, string instance, bool showResult = true, double timeoutSeconds = 3000)
+        public async Task<bool> ValidateConnection(OracleConnectionModel oracleConnection, string instance, bool showResult = true, double timeoutSeconds = 5000)
         {
             string connectionString = _connection.GetConnectionString(oracleConnection, instance);
             using var conn = new OracleConnection(connectionString);

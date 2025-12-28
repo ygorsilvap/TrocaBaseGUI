@@ -49,7 +49,7 @@ namespace TrocaBaseGUI.Services
                              File.Exists(Path.Combine(path, GlobalStrings.ConexaoRedirecionaDat)) &&
                              File.Exists(Path.Combine(path, GlobalStrings.ConexaoClienteDat));
 
-            return conexao2C ? 2 : conexao3C ? 3 : 0;
+            return conexao2C && !conexao3C ? 2 : conexao3C ? 3 : 0;
         }
 
         public SysDirectoryModel GetDir(ObservableCollection<SysDirectoryModel> directoryList, string path)

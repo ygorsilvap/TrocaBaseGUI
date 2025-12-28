@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
@@ -15,6 +16,7 @@ namespace TrocaBaseGUI.Views
         public DatabaseModel _db;
         public MainViewModel _viewModelDbs;
 
+        //Construtor para edição de base
         public EditDbPage(MainViewModel viewModelDbs, DatabaseModel db)
         {
             InitializeComponent();
@@ -25,6 +27,7 @@ namespace TrocaBaseGUI.Views
             _viewModelDbs = viewModelDbs;
         }
 
+        //Construtor para adição de base
         public EditDbPage(MainViewModel viewModelDbs)
         {
             InitializeComponent();
@@ -70,6 +73,9 @@ namespace TrocaBaseGUI.Views
                     serverInput.IsEnabled = false;
                 }
             }
+
+            ClearButton.Foreground = Brushes.Gray;
+            ClearButton.IsEnabled = _db.IsManualAdded;
         }   
 
         private void Return_Click(object sender, RoutedEventArgs e)
@@ -176,6 +182,12 @@ namespace TrocaBaseGUI.Views
             if (IsDbEmpty()) //|| _viewModelDbs.Databases.Contains(_db))
                 return;
 
+            if (!_db.IsManualAdded)
+            {
+                NavigationService.GoBack();
+                return;
+            }
+
             if (IsDbIn())
             {
                 MessageBox.Show("Base Repetida.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -199,6 +211,8 @@ namespace TrocaBaseGUI.Views
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
+            //if (!_db.IsManualAdded) return;
+
             _db = new DatabaseModel();
 
             nameInput.Text = String.Empty;

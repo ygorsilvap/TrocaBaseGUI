@@ -90,8 +90,10 @@ namespace TrocaBaseGUI.ViewModels
 
         }
 
-        public void SetDatabases(List<DatabaseModel> databases)
+        public void AddDatabases(List<DatabaseModel> databases)
         {
+            //string dbType = databases.FirstOrDefault().DbType;
+
             databases.ForEach(db =>
             {
                 if (Databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
@@ -103,14 +105,34 @@ namespace TrocaBaseGUI.ViewModels
                 Databases[Databases.Count - 1].Id = Databases.Count - 1;
             });
 
-            foreach (var db in Databases.ToList())
-            {
-                if (!databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                                  d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
-                                  d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
-                    Databases.Remove(db);
-            }
+            //foreach (var db in Databases.ToList())
+            //{
+            //    //base não está na lista de bases carregadas
+            //    if (!databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
+            //                      d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+            //                      d.DbType.Equals(dbType, StringComparison.OrdinalIgnoreCase)))
+            //        Databases.Remove(db);
+            //}
         }
+
+        public void RemoveDatabases(List<DatabaseModel> databases)
+        {
+            if (databases.Count <= 0) return;
+
+            string dbType = databases.FirstOrDefault().DbType;
+
+            foreach (var db in databases)
+            {
+                Databases.Remove(db);
+                if (SysDirectoryList.Any(d => d.SysDatabase == db.Id))
+                {
+                    SysDirectoryList.First(d => d.SysDatabase == db.Id).SysDatabase = -1;
+                }
+            }
+            if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith(dbType[0].ToString(), StringComparison.OrdinalIgnoreCase))
+                SelectedDatabase = null;
+        }
+
 
         //Refatorar
         public async Task OpenSqlConn(SqlServerService sqlservice, SqlServerConnectionModel sqlServerConnection, bool removeDb = false, bool showResult = true)
@@ -122,7 +144,7 @@ namespace TrocaBaseGUI.ViewModels
             if (await sqlservice.ValidateConnection(sqlServerConnection))
             {
                 var databases = await sqlservice.GetSqlServerDatabases(sqlServerConnection);
-                SetDatabases(databases);
+                AddDatabases(databases);
 
                 if(showResult)
                 {
@@ -134,29 +156,14 @@ namespace TrocaBaseGUI.ViewModels
             }
             else
             {
-                //Refatorar
                 if (removeDb)
                 {
-                    var environment = sqlServerConnection.Environment;
                     var removable = Databases
-                        .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s") && item.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase))
+                        .Where(item => item.DbType != null && item.DbType.ToLower().StartsWith("s") && item.Environment.Equals(sqlServerConnection.Environment, StringComparison.OrdinalIgnoreCase))
                         .ToList();
-
-                    foreach (var item in removable)
-                    {
-                        Databases.Remove(item);
-                        if(SysDirectoryList.Any(d => d.SysDatabase == item.Id))
-                        {
-                            SysDirectoryList.First(d => d.SysDatabase == item.Id).SysDatabase = -1;
-                        }
-                        Debug.WriteLine($"\n\ncount: {Databases.Count}\n\n");
-                    }
-                    if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith("s", StringComparison.OrdinalIgnoreCase))
-                        SelectedDatabase = null;
-
+                    
+                    RemoveDatabases(removable);
                 }
-                //DbService.SortDatabases(Databases);
-
                 if(showResult)
                 {
                     if (sqlServerConnection.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
@@ -180,7 +187,7 @@ namespace TrocaBaseGUI.ViewModels
                 if (await OracleService.ValidateConnection(oracleConnection, instance, showResult))
                 {
                     var databases = await oracleService.GetOracleDatabases(oracleConnection, instance);
-                    SetDatabases(databases);
+                    AddDatabases(databases);
 
                     if(showResult)
                     {
@@ -193,32 +200,15 @@ namespace TrocaBaseGUI.ViewModels
                     return;
                 }
 
-                if (Databases.Count() > 0 || removeDb)
+                if (removeDb)
                 {
                     var removable = Databases
                         .Where(db => db.DbType != null &&
                             db.DbType.ToLower().StartsWith("o") &&
                             db.Environment.Equals(oracleConnection.Environment, StringComparison.OrdinalIgnoreCase))
                         .ToList();
-
-
-                    foreach (var item in removable)
-                    {
-                        Databases.Remove(item);
-                        if (SysDirectoryList.Any(d => d.SysDatabase == item.Id))
-                        {
-                            SysDirectoryList.First(d => d.SysDatabase == item.Id).SysDatabase = -1;
-                        }
-                    }
-                    //removable.ForEach(db => {
-                    //    Debug.WriteLine($"\nRemovendo {db.Name} - {db.Environment}\n");
-                    //    Databases.Remove(db);
-                    //});
-
-                    if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith("o", StringComparison.OrdinalIgnoreCase))
-                        SelectedDatabase = null;
-
-                    //DbService.SortDatabases(Databases);
+                    
+                    RemoveDatabases(removable);
                 }
             }
         }

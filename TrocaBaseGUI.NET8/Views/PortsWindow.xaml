@@ -53,14 +53,14 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="1"/>
                             </Grid.RowDefinitions>
-                            
+
                             <Grid>
                                 <TextBlock Text="{Binding App}" FontSize="12" Padding="5,5,0,5" Margin="0,0,182,0"/>
                                 <Border Background="#f5f4f3" BorderBrush="#411e5a" BorderThickness="2" CornerRadius="5" 
-                                        Margin="138,5,128,5">
+                                        Margin="188,5,78,5">
                                     <TextBox x:Name="serverPort" 
                                          Padding="0,-1,0,1"
-                                         Height="15" Width="47"
+                                         Height="15" Width="48"
                                          Background="Transparent" 
                                          Foreground="black" 
                                          FontSize="12" 
@@ -68,11 +68,9 @@
                                          MaxLength="5" 
                                          TextAlignment="Center"
                                          Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" 
-                                         BorderThickness="0"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"/>
+                                         BorderThickness="0"/>
                                 </Border>
-                                <Border Background="#f5f4f3" BorderBrush="#411e5a" BorderThickness="2" CornerRadius="5" 
+                                <!--<Border Background="#f5f4f3" BorderBrush="#411e5a" BorderThickness="2" CornerRadius="5" 
                                         Margin="205,5,61,5">
                                     <TextBox x:Name="serverPort2" 
                                          Padding="0,-1,0,1"
@@ -87,7 +85,7 @@
                                          BorderThickness="0"
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"/>
-                                </Border>
+                                </Border>-->
                             </Grid>
                             <Border Height="1" Background="#411e5a" Grid.Row="1" Margin="3,2,17,-2"/>
                         </Grid>

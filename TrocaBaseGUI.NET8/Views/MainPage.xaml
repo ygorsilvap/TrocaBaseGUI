@@ -613,10 +613,19 @@
                                         <Setter Property="Foreground" Value="#f5f4f3"/>
                                     </Style>
                                 </ContextMenu.Resources>
-                                <MenuItem Header="Renomear" Click="EditarBase_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
+                                <MenuItem Header="Renomear" Click="EditarBase_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0">
+                                    <MenuItem.Style>
+                                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Environment}" Value="server">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </MenuItem.Style>
+                                </MenuItem>
                                 <MenuItem Header="Copiar Dados de Conexão" Click="CopyStringClick_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
                                 <!--<MenuItem Header="Exportar Dados de Conexão" IsEnabled="false" Click="ExportConnectionData_Click" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />-->
-
                                 <MenuItem Header="Excluir Base" Click="DeleteDatabase_Click" IsEnabled="{Binding IsManualAdded}" Background="#5C2A80" Foreground="#f5f4f3" Margin="-2,0,0,0" />
                             </ContextMenu>
                         </Grid.ContextMenu>

@@ -55,7 +55,8 @@ namespace TrocaBaseGUI.Services
                             END
                             '
                             FROM sys.databases
-                            WHERE database_id > 4; -- ignora bancos de sistema
+                            WHERE database_id > 4  -- ignora bancos de sistema
+                                    AND HAS_DBACCESS(name) = 1;  -- busca por bancos que são acessíveis com usuário CNP
 
                             EXEC sp_executesql @sql;
 
@@ -91,9 +92,9 @@ namespace TrocaBaseGUI.Services
 
 
         //Refatorar
-        public async Task<Boolean> ValidateConnection(SqlServerConnectionModel sqlServerConnection, double timeoutSeconds = 3000)
+        public async Task<Boolean> ValidateConnection(SqlServerConnectionModel sqlServerConnection, double timeoutSeconds = 5000)
         {
-            if (sqlServerConnection.IsValid())
+            if (!sqlServerConnection.IsValid())
                 return false;
 
             try

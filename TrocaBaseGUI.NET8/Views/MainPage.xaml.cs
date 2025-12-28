@@ -151,6 +151,10 @@ namespace TrocaBaseGUI.Views
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            var listBox = sender as ListBox;
+
+            if (listBox.SelectedItem == null) return;
+
             if (!String.IsNullOrEmpty(mainExe))
             {
                 if(selectedSysDirectory.SysDatabase < 0)
@@ -161,7 +165,11 @@ namespace TrocaBaseGUI.Views
 
                     if (del.Equals("yes"))
                         viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+
+                    return;
                 }
+                    
+                viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
             }
             else
             {
