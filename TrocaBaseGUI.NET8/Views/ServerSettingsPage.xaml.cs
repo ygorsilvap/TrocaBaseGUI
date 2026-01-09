@@ -13,80 +13,116 @@ namespace TrocaBaseGUI.Views
     public partial class ServerSettingsPage : Page
     {
 
-        public MainViewModel _viewModel;
+        public MainViewModel viewModel;
 
         public ServerSettingsPage()
         {
             InitializeComponent();
 
             var mainWindow = (SettingsWindow)Application.Current.MainWindow;
-            _viewModel = mainWindow.viewModel;
-            DataContext = _viewModel;
+            viewModel = mainWindow.viewModel;
+            DataContext = viewModel;
         }
 
         private void ServerPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(_viewModel.ServerOracleConnection.Password))
-                OraclePasswordMask.Text = new string('•', _viewModel.ServerOracleConnection.Password.Length);
+            if (!string.IsNullOrEmpty(viewModel.ServerOracleConnection.Password))
+                OraclePasswordMask.Text = new string('•', viewModel.ServerOracleConnection.Password.Length);
 
-            if (!string.IsNullOrEmpty(_viewModel.ServerSQLServerConnection.Password))
-                SqlPasswordMask.Text = new string('•', _viewModel.ServerSQLServerConnection.Password.Length);
+            if (!string.IsNullOrEmpty(viewModel.ServerSQLServerConnection.Password))
+                SqlPasswordMask.Text = new string('•', viewModel.ServerSQLServerConnection.Password.Length);
+
+            if (viewModel.isServerSqlLoading)
+                SetLoadingState("s");
+
+            if (viewModel.isServerOracleLoading)
+                SetLoadingState("o");
         }
 
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
         {
-            SqlServerConnectionTestButton.IsEnabled = false;
-            SqlServerConnectionTestButton.Content = string.Empty;
-            SqlServerLoadingCircle.Visibility = Visibility.Visible;
+            var dbType = sender as Button;
+
+            viewModel.isServerSqlLoading = true;
+            SetLoadingState(dbType.Name);
 
             var tasks = new List<Task>
                 {
-                    _viewModel.OpenSqlConn(_viewModel.SqlService, _viewModel.ServerSQLServerConnection)
+                    viewModel.OpenSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection)
                 };
 
             await Task.WhenAll(tasks);
 
-            SqlServerConnectionTestButton.IsEnabled = true;
-            SqlServerLoadingCircle.Visibility = Visibility.Hidden;
-            SqlServerConnectionTestButton.Content = "Testar Conexão";
+            viewModel.isServerSqlLoading = false;
+            SetLoadingState(dbType.Name);
         }
 
         private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
         {
-            OracleConnectionTestButton.IsEnabled = false;
-            OracleConnectionTestButton.Content = string.Empty;
-            OracleLoadingCircle.Visibility = Visibility.Visible;
+            var dbType = sender as Button;
+
+            viewModel.isServerOracleLoading = true;
+            SetLoadingState(dbType.Name);
 
             var tasks = new List<Task>
                 {
-                    _viewModel.OpenOracleConn(_viewModel.OracleService, _viewModel.ServerOracleConnection)
+                    viewModel.OpenOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection)
                 };
 
             await Task.WhenAll(tasks);
 
-            OracleConnectionTestButton.IsEnabled = true;
-            OracleLoadingCircle.Visibility = Visibility.Hidden;
-            OracleConnectionTestButton.Content = "Testar Conexão";
+            viewModel.isServerOracleLoading = false;
+            SetLoadingState(dbType.Name);
         }
         private void SqlServerPassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ServerSQLServerConnection.Password = SqlServerPassword.Text;
+            viewModel.ServerSQLServerConnection.Password = SqlServerPassword.Text;
 
             int pwdLength = SqlServerPassword.Text.Length;
             SqlPasswordMask.Text = new string('•', pwdLength);
-
-            Debug.WriteLine($"\n\nsqlpwd: {_viewModel.ServerSQLServerConnection.Password}\n\n");
         }
 
         private void OraclePassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ServerOracleConnection.Password = OraclePassword.Text;
+            viewModel.ServerOracleConnection.Password = OraclePassword.Text;
 
             int pwdLength = OraclePassword.Text.Length;
             OraclePasswordMask.Text = new string('•', pwdLength);
-
-            Debug.WriteLine($"\n\nsqlpwd: {_viewModel.ServerOracleConnection.Password}\n\n");
-
         }
+
+        private void SetLoadingState(string dbType)
+        {
+            if (dbType.StartsWith("s", StringComparison.OrdinalIgnoreCase))
+            {
+                if (viewModel.isServerSqlLoading)
+                {
+                    SqlServerConnectionTestButton.IsEnabled = false;
+                    SqlServerConnectionTestButton.Content = string.Empty;
+                    SqlServerLoadingCircle.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SqlServerConnectionTestButton.IsEnabled = true;
+                    SqlServerLoadingCircle.Visibility = Visibility.Hidden;
+                    SqlServerConnectionTestButton.Content = "Testar Conexão";
+                }
+            }
+            else
+            {
+                if (viewModel.isServerOracleLoading)
+                {
+                    OracleConnectionTestButton.IsEnabled = false;
+                    OracleConnectionTestButton.Content = string.Empty;
+                    OracleLoadingCircle.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    OracleConnectionTestButton.IsEnabled = true;
+                    OracleLoadingCircle.Visibility = Visibility.Hidden;
+                    OracleConnectionTestButton.Content = "Testar Conexão";
+                }
+            }
+        }
+
     }
 }

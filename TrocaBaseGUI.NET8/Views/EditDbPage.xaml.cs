@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TrocaBaseGUI.Utils;
 using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
@@ -202,8 +203,9 @@ namespace TrocaBaseGUI.Views
 
             if (!_viewModelDbs.Databases.Contains(_db) && IsDbValid())
             {
+                _db.Id = UtilityService.IdGen();
                 _viewModelDbs.Databases.Add(_db);
-                _viewModelDbs.Databases[_viewModelDbs.Databases.Count - 1].Id = _viewModelDbs.Databases.Count - 1;
+                //_viewModelDbs.Databases[_viewModelDbs.Databases.Count - 1].Id = _viewModelDbs.Databases.Count - 1;
                 NavigationService.GoBack();
                 return;
             }

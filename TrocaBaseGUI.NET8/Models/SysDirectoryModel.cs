@@ -9,7 +9,7 @@ namespace TrocaBaseGUI.Models
     {
         public SysDirectoryModel() { }
 
-        public SysDirectoryModel(string address, string fullPathAddress, List<string> mainExeFiles, ObservableCollection<string> exeFiles, int selectedBase = -1)
+        public SysDirectoryModel(string address, string fullPathAddress, List<string> mainExeFiles, ObservableCollection<string> exeFiles, string selectedBase = "")
         {
             Folder = address;
             Path = fullPathAddress;
@@ -74,8 +74,8 @@ namespace TrocaBaseGUI.Models
             { exeFiles = value; OnPropertyChanged(); }
         }
 
-        private int sysDatabase = -1;
-        public int SysDatabase
+        private string sysDatabase;
+        public string SysDatabase
         {
             get => sysDatabase;
             set

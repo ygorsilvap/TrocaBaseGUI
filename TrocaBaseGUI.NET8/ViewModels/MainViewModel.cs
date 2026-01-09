@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -9,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.IdentityModel.Tokens;
 using TrocaBaseGUI.Models;
 using TrocaBaseGUI.Services;
+using TrocaBaseGUI.Utils;
 using MessageBox = System.Windows.MessageBox;
 
 namespace TrocaBaseGUI.ViewModels
@@ -70,6 +72,13 @@ namespace TrocaBaseGUI.ViewModels
         //public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
         public AppState appState { get; set; } = new AppState();
         public AppStateService appStateService { get; set; } = new AppStateService();
+        public bool isDbListLoading;
+
+        public bool isLocalSqlLoading;
+        public bool isLocalOracleLoading;
+
+        public bool isServerSqlLoading;
+        public bool isServerOracleLoading;
 
         public MainViewModel()
         {
@@ -92,7 +101,8 @@ namespace TrocaBaseGUI.ViewModels
 
         public void AddDatabases(List<DatabaseModel> databases)
         {
-            //string dbType = databases.FirstOrDefault().DbType;
+            string dbType = databases.FirstOrDefault().DbType;
+            string environment = databases.FirstOrDefault().Environment;
 
             databases.ForEach(db =>
             {
@@ -101,18 +111,25 @@ namespace TrocaBaseGUI.ViewModels
                                   d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)))
                     return;
 
+                db.Id = UtilityService.IdGen();
                 Databases.Add(db);
-                Databases[Databases.Count - 1].Id = Databases.Count - 1;
+                //Databases.FirstOrDefault(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
+                //                  d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+                //                  d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)).Id = UtilityService.IdGen();
+                //Databases[Databases.Count - 1].Id = Databases.Count - 1;
+
             });
 
-            //foreach (var db in Databases.ToList())
-            //{
-            //    //base não está na lista de bases carregadas
-            //    if (!databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-            //                      d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
-            //                      d.DbType.Equals(dbType, StringComparison.OrdinalIgnoreCase)))
-            //        Databases.Remove(db);
-            //}
+            foreach (var db in Databases.Where(db => db.DbType.Equals(dbType) && db.Environment.Equals(environment)).ToList())
+            {
+                bool isDbThere = databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
+                                  d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
+                                  d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase));
+
+                //base não está na lista de bases carregadas
+                if (!isDbThere)
+                    Databases.Remove(db);
+            }
         }
 
         public void RemoveDatabases(List<DatabaseModel> databases)
@@ -126,7 +143,7 @@ namespace TrocaBaseGUI.ViewModels
                 Databases.Remove(db);
                 if (SysDirectoryList.Any(d => d.SysDatabase == db.Id))
                 {
-                    SysDirectoryList.First(d => d.SysDatabase == db.Id).SysDatabase = -1;
+                    SysDirectoryList.First(d => d.SysDatabase == db.Id).SysDatabase = string.Empty;
                 }
             }
             if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith(dbType[0].ToString(), StringComparison.OrdinalIgnoreCase))
@@ -213,24 +230,14 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public void SelectBase(ObservableCollection<DatabaseModel> dbs, int id, SysDirectoryModel sysDirectory)
+        public void SelectDatabase(ObservableCollection<DatabaseModel> dbs, string id, SysDirectoryModel sysDirectory)
         {
-            //foreach (var item in Databases)
-            //{
-            //    Debug.WriteLine($"\n Id: {item.Id}, Database: {item.Name}, Type: {item.DbType}, Environment: {item.Environment}, Server: {item.Server}\n");
-            //}
             var conexaoService = conexaoFileService;
-            //int tier = conexaoService.GetTier(conexaoService.ConexaoFilePath);
 
             if (sysDirectory.Tier == 3 && !conexaoService.Is3CSettingsValid(Conexao3Camadas))
             {
                 return;
             }
-
-            //Rever a necessidade disso
-            //string cnxPath = conexaoFileService.ConexaoFilePath;
-            //string selectedCnx = SysDirectoryList.Any(d => d.Path.Equals(cnxPath)) ?
-            //    SysDirectoryList.FirstOrDefault(d => d.Path.Equals(cnxPath)).Path : string.Empty;
 
             if (string.IsNullOrEmpty(sysDirectory.Path))
                 return;
@@ -243,8 +250,6 @@ namespace TrocaBaseGUI.ViewModels
 
             if (sysDirectory.Tier == 3)
             {
-                //File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
-                //File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas , appState.ServerParams)));
                 File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
                 File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas, appState.ServerParams)));
             } else
@@ -266,23 +271,6 @@ namespace TrocaBaseGUI.ViewModels
         {
             return new ObservableCollection<DatabaseModel>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
         }
-
-        //public void AddDirectory(string folder, string path, string exe, ObservableCollection<string> exeList)
-        //{
-        //    var existente = SysDirectoryList.FirstOrDefault(d => d.Folder == folder);
-        //    if (existente != null)
-        //    {
-        //        SysDirectoryList.Remove(existente);
-        //    }
-
-        //    SysDirectoryList.Insert(0, new SysDirectoryModel(folder, path, exe, exeList));
-        //    exeFile = exe;
-
-        //    while (SysDirectoryList.Count > MaxSysDirectorySize)
-        //    {
-        //        SysDirectoryList.RemoveAt(SysDirectoryList.Count - 1);
-        //    }
-        //}
 
         //Refazer
         public void ClearApp()

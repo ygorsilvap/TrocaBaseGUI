@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using MessagePack;
 using Microsoft.IdentityModel.Tokens;
 using TrocaBaseGUI.Models;
@@ -30,7 +31,7 @@ namespace TrocaBaseGUI.Views
         public string sysSelected;
         public string mainExe;
         public string secondaryExe;
-        public int selectedDatabaseId;
+        public string selectedDatabaseId;
         public SysDirectoryModel selectedSysDirectory = new SysDirectoryModel();
         public ObservableCollection<string> exesList { get; set; } = new ObservableCollection<string>();
 
@@ -47,6 +48,13 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
+
+            //foreach (var db in viewModel.Databases)
+            //{
+            //    Debug.WriteLine($"\nId: {db.Id}, Db: {db.Name}, Env: {db.Environment}, DbT: {db.DbType}");
+            //}
+
+            //UtilityService.IdGen();
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -60,6 +68,8 @@ namespace TrocaBaseGUI.Views
             SetSelectedDatabase(selectedDatabaseId);
 
             SetDabaseCopyDbs();
+
+            SetLoadingState();
         }
 
         private void SetDabaseCopyDbs()
@@ -99,30 +109,8 @@ namespace TrocaBaseGUI.Views
             }
 
             ObservableCollection<DatabaseModel> bases = viewModel.EnvironmentFilter(environment, db);
-            viewModel.DbService.SortDatabasesByName(bases);
             DatabaseList.ItemsSource = viewModel.DbTypeFilter(type, bases);
-        }
-
-        public void Refresh()
-        {
-            //IsThereSysDirectory.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Nenhum executável encontrado.\nSelecione um executável." : "";
-
-            //dbList = new ObservableCollection<DatabaseModel>(viewModel.Databases ?? new ObservableCollection<DatabaseModel>());
-
-            ////Arrumar essa gambiarra sem vergonha
-            //if(String.IsNullOrEmpty(dbSearch.Text))
-            //{
-            //    dbSearch.Text = dbSearch.Text;
-            //} else
-            //{
-            //    lstTodosBancos.ItemsSource = dbList;
-            //}
-
-            //RadioButton_Checked(rbTodos, null);
-            //tabSelected = TabControl.SelectedIndex;
-            //OpenSysButtonText.Text = string.IsNullOrWhiteSpace(MainViewModel.exeFile) ? "Iniciar sistema" : $"Iniciar \n{StringUtils.ToCapitalize(MainViewModel.exeFile)}";
-
-            //GetFilter(dbList);
+            viewModel.DbService.SortDatabasesByName(bases);
         }
 
         public void SetExesSelection()
@@ -137,16 +125,16 @@ namespace TrocaBaseGUI.Views
             string mainExecutable = !string.IsNullOrEmpty(mainExe) && mainExe.EndsWith("client", StringComparison.OrdinalIgnoreCase) ? mainExe.Replace("client", "") : mainExe;
 
             OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(mainExecutable) ?
-                "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(mainExecutable)}";
+                "Selecione um executável" : $"Iniciar \n{Utils.UtilityService.ToCapitalize(mainExecutable)}";
 
             OpenSecondaryExeButtonText.Text = exesList.Count <= 0 || string.IsNullOrEmpty(secondaryExe) ?
-                "Selecione um executável" : $"Iniciar \n{StringUtils.ToCapitalize(secondaryExe)}";
+                "Selecione um executável" : $"Iniciar \n{Utils.UtilityService.ToCapitalize(secondaryExe)}";
         }
 
-        public void SetSelectedDatabase(int database)
+        public void SetSelectedDatabase(string database)
         {
-            viewModel.SelectedDatabase = database > -1 ?
-                viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : new DatabaseModel();
+            viewModel.SelectedDatabase = !string.IsNullOrEmpty(database) ?
+                viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : null;
         }
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -157,19 +145,19 @@ namespace TrocaBaseGUI.Views
 
             if (!String.IsNullOrEmpty(mainExe))
             {
-                if(selectedSysDirectory.SysDatabase < 0)
+                if(string.IsNullOrEmpty(selectedSysDirectory.SysDatabase))
                 {
                     var del = MessageBox.Show("Ao selecionar uma base pela primeira vez em cada diretório, o conteúdo do arquivo de conexão será substituído pelo conteúdo gerado no programa.\n\nVocê deseja continuar?", "Selecionar base",
                                 MessageBoxButton.YesNo, MessageBoxImage.Warning)
                                 .ToString().ToLower();
 
                     if (del.Equals("yes"))
-                        viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+                        viewModel.SelectDatabase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
 
                     return;
                 }
                     
-                viewModel.SelectBase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+                viewModel.SelectDatabase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
             }
             else
             {
@@ -182,7 +170,10 @@ namespace TrocaBaseGUI.Views
             var rb = sender as RadioButton;
 
             if(rb.IsLoaded)
+            {
                 SetDatabaseListFiltered(databasesCopy);
+                SetLoadingState();
+            }
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -192,6 +183,7 @@ namespace TrocaBaseGUI.Views
 
             SetDatabaseListFiltered(databasesCopy);
             SetSearchPlaceholder();
+            SetLoadingState();
         }
 
         private void MenuDiretorios_Click(object sender, RoutedEventArgs e)
@@ -220,7 +212,7 @@ namespace TrocaBaseGUI.Views
                 mainExe = string.Empty;
                 MainExesList.ItemsSource = new List<string>();
                 ExesList.ItemsSource = new ObservableCollection<string>();
-                selectedDatabaseId = -1;
+                selectedDatabaseId = string.Empty;
                 SetExesSelection();
                 MainExesList.Visibility = Visibility.Hidden;
                 return;
@@ -250,13 +242,10 @@ namespace TrocaBaseGUI.Views
             //Revisar necessidade dessa variável
             selectedSysDirectory = selectedItem;
 
-            if (viewModel.Databases.Any(db => db.Id == selectedItem.SysDatabase))
-            {
-                SetSelectedDatabase(selectedItem.SysDatabase);
-                DatabaseService.SetSelection(viewModel.Databases, selectedItem.SysDatabase);
-            }
+            SetSelectedDatabase(selectedItem.SysDatabase);
+            DatabaseService.SetSelection(viewModel.Databases, selectedItem.SysDatabase);
 
-            //Revisar a necessidade de um serviço para conexaoaddress. Utilizando assim apenas como paliativa.
+            //Revisar a necessidade de um serviço para conexaoaddress.
             viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
         }
 
@@ -394,9 +383,9 @@ namespace TrocaBaseGUI.Views
 
         private async void RefreshDbListButton_Click(object sender, RoutedEventArgs e)
         {
-            DatabaseList.ItemsSource = "";
-            LoadingCircle.Visibility = Visibility.Visible;
-            RefreshDbListButton.IsEnabled = false;
+            viewModel.isDbListLoading = true;
+
+            SetLoadingState();
 
             var tasks = new List<Task>
                 {
@@ -410,14 +399,11 @@ namespace TrocaBaseGUI.Views
 
             await Task.WhenAll(tasks);
 
-            foreach (var item in viewModel.Databases)
-                Debug.WriteLine($"\n\ndb: {item.Id}\n\n");
+            //foreach (var item in viewModel.Databases)
+            //    Debug.WriteLine($"\n\ndb: {item.Id}\n\n");
 
-            SetDabaseCopyDbs();
-            LoadingCircle.Visibility = Visibility.Hidden;
-            RefreshDbListButton.IsEnabled = true;
-
-
+            viewModel.isDbListLoading = false;
+            SetLoadingState();
 
             //MessageBox.Show("Atualização Finalizada.");
         }
@@ -478,6 +464,24 @@ namespace TrocaBaseGUI.Views
             //    Debug.WriteLine($"m\n\nn: {code}\n\n");
                 
             //}
+        }
+
+        private void SetLoadingState()
+        {
+            if (viewModel.isDbListLoading)
+            {
+                DatabaseList.ItemsSource = null;
+                LoadingCircle.Visibility = Visibility.Visible;
+                RefreshDbListButton.IsEnabled = false;
+                SettingsButton.IsEnabled = false;
+            }
+            else
+            {
+                LoadingCircle.Visibility = Visibility.Hidden;
+                RefreshDbListButton.IsEnabled = true;
+                SettingsButton.IsEnabled = true;
+                SetDabaseCopyDbs();
+            }
         }
 
         //private void Button_Click(object sender, RoutedEventArgs e)

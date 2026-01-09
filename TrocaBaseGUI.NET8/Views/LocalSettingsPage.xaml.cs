@@ -14,77 +14,72 @@ namespace TrocaBaseGUI.Views
     public partial class LocalSettingsPage : Page
     {
 
-        public MainViewModel _viewModel;
-        string unmaskedSqlPassword;
-        string unmaskedOraclePassword;
-
-        //ChatGPT
-        private string realSqlPassword = "";
-        private bool ignoreSql = false;
-        private string realOraclePassword = "";
-        private bool ignoreOracle = false;
+        public MainViewModel viewModel;
 
         public LocalSettingsPage()
         {
             InitializeComponent();
 
             var mainWindow = (SettingsWindow)Application.Current.MainWindow;
-            _viewModel = mainWindow.viewModel;
-            DataContext = _viewModel;
+            viewModel = mainWindow.viewModel;
+            DataContext = viewModel;
         }
 
         private void LocalPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if(!string.IsNullOrEmpty(_viewModel.LocalOracleConnection.Password))
-                OraclePasswordMask.Text = new string('•', _viewModel.LocalOracleConnection.Password.Length);
+            if(!string.IsNullOrEmpty(viewModel.LocalOracleConnection.Password))
+                OraclePasswordMask.Text = new string('•', viewModel.LocalOracleConnection.Password.Length);
 
-            if (!string.IsNullOrEmpty(_viewModel.LocalSQLServerConnection.Password))
-                SqlPasswordMask.Text = new string('•', _viewModel.LocalSQLServerConnection.Password.Length);
+            if (!string.IsNullOrEmpty(viewModel.LocalSQLServerConnection.Password))
+                SqlPasswordMask.Text = new string('•', viewModel.LocalSQLServerConnection.Password.Length);
+
+            if (viewModel.isLocalSqlLoading)
+                SetLoadingState("s");
+
+            if (viewModel.isLocalOracleLoading)
+                SetLoadingState("o");
         }
 
         private async void SqlServerTestConn_Click(object sender, RoutedEventArgs e)
         {
-            //if (await _viewModel.SqlService.ValidateConnection(_viewModel.LocalSQLServerConnection))
-            SqlServerConnectionTestButton.IsEnabled = false;
-            SqlServerConnectionTestButton.Content = string.Empty;
-            SqlServerLoadingCircle.Visibility = Visibility.Visible;
-                
-                var tasks = new List<Task>
-                {
-                    _viewModel.OpenSqlConn(_viewModel.SqlService, _viewModel.LocalSQLServerConnection)
-                };
+            var dbType = sender as Button;
 
-                await Task.WhenAll(tasks);
+            viewModel.isLocalSqlLoading = true;
+            SetLoadingState(dbType.Name);
 
-            SqlServerConnectionTestButton.IsEnabled = true;
-            SqlServerLoadingCircle.Visibility = Visibility.Hidden;
-            SqlServerConnectionTestButton.Content = "Testar Conexão";
-        }
-
-        private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
-        {
-            //string instance = !string.IsNullOrEmpty(_viewModel.LocalOracleConnection.Instance) ? 
-            //    _viewModel.LocalOracleConnection.Instance : _viewModel.OracleService.GetRunningInstances()[0];
-
-            OracleConnectionTestButton.IsEnabled = false;
-            OracleConnectionTestButton.Content = string.Empty;
-            OracleLoadingCircle.Visibility = Visibility.Visible;
 
             var tasks = new List<Task>
                 {
-                    _viewModel.OpenOracleConn(_viewModel.OracleService, _viewModel.LocalOracleConnection)
+                    viewModel.OpenSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection)
                 };
 
             await Task.WhenAll(tasks);
 
-            OracleConnectionTestButton.IsEnabled = true;
-            OracleLoadingCircle.Visibility = Visibility.Hidden;
-            OracleConnectionTestButton.Content = "Testar Conexão";
+            viewModel.isLocalSqlLoading = false;
+            SetLoadingState(dbType.Name);
+        }
+
+        private async void OracleTestConn_Click(object sender, RoutedEventArgs e)
+        {
+            var dbType = sender as Button;
+
+            viewModel.isLocalOracleLoading = true;
+            SetLoadingState(dbType.Name);
+
+            var tasks = new List<Task>
+                {
+                    viewModel.OpenOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection)
+                };
+
+            await Task.WhenAll(tasks);
+
+            viewModel.isLocalOracleLoading = false;
+            SetLoadingState(dbType.Name);
         }
 
         private void SqlServerPassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.LocalSQLServerConnection.Password = SqlServerPassword.Text;
+            viewModel.LocalSQLServerConnection.Password = SqlServerPassword.Text;
 
             int pwdLength = SqlServerPassword.Text.Length;
             SqlPasswordMask.Text = new string('•', pwdLength);
@@ -92,10 +87,46 @@ namespace TrocaBaseGUI.Views
 
         private void OraclePassword_TextChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.LocalOracleConnection.Password = OraclePassword.Text;
+            viewModel.LocalOracleConnection.Password = OraclePassword.Text;
 
             int pwdLength = OraclePassword.Text.Length;
             OraclePasswordMask.Text = new string('•', pwdLength);
+        }
+
+        private void SetLoadingState(string dbType)
+        {
+            if (dbType.StartsWith("s", StringComparison.OrdinalIgnoreCase))
+            {
+                if (viewModel.isLocalSqlLoading)
+                {
+                    SqlServerConnectionTestButton.IsEnabled = false;
+                    SqlServerConnectionTestButton.Content = string.Empty;
+                    SqlServerLoadingCircle.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SqlServerConnectionTestButton.IsEnabled = true;
+                    SqlServerLoadingCircle.Visibility = Visibility.Hidden;
+                    SqlServerConnectionTestButton.Content = "Testar Conexão";
+                }
+
+
+            }
+            else
+            {
+                if (viewModel.isLocalOracleLoading)
+                {
+                    OracleConnectionTestButton.IsEnabled = false;
+                    OracleConnectionTestButton.Content = string.Empty;
+                    OracleLoadingCircle.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    OracleConnectionTestButton.IsEnabled = true;
+                    OracleLoadingCircle.Visibility = Visibility.Hidden;
+                    OracleConnectionTestButton.Content = "Testar Conexão";
+                }
+            }
         }
     }
 }

@@ -21,13 +21,13 @@ namespace TrocaBaseGUI.Services
             return databases;
         }
 
-        public void AddDatabase(DatabaseModel database)
-        {
-            //gerenciar IDs
-            int lastIdSet = Databases.LastOrDefault().Id;
+        //public void AddDatabase(DatabaseModel database)
+        //{
+        //    gerenciar IDs
+        //    int lastIdSet = Databases.LastOrDefault().Id;
 
-            Databases.Add(database);
-        }
+        //    Databases.Add(database);
+        //}
 
         public void SortDatabasesByName(ObservableCollection<DatabaseModel> databases)
         {
@@ -71,16 +71,24 @@ namespace TrocaBaseGUI.Services
 
         public static void SetDisplayName(DatabaseModel db, string newDisplayName = "")
         {
-            db.DisplayName = String.IsNullOrEmpty(db.DisplayName) || String.IsNullOrEmpty(newDisplayName) ?
-                StringUtils.ToCapitalize(db.Name) : StringUtils.ToCapitalize(newDisplayName);
+            db.DisplayName = string.IsNullOrEmpty(db.DisplayName) || string.IsNullOrEmpty(newDisplayName) ?
+                Utils.UtilityService.ToCapitalize(db.Name) : Utils.UtilityService.ToCapitalize(newDisplayName);
         }
 
-        public static void SetSelection(ObservableCollection<DatabaseModel> dbs, int id)
+        public static void SetSelection(ObservableCollection<DatabaseModel> dbs, string id)
         {
-            var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
 
-            if (id < 0)
+            //Mesclar os 2 ifs 
+            if (string.IsNullOrEmpty(id))
+            {
+                dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
                 return;
+            }
+
+            if (!dbs.Any(db => db.Id.Equals(id)))
+                return;
+
+            var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
 
             if (dbs.Any(b => b.IsSelected == true))
                 dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
@@ -88,10 +96,11 @@ namespace TrocaBaseGUI.Services
             selectedDb.IsSelected = true;
         }
 
-        public static int GetSelection(ObservableCollection<DatabaseModel> dbs)
+        public static string GetSelection(ObservableCollection<DatabaseModel> dbs)
         {
             //return dbs.Any(b => b.IsSelected == true) ? dbs.FirstOrDefault(b => b.IsSelected == true).Id : -1;
-            return dbs.FirstOrDefault(b => b.IsSelected)?.Id ?? -1;
+            string id = dbs.FirstOrDefault(b => b.IsSelected).Id;
+            return !string.IsNullOrEmpty(id) ? id : string.Empty;
         }
 
         public DatabaseModel GetDatabaseById(ObservableCollection<DatabaseModel> dbs, int id)

@@ -12,6 +12,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         Loaded="SettingsWindow_Loaded"
+        
         ResizeMode="NoResize">
 
     <Border Background="#f5f4f3" BorderBrush="#2a353a" CornerRadius="5" BorderThickness="2" Padding="6">

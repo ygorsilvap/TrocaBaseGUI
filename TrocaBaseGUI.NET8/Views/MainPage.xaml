@@ -27,7 +27,6 @@
 
         <Ellipse
             x:Name="LoadingCircle"
-            Visibility="Hidden"
             Width="30"
             Height="30"
             Stroke="#411e5a"
@@ -877,7 +876,7 @@
         </ComboBox>
 
         <!--<TextBlock x:Name="conexaoCheck" Foreground="#f5f4f3" HorizontalAlignment="Center" Height="29" Margin="0,118,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="104"/>-->
-        <Button Click="ToSettings_Click" IsTabStop="False" Content="⚙️" ToolTip="Configurações" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,85,0,385" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
+        <Button x:Name="SettingsButton" Click="ToSettings_Click" IsTabStop="False" Content="⚙️" ToolTip="Configurações" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,85,0,385" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -899,6 +898,9 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="21"/>
                             <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#dc9710"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#A6A5A4"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -966,6 +968,9 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="RefreshDbListButtonText" Property="TextElement.FontSize" Value="25"/>
                             <Setter TargetName="RefreshDbListButtonText" Property="TextElement.Foreground" Value="#dc9710"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="RefreshDbListButtonText" Property="TextElement.Foreground" Value="#E8BE23"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

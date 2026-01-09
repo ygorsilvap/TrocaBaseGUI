@@ -10,15 +10,14 @@ namespace TrocaBaseGUI.Views
 {
     public partial class DoisCParamsPage : Page
     {
-        public MainViewModel _viewModel;
-        //public bool defaultLoginChecked;
+        public MainViewModel viewModel;
 
         public DoisCParamsPage()
         {
             InitializeComponent();
             var mainWindow = (SettingsWindow)Application.Current.MainWindow;
-            _viewModel = mainWindow.viewModel;
-            DataContext = _viewModel;
+            viewModel = mainWindow.viewModel;
+            DataContext = viewModel;
 
             //Refazer ou apagar essa função
             SetParams();
@@ -26,26 +25,26 @@ namespace TrocaBaseGUI.Views
 
         private void loginCheckbox_Checked(object sender, RoutedEventArgs e)
         {
-            _viewModel.appState.LocalParams.DefaultLoginCheckbox = (bool)loginCheckbox.IsChecked;
-            loginPadrao.IsEnabled = _viewModel.appState.LocalParams.DefaultLoginCheckbox;
+            viewModel.appState.LocalParams.DefaultLoginCheckbox = (bool)loginCheckbox.IsChecked;
+            loginPadrao.IsEnabled = viewModel.appState.LocalParams.DefaultLoginCheckbox;
         }
 
         private void senhaCheckbox_Checked(object sender, RoutedEventArgs e)
         {
-            _viewModel.appState.LocalParams.DefaultPasswordCheckbox = (bool)senhaCheckbox.IsChecked;
-            senhaPadrao.IsEnabled = _viewModel.appState.LocalParams.DefaultPasswordCheckbox;
+            viewModel.appState.LocalParams.DefaultPasswordCheckbox = (bool)senhaCheckbox.IsChecked;
+            senhaPadrao.IsEnabled = viewModel.appState.LocalParams.DefaultPasswordCheckbox;
         }
 
         private void editorCheckbox_Checked(object sender, RoutedEventArgs e)
         {
-            _viewModel.appState.LocalParams.EditorCheckbox = (bool)editorCheckbox.IsChecked;
-            editorTexto.IsEnabled = _viewModel.appState.LocalParams.EditorCheckbox;
+            viewModel.appState.LocalParams.EditorCheckbox = (bool)editorCheckbox.IsChecked;
+            editorTexto.IsEnabled = viewModel.appState.LocalParams.EditorCheckbox;
         }
 
         private void updateFolderCheckbox_Checked(object sender, RoutedEventArgs e)
         {
-            _viewModel.appState.LocalParams.DirUpdateCheckbox = (bool)updateFolderCheckbox.IsChecked;
-            updateFolder.IsEnabled = _viewModel.appState.LocalParams.DirUpdateCheckbox;
+            viewModel.appState.LocalParams.DirUpdateCheckbox = (bool)updateFolderCheckbox.IsChecked;
+            updateFolder.IsEnabled = viewModel.appState.LocalParams.DirUpdateCheckbox;
         }
 
 
@@ -53,19 +52,19 @@ namespace TrocaBaseGUI.Views
         private void SetParams()
         {
             //Debug.WriteLine($"\n\n3STGloginPadrao: {_viewModel.appState.DefaultLoginCheckbox}\n\n");
-            loginCheckbox.IsChecked = _viewModel.appState.LocalParams.DefaultLoginCheckbox || !string.IsNullOrEmpty(_viewModel.Conexao2Camadas.DefaultLogin);
+            loginCheckbox.IsChecked = viewModel.appState.LocalParams.DefaultLoginCheckbox || !string.IsNullOrEmpty(viewModel.Conexao2Camadas.DefaultLogin);
             loginPadrao.IsEnabled = (bool)loginCheckbox.IsChecked;
 
-            senhaCheckbox.IsChecked = _viewModel.appState.LocalParams.DefaultPasswordCheckbox || !string.IsNullOrEmpty(_viewModel.Conexao2Camadas.DefaultPassword);
+            senhaCheckbox.IsChecked = viewModel.appState.LocalParams.DefaultPasswordCheckbox || !string.IsNullOrEmpty(viewModel.Conexao2Camadas.DefaultPassword);
             senhaPadrao.IsEnabled = (bool)senhaCheckbox.IsChecked;
 
-            editorCheckbox.IsChecked = _viewModel.appState.LocalParams.EditorCheckbox || !string.IsNullOrEmpty(_viewModel.Conexao2Camadas.TextEditorPath);
+            editorCheckbox.IsChecked = viewModel.appState.LocalParams.EditorCheckbox || !string.IsNullOrEmpty(viewModel.Conexao2Camadas.TextEditorPath);
             editorTexto.IsEnabled = (bool)editorCheckbox.IsChecked;
 
-            updateFolderCheckbox.IsChecked = _viewModel.appState.LocalParams.DirUpdateCheckbox || !string.IsNullOrEmpty(_viewModel.Conexao2Camadas.UpdateFolder);
+            updateFolderCheckbox.IsChecked = viewModel.appState.LocalParams.DirUpdateCheckbox || !string.IsNullOrEmpty(viewModel.Conexao2Camadas.UpdateFolder);
             updateFolder.IsEnabled = (bool)updateFolderCheckbox.IsChecked;
 
-            ultMenuWebCheckbox.IsChecked = _viewModel.Conexao2Camadas.UseWebMenu;
+            ultMenuWebCheckbox.IsChecked = viewModel.Conexao2Camadas.UseWebMenu;
         }
 
         private void SelectTextEditorPath_Click(object sender, RoutedEventArgs e)
@@ -80,7 +79,7 @@ namespace TrocaBaseGUI.Views
             if(dialog.ShowDialog() == CommonFileDialogResult.Ok && File.Exists(dialog.FileName)) {
                 string textEditorPath = Path.GetFullPath(dialog.FileName);
 
-                _viewModel.Conexao2Camadas.TextEditorPath = textEditorPath;
+                viewModel.Conexao2Camadas.TextEditorPath = textEditorPath;
             }
         }
 
@@ -98,7 +97,7 @@ namespace TrocaBaseGUI.Views
             {
                 string updateFolderPath = dialog.FileName;
 
-                _viewModel.Conexao2Camadas.UpdateFolder = updateFolderPath;
+                viewModel.Conexao2Camadas.UpdateFolder = updateFolderPath;
             }
         }
     }

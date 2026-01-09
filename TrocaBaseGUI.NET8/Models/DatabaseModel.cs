@@ -7,8 +7,8 @@ using TrocaBaseGUI.Utils;
 
 public class DatabaseModel : INotifyPropertyChanged
 {
-    private int id;
-    public int Id
+    private string id;
+    public string Id
     {
         get => id;
         set
