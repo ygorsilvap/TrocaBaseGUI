@@ -109,8 +109,6 @@ namespace TrocaBaseGUI.Views
                     SqlServerLoadingCircle.Visibility = Visibility.Hidden;
                     SqlServerConnectionTestButton.Content = "Testar Conexão";
                 }
-
-
             }
             else
             {
