@@ -33,10 +33,10 @@ namespace TrocaBaseGUI.Views
             if (!string.IsNullOrEmpty(viewModel.LocalSQLServerConnection.Password))
                 SqlPasswordMask.Text = new string('•', viewModel.LocalSQLServerConnection.Password.Length);
 
-            if (viewModel.isLocalSqlLoading)
+            if (viewModel.isSqlLoading)
                 SetLoadingState("s");
 
-            if (viewModel.isLocalOracleLoading)
+            if (viewModel.isOracleLoading)
                 SetLoadingState("o");
         }
 
@@ -44,7 +44,7 @@ namespace TrocaBaseGUI.Views
         {
             var dbType = sender as Button;
 
-            viewModel.isLocalSqlLoading = true;
+            viewModel.isSqlLoading = true;
             SetLoadingState(dbType.Name);
 
 
@@ -55,7 +55,7 @@ namespace TrocaBaseGUI.Views
 
             await Task.WhenAll(tasks);
 
-            viewModel.isLocalSqlLoading = false;
+            viewModel.isSqlLoading = false;
             SetLoadingState(dbType.Name);
         }
 
@@ -63,7 +63,7 @@ namespace TrocaBaseGUI.Views
         {
             var dbType = sender as Button;
 
-            viewModel.isLocalOracleLoading = true;
+            viewModel.isOracleLoading = true;
             SetLoadingState(dbType.Name);
 
             var tasks = new List<Task>
@@ -73,7 +73,7 @@ namespace TrocaBaseGUI.Views
 
             await Task.WhenAll(tasks);
 
-            viewModel.isLocalOracleLoading = false;
+            viewModel.isOracleLoading = false;
             SetLoadingState(dbType.Name);
         }
 
@@ -95,9 +95,10 @@ namespace TrocaBaseGUI.Views
 
         private void SetLoadingState(string dbType)
         {
+            //sql server
             if (dbType.StartsWith("s", StringComparison.OrdinalIgnoreCase))
             {
-                if (viewModel.isLocalSqlLoading)
+                if (viewModel.isSqlLoading)
                 {
                     SqlServerConnectionTestButton.IsEnabled = false;
                     SqlServerConnectionTestButton.Content = string.Empty;
@@ -110,9 +111,10 @@ namespace TrocaBaseGUI.Views
                     SqlServerConnectionTestButton.Content = "Testar Conexão";
                 }
             }
+            //oracle
             else
             {
-                if (viewModel.isLocalOracleLoading)
+                if (viewModel.isOracleLoading)
                 {
                     OracleConnectionTestButton.IsEnabled = false;
                     OracleConnectionTestButton.Content = string.Empty;

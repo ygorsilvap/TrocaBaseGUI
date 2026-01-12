@@ -74,11 +74,36 @@ namespace TrocaBaseGUI.ViewModels
         public AppStateService appStateService { get; set; } = new AppStateService();
         public bool isDbListLoading;
 
-        public bool isLocalSqlLoading;
-        public bool isLocalOracleLoading;
+        //ChatGPT
+        private bool _isSqlLoading;
+        public bool isSqlLoading
+        {
+            get => _isSqlLoading;
+            set
+            {
+                if (_isSqlLoading != value)
+                {
+                    _isSqlLoading = value;
+                    OnPropertyChanged(nameof(isSqlLoading));
+                }
+            }
 
-        public bool isServerSqlLoading;
-        public bool isServerOracleLoading;
+        }
+
+        private bool _isOracleLoading;
+        public bool isOracleLoading
+        {
+            get => _isOracleLoading;
+            set
+            {
+                if (_isOracleLoading != value)
+                {
+                    _isOracleLoading = value;
+                    OnPropertyChanged(nameof(isOracleLoading));
+                }
+            }
+        }
+        //
 
         public MainViewModel()
         {

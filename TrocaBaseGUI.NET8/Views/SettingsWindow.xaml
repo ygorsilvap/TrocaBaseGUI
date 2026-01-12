@@ -148,12 +148,12 @@
                         </Setter>
                     </Style>
                 </TabControl.Resources>
-                <TabItem Header="Conexão Local" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0" />
-                <TabItem Header="Conexão Server" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
-                <TabItem Header="Opc. 2 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
-                <TabItem Header="Opc. 3 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
+                <TabItem x:Name="ConLocalTab" Header="Conexão Local" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0" />
+                <TabItem x:Name="ConServerTab" Header="Conexão Server" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
+                <TabItem x:Name="DoisCTab" Header="Opc. 2 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
+                <TabItem x:Name="TresCTab" Header="Opc. 3 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
             </TabControl>
-            <Button Content="🡨" Click="SalvarVoltar_Click" IsTabStop="False" ToolTip="Voltar" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Margin="4,13,0,0" Grid.Row="2" VerticalAlignment="Top" Width="24">
+            <Button x:Name="VoltarButton" Content="🡨" Click="SalvarVoltar_Click" IsTabStop="False" ToolTip="Voltar" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Margin="4,13,0,0" Grid.Row="2" VerticalAlignment="Top" Width="24">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -172,12 +172,15 @@
                                 <Setter TargetName="Border" Property="TextElement.FontSize" Value="21"/>
                                 <Setter TargetName="Border" Property="TextElement.Foreground" Value="#dc9710"/>
                             </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="TextElement.Foreground" Value="#A6A5A4"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
 
-            <Button Click="ClearAll_Click" IsTabStop="False" ToolTip="Exclui todas as informações de configurações" HorizontalAlignment="Left" Width="30" Background="Transparent" Margin="3,273,0,20" Grid.Row="3">
+            <Button x:Name="ClearButton" Click="ClearAll_Click" IsTabStop="False" ToolTip="Exclui todas as informações de configurações" HorizontalAlignment="Left" Width="30" Background="Transparent" Margin="3,273,0,20" Grid.Row="3">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
@@ -199,6 +202,9 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="textBlock" Property="TextElement.FontSize" Value="25"/>
                                 <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#dc9710"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#A6A5A4"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
