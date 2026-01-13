@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using TrocaBaseGUI.ViewModels;
 
 namespace TrocaBaseGUI.Views
@@ -26,6 +17,9 @@ namespace TrocaBaseGUI.Views
 
             viewModel = MainViewModel.Instance;
             DataContext = viewModel;
+
+            //solução do chatgpt
+            viewModel.PropertyChanged += SetLoadingState;
         }
 
         private void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
@@ -109,6 +103,31 @@ namespace TrocaBaseGUI.Views
             }
         }
 
+        //lógica minha, função acessada por código sugerido pelo gpt
+        private void SetLoadingState(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainViewModel.isSqlLoading) || e.PropertyName == nameof(MainViewModel.isOracleLoading))
+            {
+                if (viewModel.isSqlLoading || viewModel.isOracleLoading)
+                {
+                    VoltarButton.IsEnabled = false;
+                    ClearButton.IsEnabled = false;
+                    ConLocalTab.IsEnabled = false;
+                    ConServerTab.IsEnabled = false;
+                    DoisCTab.IsEnabled = false;
+                    TresCTab.IsEnabled = false;
+                }
+                else if (!viewModel.isSqlLoading || !viewModel.isOracleLoading)
+                {
+                    VoltarButton.IsEnabled = true;
+                    ClearButton.IsEnabled = true;
+                    ConLocalTab.IsEnabled = true;
+                    ConServerTab.IsEnabled = true;
+                    DoisCTab.IsEnabled = true;
+                    TresCTab.IsEnabled = true;
+                }
+            }
+        }
 
     }
 }

@@ -32,10 +32,10 @@ namespace TrocaBaseGUI.Views
             if (!string.IsNullOrEmpty(viewModel.ServerSQLServerConnection.Password))
                 SqlPasswordMask.Text = new string('•', viewModel.ServerSQLServerConnection.Password.Length);
 
-            if (viewModel.isServerSqlLoading)
+            if (viewModel.isSqlLoading)
                 SetLoadingState("s");
 
-            if (viewModel.isServerOracleLoading)
+            if (viewModel.isOracleLoading)
                 SetLoadingState("o");
         }
 
@@ -43,7 +43,7 @@ namespace TrocaBaseGUI.Views
         {
             var dbType = sender as Button;
 
-            viewModel.isServerSqlLoading = true;
+            viewModel.isSqlLoading = true;
             SetLoadingState(dbType.Name);
 
             var tasks = new List<Task>
@@ -53,7 +53,7 @@ namespace TrocaBaseGUI.Views
 
             await Task.WhenAll(tasks);
 
-            viewModel.isServerSqlLoading = false;
+            viewModel.isSqlLoading = false;
             SetLoadingState(dbType.Name);
         }
 
@@ -61,7 +61,7 @@ namespace TrocaBaseGUI.Views
         {
             var dbType = sender as Button;
 
-            viewModel.isServerOracleLoading = true;
+            viewModel.isOracleLoading = true;
             SetLoadingState(dbType.Name);
 
             var tasks = new List<Task>
@@ -71,7 +71,7 @@ namespace TrocaBaseGUI.Views
 
             await Task.WhenAll(tasks);
 
-            viewModel.isServerOracleLoading = false;
+            viewModel.isOracleLoading = false;
             SetLoadingState(dbType.Name);
         }
         private void SqlServerPassword_TextChanged(object sender, RoutedEventArgs e)
@@ -94,7 +94,7 @@ namespace TrocaBaseGUI.Views
         {
             if (dbType.StartsWith("s", StringComparison.OrdinalIgnoreCase))
             {
-                if (viewModel.isServerSqlLoading)
+                if (viewModel.isSqlLoading)
                 {
                     SqlServerConnectionTestButton.IsEnabled = false;
                     SqlServerConnectionTestButton.Content = string.Empty;
@@ -109,7 +109,7 @@ namespace TrocaBaseGUI.Views
             }
             else
             {
-                if (viewModel.isServerOracleLoading)
+                if (viewModel.isOracleLoading)
                 {
                     OracleConnectionTestButton.IsEnabled = false;
                     OracleConnectionTestButton.Content = string.Empty;
