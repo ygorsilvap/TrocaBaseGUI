@@ -81,7 +81,10 @@ namespace TrocaBaseGUI.Services
             //Mesclar os 2 ifs 
             if (string.IsNullOrEmpty(id))
             {
-                dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+                if (dbs.Any(b => b.IsSelected == true))
+                {
+                    dbs.FirstOrDefault(b => b.IsSelected == true).IsSelected = false;
+                }
                 return;
             }
 
