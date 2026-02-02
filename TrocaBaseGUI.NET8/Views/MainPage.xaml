@@ -457,6 +457,9 @@
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="Border" Property="Background" Value="#5C2A80"/>
                                     </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="#A6A5A4"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#70706F"/>                                    </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>

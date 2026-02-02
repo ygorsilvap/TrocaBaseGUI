@@ -119,13 +119,13 @@ namespace TrocaBaseGUI.Views
                 string.Empty :
                 exesList.FirstOrDefault(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)).ToLower();
 
-            secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ?
-                secondaryExe.Replace("client", "") : secondaryExe;
+            //secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ?
+            //    secondaryExe.Replace("client", "") : secondaryExe;
 
-            string mainExecutable = !string.IsNullOrEmpty(mainExe) && mainExe.EndsWith("client", StringComparison.OrdinalIgnoreCase) ? mainExe.Replace("client", "") : mainExe;
+            //string mainExecutable = !string.IsNullOrEmpty(mainExe) && mainExe.EndsWith("client", StringComparison.OrdinalIgnoreCase) ? mainExe.Replace("client", "") : mainExe;
 
-            OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(mainExecutable) ?
-                "Selecione um executável" : $"Iniciar \n{Utils.UtilityService.ToCapitalize(mainExecutable)}";
+            OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(mainExe) ?
+                "Selecione um executável" : $"Iniciar \n{Utils.UtilityService.ToCapitalize(mainExe)}";
 
             OpenSecondaryExeButtonText.Text = exesList.Count <= 0 || string.IsNullOrEmpty(secondaryExe) ?
                 "Selecione um executável" : $"Iniciar \n{Utils.UtilityService.ToCapitalize(secondaryExe)}";
@@ -387,15 +387,36 @@ namespace TrocaBaseGUI.Views
 
             SetLoadingState();
 
-            var tasks = new List<Task>
+            List<Task> tasks;
+
+            if (tabSelected == 0)
+            {
+                tasks = new List<Task>
                 {
                     //Local
                     viewModel.OpenSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection, true, false),
                     viewModel.OpenOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection, true, false),
+                };
+            }
+            else
+            {
+                tasks = new List<Task>
+                {
                     //Server
                     viewModel.OpenSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection, true, false),
                     viewModel.OpenOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection, true, false)
                 };
+            }
+
+            //var tasks = new List<Task>
+            //    {
+            //        //Local
+            //        viewModel.OpenSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection, true, false),
+            //        viewModel.OpenOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection, true, false),
+            //        //Server
+            //        viewModel.OpenSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection, true, false),
+            //        viewModel.OpenOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection, true, false)
+            //    };
 
             await Task.WhenAll(tasks);
 
@@ -474,12 +495,14 @@ namespace TrocaBaseGUI.Views
                 LoadingCircle.Visibility = Visibility.Visible;
                 RefreshDbListButton.IsEnabled = false;
                 SettingsButton.IsEnabled = false;
+                TabControl.IsEnabled = false;
             }
             else
             {
                 LoadingCircle.Visibility = Visibility.Hidden;
                 RefreshDbListButton.IsEnabled = true;
                 SettingsButton.IsEnabled = true;
+                TabControl.IsEnabled = true;
                 SetDabaseCopyDbs();
             }
         }

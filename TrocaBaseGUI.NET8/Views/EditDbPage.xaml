@@ -97,7 +97,7 @@
         </TextBox>
 
         <TextBlock x:Name = "instDbNameInputTXT" Text="Instância/Nome da Base" Foreground="#411e5a" HorizontalAlignment="Left" Margin="320,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167" Height="17"></TextBlock>
-        <TextBox x:Name = "instDbNameInput" TextChanged="instDbNameInput_TextChanged" Margin="320,267,110,215" TextWrapping="Wrap">
+        <TextBox x:Name = "instDbNameInput" TextChanged="instDbNameInput_TextChanged" IsEnabled="False" Margin="320,267,110,215" TextWrapping="Wrap">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">

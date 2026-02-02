@@ -127,10 +127,15 @@ namespace TrocaBaseGUI.Views
                 instDbNameInputTXT.Text = "Nome da base SQL Server";
                 _db.DbType = "SQL Server";
             }
+
+            instDbNameInput.IsEnabled = true;
         }
 
         public bool IsDbValid()
         {
+            if(string.IsNullOrEmpty(_db.DbType))
+                return false;
+
             if(_db.DbType.Equals("oracle", StringComparison.OrdinalIgnoreCase))
             {
                 if (String.IsNullOrEmpty(_db.DisplayName) || String.IsNullOrEmpty(_db.Instance) || String.IsNullOrEmpty(_db.Name))
@@ -189,17 +194,18 @@ namespace TrocaBaseGUI.Views
                 return;
             }
 
+            if (!IsDbValid())
+            {
+                MessageBox.Show("Informações Inválidas.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             if (IsDbIn())
             {
                 MessageBox.Show("Base Repetida.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (!IsDbValid())
-            {
-                MessageBox.Show("Informações Inválidas.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
 
             if (!_viewModelDbs.Databases.Contains(_db) && IsDbValid())
             {

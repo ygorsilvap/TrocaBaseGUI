@@ -50,9 +50,19 @@ namespace TrocaBaseGUI.ViewModels
         public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
 
         public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel() { Environment = "local" };
-        public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel() { Environment = "server" };
+        public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel() 
+            { Environment = "server",
+              Server = "AZ-BD-AUTO-03.linx.com.br",
+              Password =  "ninguemsabe"
+              };
         public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "local" };
-        public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "server" };
+        public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel()
+        {
+            Environment = "server",
+            Server = "150.230.86.225",
+            Instance = "pdb_auto_dev_01.sub08051803480.vcnoradev.oraclevcn.com",
+            Password = "ninguemsabe"
+        };
         public OracleService OracleService;
         public SqlServerService SqlService;
         //public ObservableCollection<DatabaseModel> Databases { get; set; } = new ObservableCollection<DatabaseModel>();
@@ -121,7 +131,6 @@ namespace TrocaBaseGUI.ViewModels
                     OnPropertyChanged(nameof(conexaoFile));
                 }
             };
-
         }
 
         public void AddDatabases(List<DatabaseModel> databases)

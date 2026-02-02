@@ -257,14 +257,21 @@
         </Ellipse>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="15" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/></TextBlock>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,138,0,44" TextWrapping="Wrap" Width="50" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Grid.Row="1"><Run Language="pt-br" Text="Servidor"/></TextBlock>
+        <TextBlock Foreground="#411e5a" ToolTip="Host utilizado em TNSNames. Normalmente é o hostname da máquina ou 'localhost'." HorizontalAlignment="Left" Margin="347,75,0,107" FontSize="16" TextWrapping="Wrap" Width="15" Grid.Row="1"><Run Language="pt-br" Text="ⓘ"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+
+
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,138,0,44" TextWrapping="Wrap" Width="37" Grid.Row="1"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" ToolTip="Senha da instância. Utilizamos 'oracle' como senha padrão da instância." HorizontalAlignment="Left" Margin="335,135,0,47" FontSize="16" TextWrapping="Wrap" Width="15" Grid.Row="1"><Run Language="pt-br" Text="ⓘ"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" FontSize="18" FontWeight="Bold" Margin="115,38,0,138" TextWrapping="Wrap" Width="100" Grid.Row="1"><Run Language="pt-br" Text="SQL Server"/></TextBlock>
         <TextBlock Foreground="#411e5a" FontSize="18" FontWeight="Bold" Margin="343,38,147,136" TextWrapping="Wrap" Grid.Row="1"><Run Language="pt-br" Text="Oracle"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="390,106,0,106" TextWrapping="Wrap" Grid.Row="2"><Run Language="pt-br" Text="Porta"/></TextBlock>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,44" TextWrapping="Wrap" Width="120" Grid.Row="1" Height="18" VerticalAlignment="Bottom"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,44" TextWrapping="Wrap" Width="36" Grid.Row="1" Height="18" VerticalAlignment="Bottom"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+        <TextBlock Foreground="#411e5a" ToolTip="Senha utilizada para login no SQL Server." HorizontalAlignment="Left" Margin="135,135,0,47" FontSize="16" TextWrapping="Wrap" Width="16" Grid.Row="1"><Run Language="pt-br" Text="ⓘ"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,5,0,207" TextWrapping="Wrap" Width="120" Grid.Row="2"><Run Language="pt-br" Text="Instância"/></TextBlock>
         <TextBlock Foreground="#999897" HorizontalAlignment="Left" Margin="348,5,0,0" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2"><Run Language="pt-br" Text="(Opcional)"/></TextBlock>

@@ -19,15 +19,15 @@ namespace TrocaBaseGUI.Views
         public LocalSettingsPage()
         {
             InitializeComponent();
-
-            var mainWindow = (SettingsWindow)Application.Current.MainWindow;
-            viewModel = mainWindow.viewModel;
-            DataContext = viewModel;
         }
 
         private void LocalPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if(!string.IsNullOrEmpty(viewModel.LocalOracleConnection.Password))
+            var mainWindow = (SettingsWindow)Application.Current.MainWindow;
+            viewModel = mainWindow.viewModel;
+            DataContext = viewModel;
+
+            if (!string.IsNullOrEmpty(viewModel.LocalOracleConnection.Password))
                 OraclePasswordMask.Text = new string('•', viewModel.LocalOracleConnection.Password.Length);
 
             if (!string.IsNullOrEmpty(viewModel.LocalSQLServerConnection.Password))
@@ -46,7 +46,6 @@ namespace TrocaBaseGUI.Views
 
             viewModel.isSqlLoading = true;
             SetLoadingState(dbType.Name);
-
 
             var tasks = new List<Task>
                 {
