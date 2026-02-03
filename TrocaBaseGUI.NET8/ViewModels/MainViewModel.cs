@@ -181,7 +181,7 @@ namespace TrocaBaseGUI.ViewModels
                 }
             }
             if (SelectedDatabase != null && SelectedDatabase.DbType.StartsWith(dbType[0].ToString(), StringComparison.OrdinalIgnoreCase))
-                SelectedDatabase = null;
+                SelectedDatabase = new DatabaseModel();
         }
 
 

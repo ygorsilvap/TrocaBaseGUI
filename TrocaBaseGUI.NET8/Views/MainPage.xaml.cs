@@ -471,22 +471,6 @@ namespace TrocaBaseGUI.Views
             Debug.WriteLine($"\n\n{orderBy}\n\n");
         }
 
-        private void ExportConnectionData_Click(object sender, RoutedEventArgs e)
-        {
-            //var menuItem = sender as MenuItem;
-            //if (menuItem?.DataContext is DatabaseModel db)
-            //{
-            //    string json = JsonSerializer.Serialize(db);
-
-            //    var options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
-            //    byte[] data = MessagePackSerializer.Serialize(json, options);
-            //    string code = Convert.ToBase64String(data);
-
-            //    Debug.WriteLine($"m\n\nn: {code}\n\n");
-                
-            //}
-        }
-
         private void SetLoadingState()
         {
             if (viewModel.isDbListLoading)
