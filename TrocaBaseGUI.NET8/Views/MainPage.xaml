@@ -910,7 +910,7 @@
             </Button.Template>
         </Button>
 
-        <Button Click="AddDb_Click" IsTabStop="False" ToolTip="Adicionar/Editar Base" HorizontalAlignment="Left" Margin="8,149,0,321" Width="30" Background="Transparent">
+        <Button Click="AddDb_Click" IsEnabled="false" IsTabStop="False" ToolTip="Adicionar/Editar Base" HorizontalAlignment="Left" Margin="8,149,0,321" Width="30" Background="Transparent">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
@@ -933,6 +933,9 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="textBlock" Property="TextElement.FontSize" Value="21"/>
                             <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#dc9710"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="textBlock" Property="TextElement.Foreground" Value="#A6A5A4"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
