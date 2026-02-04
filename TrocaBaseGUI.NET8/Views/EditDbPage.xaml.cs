@@ -212,7 +212,7 @@ namespace TrocaBaseGUI.Views
                 return;
             }
 
-            if (IsDbIn())
+            if (IsDbIn() && !editMode)
             {
                 MessageBox.Show("Base Repetida.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
