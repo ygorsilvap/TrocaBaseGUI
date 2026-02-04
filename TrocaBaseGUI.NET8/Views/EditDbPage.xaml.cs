@@ -218,7 +218,7 @@ namespace TrocaBaseGUI.Views
                 return;
             }
 
-            if (editMode)
+            if (!IsDbIn() && editMode)
             {
                 NavigationService.GoBack();
                 return;
