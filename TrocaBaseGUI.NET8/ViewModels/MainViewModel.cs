@@ -180,14 +180,9 @@ namespace TrocaBaseGUI.ViewModels
 
                 db.Id = UtilityService.IdGen();
                 Databases.Add(db);
-                //Databases.FirstOrDefault(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                //                  d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
-                //                  d.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase)).Id = UtilityService.IdGen();
-                //Databases[Databases.Count - 1].Id = Databases.Count - 1;
-
             });
 
-            foreach (var db in Databases.Where(db => db.DbType.Equals(dbType) && db.Environment.Equals(environment)).ToList())
+            foreach (var db in Databases.Where(db => db.DbType.Equals(dbType) && db.Environment.Equals(environment) && db.IsManualAdded == false).ToList())
             {
                 bool isDbThere = databases.Any(d => d.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
                                   d.Environment.Equals(db.Environment, StringComparison.OrdinalIgnoreCase) &&
@@ -365,6 +360,8 @@ namespace TrocaBaseGUI.ViewModels
 
             Conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
             Conexao3Camadas = new ConexaoFileModel() { Tier = 3 };
+
+            SelectedDatabase = new DatabaseModel();
 
             SysDirectoryList.Clear();
             Databases.Clear();
