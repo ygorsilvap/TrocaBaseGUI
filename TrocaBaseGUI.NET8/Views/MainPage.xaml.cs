@@ -336,7 +336,7 @@ namespace TrocaBaseGUI.Views
 
         private void CopyStringClick_Click(object sender, RoutedEventArgs e)
         {
-            string connString = viewModel.SelectedDatabase.DbType.ToLower().StartsWith("S")
+            string connString = viewModel.SelectedDatabase.DbType.ToLower().StartsWith("s")
                 ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Name, viewModel.SelectedDatabase.Server)
                 : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Server, viewModel.SelectedDatabase.Instance, viewModel.SelectedDatabase.Name);
 
