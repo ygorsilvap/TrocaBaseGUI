@@ -41,7 +41,7 @@
         </TextBox>
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="110,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Height="26"><Run Language="pt-br" Text="Server"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name = "serverInput" TextChanged="serverInput_TextChanged" HorizontalAlignment="Left" Margin="110,205,0,277" TextWrapping="Wrap" Width="120">
+        <TextBox x:Name = "serverInput" TextChanged="serverInput_TextChanged" HorizontalAlignment="Left" Margin="110,205,0,277" TextWrapping="NoWrap" Width="120">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Template">

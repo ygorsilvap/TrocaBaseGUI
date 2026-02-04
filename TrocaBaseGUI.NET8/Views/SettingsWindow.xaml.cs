@@ -100,6 +100,13 @@ namespace TrocaBaseGUI.Views
             if (del.Equals("yes"))
             {
                 viewModel.ClearApp();
+
+                var main = new MainWindow();
+
+                Application.Current.MainWindow = main;
+                main.Show();
+
+                Window.GetWindow(this)?.Close();
             }
         }
 

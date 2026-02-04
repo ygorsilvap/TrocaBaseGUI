@@ -51,8 +51,10 @@ namespace TrocaBaseGUI.Views
 
             //foreach (var db in viewModel.Databases)
             //{
-            //    Debug.WriteLine($"\nId: {db.Id}, Db: {db.Name}, Env: {db.Environment}, DbT: {db.DbType}");
+            //    Debug.WriteLine($"\nId: {db.Id}, Db: {db.Name}, Env: {db.Environment}, DbT: {db.DbType}, Server: {db.Server}");
             //}
+
+            Debug.WriteLine($"\n\nCopyStringClick_Click - DbId: {viewModel.SelectedDatabase.Environment}, {viewModel.SelectedDatabase.Name}, {viewModel.SelectedDatabase.Server}\n\n");
 
             //UtilityService.IdGen();
         }
@@ -65,7 +67,7 @@ namespace TrocaBaseGUI.Views
 
             SetExesSelection();
 
-            SetSelectedDatabase(selectedDatabaseId);
+            //SetSelectedDatabase(selectedDatabaseId);
 
             SetDabaseCopyDbs();
 
@@ -134,7 +136,7 @@ namespace TrocaBaseGUI.Views
         public void SetSelectedDatabase(string database)
         {
             viewModel.SelectedDatabase = !string.IsNullOrEmpty(database) ?
-                viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : null;
+                viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : new DatabaseModel();
         }
 
         private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -334,11 +336,13 @@ namespace TrocaBaseGUI.Views
 
         private void CopyStringClick_Click(object sender, RoutedEventArgs e)
         {
-            string connString = viewModel.SelectedDatabase.DbType.ToLower().StartsWith("s")
+            string connString = viewModel.SelectedDatabase.DbType.ToLower().StartsWith("S")
                 ? viewModel.SqlService.CreateSQLServerConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Name, viewModel.SelectedDatabase.Server)
                 : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Server, viewModel.SelectedDatabase.Instance, viewModel.SelectedDatabase.Name);
 
             Clipboard.SetText(connString);
+
+            //Debug.WriteLine($"\n\nCopyStringClick_Click - DbId: {viewModel.SelectedDatabase.Environment}, {viewModel.SelectedDatabase.Name}, {viewModel.SelectedDatabase.Server}\n\n");
         }
 
         private void DbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)

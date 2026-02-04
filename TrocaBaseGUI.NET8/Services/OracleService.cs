@@ -154,7 +154,7 @@ namespace TrocaBaseGUI.Services
             //CRIAR A DIFERENÇA DE CONN STRING DE LOCAL PARA SERVER. TROCAR O SERVER DO LOCAL PARA DNS.GETHOSTNAME
             if (environment.ToLower() == "local")
             {
-                return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={Dns.GetHostEntry(string.Empty).HostName}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
+                return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={server}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
             }
             else
             {

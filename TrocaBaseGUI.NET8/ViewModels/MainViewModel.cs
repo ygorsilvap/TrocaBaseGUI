@@ -15,7 +15,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace TrocaBaseGUI.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
         //Não me recordo o motivo dessas 2 declarações da MVM, provavelmente coisa do chatgpt. REMOVER.
         private static MainViewModel _instance;
@@ -46,8 +46,30 @@ namespace TrocaBaseGUI.ViewModels
 
         //public static string exeFile;
 
-        public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
-        public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
+        //public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
+        //public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
+
+        private ConexaoFileModel _conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
+        public ConexaoFileModel Conexao2Camadas 
+        {
+            get => _conexao2Camadas;
+            set
+            {
+                _conexao2Camadas = value;
+                OnPropertyChanged(nameof(Conexao2Camadas));
+            }
+        }
+
+        private ConexaoFileModel _conexao3Camadas = new ConexaoFileModel() { Tier = 3 };
+        public ConexaoFileModel Conexao3Camadas
+        {
+            get => _conexao3Camadas;
+            set
+            {
+                _conexao3Camadas = value;
+                OnPropertyChanged(nameof(Conexao3Camadas));
+            }
+        }
 
         public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel() { Environment = "local" };
         public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel() 
@@ -81,6 +103,17 @@ namespace TrocaBaseGUI.ViewModels
         public SysDirectoryService sysDirectoryService { get; set; } = new SysDirectoryService();
         //public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
         public AppState appState { get; set; } = new AppState();
+
+        //public AppState appState = new AppState();
+        //public AppState AppState
+        //{
+        //    get => appState;
+        //    set
+        //    {
+        //        appState = value;
+        //        OnPropertyChanged(nameof(AppState));
+        //    }
+        //}
         public AppStateService appStateService { get; set; } = new AppStateService();
         public bool isDbListLoading;
 
@@ -306,18 +339,32 @@ namespace TrocaBaseGUI.ViewModels
             return new ObservableCollection<DatabaseModel>(db.Where(i => i.DbType.Equals(type, StringComparison.OrdinalIgnoreCase)));
         }
 
-        //Refazer
+        //Refazer. Bom exemplo de alto acoplamento
         public void ClearApp()
         {
             //exeFile = "";
 
-            LocalSQLServerConnection = new SqlServerConnectionModel();
-            ServerSQLServerConnection = new SqlServerConnectionModel();
+            LocalSQLServerConnection = new SqlServerConnectionModel() { Environment = "local" };
+            ServerSQLServerConnection = new SqlServerConnectionModel()
+            {
+                Environment = "server",
+                Server = "AZ-BD-AUTO-03.linx.com.br",
+                Password = "ninguemsabe"
+            };
 
             LocalOracleConnection = new OracleConnectionModel() { Environment = "local" };
-            ServerOracleConnection = new OracleConnectionModel() { Environment = "server" };
+            ServerOracleConnection = new OracleConnectionModel()
+            {
+                Environment = "server",
+                Server = "150.230.86.225",
+                Instance = "pdb_auto_dev_01.sub08051803480.vcnoradev.oraclevcn.com",
+                Password = "ninguemsabe"
+            };
 
             appState = new AppState();
+
+            Conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
+            Conexao3Camadas = new ConexaoFileModel() { Tier = 3 };
 
             SysDirectoryList.Clear();
             Databases.Clear();
@@ -326,7 +373,7 @@ namespace TrocaBaseGUI.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
+        public void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

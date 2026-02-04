@@ -96,5 +96,25 @@ namespace TrocaBaseGUI.Services
                 }
             }
         }
+
+        //public void ClearApp(MainViewModel vm)
+        //{
+        //    //exeFile = "";
+
+        //    LocalSQLServerConnection = new SqlServerConnectionModel();
+        //    ServerSQLServerConnection = new SqlServerConnectionModel();
+
+        //    LocalOracleConnection = new OracleConnectionModel() { Environment = "local" };
+        //    ServerOracleConnection = new OracleConnectionModel() { Environment = "server" };
+
+        //    appState = new AppState();
+
+        //    SysDirectoryList.Clear();
+        //    Databases.Clear();
+
+        //    vm = new MainViewModel();
+
+        //    Properties.Settings.Default.Save();
+        //}
     }
 }

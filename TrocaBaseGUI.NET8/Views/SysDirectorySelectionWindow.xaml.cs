@@ -85,6 +85,9 @@ namespace TrocaBaseGUI.Views
                 MainBorder.Height -= 27;
                 sysDirectorySelectionWindow.Top += 15;
 
+                if (viewModel.SysDirectoryList.Count < 1)
+                    viewModel.Databases.FirstOrDefault(db => db.IsSelected == true).IsSelected = false;
+
                 //Debug.WriteLine("\n\n\nDeletando pasta da lista...\n\n\n");
             }
         }
@@ -151,7 +154,7 @@ namespace TrocaBaseGUI.Views
             var dialog = new CommonOpenFileDialog
             {
                 Title = "Selecione a pasta do sistema.",
-                InitialDirectory = @"C:\Users\ygor\Desktop\TrocaBaseTestes",
+                InitialDirectory = @"C:\",
                 IsFolderPicker = true
             };
 
@@ -184,7 +187,7 @@ namespace TrocaBaseGUI.Views
 
         private void DeleteAllSysDirectoryList_Click(object sender, RoutedEventArgs e)
         {
-            if(viewModel.SysDirectoryList.Count > 1)
+            if(viewModel.SysDirectoryList.Count > 0)
             {
                 var del = MessageBox.Show("Deseja mesmo excluir todas as pastas?", "Excluir Todas as Pastas",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning)
@@ -194,6 +197,9 @@ namespace TrocaBaseGUI.Views
                     MainBorder.Height = 150;
                     sysDirectorySelectionWindow.Top += (viewModel?.SysDirectoryList.Count * 15 ?? 0);
                     viewModel.SysDirectoryList.Clear();
+                    viewModel.appState.SelectedFolder = new SysDirectoryModel();
+                    //viewModel.SelectedDatabase = new DatabaseModel();
+                    viewModel.Databases.FirstOrDefault(db => db.IsSelected == true).IsSelected = false;
                 }
             }
         }

@@ -16,6 +16,7 @@ namespace TrocaBaseGUI.Views
     {
         public DatabaseModel _db;
         public MainViewModel _viewModelDbs;
+        bool editMode;
 
         //Construtor para edição de base
         public EditDbPage(MainViewModel viewModelDbs, DatabaseModel db)
@@ -38,6 +39,7 @@ namespace TrocaBaseGUI.Views
 
         public void EditDbPage_Loaded()
         {
+            editMode = true;
             nameInput.Text = _db.DisplayName;
             serverInput.Text = _db.Server;
 
@@ -57,6 +59,11 @@ namespace TrocaBaseGUI.Views
                     instDbNameInput.Text = _db.Instance;
                     instDbNameInput.IsEnabled = false;
                     serverInput.IsEnabled = false;
+                } else
+                {
+                    instDbNameInputTXT.Text = "Instância";
+                    userInput.Text = _db.Name;
+                    instDbNameInput.Text = _db.Instance;
                 }
             }
             else
@@ -76,7 +83,7 @@ namespace TrocaBaseGUI.Views
             }
 
             ClearButton.Foreground = Brushes.Gray;
-            ClearButton.IsEnabled = _db.IsManualAdded;
+            ClearButton.IsEnabled = false;
         }   
 
         private void Return_Click(object sender, RoutedEventArgs e)
@@ -188,11 +195,11 @@ namespace TrocaBaseGUI.Views
             if (IsDbEmpty()) //|| _viewModelDbs.Databases.Contains(_db))
                 return;
 
-            if (!_db.IsManualAdded)
+            if (!_db.IsManualAdded || editMode)
             {
                 NavigationService.GoBack();
                 return;
-            }
+            } 
 
             if (!IsDbValid())
             {
