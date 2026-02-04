@@ -14,6 +14,7 @@ namespace TrocaBaseGUI.Views
     //Classe, funcionalidade e tela feito as pressas. REFAZER TODA A CLASSE. TWO WAY BINDING.
     public partial class EditDbPage : Page
     {
+        public DatabaseModel _dbCopy;
         public DatabaseModel _db;
         public MainViewModel _viewModelDbs;
         bool editMode;
@@ -42,6 +43,8 @@ namespace TrocaBaseGUI.Views
             editMode = true;
             nameInput.Text = _db.DisplayName;
             serverInput.Text = _db.Server;
+
+            _dbCopy = _db;
 
             //serverInput.IsEnabled = false;
 
@@ -93,6 +96,20 @@ namespace TrocaBaseGUI.Views
 
         private void Return_Click(object sender, RoutedEventArgs e)
         {
+            //if (!IsDbValid())
+            //{
+            //    MessageBox.Show("Informações Inválidas.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    NavigationService.GoBack();
+            //    return;
+            //}
+
+            //if (IsDbIn() && _db.IsManualAdded)
+            //{
+            //    MessageBox.Show("Base Repetida.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    NavigationService.GoBack();
+            //    return;
+            //}
+
             NavigationService.GoBack();
         }
 
@@ -180,13 +197,15 @@ namespace TrocaBaseGUI.Views
                     if (_db.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase) &&
                        _db.Instance.Equals(db.Instance, StringComparison.OrdinalIgnoreCase) &&
                        _db.Server.Equals(db.Server, StringComparison.OrdinalIgnoreCase) &&
-                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase))
+                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) && 
+                       !_db.Id.Equals(db.Id))
                         return true;
                 } else
                 {
                     if (_db.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase) &&
                        _db.Server.Equals(db.Server, StringComparison.OrdinalIgnoreCase) &&
-                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase))
+                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
+                       !_db.Id.Equals(db.Id))
                         return true;
                 }
 
@@ -212,15 +231,9 @@ namespace TrocaBaseGUI.Views
                 return;
             }
 
-            if (IsDbIn() && !editMode)
+            if (IsDbIn())
             {
                 MessageBox.Show("Base Repetida.", "Base inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!IsDbIn() && editMode)
-            {
-                NavigationService.GoBack();
                 return;
             }
 
@@ -232,6 +245,8 @@ namespace TrocaBaseGUI.Views
                 NavigationService.GoBack();
                 return;
             }
+
+            NavigationService.GoBack();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
