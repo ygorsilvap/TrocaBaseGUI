@@ -80,6 +80,11 @@ namespace TrocaBaseGUI.Views
                     instDbNameInput.IsEnabled = false;
                     serverInput.IsEnabled = false;
                 }
+                else
+                {
+                    instDbNameInputTXT.Text = "Nome da base";
+                    instDbNameInput.Text = _db.Name;
+                }
             }
 
             ClearButton.Foreground = Brushes.Gray;
