@@ -54,7 +54,7 @@ namespace TrocaBaseGUI.Views
             //    Debug.WriteLine($"\nId: {db.Id}, Db: {db.Name}, Env: {db.Environment}, DbT: {db.DbType}, Server: {db.Server}");
             //}
 
-            Debug.WriteLine($"\n\nCopyStringClick_Click - DbId: {viewModel.SelectedDatabase.Environment}, {viewModel.SelectedDatabase.Name}, {viewModel.SelectedDatabase.Server}\n\n");
+            //Debug.WriteLine($"\n\nCopyStringClick_Click - DbId: {viewModel.SelectedDatabase.Environment}, {viewModel.SelectedDatabase.Name}, {viewModel.SelectedDatabase.Server}\n\n");
 
             //UtilityService.IdGen();
         }
