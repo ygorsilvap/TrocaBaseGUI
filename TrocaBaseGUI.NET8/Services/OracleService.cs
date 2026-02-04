@@ -152,9 +152,11 @@ namespace TrocaBaseGUI.Services
         public string CreateOracleConnectionString(string environment, string server, string instance, string db)
         {
             //CRIAR A DIFERENÇA DE CONN STRING DE LOCAL PARA SERVER. TROCAR O SERVER DO LOCAL PARA DNS.GETHOSTNAME
-            if (environment.ToLower() == "local")
+            if (environment.ToLower() == "local" &&
+                (server.ToLower().Contains(Dns.GetHostEntry(string.Empty).HostName) || Dns.GetHostEntry(string.Empty).HostName.ToLower().Contains(server.ToLower())))
             {
-                return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={server}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
+                //return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={server}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
+                return $"{GlobalStrings.BancoDadosTag}=ORACLE\n{GlobalStrings.DatabaseTag}={Dns.GetHostEntry(string.Empty).HostName}/{instance}\n{GlobalStrings.UsuarioOracleTag}={db.ToUpper()}";
             }
             else
             {
