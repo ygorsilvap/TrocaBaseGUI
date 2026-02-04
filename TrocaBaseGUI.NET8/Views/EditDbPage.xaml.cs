@@ -197,16 +197,19 @@ namespace TrocaBaseGUI.Views
                     if (_db.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase) &&
                        _db.Instance.Equals(db.Instance, StringComparison.OrdinalIgnoreCase) &&
                        _db.Server.Equals(db.Server, StringComparison.OrdinalIgnoreCase) &&
-                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) && 
-                       !_db.Id.Equals(db.Id))
+                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase))
+                        if (editMode && !_db.Id.Equals(db.Id))
+                            return true;
+
                         return true;
                 } else
                 {
                     if (_db.DbType.Equals(db.DbType, StringComparison.OrdinalIgnoreCase) &&
                        _db.Server.Equals(db.Server, StringComparison.OrdinalIgnoreCase) &&
-                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase) &&
-                       !_db.Id.Equals(db.Id))
-                        return true;
+                       _db.Name.Equals(db.Name, StringComparison.OrdinalIgnoreCase))
+                        if (editMode && !_db.Id.Equals(db.Id))
+                            return true;
+                    return true;
                 }
 
             }
