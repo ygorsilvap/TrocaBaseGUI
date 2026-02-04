@@ -200,7 +200,7 @@ namespace TrocaBaseGUI.Views
             if (IsDbEmpty()) //|| _viewModelDbs.Databases.Contains(_db))
                 return;
 
-            if (!_db.IsManualAdded || editMode)
+            if (!_db.IsManualAdded)
             {
                 NavigationService.GoBack();
                 return;
@@ -218,6 +218,11 @@ namespace TrocaBaseGUI.Views
                 return;
             }
 
+            if (editMode)
+            {
+                NavigationService.GoBack();
+                return;
+            }
 
             if (!_viewModelDbs.Databases.Contains(_db) && IsDbValid())
             {
