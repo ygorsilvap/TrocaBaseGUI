@@ -168,6 +168,9 @@ namespace TrocaBaseGUI.ViewModels
 
         public void AddDatabases(List<DatabaseModel> databases)
         {
+            if (databases.IsNullOrEmpty())
+                return;
+
             string dbType = databases.FirstOrDefault().DbType;
             string environment = databases.FirstOrDefault().Environment;
 
@@ -306,7 +309,7 @@ namespace TrocaBaseGUI.ViewModels
 
             var selectedDb = dbs.FirstOrDefault(db => db.Id.Equals(id));
 
-            string newConn = selectedDb.DbType.ToLower().StartsWith("s")
+            string newConn = selectedDb.DbType.ToLower().StartsWith("s", StringComparison.OrdinalIgnoreCase)
                ? $"{SqlService.CreateSQLServerConnectionString(selectedDb.Environment, selectedDb.Name, selectedDb.Server)}\n\n"
                : $"{OracleService.CreateOracleConnectionString(selectedDb.Environment, selectedDb.Server, selectedDb.Instance, selectedDb.Name)}\n\n";
 
