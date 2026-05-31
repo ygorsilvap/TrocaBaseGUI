@@ -60,14 +60,6 @@ namespace TrocaBaseGUI.Services
             return directoryList.FirstOrDefault(d => d.Path.EndsWith(path));
         }
 
-        //public SysDirectoryModel GetDirByFolder(ObservableCollection<SysDirectoryModel> directoryList, string folder)
-        //{
-        //    if (string.IsNullOrEmpty(folder) || directoryList.Count < 1)
-        //        return null;
-
-        //    return directoryList.FirstOrDefault(d => d.Folder.EndsWith(folder));
-        //}
-
         public string GetSysExeFile(string directory)
         {
             if (string.IsNullOrEmpty(directory))
@@ -152,6 +144,7 @@ namespace TrocaBaseGUI.Services
                 dir.MainExeFiles = GetSysFound(directory);
                 dir.ExeFiles = GetExeList(directory);
                 dir.Tier = GetTier(directory);
+                dir.IsValid = true;
             }
         }
 
@@ -161,15 +154,16 @@ namespace TrocaBaseGUI.Services
                 directoryList.Remove(directoryList.FirstOrDefault(d => d.Id == id));
         }
 
-        //public void ClearDirectories(ObservableCollection<SysDirectoryModel> directoryList)
-        //{
-        //    directoryList.Clear();
-        //}
-
         public void UpdateSysDirectoriesFiles(ObservableCollection<SysDirectoryModel> directoryList)
         {
             foreach (var dir in directoryList)
             {
+                if (!Directory.Exists(dir.Path))
+                {
+                    dir.IsValid = false;
+                    MessageBox.Show($"A pasta '{dir.Folder}' não foi encontrada. Verifique se a pasta foi renomeada, excluída ou movida, e atualize o registro no Gerenciador de Diretórios.", "Erro de diretório", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 dir.MainExeFiles = GetSysFound(dir.Path);
                 dir.ExeFiles = GetExeList(dir.Path);
             }

@@ -212,6 +212,7 @@ namespace TrocaBaseGUI.Views
 
             if (selectedItem == null) {
                 mainExe = string.Empty;
+                exesList = new ObservableCollection<string>();
                 MainExesList.ItemsSource = new List<string>();
                 ExesList.ItemsSource = new ObservableCollection<string>();
                 selectedDatabaseId = string.Empty;

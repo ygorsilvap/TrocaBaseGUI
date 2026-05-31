@@ -743,6 +743,7 @@
           Height="20">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
+                    <Setter Property="IsEnabled" Value="{Binding IsValid}" />
                     <Setter Property="Padding" Value="4,2" />
                     <Setter Property="Foreground" Value="#f5f4f3" />
                     <Setter Property="Background" Value="#411e5a" />
@@ -772,7 +773,7 @@
                                         <Setter TargetName="Bd" Property="BorderBrush" Value="#7737A6"/>
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Foreground" Value="#f5f4f3" />
+                                        <Setter Property="Foreground" Value="#A6A5A4" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

@@ -199,7 +199,9 @@ namespace TrocaBaseGUI.Views
                     viewModel.SysDirectoryList.Clear();
                     viewModel.appState.SelectedFolder = new SysDirectoryModel();
                     //viewModel.SelectedDatabase = new DatabaseModel();
-                    viewModel.Databases.FirstOrDefault(db => db.IsSelected == true).IsSelected = false;
+
+                    if(viewModel.Databases.Any(db => db.IsSelected == true))
+                        viewModel.Databases.FirstOrDefault(db => db.IsSelected == true).IsSelected = false;
                 }
             }
         }

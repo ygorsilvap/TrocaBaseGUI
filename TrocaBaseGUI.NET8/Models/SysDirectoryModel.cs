@@ -50,14 +50,6 @@ namespace TrocaBaseGUI.Models
             { tier = value; OnPropertyChanged(); }
         }
 
-        //private string mainExeFile;
-        //public string MainExeFile
-        //{
-        //    get => mainExeFile;
-        //    set
-        //    { mainExeFile = value; OnPropertyChanged(); }
-        //}
-
         private List<string> mainExeFiles;
         public List<string> MainExeFiles
         {
@@ -80,6 +72,14 @@ namespace TrocaBaseGUI.Models
             get => sysDatabase;
             set
             { sysDatabase = value; OnPropertyChanged(); }
+        }
+
+        private bool isValid = true;
+        public bool IsValid
+        {
+            get => isValid;
+            set
+            { isValid = value; OnPropertyChanged(); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
