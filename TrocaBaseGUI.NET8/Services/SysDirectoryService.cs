@@ -162,12 +162,12 @@ namespace TrocaBaseGUI.Services
                 {
                     dir.IsValid = false;
                     MessageBox.Show($"A pasta '{dir.Folder}' não foi encontrada. Verifique se a pasta foi renomeada, excluída ou movida, e atualize o registro no Gerenciador de Diretórios.", "Erro de diretório", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    continue;
                 }
+
                 dir.MainExeFiles = GetSysFound(dir.Path);
                 dir.ExeFiles = GetExeList(dir.Path);
             }
-
         }
     }
 }

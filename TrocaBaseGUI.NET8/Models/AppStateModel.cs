@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TrocaBaseGUI.Models
 {
-    public class AppState : INotifyPropertyChanged
+    public class AppStateModel : INotifyPropertyChanged
     {
         //public AppState() { }
 
@@ -34,6 +34,14 @@ namespace TrocaBaseGUI.Models
             get => exeFile;
             set
             { exeFile = value; OnPropertyChanged(); }
+        }
+
+        private bool alteraWeb = false;
+        public bool AlteraWeb
+        {
+            get => alteraWeb;
+            set
+            { alteraWeb = value; OnPropertyChanged(); }
         }
 
         private string conexaoFile;

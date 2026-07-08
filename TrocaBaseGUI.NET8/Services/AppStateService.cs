@@ -43,7 +43,7 @@ namespace TrocaBaseGUI.Services
 
         public void SaveState(MainViewModel vm)
         {
-            var state = new AppState
+            var state = new AppStateModel
             {
                 History = vm.SysDirectoryList.ToList(),
                 Databases = vm.Databases.ToList(),
@@ -57,7 +57,8 @@ namespace TrocaBaseGUI.Services
                 ServerParams = vm.appState.ServerParams ?? new AppParams(),
                 Conexao2Camadas = vm.Conexao2Camadas,
                 Conexao3Camadas = vm.Conexao3Camadas,
-                SelectedFolder  = vm.appState.SelectedFolder
+                SelectedFolder  = vm.appState.SelectedFolder,
+                AlteraWeb = vm.appState.AlteraWeb
             };
 
             string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
@@ -71,7 +72,7 @@ namespace TrocaBaseGUI.Services
 
             if (!string.IsNullOrEmpty(json))
             {
-                var state = JsonSerializer.Deserialize<AppState>(json);
+                var state = JsonSerializer.Deserialize<AppStateModel>(json);
 
                 if (state != null)
                 {
@@ -91,6 +92,7 @@ namespace TrocaBaseGUI.Services
                     vm.appState.LocalParams = state.LocalParams ?? new AppParams();
                     vm.appState.ServerParams = state.ServerParams ?? new AppParams();
                     vm.appState.SelectedFolder = state.SelectedFolder;
+                    vm.appState.AlteraWeb = state.AlteraWeb;
 
                     //appState = state;
                 }

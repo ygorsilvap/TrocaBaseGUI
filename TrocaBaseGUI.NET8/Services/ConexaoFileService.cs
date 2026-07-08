@@ -194,8 +194,8 @@ namespace TrocaBaseGUI.Services
             string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"{GlobalStrings.SenhaPadraotag}={conexao.DefaultPassword}\n";
             string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"{GlobalStrings.EditorTag}={conexao.TextEditorPath}\n";
             string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"{GlobalStrings.DirAtualizacaoTag}={conexao.UpdateFolder}\n";
-            string useWebMenu = conexao.UseWebMenu ? $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=S" : $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=N";
-            string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
+            string usaConciliador = conexao.UsaConciliador ? $"{GlobalStrings.ConciliadorTag}=1" : string.Empty;
+            string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, updateFolder, usaConciliador);
 
             //Debug.WriteLine($"\n\n'2: {settings}'\n\n");
 
@@ -224,10 +224,10 @@ namespace TrocaBaseGUI.Services
             string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"{GlobalStrings.SenhaPadraotag}={conexao.DefaultPassword}\n";
             string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"{GlobalStrings.EditorTag}={conexao.TextEditorPath}\n";
             string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"{GlobalStrings.DirAtualizacaoTag}={conexao.UpdateFolder}\n";
-            string useWebMenu = conexao.UseWebMenu ? $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=S" : $"{GlobalStrings.AbrirMenusWebNoDesktopTag}=N";
+            string usaConciliador = conexao.UsaConciliador ? $"{GlobalStrings.ConciliadorTag}=1" : string.Empty;
 
 
-            string settings = string.Concat(defaultSettings, ports, redirector, loginPadrao, senhaPadrao, editorTexto, updateFolder, useWebMenu);
+            string settings = string.Concat(defaultSettings, ports, redirector, loginPadrao, senhaPadrao, editorTexto, updateFolder, usaConciliador);
 
             //Debug.WriteLine($"\n\n'3Client: {settings}'\n\n");
 

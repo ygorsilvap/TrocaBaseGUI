@@ -35,6 +35,7 @@ namespace TrocaBaseGUI.Views
         public SysDirectoryModel selectedSysDirectory = new SysDirectoryModel();
         public ObservableCollection<string> exesList { get; set; } = new ObservableCollection<string>();
 
+
         public string orderBy = "aa";
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -48,6 +49,14 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
+
+            List<IISServiceModel> teste = IISServiceService.GetIISServices();
+
+            foreach (IISServiceModel item in teste)
+            {
+                Debug.WriteLine($"{item.ServiceName}, {item.Port}\n");
+            }
+
 
             //foreach (var db in viewModel.Databases)
             //{
@@ -218,14 +227,19 @@ namespace TrocaBaseGUI.Views
                 selectedDatabaseId = string.Empty;
                 SetExesSelection();
                 MainExesList.Visibility = Visibility.Hidden;
+                OpenSelectedDirectory.IsEnabled = false;
+                SysDirectory.IsEnabled = false;
                 return;
             }
 
             exesList = selectedItem.ExeFiles;
             ExesList.ItemsSource = exesList;
 
+            OpenSelectedDirectory.IsEnabled = true;
+            SysDirectory.IsEnabled = true;
 
-            if(selectedItem.MainExeFiles.Count > 1)
+
+            if (selectedItem.MainExeFiles.Count > 1)
             {
                 MainExesList.Visibility = Visibility.Visible;
                 OpenMainExeButtonText.Margin = new Thickness(0,0,10,0);
@@ -250,6 +264,13 @@ namespace TrocaBaseGUI.Views
 
             //Revisar a necessidade de um serviço para conexaoaddress.
             viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
+        }
+
+        private void OpenSelectedDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedFolder = viewModel.appState.SelectedFolder.Path;
+
+            Process.Start("explorer.exe", selectedFolder);
         }
 
         private void ExeSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -379,11 +400,16 @@ namespace TrocaBaseGUI.Views
             if (dbSearch.Text.Equals("Pesquisar Bases...")) return;
 
             string environment = tabSelected == 0 ? "local" : "server";
+            string dbType = rbOracle.IsChecked == true ? "Oracle" : rbSqlServer.IsChecked == true ? "SQL Server" : string.Empty;
 
-            if (viewModel.Databases.Count > 0)
+            if (viewModel.Databases.Count > 0 && !string.IsNullOrEmpty(dbType))
+                DatabaseList.ItemsSource = databasesCopy.Where(db => db.Name.StartsWith(dbSearch.Text, StringComparison.OrdinalIgnoreCase)
+                                                && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase)
+                                                && db.DbType.Equals(dbType, StringComparison.OrdinalIgnoreCase));
+
+            if (viewModel.Databases.Count > 0 && string.IsNullOrEmpty(dbType))
                 DatabaseList.ItemsSource = databasesCopy.Where(db => db.Name.StartsWith(dbSearch.Text, StringComparison.OrdinalIgnoreCase)
                                                 && db.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
-
         }
 
         private async void RefreshDbListButton_Click(object sender, RoutedEventArgs e)

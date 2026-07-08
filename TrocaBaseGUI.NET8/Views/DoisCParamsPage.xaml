@@ -18,8 +18,8 @@
         <!--<Border BorderThickness="1" BorderBrush="#2a353a" Margin="60,22,60,70" CornerRadius="0, 0, 5, 5" Grid.Row="1"/>-->
         <!--<TextBox HorizontalAlignment="Left" Margin="100,236,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
         <!--<TextBox x:Name="OraclePassword" FontSize="11" Margin="300,235,100,0" TextWrapping="Wrap" Text="{Binding OracleConnection.Password}" VerticalAlignment="Top"/>-->
-        <CheckBox x:Name="ultMenuWebCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding Conexao2Camadas.UseWebMenu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="15"/>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="102" Height="16" Grid.Row="1" Text="Utiliza Menu Web"/>
+        <CheckBox x:Name="usaConciliadorCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding Conexao2Camadas.UsaConciliador, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="147" Height="16" Grid.Row="1" Text="Utiliza Conciliador Contábil"/>
 
         <CheckBox x:Name="loginCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding appState.LocalParams.DefaultLoginCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="loginCheckbox_Checked" Content="CheckBox" HorizontalAlignment="Right" Margin="0,66,460,0" Grid.Row="1" VerticalAlignment="Top" Width="15" Height="15"/>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="17" Grid.Row="1"><Run Text="Login Padrão"/><Run Language="pt-br" Text=":"/><LineBreak/><Run Language="pt-br"/><LineBreak/><Run/></TextBlock>

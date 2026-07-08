@@ -131,8 +131,8 @@
             </TextBox.Style>
         </TextBox>
 
-        <CheckBox x:Name="ultMenuWebCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding Conexao3Camadas.UseWebMenu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,206,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
-        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Height="16" Grid.Row="1" Text="Utiliza Menu Web"/>
+        <CheckBox x:Name="usaConciliadorCheckbox" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3" IsChecked="{Binding Conexao3Camadas.UsaConciliador, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="CheckBox" HorizontalAlignment="Left" Margin="75,206,0,0" Grid.Row="1" VerticalAlignment="Top" Width="15"/>
+        <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="151" Height="16" Grid.Row="1" Text="Utiliza Conciliador Contábil"/>
 
         <Button Content="📁" x:Name="txtEditorPathBtn" Click="SelectTextEditorPath_Click" IsTabStop="False" IsEnabled="{Binding appState.ServerParams.EditorCheckbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="348,133,0,0" Grid.Row="1">
             <Button.Template>
@@ -248,7 +248,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#411e5a" Margin="222,218,0,183" Grid.Row="1" TextWrapping="Wrap" Text="       Porta Redirecionador" Width="67"/>
+        <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#411e5a" Margin="222,221,0,180" Grid.Row="1" TextWrapping="Wrap" Text="       Porta Redirecionador" Width="67"/>
         <Button Content="Atualizar Redirecionador" ToolTip="Atualiza o arquivo ConexaoRedireciona.dat" IsTabStop="False" Click="UpdateRedirectorFile_Click" BorderThickness="2" Foreground="#411e5a" BorderBrush="#411e5a" Background="#f5f4f3" Margin="310,317,100,80" Grid.Row="1">
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -298,7 +298,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#411e5a" Margin="300,218,0,183" Grid.Row="1" TextWrapping="Wrap" Text="    Porta Verificador" Width="43"/>
+        <TextBlock FontSize="9" HorizontalAlignment="Left" Foreground="#411e5a" Margin="300,221,0,180" Grid.Row="1" TextWrapping="Wrap" Text="    Porta Verificador" Width="43"/>
         <TextBox x:Name="dbServer" Text="{Binding Conexao3Camadas.DbServer, Mode=TwoWay}" Foreground="Black" FontSize="11" Padding="1, 0" Margin="200,286,205,123" Grid.Row="1">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ namespace TrocaBaseGUI.Properties.Constants
         public const string LoginPadraotag = "[LOGINPADRAO]";
         public const string SenhaPadraotag = "[SENHAPADRAO]";
         public const string EditorTag = "[EDITOR]";
-        public const string AbrirMenusWebNoDesktopTag = "[ABRIR_MENUSWEB_NODESKTOP]";
+        public const string ConciliadorTag = "[CONFIG_REFERENCIA]";
         public const string DirAtualizacaoTag = "[DIRATUALIZACAO]";
         public const string UsuarioOracleTag = "[USUARIO_ORACLE]";
 
@@ -33,5 +34,7 @@ namespace TrocaBaseGUI.Properties.Constants
         public const string PortaRedirecionadorTag = "[PORTA_REDIRECIONADOR]";
         public const string PortaVerificadorTag = "[PORTA_VERIFICADOR]";
         public const string RedirecionadorTag = "[REDIRECIONADOR]";
+
+        //public const string TrocaBaseIISConfigFile = "C:\\inetpub\\";
     }
 }

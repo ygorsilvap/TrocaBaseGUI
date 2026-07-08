@@ -459,7 +459,8 @@
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter TargetName="Border" Property="Background" Value="#A6A5A4"/>
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="#70706F"/>                                    </Trigger>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#70706F"/>
+                                    </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
@@ -730,6 +731,16 @@
             </RadioButton>
         </StackPanel>
 
+        <CheckBox x:Name="editorCheckbox" IsChecked="{Binding appState.AlteraWeb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3"  Content="CheckBox" HorizontalAlignment="Left" Margin="357,91,0,0" VerticalAlignment="Top" Width="15"/>
+
+        <TextBlock x:Name="Param"
+                   Text="Alterar base web"
+                   Foreground="#411e5a"
+                   FontWeight="Regular"
+                   TextAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="377,90,80,0"/>
+
         <ComboBox x:Name="SysDirectory"
           ItemsSource="{Binding SysDirectoryList}"
           SelectedValue="{Binding appState.SelectedFolder}"
@@ -740,6 +751,7 @@
           Margin="357,120,80,0"
           VerticalAlignment="Top"
           IsTabStop="False"
+          IsEnabled="False"
           Height="20">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
@@ -827,6 +839,10 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="Border" Property="Background" Value="#5C2A80" />
                                                     </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Border" Property="Background" Value="#A6A5A4" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="#A6A5A4" />
+                                                    </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </ToggleButton.Template>
@@ -878,6 +894,37 @@
                 </Style>
             </ComboBox.Style>
         </ComboBox>
+
+        <Button Content="📁" x:Name="OpenSelectedDirectory" Click="OpenSelectedDirectory_Click" ToolTip="Abrir pasta no explorer" Foreground="#411e5a" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="21" Width="20" Margin="475,117,0,0" IsEnabled="False">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border"
+                            Background="Transparent"
+                            CornerRadius="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="0">
+                        <ContentPresenter x:Name="contentPresenter"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True"
+                                TextElement.Foreground="{TemplateBinding Foreground}"
+                                TextElement.FontSize="{TemplateBinding FontSize}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#7737A6"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="contentPresenter" Property="TextElement.FontSize" Value="15"/>
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#411e5a"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#BFBEBD"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
 
         <!--<TextBlock x:Name="conexaoCheck" Foreground="#f5f4f3" HorizontalAlignment="Center" Height="29" Margin="0,118,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="104"/>-->
         <Button x:Name="SettingsButton" Click="ToSettings_Click" IsTabStop="False" Content="⚙️" ToolTip="Configurações" Foreground="#f5f4f3" FontSize="22" HorizontalAlignment="Left" Margin="8,85,0,385" Width="30" BorderBrush="#2a353a"  Background="Transparent" RenderTransformOrigin="0.511,0.257">

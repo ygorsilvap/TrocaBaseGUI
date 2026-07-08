@@ -64,7 +64,7 @@ namespace TrocaBaseGUI.Views
             updateFolderCheckbox.IsChecked = viewModel.appState.LocalParams.DirUpdateCheckbox || !string.IsNullOrEmpty(viewModel.Conexao2Camadas.UpdateFolder);
             updateFolder.IsEnabled = (bool)updateFolderCheckbox.IsChecked;
 
-            ultMenuWebCheckbox.IsChecked = viewModel.Conexao2Camadas.UseWebMenu;
+            usaConciliadorCheckbox.IsChecked = viewModel.Conexao2Camadas.UsaConciliador;
         }
 
         private void SelectTextEditorPath_Click(object sender, RoutedEventArgs e)

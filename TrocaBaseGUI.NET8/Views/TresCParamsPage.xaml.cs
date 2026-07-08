@@ -105,7 +105,7 @@ namespace TrocaBaseGUI.Views
             updateFolderCheckbox.IsChecked = _viewModel.appState.ServerParams.DirUpdateCheckbox || !string.IsNullOrEmpty(_viewModel.Conexao3Camadas.UpdateFolder);
             updateFolder.IsEnabled = (bool)updateFolderCheckbox.IsChecked;
 
-            ultMenuWebCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseWebMenu;
+            usaConciliadorCheckbox.IsChecked = _viewModel.Conexao3Camadas.UsaConciliador;
 
             useRedirectCheckbox.IsChecked = _viewModel.Conexao3Camadas.UseRedirect || !string.IsNullOrEmpty(_viewModel.Conexao3Camadas.RedirectPort);
         }

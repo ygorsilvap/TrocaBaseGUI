@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net;
 using System.Runtime.CompilerServices;
 
 namespace TrocaBaseGUI.Models
@@ -86,12 +87,12 @@ namespace TrocaBaseGUI.Models
             { updateFolder = value; OnPropertyChanged(); }
         }
 
-        private bool useWebMenu;
-        public bool UseWebMenu
+        private bool usaConciliador;
+        public bool UsaConciliador
         {
-            get => useWebMenu;
+            get => usaConciliador;
             set
-            { useWebMenu = value; OnPropertyChanged(); }
+            { usaConciliador = value; OnPropertyChanged(); }
         }
 
         private bool useRedirect;
@@ -110,7 +111,8 @@ namespace TrocaBaseGUI.Models
             { redirectPort = value; OnPropertyChanged(); }
         }
 
-        private string dbServer;
+        //Renomear para "redirectServer"
+        private string dbServer = $"{Dns.GetHostName()}.linx-inves.com.br";
         public string DbServer
         {
             get => dbServer;

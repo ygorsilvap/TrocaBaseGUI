@@ -1,14 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.ServiceProcess;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Forms;
-using Microsoft.IdentityModel.Tokens;
 using TrocaBaseGUI.Models;
+using TrocaBaseGUI.Properties.Constants;
 using TrocaBaseGUI.Services;
 using TrocaBaseGUI.Utils;
 using MessageBox = System.Windows.MessageBox;
@@ -71,13 +74,22 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel() { Environment = "local" };
+        public SqlServerConnectionModel LocalSQLServerConnection { get; set; } = new SqlServerConnectionModel() 
+        { 
+            Environment = "local",
+            Server = Dns.GetHostName(),
+            Password = "ninguemsabe"
+        };
         public SqlServerConnectionModel ServerSQLServerConnection { get; set; } = new SqlServerConnectionModel() 
             { Environment = "server",
-              Server = "AZ-BD-AUTO-03.linx.com.br",
+              Server = "D-SRVMTZ0243",
               Password =  "ninguemsabe"
               };
-        public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel() { Environment = "local" };
+        public OracleConnectionModel LocalOracleConnection { get; set; } = new OracleConnectionModel() 
+        {   Environment = "local",
+            Server = "localhost",
+            Password = "oracle"
+        };
         public OracleConnectionModel ServerOracleConnection { get; set; } = new OracleConnectionModel()
         {
             Environment = "server",
@@ -102,7 +114,7 @@ namespace TrocaBaseGUI.ViewModels
         public ObservableCollection<SysDirectoryModel> SysDirectoryList { get; set; } = new ObservableCollection<SysDirectoryModel>();
         public SysDirectoryService sysDirectoryService { get; set; } = new SysDirectoryService();
         //public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
-        public AppState appState { get; set; } = new AppState();
+        public AppStateModel appState { get; set; } = new AppStateModel();
 
         //public AppState appState = new AppState();
         //public AppState AppState
@@ -325,6 +337,24 @@ namespace TrocaBaseGUI.ViewModels
             DatabaseService.SetSelection(dbs, selectedDb.Id);
             sysDirectoryService.GetDir(SysDirectoryList, sysDirectory.Path).SysDatabase = selectedDb.Id;
             SelectedDatabase = selectedDb;
+
+            if (appState.AlteraWeb && selectedDb.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!IISServiceService.GetIISServices().Any(p => p.Port.Equals("81")))
+                    return;
+
+                var servicoIIS = IISServiceService.GetIISServices().FirstOrDefault(p => p.Port.Equals("81"));
+
+                string conexaoWeb = $"C:\\inetpub\\Linx_{servicoIIS.ServiceName.Substring(8)}\\ConfiguracoesLinxDMS\\conexao.dat";
+
+                File.WriteAllText(conexaoWeb, string.Concat(newConn, $"[NOME_CONFIG]={servicoIIS.ServiceName.Substring(8)}"));
+
+                MessageBox.Show("Reiniciando IIS.", "Alterar base web", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                Process.Start("iisreset.exe");
+
+                MessageBox.Show("Finalizado.", "Alterar base web", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         public ObservableCollection<DatabaseModel> EnvironmentFilter(string environment, ObservableCollection<DatabaseModel> db)
@@ -342,24 +372,33 @@ namespace TrocaBaseGUI.ViewModels
         {
             //exeFile = "";
 
-            LocalSQLServerConnection = new SqlServerConnectionModel() { Environment = "local" };
-            ServerSQLServerConnection = new SqlServerConnectionModel()
-            {
-                Environment = "server",
-                Server = "AZ-BD-AUTO-03.linx.com.br",
-                Password = "ninguemsabe"
-            };
+        LocalSQLServerConnection = new SqlServerConnectionModel()
+        {
+            Environment = "local",
+            Server = Dns.GetHostName(),
+            Password = "ninguemsabe"
+        };
+        ServerSQLServerConnection = new SqlServerConnectionModel()
+        {
+            Environment = "server",
+            Server = "D-SRVMTZ0243",
+            Password = "ninguemsabe"
+        };
+        LocalOracleConnection = new OracleConnectionModel()
+                {
+                    Environment = "local",
+                    Server = "localhost",
+                    Password = "oracle"
+                };
+        ServerOracleConnection = new OracleConnectionModel()
+                {
+                    Environment = "server",
+                    Server = "150.230.86.225",
+                    Instance = "pdb_auto_dev_01.sub08051803480.vcnoradev.oraclevcn.com",
+                    Password = "ninguemsabe"
+                };
 
-            LocalOracleConnection = new OracleConnectionModel() { Environment = "local" };
-            ServerOracleConnection = new OracleConnectionModel()
-            {
-                Environment = "server",
-                Server = "150.230.86.225",
-                Instance = "pdb_auto_dev_01.sub08051803480.vcnoradev.oraclevcn.com",
-                Password = "ninguemsabe"
-            };
-
-            appState = new AppState();
+        appState = new AppStateModel();
 
             Conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
             Conexao3Camadas = new ConexaoFileModel() { Tier = 3 };
