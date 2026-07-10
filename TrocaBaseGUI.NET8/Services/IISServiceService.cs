@@ -1,16 +1,14 @@
 ﻿using Microsoft.Web.Administration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using TrocaBaseGUI.Models;
+
 
 namespace TrocaBaseGUI.Services
 {
     public class IISServiceService
     {
-        public static List<IISServiceModel> GetIISServices()
+        public static List<IISServiceModel> GetIISDMSSite()
         {
             List<IISServiceModel> iIsServiceList = new();
 
@@ -30,6 +28,67 @@ namespace TrocaBaseGUI.Services
             }
 
             return iIsServiceList;
+        }
+
+        public static async Task StopIISService(string name)
+        {
+            string cfgName = name.Substring(8);
+
+            var serverManager = new Microsoft.Web.Administration.ServerManager();
+
+            Site dmsSite = serverManager.Sites.FirstOrDefault(s => s.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase));
+
+            var dmsPool = serverManager.ApplicationPools.Where(p => p.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            while (dmsSite.State == ObjectState.Started || dmsPool.Any(p => p.State == ObjectState.Started || p.State == ObjectState.Stopping))
+            {
+                serverManager = new Microsoft.Web.Administration.ServerManager();
+                dmsSite = serverManager.Sites.FirstOrDefault(s => s.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase));
+                dmsPool = serverManager.ApplicationPools.Where(p => p.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                foreach (var item in dmsPool)
+                {
+                    while (item.State == ObjectState.Started)
+                    {
+                        if(item.State == ObjectState.Started)
+                            item.Stop();
+                    }
+                }
+                if (dmsSite.State == ObjectState.Started)
+                    dmsSite.Stop();
+
+                await Task.Delay(250);
+            }
+        }
+
+        public static async Task StartIISService(string name)
+        {
+            string cfgName = name.Substring(8);
+
+            var serverManager = new Microsoft.Web.Administration.ServerManager();
+
+            Site dmsSite = serverManager.Sites.FirstOrDefault(s => s.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase));
+
+            var dmsPool = serverManager.ApplicationPools.Where(p => p.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            while (dmsPool.Any(p => p.State == ObjectState.Stopped))
+            {
+                serverManager = new Microsoft.Web.Administration.ServerManager();
+                dmsSite = serverManager.Sites.FirstOrDefault(s => s.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase));
+                dmsPool = serverManager.ApplicationPools.Where(p => p.Name.EndsWith(cfgName, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                foreach (var item in dmsPool)
+                {
+                    while (item.State == ObjectState.Stopped || item.State == ObjectState.Stopping)
+                    {
+                        if(item.State == ObjectState.Stopped)
+                            item.Start();
+                    }
+                }
+                if(dmsSite.State == ObjectState.Stopped)
+                    dmsSite.Start();
+
+            }
         }
     }
 }

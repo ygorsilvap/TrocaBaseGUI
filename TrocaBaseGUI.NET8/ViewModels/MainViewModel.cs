@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Microsoft.Web.Administration;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -46,11 +47,6 @@ namespace TrocaBaseGUI.ViewModels
             get => conexaoFileService.ConexaoClienteFile;
             set => conexaoFileService.ConexaoClienteFile = value;
         }
-
-        //public static string exeFile;
-
-        //public ConexaoFileModel Conexao2Camadas { get; set; } = new ConexaoFileModel() { Tier = 2 };
-        //public ConexaoFileModel Conexao3Camadas { get; set; } = new ConexaoFileModel() { Tier = 3 };
 
         private ConexaoFileModel _conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
         public ConexaoFileModel Conexao2Camadas 
@@ -109,6 +105,20 @@ namespace TrocaBaseGUI.ViewModels
 
         //Refatorar a tratativa de base selecionada para retirar essa variavel da vm[1]
         public DatabaseModel SelectedDatabase { get; set; } = new DatabaseModel();
+        //private DatabaseModel _selectedDatabase = new();
+
+        //public DatabaseModel SelectedDatabase
+        //{
+        //    get => _selectedDatabase;
+        //    set
+        //    {
+        //        if (_selectedDatabase != value)
+        //        {
+        //            _selectedDatabase = value;
+        //            OnPropertyChanged(nameof(SelectedDatabase));
+        //        }
+        //    }
+        //}
 
         private const int MaxSysDirectorySize = 10;
         public ObservableCollection<SysDirectoryModel> SysDirectoryList { get; set; } = new ObservableCollection<SysDirectoryModel>();
@@ -116,16 +126,6 @@ namespace TrocaBaseGUI.ViewModels
         //public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
         public AppStateModel appState { get; set; } = new AppStateModel();
 
-        //public AppState appState = new AppState();
-        //public AppState AppState
-        //{
-        //    get => appState;
-        //    set
-        //    {
-        //        appState = value;
-        //        OnPropertyChanged(nameof(AppState));
-        //    }
-        //}
         public AppStateService appStateService { get; set; } = new AppStateService();
         public bool isDbListLoading;
 
@@ -307,7 +307,7 @@ namespace TrocaBaseGUI.ViewModels
             }
         }
 
-        public void SelectDatabase(ObservableCollection<DatabaseModel> dbs, string id, SysDirectoryModel sysDirectory)
+        public async Task SelectDatabase(ObservableCollection<DatabaseModel> dbs, string id, SysDirectoryModel sysDirectory)
         {
             var conexaoService = conexaoFileService;
 
@@ -340,18 +340,20 @@ namespace TrocaBaseGUI.ViewModels
 
             if (appState.AlteraWeb && selectedDb.Environment.Equals("server", StringComparison.OrdinalIgnoreCase))
             {
-                if (!IISServiceService.GetIISServices().Any(p => p.Port.Equals("81")))
+                if (!IISServiceService.GetIISDMSSite().Any(p => p.Port.Equals("81")))
                     return;
 
-                var servicoIIS = IISServiceService.GetIISServices().FirstOrDefault(p => p.Port.Equals("81"));
+                var servicoIIS = IISServiceService.GetIISDMSSite().FirstOrDefault(p => p.Port.Equals("81"));
 
                 string conexaoWeb = $"C:\\inetpub\\Linx_{servicoIIS.ServiceName.Substring(8)}\\ConfiguracoesLinxDMS\\conexao.dat";
 
-                File.WriteAllText(conexaoWeb, string.Concat(newConn, $"[NOME_CONFIG]={servicoIIS.ServiceName.Substring(8)}"));
-
                 MessageBox.Show("Reiniciando IIS.", "Alterar base web", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                Process.Start("iisreset.exe");
+                await IISServiceService.StopIISService(servicoIIS.ServiceName);
+
+                File.WriteAllText(conexaoWeb, string.Concat(newConn, $"[NOME_CONFIG]={servicoIIS.ServiceName.Substring(8)}"));
+
+                await IISServiceService.StartIISService(servicoIIS.ServiceName);
 
                 MessageBox.Show("Finalizado.", "Alterar base web", MessageBoxButton.OK, MessageBoxImage.Information);
             }

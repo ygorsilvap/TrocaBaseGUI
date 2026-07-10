@@ -731,9 +731,9 @@
             </RadioButton>
         </StackPanel>
 
-        <CheckBox x:Name="editorCheckbox" IsChecked="{Binding appState.AlteraWeb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3"  Content="CheckBox" HorizontalAlignment="Left" Margin="357,91,0,0" VerticalAlignment="Top" Width="15"/>
+        <CheckBox x:Name="AlteraBaseWebCheckbox" IsChecked="{Binding appState.AlteraWeb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsTabStop="False" BorderBrush="#411e5a" Background="#f5f4f3"  Content="CheckBox" HorizontalAlignment="Left" Margin="357,91,0,0" VerticalAlignment="Top" Width="16"/>
 
-        <TextBlock x:Name="Param"
+        <TextBlock x:Name="AlteraBaseWebTxt"
                    Text="Alterar base web"
                    Foreground="#411e5a"
                    FontWeight="Regular"
@@ -1030,6 +1030,16 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <!--<Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="326,65,0,0" VerticalAlignment="Top"/>-->
+        <TextBlock x:Name="SelectedDatabaseDisplay"
+            Foreground="#dc9710"
+            FontWeight="bold"
+            TextAlignment="Center"
+            VerticalAlignment="Top"
+            Margin="203,112,217,0">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#B3B3B3" Direction="-15" ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
+        <!--<Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="325,42,0,0" VerticalAlignment="Top"/>-->
     </Grid>
 </Page>

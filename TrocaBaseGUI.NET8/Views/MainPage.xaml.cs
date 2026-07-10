@@ -49,23 +49,6 @@ namespace TrocaBaseGUI.Views
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
-
-            List<IISServiceModel> teste = IISServiceService.GetIISServices();
-
-            foreach (IISServiceModel item in teste)
-            {
-                Debug.WriteLine($"{item.ServiceName}, {item.Port}\n");
-            }
-
-
-            //foreach (var db in viewModel.Databases)
-            //{
-            //    Debug.WriteLine($"\nId: {db.Id}, Db: {db.Name}, Env: {db.Environment}, DbT: {db.DbType}, Server: {db.Server}");
-            //}
-
-            //Debug.WriteLine($"\n\nCopyStringClick_Click - DbId: {viewModel.SelectedDatabase.Environment}, {viewModel.SelectedDatabase.Name}, {viewModel.SelectedDatabase.Server}\n\n");
-
-            //UtilityService.IdGen();
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -130,11 +113,6 @@ namespace TrocaBaseGUI.Views
                 string.Empty :
                 exesList.FirstOrDefault(exe => exe.StartsWith("frentecaixa", StringComparison.OrdinalIgnoreCase)).ToLower();
 
-            //secondaryExe = !string.IsNullOrEmpty(secondaryExe) && secondaryExe.Contains("client", StringComparison.OrdinalIgnoreCase) ?
-            //    secondaryExe.Replace("client", "") : secondaryExe;
-
-            //string mainExecutable = !string.IsNullOrEmpty(mainExe) && mainExe.EndsWith("client", StringComparison.OrdinalIgnoreCase) ? mainExe.Replace("client", "") : mainExe;
-
             OpenMainExeButtonText.Text = string.IsNullOrWhiteSpace(mainExe) ?
                 "Selecione um executável" : $"Iniciar \n{Utils.UtilityService.ToCapitalize(mainExe)}";
 
@@ -148,31 +126,45 @@ namespace TrocaBaseGUI.Views
                 viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : new DatabaseModel();
         }
 
-        private void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var listBox = sender as ListBox;
 
             if (listBox.SelectedItem == null) return;
 
-            if (!String.IsNullOrEmpty(mainExe))
+            var selectedDB = listBox.SelectedItem as DatabaseModel;
+
+            string selectedDbId = string.IsNullOrEmpty(viewModel.SelectedDatabase.Id) ? selectedDB.Id : viewModel.SelectedDatabase.Id;
+
+            try
             {
-                if(string.IsNullOrEmpty(selectedSysDirectory.SysDatabase))
+                if (!String.IsNullOrEmpty(mainExe))
                 {
-                    var del = MessageBox.Show("Ao selecionar uma base pela primeira vez em cada diretório, o conteúdo do arquivo de conexão será substituído pelo conteúdo gerado no programa.\n\nVocê deseja continuar?", "Selecionar base",
-                                MessageBoxButton.YesNo, MessageBoxImage.Warning)
-                                .ToString().ToLower();
+                    if (string.IsNullOrEmpty(selectedSysDirectory.SysDatabase))
+                    {
+                        var del = MessageBox.Show("Ao selecionar uma base pela primeira vez em cada diretório, o conteúdo do arquivo de conexão será substituído pelo conteúdo gerado no programa.\n\nVocê deseja continuar?", "Selecionar base",
+                                    MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                                    .ToString().ToLower();
 
-                    if (del.Equals("yes"))
-                        viewModel.SelectDatabase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+                        if (del.Equals("yes"))
+                        {
+                            await viewModel.SelectDatabase(viewModel.Databases, selectedDbId, selectedSysDirectory);
+                            SelectedDatabaseDisplay.Text = viewModel.SelectedDatabase.DisplayName;
+                        }
 
-                    return;
+                        return;
+                    }
+                    await viewModel.SelectDatabase(viewModel.Databases, selectedDbId, selectedSysDirectory);
+                    SelectedDatabaseDisplay.Text = viewModel.SelectedDatabase.DisplayName;
                 }
-                    
-                viewModel.SelectDatabase(viewModel.Databases, viewModel.SelectedDatabase.Id, selectedSysDirectory);
+                else
+                {
+                    MessageBox.Show("Nenhum diretório selecionado.\nSelecione um diretório.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Nenhum diretório selecionado.\nSelecione um diretório.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Erro ao selecionar uma base de dados", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -195,6 +187,23 @@ namespace TrocaBaseGUI.Views
             SetDatabaseListFiltered(databasesCopy);
             SetSearchPlaceholder();
             SetLoadingState();
+
+            bool isServer = tabSelected == 1;
+
+            AlteraBaseWebCheckbox.IsEnabled = isServer;
+            AlteraBaseWebTxt.IsEnabled = isServer;
+
+            if (!isServer)
+            {
+                AlteraBaseWebCheckbox.Visibility = Visibility.Hidden;
+                AlteraBaseWebCheckbox.IsHitTestVisible = false;
+                AlteraBaseWebTxt.Visibility = Visibility.Hidden;
+            } else
+            {
+                AlteraBaseWebCheckbox.Visibility = Visibility.Visible;
+                AlteraBaseWebCheckbox.IsHitTestVisible = true;
+                AlteraBaseWebTxt.Visibility = Visibility.Visible;
+            }
         }
 
         private void MenuDiretorios_Click(object sender, RoutedEventArgs e)
@@ -219,7 +228,7 @@ namespace TrocaBaseGUI.Views
             viewModel.appState.SelectedFolder = selectedItem == null ?
                 viewModel.SysDirectoryList.LastOrDefault() : selectedItem;
 
-            if (selectedItem == null) {
+            if (viewModel.appState.SelectedFolder == null) {
                 mainExe = string.Empty;
                 exesList = new ObservableCollection<string>();
                 MainExesList.ItemsSource = new List<string>();
@@ -227,43 +236,46 @@ namespace TrocaBaseGUI.Views
                 selectedDatabaseId = string.Empty;
                 SetExesSelection();
                 MainExesList.Visibility = Visibility.Hidden;
-                OpenSelectedDirectory.IsEnabled = false;
-                SysDirectory.IsEnabled = false;
+                if (viewModel.SysDirectoryList.Count < 1)
+                {
+                    OpenSelectedDirectory.IsEnabled = false;
+                    SysDirectory.IsEnabled = false;
+                }
                 return;
             }
 
-            exesList = selectedItem.ExeFiles;
+            exesList = viewModel.appState.SelectedFolder.ExeFiles;
             ExesList.ItemsSource = exesList;
 
             OpenSelectedDirectory.IsEnabled = true;
             SysDirectory.IsEnabled = true;
 
 
-            if (selectedItem.MainExeFiles.Count > 1)
+            if (viewModel.appState.SelectedFolder.MainExeFiles.Count > 1)
             {
                 MainExesList.Visibility = Visibility.Visible;
                 OpenMainExeButtonText.Margin = new Thickness(0,0,10,0);
-                MainExesList.ItemsSource = selectedItem.MainExeFiles;
+                MainExesList.ItemsSource = viewModel.appState.SelectedFolder.MainExeFiles;
 
-                mainExe = selectedItem.MainExeFiles[0];
+                mainExe = viewModel.appState.SelectedFolder.MainExeFiles[0];
             }
             else
             {
                 MainExesList.Visibility = Visibility.Hidden;
                 OpenMainExeButtonText.Margin = new Thickness(0, 0, 0, 0);
-                mainExe = selectedItem.MainExeFiles[0];
+                mainExe = viewModel.appState.SelectedFolder.MainExeFiles[0];
             }
 
             SetExesSelection();  
 
             //Revisar necessidade dessa variável
-            selectedSysDirectory = selectedItem;
+            selectedSysDirectory = viewModel.appState.SelectedFolder;
 
-            SetSelectedDatabase(selectedItem.SysDatabase);
-            DatabaseService.SetSelection(viewModel.Databases, selectedItem.SysDatabase);
+            SetSelectedDatabase(viewModel.appState.SelectedFolder.SysDatabase);
+            DatabaseService.SetSelection(viewModel.Databases, viewModel.appState.SelectedFolder.SysDatabase);
 
             //Revisar a necessidade de um serviço para conexaoaddress.
-            viewModel.conexaoFileService.SetConexaoAddress(selectedItem.Path);
+            viewModel.conexaoFileService.SetConexaoAddress(viewModel.appState.SelectedFolder.Path);
         }
 
         private void OpenSelectedDirectory_Click(object sender, RoutedEventArgs e)
@@ -363,8 +375,6 @@ namespace TrocaBaseGUI.Views
                 : viewModel.OracleService.CreateOracleConnectionString(viewModel.SelectedDatabase.Environment, viewModel.SelectedDatabase.Server, viewModel.SelectedDatabase.Instance, viewModel.SelectedDatabase.Name);
 
             Clipboard.SetText(connString);
-
-            //Debug.WriteLine($"\n\nCopyStringClick_Click - DbId: {viewModel.SelectedDatabase.Environment}, {viewModel.SelectedDatabase.Name}, {viewModel.SelectedDatabase.Server}\n\n");
         }
 
         private void DbSearchPlaceholder_MouseDown(object sender, MouseButtonEventArgs e)
@@ -439,25 +449,10 @@ namespace TrocaBaseGUI.Views
                 };
             }
 
-            //var tasks = new List<Task>
-            //    {
-            //        //Local
-            //        viewModel.OpenSqlConn(viewModel.SqlService, viewModel.LocalSQLServerConnection, true, false),
-            //        viewModel.OpenOracleConn(viewModel.OracleService, viewModel.LocalOracleConnection, true, false),
-            //        //Server
-            //        viewModel.OpenSqlConn(viewModel.SqlService, viewModel.ServerSQLServerConnection, true, false),
-            //        viewModel.OpenOracleConn(viewModel.OracleService, viewModel.ServerOracleConnection, true, false)
-            //    };
-
             await Task.WhenAll(tasks);
-
-            //foreach (var item in viewModel.Databases)
-            //    Debug.WriteLine($"\n\ndb: {item.Id}\n\n");
 
             viewModel.isDbListLoading = false;
             SetLoadingState();
-
-            //MessageBox.Show("Atualização Finalizada.");
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -524,9 +519,9 @@ namespace TrocaBaseGUI.Views
 
         //private void Button_Click(object sender, RoutedEventArgs e)
         //{
-        //    //DateTime date = new("dd/mm/yyyy");
-        //    DateTime date = Convert.ToDateTime("01/03/2024");
-        //    Debug.WriteLine(date);
+        //    var servicoIIS = IISServiceService.GetIISDMSSite().FirstOrDefault(p => p.Port.Equals("81"));
+
+        //    IISServiceService.StopIISService(servicoIIS.ServiceName);
         //}
     }
 }
