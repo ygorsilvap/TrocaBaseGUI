@@ -47,6 +47,8 @@ namespace TrocaBaseGUI.Views
             viewModel = vm;
             DataContext = viewModel;
 
+            SelectedDatabaseDisplay.Text = viewModel.SelectedDatabase.DisplayName;
+
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
         }
@@ -241,6 +243,9 @@ namespace TrocaBaseGUI.Views
                     OpenSelectedDirectory.IsEnabled = false;
                     SysDirectory.IsEnabled = false;
                 }
+
+                SelectedDatabaseDisplay.Text = string.Empty;
+
                 return;
             }
 
@@ -276,6 +281,8 @@ namespace TrocaBaseGUI.Views
 
             //Revisar a necessidade de um serviço para conexaoaddress.
             viewModel.conexaoFileService.SetConexaoAddress(viewModel.appState.SelectedFolder.Path);
+
+            SelectedDatabaseDisplay.Text = viewModel.SelectedDatabase.DisplayName;
         }
 
         private void OpenSelectedDirectory_Click(object sender, RoutedEventArgs e)

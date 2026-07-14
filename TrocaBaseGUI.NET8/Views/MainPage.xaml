@@ -121,10 +121,13 @@
                                     </Trigger>
                                     <Trigger Property="IsHighlighted" Value="True">
                                         <Setter TargetName="Bd" Property="Background" Value="#7737A6" />
-                                        <Setter Property="Foreground" Value="#411e5a" />
+                                        <Setter Property="Foreground" Value="#f5f4f3" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="Foreground" Value="#411e5a" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="#f5f4f3" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

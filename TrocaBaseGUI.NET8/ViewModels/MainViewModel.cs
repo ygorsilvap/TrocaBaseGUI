@@ -120,7 +120,7 @@ namespace TrocaBaseGUI.ViewModels
         //    }
         //}
 
-        private const int MaxSysDirectorySize = 10;
+        //private const int MaxSysDirectorySize = 10;
         public ObservableCollection<SysDirectoryModel> SysDirectoryList { get; set; } = new ObservableCollection<SysDirectoryModel>();
         public SysDirectoryService sysDirectoryService { get; set; } = new SysDirectoryService();
         //public ObservableCollection<string> ExeFilesList { get; set; } = new ObservableCollection<string>();
@@ -374,33 +374,33 @@ namespace TrocaBaseGUI.ViewModels
         {
             //exeFile = "";
 
-        LocalSQLServerConnection = new SqlServerConnectionModel()
-        {
-            Environment = "local",
-            Server = Dns.GetHostName(),
-            Password = "ninguemsabe"
-        };
-        ServerSQLServerConnection = new SqlServerConnectionModel()
-        {
-            Environment = "server",
-            Server = "D-SRVMTZ0243",
-            Password = "ninguemsabe"
-        };
-        LocalOracleConnection = new OracleConnectionModel()
-                {
-                    Environment = "local",
-                    Server = "localhost",
-                    Password = "oracle"
-                };
-        ServerOracleConnection = new OracleConnectionModel()
-                {
-                    Environment = "server",
-                    Server = "150.230.86.225",
-                    Instance = "pdb_auto_dev_01.sub08051803480.vcnoradev.oraclevcn.com",
-                    Password = "ninguemsabe"
-                };
+            LocalSQLServerConnection = new SqlServerConnectionModel()
+            {
+                Environment = "local",
+                Server = Dns.GetHostName(),
+                Password = "ninguemsabe"
+            };
+            ServerSQLServerConnection = new SqlServerConnectionModel()
+            {
+                Environment = "server",
+                Server = "D-SRVMTZ0243",
+                Password = "ninguemsabe"
+            };
+            LocalOracleConnection = new OracleConnectionModel()
+                    {
+                        Environment = "local",
+                        Server = "localhost",
+                        Password = "oracle"
+                    };
+            ServerOracleConnection = new OracleConnectionModel()
+                    {
+                        Environment = "server",
+                        Server = "150.230.86.225",
+                        Instance = "pdb_auto_dev_01.sub08051803480.vcnoradev.oraclevcn.com",
+                        Password = "ninguemsabe"
+                    };
 
-        appState = new AppStateModel();
+            appState = new AppStateModel();
 
             Conexao2Camadas = new ConexaoFileModel() { Tier = 2 };
             Conexao3Camadas = new ConexaoFileModel() { Tier = 3 };
