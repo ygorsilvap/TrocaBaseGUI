@@ -101,20 +101,20 @@ namespace TrocaBaseGUI.Models
             { serverOracleConnection = value; OnPropertyChanged(); }
         }
 
-        private AppParams localParams = new AppParams();
-        public AppParams LocalParams
-        {
-            get => localParams;
-            set
-            { localParams = value; OnPropertyChanged(); }
-        }
+        //private AppParams localParams = new AppParams();
+        //public AppParams LocalParams
+        //{
+        //    get => localParams;
+        //    set
+        //    { localParams = value; OnPropertyChanged(); }
+        //}
 
-        private AppParams serverParams = new AppParams();
-        public AppParams ServerParams
+        private AppParams settings = new AppParams();
+        public AppParams Settings
         {
-            get => serverParams;
+            get => settings;
             set
-            { serverParams = value; OnPropertyChanged(); }
+            { settings = value; OnPropertyChanged(); }
         }
 
         private SysDirectoryModel selectedFolder = new SysDirectoryModel();

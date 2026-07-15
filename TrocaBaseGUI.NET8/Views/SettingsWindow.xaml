@@ -114,7 +114,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Border BorderThickness="1" BorderBrush="#411e5a" Margin="0,35,0,60" CornerRadius="0, 0, 5, 5" Grid.Row="2" HorizontalAlignment="Center" Width="416" Grid.RowSpan="2"/>
+            <Border BorderThickness="1" BorderBrush="#411e5a" Margin="0,35,0,40" CornerRadius="0, 0, 5, 5" Grid.Row="2" HorizontalAlignment="Center" Width="416" Grid.RowSpan="2"/>
             <TabControl Margin="60,9,60,82" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" BorderThickness="0" Background="#101e24" Grid.Row="2">
                 <TabControl.Resources>
                     <Style TargetType="TabItem">
@@ -150,8 +150,8 @@
                 </TabControl.Resources>
                 <TabItem x:Name="ConLocalTab" Header="Conexão Local" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0" />
                 <TabItem x:Name="ConServerTab" Header="Conexão Server" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
-                <TabItem x:Name="DoisCTab" Header="Opc. 2 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
-                <TabItem x:Name="TresCTab" Header="Opc. 3 Camadas" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>
+                <!--<TabItem x:Name="DoisCTab" Header="Opc. 2 Camadas" IsEnabled="False" IsTabStop="False" Foreground="#f5f4f3" Margin="12,0,-12,0"/>-->
+                <TabItem x:Name="TresCTab" Header="Parâmetros" IsTabStop="False" Foreground="#f5f4f3" Margin="-2,0,2,0"/>
             </TabControl>
             <Button x:Name="VoltarButton" Content="🡨" Click="SalvarVoltar_Click" IsTabStop="False" ToolTip="Voltar" Foreground="#f5f4f3" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Margin="4,13,0,0" Grid.Row="2" VerticalAlignment="Top" Width="24">
                 <Button.Template>

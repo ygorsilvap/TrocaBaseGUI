@@ -47,7 +47,9 @@ namespace TrocaBaseGUI.Views
             viewModel = vm;
             DataContext = viewModel;
 
-            SelectedDatabaseDisplay.Text = viewModel.SelectedDatabase.DisplayName;
+            SelectedDatabaseDisplay.Text = !String.IsNullOrWhiteSpace(viewModel.SelectedDatabase.DisplayName) ? viewModel.SelectedDatabase.DisplayName : string.Empty;
+            //SelectedDatabaseDisplay.Text = viewModel.SelectedDatabase.DisplayName;
+
 
             RadioButton_Checked(rbTodos, null);
             tabSelected = TabControl.SelectedIndex;
@@ -62,6 +64,7 @@ namespace TrocaBaseGUI.Views
             SetExesSelection();
 
             //SetSelectedDatabase(selectedDatabaseId);
+            GetSelectedDatabase();
 
             SetDabaseCopyDbs();
 
@@ -126,6 +129,12 @@ namespace TrocaBaseGUI.Views
         {
             viewModel.SelectedDatabase = !string.IsNullOrEmpty(database) ?
                 viewModel.Databases.FirstOrDefault(db => db.Id.Equals(database)) : new DatabaseModel();
+        }
+
+        public void GetSelectedDatabase()
+        {
+            if (viewModel.Databases.Any(db => db.IsSelected))
+                viewModel.SelectedDatabase = viewModel.Databases.FirstOrDefault(db => db.IsSelected);
         }
 
         private async void TrocarBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)

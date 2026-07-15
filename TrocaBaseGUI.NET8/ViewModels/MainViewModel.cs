@@ -327,11 +327,11 @@ namespace TrocaBaseGUI.ViewModels
 
             if (sysDirectory.Tier == 3)
             {
-                File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.ServerParams)));
-                File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas, appState.ServerParams)));
+                File.WriteAllText(conexaoServidorFile, string.Concat(newConn, conexaoService.Create3CConnectionServerFileSettings(Conexao3Camadas, appState.Settings)));
+                File.WriteAllText(conexaoClienteFile, string.Concat(conexaoService.Create3CConnectionClientFileSettings(Conexao3Camadas, appState.Settings)));
             } else
             {
-                File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoService.Create2CConnectionFileSettings(Conexao2Camadas, appState.LocalParams)));
+                File.WriteAllText(conexaoFile, string.Concat(newConn, conexaoService.Create2CConnectionFileSettings(Conexao2Camadas, appState.Settings)));
             }
 
             DatabaseService.SetSelection(dbs, selectedDb.Id);

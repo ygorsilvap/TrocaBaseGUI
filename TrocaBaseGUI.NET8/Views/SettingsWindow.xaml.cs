@@ -72,10 +72,10 @@ namespace TrocaBaseGUI.Views
                 case 1:
                     ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new ServerSettingsPage());
                     break;
+                //case 2:
+                //    ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new DoisCParamsPage());
+                //    break;
                 case 2:
-                    ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new DoisCParamsPage());
-                    break;
-                case 3:
                     ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new TresCParamsPage());
                     break;
             }
@@ -121,7 +121,7 @@ namespace TrocaBaseGUI.Views
                     ClearButton.IsEnabled = false;
                     ConLocalTab.IsEnabled = false;
                     ConServerTab.IsEnabled = false;
-                    DoisCTab.IsEnabled = false;
+                    //DoisCTab.IsEnabled = false;
                     TresCTab.IsEnabled = false;
                 }
                 else if (!viewModel.isSqlLoading || !viewModel.isOracleLoading)
@@ -130,7 +130,7 @@ namespace TrocaBaseGUI.Views
                     ClearButton.IsEnabled = true;
                     ConLocalTab.IsEnabled = true;
                     ConServerTab.IsEnabled = true;
-                    DoisCTab.IsEnabled = true;
+                    //DoisCTab.IsEnabled = true;
                     TresCTab.IsEnabled = true;
                 }
             }

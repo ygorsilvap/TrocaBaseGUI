@@ -53,8 +53,7 @@ namespace TrocaBaseGUI.Services
                 ServerSQLServerConnection = vm.ServerSQLServerConnection,
                 LocalOracleConnection = vm.LocalOracleConnection,
                 ServerOracleConnection = vm.ServerOracleConnection,
-                LocalParams = vm.appState.LocalParams ?? new AppParams(),
-                ServerParams = vm.appState.ServerParams ?? new AppParams(),
+                Settings = vm.appState.Settings ?? new AppParams(),
                 Conexao2Camadas = vm.Conexao2Camadas,
                 Conexao3Camadas = vm.Conexao3Camadas,
                 SelectedFolder  = vm.appState.SelectedFolder,
@@ -89,8 +88,7 @@ namespace TrocaBaseGUI.Services
                     vm.LocalOracleConnection = state.LocalOracleConnection;
                     vm.ServerOracleConnection = state.ServerOracleConnection;
 
-                    vm.appState.LocalParams = state.LocalParams ?? new AppParams();
-                    vm.appState.ServerParams = state.ServerParams ?? new AppParams();
+                    vm.appState.Settings = state.Settings ?? new AppParams();
                     vm.appState.SelectedFolder = state.SelectedFolder;
                     vm.appState.AlteraWeb = state.AlteraWeb;
 

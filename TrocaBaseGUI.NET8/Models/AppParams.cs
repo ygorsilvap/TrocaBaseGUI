@@ -19,12 +19,28 @@ namespace TrocaBaseGUI.Models
             { defaultLoginCheckbox = value; OnPropertyChanged(); }
         }
 
+        private string defaultLogin;
+        public string DefaultLogin
+        {
+            get => defaultLogin;
+            set
+            { defaultLogin = value; OnPropertyChanged(); }
+        }
+
         private bool defaultPasswordCheckbox;
         public bool DefaultPasswordCheckbox
         {
             get => defaultPasswordCheckbox;
             set
             { defaultPasswordCheckbox = value; OnPropertyChanged(); }
+        }
+
+        private string defaultPassword;
+        public string DefaultPassword
+        {
+            get => defaultPassword;
+            set
+            { defaultPassword = value; OnPropertyChanged(); }
         }
 
         private bool editorCheckbox;
@@ -35,12 +51,36 @@ namespace TrocaBaseGUI.Models
             { editorCheckbox = value; OnPropertyChanged(); }
         }
 
+        private string textEditorPath;
+        public string TextEditorPath
+        {
+            get => textEditorPath;
+            set
+            { textEditorPath = value; OnPropertyChanged(); }
+        }
+
         private bool dirUpdateCheckbox;
         public bool DirUpdateCheckbox
         {
             get => dirUpdateCheckbox;
             set
             { dirUpdateCheckbox = value; OnPropertyChanged(); }
+        }
+
+        private string updateFolder;
+        public string UpdateFolder
+        {
+            get => updateFolder;
+            set
+            { updateFolder = value; OnPropertyChanged(); }
+        }
+
+        private bool usaConciliador;
+        public bool UsaConciliador
+        {
+            get => usaConciliador;
+            set
+            { usaConciliador = value; OnPropertyChanged(); }
         }
 
         //private bool useWebMenuCheckbox;

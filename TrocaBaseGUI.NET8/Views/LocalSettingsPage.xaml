@@ -270,7 +270,6 @@
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="390,106,0,106" TextWrapping="Wrap" Grid.Row="2"><Run Language="pt-br" Text="Porta"/></TextBlock>
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="100,0,0,44" TextWrapping="Wrap" Width="36" Grid.Row="1" Height="18" VerticalAlignment="Bottom"><Run Language="pt-br" Text="Senha"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-        <TextBlock Foreground="#411e5a" ToolTip="Senha utilizada para login no SQL Server." HorizontalAlignment="Left" Margin="135,135,0,47" FontSize="16" TextWrapping="Wrap" Width="16" Grid.Row="1"><Run Language="pt-br" Text="ⓘ"/><LineBreak/><Run Language="pt-br"/></TextBlock>
 
 
         <TextBlock Foreground="#411e5a" HorizontalAlignment="Left" Margin="300,5,0,207" TextWrapping="Wrap" Width="120" Grid.Row="2"><Run Language="pt-br" Text="Instância"/></TextBlock>
