@@ -190,11 +190,11 @@ namespace TrocaBaseGUI.Services
 
         public string Create2CConnectionFileSettings(ConexaoFileModel conexao, AppParams appParams)
         {
-            string loginPadrao = string.IsNullOrEmpty(conexao.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"{GlobalStrings.LoginPadraotag}={conexao.DefaultLogin}\n";
-            string senhaPadrao = string.IsNullOrEmpty(conexao.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"{GlobalStrings.SenhaPadraotag}={conexao.DefaultPassword}\n";
-            string editorTexto = string.IsNullOrEmpty(conexao.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"{GlobalStrings.EditorTag}={conexao.TextEditorPath}\n";
-            string updateFolder = string.IsNullOrEmpty(conexao.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"{GlobalStrings.DirAtualizacaoTag}={conexao.UpdateFolder}\n";
-            string usaConciliador = conexao.UsaConciliador ? $"{GlobalStrings.ConciliadorTag}=1" : string.Empty;
+            string loginPadrao = string.IsNullOrEmpty(appParams.DefaultLogin) || !appParams.DefaultLoginCheckbox ? string.Empty : $"{GlobalStrings.LoginPadraotag}={appParams.DefaultLogin}\n";
+            string senhaPadrao = string.IsNullOrEmpty(appParams.DefaultPassword) || !appParams.DefaultPasswordCheckbox ? string.Empty : $"{GlobalStrings.SenhaPadraotag}={appParams.DefaultPassword}\n";
+            string editorTexto = string.IsNullOrEmpty(appParams.TextEditorPath) || !appParams.EditorCheckbox ? string.Empty : $"{GlobalStrings.EditorTag}={appParams.TextEditorPath}\n";
+            string updateFolder = string.IsNullOrEmpty(appParams.UpdateFolder) || !appParams.DirUpdateCheckbox ? string.Empty : $"{GlobalStrings.DirAtualizacaoTag}={appParams.UpdateFolder}\n";
+            string usaConciliador = appParams.UsaConciliador ? $"{GlobalStrings.ConciliadorTag}=1" : string.Empty;
             string settings = string.Concat(loginPadrao, senhaPadrao, editorTexto, updateFolder, usaConciliador);
 
             //Debug.WriteLine($"\n\n'2: {settings}'\n\n");

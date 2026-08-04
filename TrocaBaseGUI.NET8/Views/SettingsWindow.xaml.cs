@@ -72,9 +72,6 @@ namespace TrocaBaseGUI.Views
                 case 1:
                     ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new ServerSettingsPage());
                     break;
-                //case 2:
-                //    ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new DoisCParamsPage());
-                //    break;
                 case 2:
                     ((SettingsWindow)Application.Current.MainWindow).MainFramePublic.Navigate(new TresCParamsPage());
                     break;

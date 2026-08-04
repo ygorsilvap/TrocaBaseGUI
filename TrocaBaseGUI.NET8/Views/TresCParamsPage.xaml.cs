@@ -64,7 +64,7 @@ namespace TrocaBaseGUI.Views
             {
                 string textEditorPath = Path.GetFullPath(dialog.FileName);
 
-                _viewModel.appState.Settings.UpdateFolder = textEditorPath;
+                _viewModel.appState.Settings.TextEditorPath = textEditorPath;
 
             }
         }

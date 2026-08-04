@@ -232,8 +232,8 @@
             </Button.Template>
         </Button>
 
-        <TextBlock Foreground="#7737A6" FontWeight="SemiBold" HorizontalAlignment="Left" Margin="75,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" Height="16" Grid.Row="1" Text="Geral"/>
-        <Rectangle RadiusX="1" RadiusY="1" Height="2" Margin="79,44,182,0" Grid.Row="1" Stroke="#7737A6" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+        <TextBlock Foreground="#7737A6" FontWeight="SemiBold" HorizontalAlignment="Left" Margin="75,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" Height="16" Grid.Row="1" Text="Geral"/>
+        <Rectangle RadiusX="1" RadiusY="1" Height="2" Margin="79,45,182,0" Grid.Row="1" Stroke="#7737A6" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="-1"/>
